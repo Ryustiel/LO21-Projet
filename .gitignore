@@ -4,3 +4,4 @@ main-debug
 *.nix
 .replit
 Makefile
+main
