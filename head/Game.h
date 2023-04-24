@@ -1,7 +1,6 @@
 #pragma once
 #include "Card.h"
 
-
 class Game{
 private:
 	static Game* instance;
