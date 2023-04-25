@@ -1,18 +1,17 @@
 #pragma once
+#include <string>
+#include <iostream>
 #include "Card.h"
 
+using namespace std;
 
-class Game{
+class Game {
 private:
-	static Game* instance;
-	Clan* clanCards[clanCardsNumber];
-	Tactical* tacticalCards[tacticalCardsNumber];
+	const Card** cards;
+	unsigned int card_count;
 public:
-	Game();
-	Game(const Game& j) = delete;
-	Game& operator= (const Game& j) = delete;
-	static Game& getInstance();
-	static void freeInstance();
+	Game(const string& version);
+	~Game();
+	unsigned int getCardCount() const { return card_count; }
+	const Card& getCard(unsigned int i) const;
 };
-
-

@@ -1,34 +1,45 @@
-#include "../head/Game.h"
+#include "Game.h"
+#include "SchottenTottenException.h"
 
-Game* Game::instance = nullptr;
+using namespace std;
 
-Game& Game::getInstance() {
-	if (instance == nullptr) {
-		instance = new Game();
+Game::Game(const string& version) {
+	if (version == "clan") {
+		unsigned int i = 0;
+		for (auto c : Colors) {
+			for (auto n : Numbers) {
+				cards[i] = new Clan(c, n);
+				i++;
+			}
+		}
+		card_count = i;
 	}
-	return *instance;
+	else if (version == "tactique") {
+		cards[0] = new Elite("Chief1");
+		cards[1] = new Elite("Chief2");
+		cards[2] = new Elite("Spy");
+		cards[3] = new Elite("Shield-Bearer");
+		cards[4] = new CombatMode("Blind-Man’s Bluff");
+		cards[5] = new CombatMode("Mud Fight");
+		cards[6] = new Ruses("Recruiter");
+		cards[7] = new Ruses("Strategist");
+		cards[8] = new Ruses("Banshee");
+		cards[9] = new Ruses("Traiter");
+    card_count =  10;
+	}
+	else {
+		throw stException("Version Game error : version not known");
+	}
 }
 
-void Game::freeInstance() { delete instance; instance = nullptr; }
-
-Game::Game() {
-	size_t i = 0;
-	for (auto c : Colors) {
-		for (auto n : Numbers) {
-			clanCards[i] = new Clan(c, n);
-			i++;
-		}
+Game::~Game() {
+	for (unsigned int i = 0; i < card_count; i++) {
+		delete cards[i];
 	}
-	const string chef1 = "Chief1";
-	tacticalCards[0] = new Elite("Chief1");
-	tacticalCards[1] = new Elite("Chief2");
-	tacticalCards[2] = new Elite("Spy");
-	tacticalCards[3] = new Elite("Shield-Bearer");
-	tacticalCards[4] = new CombatMode("Blind-Man’s Bluff");
-	tacticalCards[5] = new CombatMode("Mud Fight");
-	tacticalCards[6] = new Ruses("Recruiter");
-	tacticalCards[7] = new Ruses("Strategist");
-	tacticalCards[8] = new Ruses("Banshee");
-	tacticalCards[9] = new Ruses("Traiter");
+	delete[] cards;
+}
 
+const Card& Game::getCard(unsigned int i) const {
+	if (i > card_count) throw stException("getCard error : incorrect number");
+	return *cards[i];
 }
