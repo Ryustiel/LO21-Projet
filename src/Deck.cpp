@@ -1,3 +1,4 @@
+
 #include "Deck.h"
 #include "SchottenTottenException.h"
 
@@ -15,5 +16,4 @@ const Card& Deck::draw() {
 	auto& c = *cards[x];
 	cards[x] = cards[card_count--];
 	return c;
-
 }

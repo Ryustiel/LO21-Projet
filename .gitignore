@@ -5,3 +5,11 @@ main-debug
 .replit
 Makefile
 main
+x64
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.ipch
+/.vs
