@@ -1,5 +1,7 @@
-@startuml haha
+@startuml Hello
 
+'Où gérer le tour de jeu ? -> Contrôleur ?
+'Parti pris : on ne peut pas changer de version du Schotten Totten entre les manches
 enum chiffre {
     un
     deux
@@ -21,49 +23,126 @@ enum couleur {
     violet
 }
 
+enum Version {
+    Classique
+    Tactique
+}
+
 'tous les enfants auront la méthode activation
 'activation() est une abstraction
 class Carte <abstraite> {
-    nom : string
-    activation() 
+    - nom : string
+
+    - activation()
+
+    + Carte()
+    + getNom() const : const string&
+    + estActivee() const : bool
 }
 
 class Clan {
-    couleur : enum
-    numero : enum
+    //friend class Jeu
+    - couleur : Couleur
+    - numero : Numero
+
+    - Clan(c : const Couleur&, nb : const Numero&, n : const string&)
+    + getNumero() const : const Numero&
+    + getCouleur() const : const Couleur&
+}
+
+class CarteTactiqueAction{
+    +activate()
 }
 
 class Tactique {
+    - CTA : CarteTactiqueAction*;
+    - setCTA (CarteTactiqueAction& cta) : void
+    - Tactique()
+    - activateCTA() : void
 
 }
 
 class Jeu <singleton> {
+    - cartes_clan : const Cartes* [64]
+    - cartes_tactiques : const Cartes**
+    - nb_tactique : unsigned int {0 | 10}
 
+    - Jeu()
+
+    + getNbCartes() const : int
+    + getCarte(size_t i) : const Carte&
 }
 
 class Pioche {
-    cartes : Cartes**
-    nombre_cartes : int
-    nombre_max_cartes : int
-    'à garder ?
-    piocher()
+    //friend class Controleur
+    - cartes : const Carte**
+    - nombre_cartes : int
+    - nombre_max_cartes : int
+
+    - Pioche()
+    - ~Pioche() //détruire cartes*
+    + getNbCartes() const: size_t
+    + estVide() const: bool
+    + piocher(): const Carte&
 }
 
-'Singleton ??
 class Controleur <singleton> {
-    initialiser()
+    - version : Version
+    - piocheClan : Pioche
+    - piocheTactique : Pioche
+    - Joueur1 : Joueur
+    - Joueur2 : Joueur
+    - jeu : Jeu *
+    - plateau : Plateau
+    - tour : bool
+    +$ initialiser(v : Version)
+    - curJoueur() const: const Joueur1&
+    - initManche() : void
+
+    'Action du jeu
+    - tour() : void
+    - jouerCarte() : void
+    - revendiquerBorne() : void
+    - piocher() : void
+
+    'Méthodes générales
+    - deplacerCartePiochMain(Pioche* p , Main* m) const: void
+    ...
+
 }
 
 class Plateau {
+    //friend class Controleur
+    - cartes: const Carte**
+    - nb: size_t
+    - nbMax: size_t
 
+    - Plateau()
+    - ~Plateau() //détruire cartes*
+    + ajouter(c: const Carte&)
+    + retirer(c: const Carte&): const Carte&
+    + print(ostream& f) const : ostream&
 }
 
 class Borne {
-    CombinaisonJoueur1 : Combinaison
-    CombinaisonJoueur2 : Combinaison
-    nb_max : int
+    //friend class Plateau
+    - CombinaisonJoueur1 : Carte **
+    - CombinaisonJoueur2 : Carte **
+    - tailleCombinaisonJ1 : unsigned int
+    - tailleCombinaisonJ2 : unsigned int
+    - taille_max : int
+    - id : int {1..9} 
+    - est_revendiquee : unsigned int
+    //0 -> pas revendiquee; 1 -> revendiquée par joueur 1; 2 -> revendiquée par joueur 2
 
-    id : int {1..9} 
+    - Borne()
+    - ~Borne()
+    + getCombinaisonJoueur1() const : Combinaison
+    + getCombinaisonJoueur2() const : Combinaison
+    + printCombinaisonJoueur1() const : void
+    + printCombinaisonJoueur2() const : void
+    + ajouterCarte(const Carte& c, unsigned int idJoueur) : void //rajouter une carte sur la borne
+    + changerTailleCombinaison(unsigned int) : void
 
     'Ou : CombinaisonJoueur1 : Carte** // CombinaisonJoueur2 : Carte**  (?)
 }
@@ -71,25 +150,63 @@ class Borne {
 'supprimer combinaison ? 
 'comment faire en sorte que la combi (avec ou non une carte Tactique apposée sur la borne)
 's'évalue correctement ?
-class Combinaison {
-
-}
+'class Combinaison {
+'    //friend class Borne
+'    - cartes : const Cartes*[3]
+'
+'    - Combinaison()
+'    - ~Combinaison()
+'    + getCarte1() const : const Carte&
+'    + getCarte2() const : const Carte&
+'    + getCarte3() const : const Carte&
+'    + operator<<(const Carte& c) : void
+'    + printCombinaison() const : void
+'}
 
 class Main {
+    //friend class Joueur
+    - cartes : const Cartes**
+    - nb_cartes : unsigned it
+    - nb_max_cartes : unsigned int
     
+    -Main(const Carte& c1, const Carte& c2, const Carte& c2,
+            const Carte& c4, const Carte& c5, const Carte& c6) //version classique
+    - Main(const Carte& c1, const Carte& c2, const Carte& c2,
+            const Carte& c4, const Carte& c5, const Carte& c6, const Carte& c7) //version tactique
+    'Comment gérer le fait que ce sont uniquement des cartes Clan au début
+    'mais peu importe ensuite ?
+
+    + printMain() const : void
+    + ajouterCarte(const Carte& c) : void
+    + jouerCarte(const Carte& c) : const Carte& //on retourne la carte jouée
+
 }
 
 'Fusionner Joueur et Main ? 
 class Joueur {
-    nom : string
-    est_IA : bool
+    - nom : string
+    - id : unsigned int {1..2}
+    - est_IA : bool //0 = non, 1 = oui
     'détermine si le Joueur est une IA ou non
+    - score : unsigned int //initialisé à 0
+    - main : Cartes**
 
-    fonctionIA()
-    'à garder ?
+
+    - Joueur(const string& n, bool i, bool ia)
+    - ~Joueur() //suppr. main*
+    + fonctionIA()
+    + getNom() const : const string&
+    + getId() const : unsigned int
+    + estIA() const : bool;
+    + getScore() const : unsigned int
+    + getMain() const : const Cartes**
 }
 
+
+
 class Elite {
+    -EliteAction* eAction
+    + setEAction(EliteAction& eAction)
 
 }
 
@@ -100,13 +217,10 @@ class ModeDeCombat {
 
 class Ruses {
     'Les cartes ruses, à la fin de leur utilisation, vont ds la défausse
-
+    + methodeInherente()
 }
 
-'faire une classe fille pour un seul objet ?
-class RuseChildren {}
 
-class ModeDeCombatChildren {}
 
 'Composition Plateau / Borne
 '-> permet de réinitialiser le jeu à la fin/ au début de chaque manche
@@ -116,14 +230,14 @@ Carte <|-- Tactique
 Tactique <|-- Elite
 Tactique <|-- ModeDeCombat
 Tactique <|-- Ruses
+Tactique *-- CarteTactiqueAction
 
-Ruses <|-- RuseChildren
-ModeDeCombat <|-- ModeDeCombatChildren
+
 
 Jeu *-- Carte
 Plateau *-- Borne
 
-Borne *--Combinaison
+'Borne *--Combinaison
 
 Carte --o Pioche
 Carte --o Plateau
