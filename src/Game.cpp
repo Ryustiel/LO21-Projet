@@ -1,5 +1,5 @@
-#include "Game.h"
-#include "SchottenTottenException.h"
+#include "../head/Game.h"
+#include "../exception/ShottenTottenException.h"
 
 using namespace std;
 
