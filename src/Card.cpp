@@ -32,8 +32,8 @@ string toString(const Number& number) {
 	}
 };
 
-ostream& operator<<(const ostream& os, const Color& color);
-ostream& operator<<(const ostream& os, const Color& number);
+ostream& operator<<(ostream& os, const Color& color) { return os << toString(color); }
+ostream& operator<<(ostream& os, const Color& number) { return os << toString(number); }
 
 std::initializer_list<Color> Colors = { Color::red, Color::green, Color::blue, Color::brown, Color::purple, Color::yellow };
 std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::three, Number::four, Number::five, Number::six, Number::seven, Number::eight, Number::nine };
