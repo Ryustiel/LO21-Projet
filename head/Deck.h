@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Card.h"
 #include "Game.h"
+#include "../exception/ShottenTottenException.h"
 
 using namespace std;
 
