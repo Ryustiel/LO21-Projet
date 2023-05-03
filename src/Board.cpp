@@ -24,8 +24,8 @@ void Border::addCard(const Card& card, const Side side) {
 
 void Border::changeMaxSize(const size_t size) {
 	if (size == max_size) { return; }
-	const Card** new_combination_j1 = new Card * [size];
-	const Card** new_combination_j2 = new Card * [size];
+	const Card** new_combination_j1 = new const Card * [size];
+	const Card** new_combination_j2 = new const Card * [size];
 	for (int i = 0; i < size_j1; i++) {
 		new_combination_j1[i] = combination_j1[i];
 	}

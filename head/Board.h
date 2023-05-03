@@ -16,7 +16,7 @@ private:
 	const Card** combination_j2;
 	Side revendication;
 public:
-	Border(): max_size(3), size_j1(0), size_j2(0), combination_j1(new Card*[max_size]), combination_j2(new Card* [max_size]), revendication(Side::none) {}
+	Border(): max_size(3), size_j1(0), size_j2(0), combination_j1(new const Card*[max_size]), combination_j2(new const Card* [max_size]), revendication(Side::none) {}
 	~Border() { delete[] combination_j1; delete[] combination_j2; }
 	void addCard(const Card& card, const Side side);
 	void changeMaxSize(const size_t size);
@@ -31,4 +31,4 @@ public:
 	Board(size_t size = 9) : border_nb(size), borders(new Border[size]) {}
 	~Board() { delete[] borders; }
 	void addCard(const Card& card, const Side side, const unsigned int n);
-}
+};
