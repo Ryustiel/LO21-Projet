@@ -12,7 +12,7 @@ string toString(const Color& color) {
 	case Color::brown: return "brown";
 	case Color::purple: return "purple";
 	case Color::yellow: return "yellow";
-	default: throw stException("Color toString cast error : color unknown.");
+	default: throw ShottenTottenException("Color toString cast error : color unknown.");
 	}
 }
 
@@ -28,7 +28,7 @@ string toString(const Number& number) {
 	case Number::seven: return "7";
 	case Number::eight: return "8";
 	case Number::nine: return "9";
-	default: throw stException("Number toString cast error : number unknown.");
+	default: throw ShottenTottenException("Number toString cast error : number unknown.");
 	}
 };
 
