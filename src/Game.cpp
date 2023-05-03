@@ -19,7 +19,7 @@ Game::Game(const Version& version) {
 		cards[card_count++] = new Ruses("Strategist");
 		cards[card_count++] = new Ruses("Banshee");
 		cards[card_count++] = new Ruses("Traiter");
-	}else{ throw stException("Version Game error : version not known"); }
+	}else{ throw ShottenTottenException("Version Game error : version not known"); }
 	
 	for (auto c : Colors) {
 		for (auto n : Numbers) {
@@ -36,7 +36,7 @@ Game::~Game() {
 }
 
 const Card& Game::getCard(unsigned int i) const {
-	if (i > card_count) throw stException("getCard error : incorrect number");
+	if (i > card_count) throw ShottenTottenException("getCard error : incorrect number");
 	return *cards[i];
 }
 
