@@ -37,6 +37,6 @@ void Border::changeMaxSize(const size_t size) {
 }
 
 void Board::addCard(const Card& card, const Side side, const unsigned int n) {
-	if (n >= border_nb) { throw BoardException("Board add Card: unexistant border"); }
+	if (n >= border_nb) { throw BoardException("Board add Card : unexistant border"); }
 	borders[n].addCard(card, side);
 }
