@@ -32,6 +32,22 @@ string toString(const Number& number) {
 	}
 };
 
+int toInt(const Number& number) {
+	switch (number)
+	{
+	case Number::one: return 1;
+	case Number::two: return 2;
+	case Number::three: return 3;
+	case Number::four: return 4;
+	case Number::five: return 5;
+	case Number::six: return 6;
+	case Number::seven: return 7;
+	case Number::eight: return 8;
+	case Number::nine: return 9;
+	default: throw ShottenTottenException("Number toInt cast error : number unknown.");
+	}
+};
+
 ostream& operator<<(ostream& os, const Color& color) { return os << toString(color); }
 ostream& operator<<(ostream& os, const Number& number) { return os << toString(number); }
 
