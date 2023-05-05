@@ -1,19 +1,20 @@
 #include "../head/Game.h"
+#include "../exception/ShottenTottenException.h"
 
 
 using namespace std;
 
 Game::Game(const Version& version) {
-  if (version == Version::legacy) {
-  	unsigned int i = 0;
-  	for (auto c : Colors) {
-  		for (auto n : Numbers) {
-  			cards[i] = new Clan(c, n);
-  			i++;
+	if (version == Version::legacy) {
+  		unsigned int i = 0;
+  		for (auto c : Colors) {
+  			for (auto n : Numbers) {
+  				cards[i] = new Clan(c, n);
+  				i++;
+  			}
   		}
-  	}
-  	card_count = i;
-	}else if (version == Version::expert) {
+	card_count = i;
+	} else if (version == Version::expert) {
 		cards[0] = new Elite("Chief1");
 		cards[1] = new Elite("Chief2");
 		cards[2] = new Elite("Spy");
@@ -24,10 +25,9 @@ Game::Game(const Version& version) {
 		cards[7] = new Ruses("Strategist");
 		cards[8] = new Ruses("Banshee");
 		cards[9] = new Ruses("Traiter");
-    card_count =  10;
-	}
-	else {
-		throw stException("Version Game error : version not known");
+		card_count =  10;
+	} else {
+		throw ShottenTottenException("Version Game error : version not known");
 	}
 }
 
