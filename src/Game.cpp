@@ -4,27 +4,30 @@
 using namespace std;
 
 Game::Game(const Version& version) {
-	card_count = 0;
-	if (version == Version::legacy) {
-		cards = new Card*[clanCardsNumber];
+  if (version == Version::legacy) {
+  	unsigned int i = 0;
+  	for (auto c : Colors) {
+  		for (auto n : Numbers) {
+  			cards[i] = new Clan(c, n);
+  			i++;
+  		}
+  	}
+  	card_count = i;
 	}else if (version == Version::expert) {
-		cards = new Card * [clanCardsNumber+clanCardsNumber];
-		cards[card_count++] = new Elite("Chief1");
-		cards[card_count++] = new Elite("Chief2");
-		cards[card_count++] = new Elite("Spy");
-		cards[card_count++] = new Elite("Shield-Bearer");
-		cards[card_count++] = new CombatMode("Blind-Man’s Bluff");
-		cards[card_count++] = new CombatMode("Mud Fight");
-		cards[card_count++] = new Ruses("Recruiter");
-		cards[card_count++] = new Ruses("Strategist");
-		cards[card_count++] = new Ruses("Banshee");
-		cards[card_count++] = new Ruses("Traiter");
-	}else{ throw ShottenTottenException("Version Game error : version not known"); }
-	
-	for (auto c : Colors) {
-		for (auto n : Numbers) {
-			cards[card_count++] = new Clan(c, n);
-		}
+		cards[0] = new Elite("Chief1");
+		cards[1] = new Elite("Chief2");
+		cards[2] = new Elite("Spy");
+		cards[3] = new Elite("Shield-Bearer");
+		cards[4] = new CombatMode("Blind-Man’s Bluff");
+		cards[5] = new CombatMode("Mud Fight");
+		cards[6] = new Ruses("Recruiter");
+		cards[7] = new Ruses("Strategist");
+		cards[8] = new Ruses("Banshee");
+		cards[9] = new Ruses("Traiter");
+    card_count =  10;
+	}
+	else {
+		throw stException("Version Game error : version not known");
 	}
 }
 
@@ -38,13 +41,4 @@ Game::~Game() {
 const Card& Game::getCard(unsigned int i) const {
 	if (i > card_count) throw ShottenTottenException("getCard error : incorrect number");
 	return *cards[i];
-}
-
-Game* Game::instance = nullptr;
-
-Game& Game::getInstance() {
-	if (instance == nullptr) {
-		instance = new Game(getVersion());
-	}
-	return *instance;
 }
