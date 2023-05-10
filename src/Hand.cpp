@@ -1,4 +1,4 @@
-#include "..\head\Hand.h"
+#include "../head/Hand.h"
 
 void Hand::add(const Card& c) {
 	if (size == max_size) {

@@ -1,4 +1,4 @@
-#include "..\head\Controller.h"
+#include "../head/Controller.h"
 
 Controller* Controller::instance = nullptr;
 

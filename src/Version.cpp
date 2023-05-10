@@ -1,4 +1,4 @@
-#include "..\head\Version.h"
+#include "../head/Version.h"
 
 Version current_version = Version::legacy;
 
