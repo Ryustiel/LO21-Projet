@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Version { legacy, expert };
+enum class Version { legacy, tactic};
 
 
 extern Version current_version;

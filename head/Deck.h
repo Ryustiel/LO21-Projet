@@ -14,7 +14,7 @@ private :
 	unsigned int max_card_count;
 
 public :
-	explicit Deck(Game& g);
+	explicit Deck(const Game& g);
 	~Deck();
 	Deck(const Deck& p) = delete;
 	Deck& operator=(const Deck& p) = delete;
