@@ -3,72 +3,88 @@
 #include "Card.h"
 #include "Deck.h"
 #include "Hand.h"
+#include <list>
+
+using namespace std;
 
 class BoardException : public ShottenTottenException {
-  using ShottenTottenException::ShottenTottenException;
+	using ShottenTottenException::ShottenTottenException;
 };
 
-enum class Side { none, j1, j2 };
-enum class Combination {
-  sum,
-  straight,
-  flush,
-  three_of_a_kind,
-  straight_flush
+
+enum class Side { none, s1, s2 };
+enum class CombinationType {
+	sum,
+	straight,
+	flush,
+	three_of_a_kind,
+	straight_flush
 };
 
-class Border {
+class Stone {
 private:
-  size_t max_size;
-  size_t size_j1;
-  size_t size_j2;
-  const Card **combination_j1;
-  const Card **combination_j2;
-  Side revendication;
-  Side firstCompleted;
+	size_t max_size;
+	size_t size_p1;
+	size_t size_p2;
+	const Card** combination_p1;
+	const Card** combination_p2;
+	Side revendication;
+	Side firstCompleted;
 
 public:
-  Border()
-      : max_size(3), size_j1(0), size_j2(0),
-        combination_j1(new const Card *[max_size]),
-        combination_j2(new const Card *[max_size]), revendication(Side::none),
-        firstCompleted(Side::none) {}
-  ~Border() {
-    delete[] combination_j1;
-    delete[] combination_j2;
-  }
-  const Side getRevendication() const { return revendication; }
-  void addCard(const Card &card, const Side side);
-  const Card &removeCard(const Card &card, const Side side);
-  void changeMaxSize(const size_t size);
-  const Side isBorderWon(const unsigned int n, Deck &deck, Hand &hand_j1,
-                         Hand &hand_j2) const;
-  const Side isWon(Deck &deck, Hand &hand1, Hand &hand2) const;
-  static const Side compareCombination(const Combination &j1,
-                                       const Combination &j2);
-  static const Side compareCombinationSum(const Clan *c1[], const Clan *c2[],
-                                          size_t n);
-  static const Combination combinationFullEval(const Clan *c[], size_t n);
-  static const size_t sum(const Clan *c[], size_t n);
-  const Card ***combinationVariation(const Card **possibleCards,
-                                     const size_t pcn,
-                                     const Card **incompleteCombination,
-                                     const size_t icn, const size_t desiredSize,
-                                     size_t &nbOfComninationFound) const;
-  const Side getFirstCompleted() { return firstCompleted; }
-  const Side compareSide(const Clan *c1[], const Clan *c2[], size_t n);
+	Stone()
+		: max_size(3), size_p1(0), size_p2(0),
+		combination_p1(new const Card* [max_size]),
+		combination_p2(new const Card* [max_size]), revendication(Side::none),
+		firstCompleted(Side::none) {}
+	~Stone() {
+		delete[] combination_p1;
+		delete[] combination_p2;
+	}
+	const Side getRevendication() const { return revendication; }
+	void addCard(const Card& card, const Side side);
+	const Card& removeCard(const Card& card, const Side side);
+	void changeMaxSize(const size_t size);
+	
+	//determine if the border is won by any side
+	const Side isWon(const Card** AvailableCards, const size_t availableCardsCount) const;
+
+	//Return all possible variations of an incomplete card combination
+	static list<const Card**> combinationVariationFromIncompleteCombination(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, size_t& nbOfComninationFound);
+	
+	//Return the best and the worse of all possible variations of an incomplete card combination
+	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize);
+
+
+	//Return which Combination is the strongest
+	static const Side compareCombination(const Card* c1[], const Card* c2[], size_t n);
+	/*
+	//Compare the value of two Combinations type
+	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
+	//Compare the sum of all card numbers
+	static const Side compareCombinationSum(const Clan* c1[], const Clan* c2[], size_t n);
+	//Determine the combination out of a card combination
+	static const CombinationType combinationTypeFromCompleteCombination(const Clan* c[], size_t n);
+	//Determine the sum of the card numbers
+	static const size_t combinationSumFromCompleteCombination(const Clan* c[], size_t n);
+	//Get which side has completed his side first
+	const Side getFirstCompleted() { return firstCompleted; }
+	*/
+
 };
 
 class Board {
 private:
-  Border *borders;
-  size_t border_nb;
+	Stone* borders;
+	size_t border_nb;
 
 public:
-  Board(size_t size = 9) : border_nb(size), borders(new Border[size]) {}
-  ~Board() { delete[] borders; }
-  void addCard(const Card &card, const Side side, const unsigned int n);
-  const Card &removeCard(const Card &card, const Side side,
-                         const unsigned int n);
-  const Side isBorderWon(const unsigned int n) const;
+	Board(size_t size = 9) : border_nb(size), borders(new Stone[size]) {}
+	~Board() { delete[] borders; }
+	void addCard(const Card& card, const Side side, const unsigned int n);
+	const Card& removeCard(const Card& card, const Side side,const unsigned int n);
+	//Return which side as won a specific stone
+	const Side isStoneWon(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const;
+	//Return which side as won on the board
+	const Side isBorderWon() const;
 };
