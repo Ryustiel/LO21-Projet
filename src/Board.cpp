@@ -78,7 +78,8 @@ void Border::changeMaxSize(const size_t size) {
   combination_j2 = new_combination_j2;
 }
 
-const Combination Border::combinationFullEval(const Clan *c[], size_t n) {
+
+const Combination Border::combinaisonFullEval(const Clan* c[],size_t n) { //evaluation of a full card combination
   bool flush = true;
   bool toak = true;
 
@@ -164,6 +165,7 @@ const Card &Board::removeCard(const Card &card, const Side side,
   }
   return borders[n].removeCard(card, side);
 }
+
 
 
 const Side Board::isBorderWon(const unsigned int n, Deck &deck, Hand &hand_j1, Hand &hand_j2) const {

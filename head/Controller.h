@@ -20,6 +20,17 @@ public:
   Board& getBoard();
   Hand& getHand1();
   Hand& getHand2();
+	Controller();
+	~Controller();
+	struct Handler {
+		Controller* instance = nullptr;
+		~Handler() { delete instance; }
+	};
+	static Handler handler;
+	Controller(const Controller& j) = delete;
+	Controller& operator=(const Controller& j) = delete;
+public:
+	static const Controller& getInstance();
 	void freeInstance();
 };
 
