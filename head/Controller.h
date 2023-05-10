@@ -29,16 +29,21 @@ protected:
 		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
 	}
+	~Controller() {
+		delete clanDeck;
+		delete player1;
+		delete player2;
+	}
 };
 
-class ExpertController : public Controller {
+class TacticController : public Controller {
 private :
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
 	friend class Supervisor;
 public :
-	ExpertController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
+	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)), tacticDeck(new Deck(Game(v))) {
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
 	}
