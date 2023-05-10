@@ -1,15 +1,15 @@
 #include "..\head\Controller.h"
 
-Controller* Controller::instance = nullptr;
+Controller::Handler Controller::handler = Controller::Handler();
 
-Controller& Controller::getInstance() {
-	if (instance == nullptr) {
-		instance = new Controller();
-	}
-	return *instance;
+
+const Controller& Controller::getInstance() {
+	if (handler.instance == nullptr) handler.instance = new Controller;
+	return *handler.instance;
 }
 
 void Controller::freeInstance() {
-	delete instance;
-	instance = nullptr;
+	delete handler.instance;
+	handler.instance = nullptr;
+
 }
