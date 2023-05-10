@@ -14,7 +14,7 @@ Game::Game(const Version& version) {
   			}
   		}
 	card_count = i;
-	} else if (version == Version::expert) {
+	} else if (version == Version::tactic) {
 		cards[0] = new Elite("Chief1");
 		cards[1] = new Elite("Chief2");
 		cards[2] = new Elite("Spy");

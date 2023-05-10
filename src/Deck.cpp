@@ -1,7 +1,7 @@
 #include"../head/Deck.h"
 
 
-Deck::Deck(Game& g) : cards(new const Card* [g.getCardCount()]), max_card_count(g.getCardCount()), card_count(g.getCardCount()) {
+Deck::Deck(const Game& g) : cards(new const Card* [g.getCardCount()]), max_card_count(g.getCardCount()), card_count(g.getCardCount()) {
 	for (unsigned int i = 0; i < g.getCardCount(); i++) cards[i] = &g.getCard(i);
 }
 
