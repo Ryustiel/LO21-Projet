@@ -130,7 +130,7 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 	}
 
 
-	bool sameColor = commonColors.size() == 1;
+	bool sameColor = commonColors.size() > 1;
 
 	//searching for straight
 	//WIP
@@ -144,68 +144,70 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 	}
 
 	//searching for three-of-a-kind
-	bool sameNumber = commonNumbers.size() == 1;
+	bool sameNumber = commonNumbers.size() > 1;
 	if (sameNumber) {
 		//three-of-a-kind is possible
-		const Card** bestToek = new const Card*[desiredSize];
-		size_t combinationSize = icn;
-		Number& cn= commonNumbers.front();
-		for (size_t i = 0; i < icn; ++i) {
-			bestToek[i] = incompleteCombination[i];
-		}
-
-		size_t i = 0;
-		while (combinationSize < desiredSize && i < pcn){
-			if (possibleCards[i]->canBeUsedAs(cn)) {
-				bestToek[combinationSize++] = possibleCards[i];
+		for (auto& cn : commonNumbers) {
+			const Card** bestToek = new const Card * [desiredSize];
+			size_t combinationSize = icn;
+			for (size_t i = 0; i < icn; ++i) {
+				bestToek[i] = incompleteCombination[i];
 			}
-			++i;
+
+			size_t i = 0;
+			while (combinationSize < desiredSize && i < pcn) {
+				if (possibleCards[i]->canBeUsedAs(cn)) {
+					bestToek[combinationSize++] = possibleCards[i];
+				}
+				++i;
+			}
+			if (combinationSize == desiredSize) {cout<<"TOEK !"<<endl; return bestToek; }
 		}
-		if(combinationSize == desiredSize){return bestToek;}
 
 	}
 
 	//searching flush
 	if (sameColor) {
 		//flush is possible
-		const Card** bestFlush = new const Card * [desiredSize];
-		size_t combinationSize = icn;
-		Color& cc = commonColors.front();
-		for (size_t i = 0; i < icn; ++i) {
-			bestFlush[i] = incompleteCombination[i];
-		}
-		size_t i = 0;
-		while (i < pcn) {
-			if (possibleCards[i]->canBeUsedAs(cc)) {
-				size_t j = icn;
-				while (j < desiredSize) {
-					cout << j <<"/"<< combinationSize << endl;
-					if (j == combinationSize) {
-						cout <<"fresh card !" << endl;
-						bestFlush[combinationSize++] = possibleCards[i];
-						break;
-					}
-					else {
-						const Card* temp = bestFlush[j];
-						if (toInt(temp->higherPossibleNumber()) < toInt(possibleCards[i]->higherPossibleNumber())) {
-							bestFlush[j] = possibleCards[i];
-							const Card* temp2;
-							for (size_t k = j + 1; k < desiredSize; ++k) {
-								cout << "moving from "<<k-1<<" to "<<k << endl;
-								temp2 = bestFlush[k];
-								bestFlush[k] = temp;
-								temp = temp2;
-								if (k == combinationSize) {++combinationSize; break;}
-							}
+		for(auto& cc: commonColors){
+			const Card** bestFlush = new const Card * [desiredSize];
+			size_t combinationSize = icn;
+			for (size_t i = 0; i < icn; ++i) {
+				bestFlush[i] = incompleteCombination[i];
+			}
+			size_t i = 0;
+			while (i < pcn) {
+				if (possibleCards[i]->canBeUsedAs(cc)) {
+					size_t j = icn;
+					while (j < desiredSize) {
+						cout << j <<"/"<< combinationSize << endl;
+						if (j == combinationSize) {
+							cout <<"fresh card !" << endl;
+							bestFlush[combinationSize++] = possibleCards[i];
 							break;
 						}
+						else {
+							const Card* temp = bestFlush[j];
+							if (toInt(temp->higherPossibleNumber()) < toInt(possibleCards[i]->higherPossibleNumber())) {
+								bestFlush[j] = possibleCards[i];
+								const Card* temp2;
+								for (size_t k = j + 1; k < desiredSize; ++k) {
+									cout << "moving from "<<k-1<<" to "<<k << endl;
+									temp2 = bestFlush[k];
+									bestFlush[k] = temp;
+									temp = temp2;
+									if (k == combinationSize) {++combinationSize; break;}
+								}
+								break;
+							}
+						}
+						++j;
 					}
-					++j;
 				}
+				++i;
 			}
-			++i;
+			if (combinationSize == desiredSize) { cout << "flush !" << endl; return bestFlush; }
 		}
-		if (combinationSize == desiredSize) { return bestFlush; }
 	}
 
 	//searching for sum
