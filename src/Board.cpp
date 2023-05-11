@@ -101,10 +101,16 @@ list<const Card**> Stone::combinationVariationFromIncompleteCombination(const Ca
 }
 
 const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize){
+	if (desiredSize < icn) { throw BoardException("bestVariation Error : desired size is less than the incomplete combination size !"); }
+	if (desiredSize == icn) { return incompleteCombination; }
+	if (pcn < desiredSize - icn) { return nullptr; }
+
+
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
 	Number min;
 	Number max;
+
 	for (int i = 0; i < icn; i++) {
 		//Search for common colors among the incomplete combination for eventual flush
 		list<Color> commonColorsCpy(commonColors);
@@ -203,10 +209,41 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 	}
 
 	//searching for sum
-	//const Card** sum = new const Card * [desiredSize];
-	//size_t combinationSize = icn;
-	//Color& cs = commonColors.front();
-
+	const Card** bestSum = new const Card * [desiredSize];
+	size_t combinationSize = icn;
+	for (size_t i = 0; i < icn; ++i) {
+		bestSum[i] = incompleteCombination[i];
+	}
+	size_t i = 0;
+	while (i < pcn) {
+		size_t j = icn;
+		while (j < desiredSize) {
+			cout << j << "/" << combinationSize << endl;
+			if (j == combinationSize) {
+				cout << "fresh card !" << endl;
+				bestSum[combinationSize++] = possibleCards[i];
+				break;
+			}
+			else {
+				const Card* temp = bestSum[j];
+				if (toInt(temp->higherPossibleNumber()) < toInt(possibleCards[i]->higherPossibleNumber())) {
+					bestSum[j] = possibleCards[i];
+					const Card* temp2;
+					for (size_t k = j + 1; k < desiredSize; ++k) {
+						cout << "moving from " << k - 1 << " to " << k << endl;
+						temp2 = bestSum[k];
+						bestSum[k] = temp;
+						temp = temp2;
+						if (k == combinationSize) { ++combinationSize; break; }
+					}
+					break;
+				}
+			}
+			++j;
+		}
+		++i;
+	}
+	if (combinationSize == desiredSize) { return bestSum; }
 
 	return nullptr;
 }
