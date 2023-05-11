@@ -171,15 +171,30 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 		size_t i = 0;
 		while (i < pcn) {
 			if (possibleCards[i]->canBeUsedAs(cc)) {
-				if (combinationSize < desiredSize) {
-					bestFlush[combinationSize++] = possibleCards[i];
-				}
-				else {
-					size_t j = icn;
-					while (j< desiredSize && toInt(bestFlush[j]->higherPossibleNumber()) > toInt(possibleCards[i]->higherPossibleNumber())){++j;}
-					if (j < desiredSize) {
-						bestFlush[j] = possibleCards[i];
+				size_t j = icn;
+				while (j < desiredSize) {
+					cout << j <<"/"<< combinationSize << endl;
+					if (j == combinationSize) {
+						cout <<"fresh card !" << endl;
+						bestFlush[combinationSize++] = possibleCards[i];
+						break;
 					}
+					else {
+						const Card* temp = bestFlush[j];
+						if (toInt(temp->higherPossibleNumber()) < toInt(possibleCards[i]->higherPossibleNumber())) {
+							bestFlush[j] = possibleCards[i];
+							const Card* temp2;
+							for (size_t k = j + 1; k < desiredSize; ++k) {
+								cout << "moving from "<<k-1<<" to "<<k << endl;
+								temp2 = bestFlush[k];
+								bestFlush[k] = temp;
+								temp = temp2;
+								if (k == combinationSize) {++combinationSize; break;}
+							}
+							break;
+						}
+					}
+					++j;
 				}
 			}
 			++i;
@@ -187,6 +202,10 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 		if (combinationSize == desiredSize) { return bestFlush; }
 	}
 
+	//searching for sum
+	//const Card** sum = new const Card * [desiredSize];
+	//size_t combinationSize = icn;
+	//Color& cs = commonColors.front();
 
 
 	return nullptr;
