@@ -110,7 +110,7 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* 
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
 	array<list<const Card*>, 9> cardNumberTable = array<list<const Card*>, 9>();
-
+	int maxSum = 0;
 	for (int i = 0; i < n; i++) {
 		//Search for common colors among the incomplete combination for eventual flush
 		list<Color> commonColorsCpy(commonColors);
@@ -130,6 +130,7 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* 
 				cardNumberTable[toInt(pn) - 1].push_front(c[i]);
 			}
 		}
+		maxSum += toInt(c[i]->higherPossibleNumber());
 	}
 
 	bool flush = !commonColors.empty();
@@ -145,11 +146,11 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* 
 
 	
 	//toak
-	if (!commonNumbers.empty()) 
-
+	if (!commonNumbers.empty()){
+		*max = toInt(commonNumbers.back()) * n;
 		return CombinationType::three_of_a_kind;
-	
-
+	}
+	*max = maxSum;
 	//flush
 	if (flush)
 		return CombinationType::flush;
@@ -280,13 +281,41 @@ const Card** recursivetruc(const Card** possibleCards, const size_t pcn, const C
 	return nullptr;
 }
 
-void quickSort(const Card**& cards, const size_t end, const size_t start =0) {
-	//a programmer 
+void swap(const Card** cards, int pos1, int pos2) {
+	const Card* temp;
+	temp = cards[pos1];
+	cards[pos1] = cards[pos2];
+	cards[pos2] = temp;
+}
+
+int partition(const Card** cards, int start, int end, int pivot) {
+	int i = start;
+	int j = start;
+	while (i <= end) {
+		if (toInt(cards[i]->higherPossibleNumber()) < pivot) {
+			i++;
+		}
+		else {
+			swap(cards, i, j);
+			i++;
+			j++;
+		}
+	}
+	return j - 1;
+}
+
+void quickSort(const Card** cards, int end, int start =0) {
+	if (start < end) {
+		int pivot = toInt(cards[end]->higherPossibleNumber());
+		int pos = partition(cards, start, end, pivot);
+
+		quickSort(cards, pos - 1, start);
+		quickSort(cards, end, pos + 1);
+	}
 }
 
 const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat){
-	quickSort(possibleCards, pcn);
-
+	quickSort(possibleCards, pcn-1);
 	const Card** combi = new const Card*[desiredSize];
 	for (size_t i = 0; i < desiredSize; ++i) {
 		if (i < icn)
