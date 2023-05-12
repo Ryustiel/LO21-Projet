@@ -4,6 +4,7 @@
 #include "Deck.h"
 #include "Hand.h"
 #include <list>
+#include <array>
 
 using namespace std;
 
@@ -20,6 +21,33 @@ enum class CombinationType {
 	three_of_a_kind,
 	straight_flush
 };
+
+inline string toString(CombinationType c) {
+	switch (c)
+	{
+	case CombinationType::sum:
+		return "sum";
+		break;
+	case CombinationType::straight:
+		return "straight";
+		break;
+	case CombinationType::flush:
+		return "flush";
+		break;
+	case CombinationType::three_of_a_kind:
+		return "three_of_a_kind";
+		break;
+	case CombinationType::straight_flush:
+		return "straight_flush";
+		break;
+	default:
+		return "HAHAHAHAHAHAHA";
+		break;
+	}
+}
+
+const Card** bestStraighCompletion(list<const Card*> cardNumberTable[9], const Card** possibleCards, const size_t pcn, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 9, const Card* partialResult[9] = nullptr);
+const bool recursiveMachin(int* baseComb, const Card* possibleCards[],  const size_t maxSize, int* max, const size_t size =0);
 
 class Stone {
 private:
@@ -53,20 +81,24 @@ public:
 	static list<const Card**> combinationVariationFromIncompleteCombination(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, size_t& nbOfComninationFound);
 	
 	//Return the best and the worse of all possible variations of an incomplete card combination
-	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize);
+	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat);
 
+	//Determine the combination out of a card combination
+	//a modifier pour les tactiques.
+	static const CombinationType combinationTypeFromCompleteCombination(const Card* c[], size_t n, int* max = nullptr);
 
 	//Return which Combination is the strongest
 	static const Side compareCombination(const Card* c1[], const Card* c2[], size_t n);
-	/*
+
 	//Compare the value of two Combinations type
 	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
+
+	/*
 	//Compare the sum of all card numbers
 	static const Side compareCombinationSum(const Clan* c1[], const Clan* c2[], size_t n);
-	//Determine the combination out of a card combination
-	static const CombinationType combinationTypeFromCompleteCombination(const Clan* c[], size_t n);
-	//Determine the sum of the card numbers
+		//Determine the sum of the card numbers
 	static const size_t combinationSumFromCompleteCombination(const Clan* c[], size_t n);
+	
 	//Get which side has completed his side first
 	const Side getFirstCompleted() { return firstCompleted; }
 	*/

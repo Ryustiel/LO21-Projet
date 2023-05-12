@@ -78,11 +78,121 @@ void Stone::changeMaxSize(const size_t size) {
   combination_p2 = new_combination_j2;
 }
 
-
-const Side Stone::compareCombination(const Card* c1[], const Card* c2[], size_t n) {
-	//à completer
-	return Side::none;
+const bool recursiveMachin(int* baseComb, const Card* possibleCards[], const size_t maxSize, int* maxSum, const size_t size) {
+	*maxSum = 0;
+	if (size == maxSize) {
+		int min = baseComb[0];
+		int max = baseComb[0];
+		*maxSum = baseComb[0];
+		for (size_t i = 1; i < maxSize; i++) {
+			for (size_t j = 0; j < i; ++j) {
+				if (baseComb[i] == baseComb[j])
+					return false;
+			}
+			if (baseComb[i] < min)
+				min = baseComb[i];
+			if (baseComb[i] > max)
+				max = baseComb[i];
+			*maxSum += baseComb[i];
+		}
+		return (min == max - maxSize + 1);
+	}
+	for (auto& nb : possibleCards[size]->possibleNumber()) {
+		baseComb[size] = toInt(nb);
+		if (recursiveMachin(baseComb, possibleCards, maxSize, maxSum, size + 1)) {
+			return true;
+		}
+	}
+	return false;
 }
+
+const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* c[], size_t n, int* max) { //evaluation of a full card combination
+	list<Color> commonColors(Colors);
+	list<Number> commonNumbers(Numbers);
+	array<list<const Card*>, 9> cardNumberTable = array<list<const Card*>, 9>();
+
+	for (int i = 0; i < n; i++) {
+		//Search for common colors among the incomplete combination for eventual flush
+		list<Color> commonColorsCpy(commonColors);
+		for (auto& pc : commonColorsCpy) {
+			if (!c[i]->canBeUsedAs(pc)) {
+				commonColors.remove(pc);
+			}
+		}
+
+		//Search for common number among the incomplete combination for eventual straight or three-of-a-kind
+		list<Number> commonNumbersCpy(commonNumbers);
+		for (auto& pn : commonNumbersCpy) {
+			if (!c[i]->canBeUsedAs(pn)) {
+				commonNumbers.remove(pn);
+			}
+			else {
+				cardNumberTable[toInt(pn) - 1].push_front(c[i]);
+			}
+		}
+	}
+
+	bool flush = !commonColors.empty();
+
+	if (commonNumbers.empty()) {
+		if (recursiveMachin(new int[n], c, n, max)) {
+			cout << "c bon" << endl;
+			if (flush)
+				return CombinationType::straight_flush;
+			return CombinationType::straight;
+		}
+	}
+
+	
+	//toak
+	if (!commonNumbers.empty()) 
+
+		return CombinationType::three_of_a_kind;
+	
+
+	//flush
+	if (flush)
+		return CombinationType::flush;
+
+	return CombinationType::sum;
+	
+	/*
+	bool flush = true;
+	bool toak = true;
+
+	for (size_t i = 1; i < n; i++) {
+		if (toInt(c[i - 1]->higherPossibleNumber()) != toInt(c[i]->higherPossibleNumber())) {
+			toak = false;
+			break;
+		}
+	}
+	if (toak)
+		return CombinationType::three_of_a_kind;
+
+	for (size_t i = 1; i < n; i++) {
+		if (c[i]->getColor() != c[i - 1]->getColor()) {
+			flush = false;
+			break;
+		}
+	}
+	int min = toInt(c[0]->getNumber());
+	int max = toInt(c[0]->getNumber());
+	for (size_t i = 1; i < n; i++) {
+		if (toInt(c[i]->getNumber()) < min)
+			min = toInt(c[i]->getNumber());
+		if (toInt(c[i]->getNumber()) > max)
+			max = toInt(c[i]->getNumber());
+	}
+	if (min == max + n) {
+		if (flush)
+			return CombinationType::straight_flush;
+		return CombinationType::straight;
+	}
+	if (flush)
+		return CombinationType::flush;
+	return CombinationType::sum;*/
+}
+
 list<const Card**> Stone::combinationVariationFromIncompleteCombination(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, size_t& nbOfComninationFound) {
 	nbOfComninationFound = 0;
 	list<const Card**> variations;
@@ -100,7 +210,95 @@ list<const Card**> Stone::combinationVariationFromIncompleteCombination(const Ca
 	return variations;
 }
 
-const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize){
+list<const Card**> possibleIncompleteStraigh(array<list<const Card*>, 9>& cardNumberTable, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 8) {
+
+	if (desiredSize < numberOfAvailableCards || highestNum+1 < numberOfAvailableCards) { return list<const Card**>(); }
+
+	list<const Card**> possibilities = list<const Card**>();
+
+	if (numberOfAvailableCards == 0) {
+		const Card* tab[9];
+		for (size_t i = 0; i < 9; ++i) { tab[i] = nullptr; }
+		possibilities.push_front(tab);
+		return possibilities;
+	}
+	if (!cardNumberTable[highestNum].empty()) {
+		for (auto& card : cardNumberTable[highestNum]) {
+			array<list<const Card*>, 9> cardNumberListCpy(cardNumberTable);
+			cardNumberListCpy[highestNum].remove(card);
+			list<const Card**> subPossibilities = possibleIncompleteStraigh(cardNumberListCpy, desiredSize - 1, numberOfAvailableCards - 1, highestNum - 1);
+			for (auto& sp : subPossibilities) {
+				sp[highestNum] = card;
+				possibilities.push_front(sp);
+			}			
+		}
+	}
+	list<const Card**> subPossibilities = possibleIncompleteStraigh(cardNumberTable, desiredSize - 1, numberOfAvailableCards, highestNum - 1);
+	for (auto& sp : subPossibilities) {
+		sp[highestNum] = nullptr;
+		possibilities.push_front(sp);
+	}
+	return possibilities;
+}
+
+const Side Stone::compareCombinationType(const CombinationType& s1, const CombinationType& s2) {
+	if (s1 == s2)
+		return Side::none;
+	if (s1 > s2) {
+		return Side::s1;
+	}
+	else {
+		return Side::s2;
+	}
+}
+
+
+const Card** recursivetruc(const Card** possibleCards, const size_t pcn, const Card** baseCombination, const size_t size, const size_t desiredSize, const  CombinationType combinationToBeat,const size_t sumToBeat) {
+
+	if (size == desiredSize) {
+		int max;
+		CombinationType resultCombType= Stone::combinationTypeFromCompleteCombination(baseCombination, desiredSize, &max);
+		cout << toString(resultCombType)<<endl;
+		Side s = Stone::compareCombinationType(resultCombType, combinationToBeat);
+		cout << "max : " << max << endl;
+		if (s == Side::s1 || (s == Side::none && sumToBeat < max)) {
+			return baseCombination;
+		}
+		return nullptr;
+	}
+	
+	for (size_t i = 0; i < pcn; ++i) {
+		baseCombination[size] = possibleCards[i];
+		const Card* tmp = possibleCards[pcn - 1];
+
+
+		const Card** resultComb= recursivetruc(possibleCards, pcn-1, baseCombination, size + 1, desiredSize, combinationToBeat,  sumToBeat);
+		if (resultComb != nullptr) {
+			return resultComb;
+		}
+	}
+	return nullptr;
+}
+
+void quickSort(const Card**& cards, const size_t end, const size_t start =0) {
+	//a programmer 
+}
+
+const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat){
+	quickSort(possibleCards, pcn);
+
+	const Card** combi = new const Card*[desiredSize];
+	for (size_t i = 0; i < desiredSize; ++i) {
+		if (i < icn)
+			combi[i] = incompleteCombination[i];
+	}
+	const Card** resultCombi = recursivetruc(possibleCards, pcn, combi, icn, desiredSize, combinationToBeat, sumToBeat);
+	return resultCombi;
+	
+
+	return possibleCards;
+	//Version amelioree incomplete
+	/*
 	if (desiredSize < icn) { throw BoardException("bestVariation Error : desired size is less than the incomplete combination size !"); }
 	if (desiredSize == icn) { return incompleteCombination; }
 	if (pcn < desiredSize - icn) { return nullptr; }
@@ -108,8 +306,7 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
-	Number min;
-	Number max;
+	array<list<const Card*>, 9> cardNumberTable = array<list<const Card*>, 9>();
 
 	for (int i = 0; i < icn; i++) {
 		//Search for common colors among the incomplete combination for eventual flush
@@ -122,9 +319,12 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 
 		//Search for common number among the incomplete combination for eventual straight or three-of-a-kind
 		list<Number> commonNumbersCpy(commonNumbers);
-		for (auto& pc : commonNumbersCpy) {
-			if (!incompleteCombination[i]->canBeUsedAs(pc)) {
-				commonNumbers.remove(pc);
+		for (auto& pn : commonNumbersCpy) {
+			if (!incompleteCombination[i]->canBeUsedAs(pn)) {
+				commonNumbers.remove(pn);
+			}
+			else {
+				cardNumberTable[toInt(pn) - 1].push_front(incompleteCombination[i]);
 			}
 		}
 	}
@@ -134,14 +334,9 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 
 	//searching for straight
 	//WIP
-	const Card** bestStraightCombination = nullptr;
-	if (icn > 1 && commonNumbers.size()>= desiredSize) {
-		size_t spread = toInt(commonNumbers.back()) - toInt(commonNumbers.front());
-		if (spread < 0) throw ShottenTottenException("Numbers Error : Number aren't put in order");
-		if (spread < desiredSize) {
-			//straight is possible
-		}
-	}
+	list<const Card**> combs = possibleIncompleteStraigh(cardNumberTable, desiredSize, icn);
+	const Card** bestStraightCombination = combs.front();
+	return bestStraightCombination;
 
 	//searching for three-of-a-kind
 	bool sameNumber = commonNumbers.size() > 1;
@@ -246,8 +441,8 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 		++i;
 	}
 	if (combinationSize == desiredSize) { return bestSum; }
-
 	return nullptr;
+	*/
 }
 
 const Side Stone::isWon(const Card** AvailableCards, const size_t availableCardsCount) const {
@@ -256,8 +451,8 @@ const Side Stone::isWon(const Card** AvailableCards, const size_t availableCards
 	const Card** p1WorseVar;
 	const Card** p2WorseVar;
 
-	p1BestVar = Stone::bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size);
-	p2BestVar = Stone::bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size);
+	//p1BestVar = Stone::bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size);
+	//p2BestVar = Stone::bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size);
 
 
 	return Side::none;
@@ -309,24 +504,16 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Clan* 
   return CombinationType::sum;
 }
 
-const Side Stone::compareCombinationType(const CombinationType &s1,
-									  const CombinationType &s2) {
-  if (s1 == s2)
-	return Side::none;
-  if (s1 > s2) {
-	return Side::s1;
-  } else {
-	return Side::s2;
-  }
+
+const size_t Stone::combinationSumFromCompleteCombination(const Clan* c[], size_t n) {
+	size_t sum = 0;
+	for (size_t i = 0; i < n; i++) {
+		sum += toInt(c[i]->getNumber());
+	}
+	return sum;
 }
 
-const size_t Stone::combinationSumFromCompleteCombination(const Clan *c[], size_t n) {
-  size_t sum = 0;
-  for (size_t i = 0; i < n; i++) {
-	sum += toInt(c[i]->getNumber());
-  }
-  return sum;
-}
+
 
 const Side Stone::compareCombinationSum(const Clan *c1[], const Clan *c2[], size_t n) {
   if (Stone::combinationSumFromCompleteCombination(c1, n) > Stone::combinationSumFromCompleteCombination(c2, n))
@@ -439,7 +626,7 @@ const Card *** Stone::combinationVariationFromIncompleteCombination(const Card *
 										   const size_t desiredSize,
 										   size_t &nbOfCombinationFound) const {
   for (size_t i = icn; i < desiredSize; ++i) {
-	for (size_t pc = 0; pc < pcn; ++pc) {
+	for (size_t pn = 0; pn < pcn; ++pn) {
 	  // A finir
 	}
   }

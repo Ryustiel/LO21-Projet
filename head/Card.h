@@ -33,6 +33,7 @@ public:
 	virtual const bool canBeUsedAs(const Number& n) const=0;
 	virtual const bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
 	virtual const Number higherPossibleNumber() const=0;
+	virtual const list<Number> possibleNumber() const = 0;
 
 };
 
@@ -41,10 +42,10 @@ const size_t tacticalCardsNumber = 10;
 
 class Clan : public Card {
 private:
-	Color color;
-	Number number;
+	const Color color;
+	const Number number;
 public:
-	Clan(const Color& c, const Number nb): Card(toString(c) + " " + toString(nb)), color(c), number(nb) {}
+	Clan(const Color& c, const Number nb): Card(toString(c) + " " + toString(nb)), color(c), number(nb) { }
 	void activate() const { return; };
 	const Color& getColor() const { return color; }
 	const Number& getNumber() const { return number; }
@@ -52,6 +53,7 @@ public:
 	virtual const bool canBeUsedAs(const Color& c) const {return c == color;}
 	virtual const bool canBeUsedAs(const Number& n) const {return n == number;}
 	virtual const Number higherPossibleNumber() const { return getNumber(); };
+	virtual const list<Number> possibleNumber() const { list<Number> tmp = list<Number>(); tmp.push_front(number); return tmp; };
 };
 
 class Tactical : public Card {
@@ -61,6 +63,7 @@ public:
 	virtual const bool canBeUsedAs(const Color& c) const { throw ShottenTottenException("canBeUsedAs Error : This card doesnt have a Color value !"); }
 	virtual const bool canBeUsedAs(const Number& n) const { throw ShottenTottenException("canBeUsedAs Error : This card doesnt have a Number value !"); }
 	virtual const Number higherPossibleNumber() const { throw ShottenTottenException("higherPossibleNumber Error : This card doesnt have a Number value !"); };
+	virtual const list<Number> possibleNumber() const { throw ShottenTottenException("possibleNumber Error : This card doesnt have a Number value !"); };
 };
 
 class Elite : public Tactical {
@@ -98,6 +101,9 @@ public:
 		}
 		return highest;
 	}
+	virtual const list<Number> possibleNumber() const {
+		return allowedNumbers;
+	};
 };
 
 class CombatMode : public Tactical {

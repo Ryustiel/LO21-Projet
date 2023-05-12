@@ -4,23 +4,23 @@
 #include "head/Board.h"
 
 int main() {
-	const Card** cards = new const Card*[10];
+	
+	const Card** cards = new const Card * [10];
 
-	cards[0] = new Clan(Color::blue, Number::six);
+	cards[0] = new Clan(Color::blue, Number::eight);
 	cards[1] = new Clan(Color::purple, Number::seven);
-	cards[4] = new Elite("Chief2", Colors, Numbers);
 	cards[2] = new Clan(Color::yellow, Number::nine);
 	cards[3] = new Clan(Color::blue, Number::nine);
+	//cards[1] = new Elite("Chief2", Colors, Numbers);
 
 
+	const Card*  icomb[] { new Clan(Color::green, Number::nine) };
 
-	const Card*  icomb[] { new Elite("Chief2", Colors, Numbers) ,new Elite("Chief1", Colors, Numbers) };
-
-	const Card** bestVar = Stone::bestVariation(cards, 4, icomb, 2, 3);
-
+	const Card** bestVar = Stone::bestVariation(cards, 4, icomb, 1, 3,CombinationType::straight,9+5);
+	//cout << bestVar[1] << endl;
 
 	if (bestVar != nullptr) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 3; i++) {
 			if (bestVar[i] != nullptr) {
 				cout << bestVar[i]->getName() << endl;
 			}
@@ -33,7 +33,8 @@ int main() {
 	else {
 		cout << "nothing found !";
 	}
-
+	return 0;
+	
 }
 
 
