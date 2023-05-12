@@ -3,6 +3,7 @@
 #include "src/Controller.cpp"
 #include "src/Board.cpp"
 #include "src/Player.cpp"
+#include "head/Game.h"
 
 int main() {
   std::cout << "Hello World!\n";

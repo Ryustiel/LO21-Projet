@@ -10,6 +10,7 @@ enum class Number { one, two, three, four, five, six, seven, eight, nine };
 
 string toString(const Color& color);
 string toString(const Number& number);
+int toInt(const Number& number);
 
 ostream& operator<<(const ostream& os, const Color& color);
 ostream& operator<<(const ostream& os, const Color& number);

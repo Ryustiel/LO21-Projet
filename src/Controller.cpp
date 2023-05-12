@@ -62,3 +62,4 @@ void Controller::runChecks() { // this is called by a player
         std::cout << "\n\nTOUR GAGNE PAR JOUEUR 1";
     }
 }
+

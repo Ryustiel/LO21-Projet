@@ -1,15 +1,18 @@
 #pragma once
 #include <string>
+#include <exception>
 
 using namespace std;
 
 
-class stException
-{
-public:
-	stException(const string& i) :info(i) {}
-	string getInfo() const { return info; }
+class ShottenTottenException : public exception{
 private:
-	string info;
+    const char* info;
+public:
+    ShottenTottenException(const char* i): info (i){}
+    const char* what() {
+        return info;
+    }
+    
 };
 
