@@ -17,10 +17,10 @@ void Controller::newGame(int nmanches) { // + additional parameters
 
 void Controller::handleNewManche() {
     std::cout << "\n\nINIT NEW MANCHE =====";
-    std::cout << "\ntour = 0;";
+    std::cout << "\nround = 0;";
     std::cout << "\npioche.init();";
     std::cout << "\nTacticController : pioche_tactique.init();";
-    board->init();
+    board.init();
     player1->initManche(); player2->initManche();
 
     TEMP_victory_counter = 0;
@@ -34,17 +34,17 @@ void Controller::handleNewManche() {
 void Controller::runMancheLoop() {
     std::cout << "\n\nManche Loop ================";
     // gere toute la manche
-    while (!board->isWon() && !stop) { // conditions de fin de manche
+    while (!board.isWon() && !stop) { // conditions de fin de manche
         std::cout << "\n\nRunning Manche " << (manches_total - manches_restantes + 1);
-        if (tour) {
+        if (round) {
             std::cout<<"\n\nplayer1 :";
             player1->playTurn();
-            tour=false;
+            round=false;
         } 
         else {
             std::cout<<"\n\nplayer2 :";
             player2->playTurn(); 
-            tour=true;
+            round=true;
         }
         runChecks(); // TEMP : should be triggered through Player::playTurn()
         
@@ -56,10 +56,10 @@ void Controller::runMancheLoop() {
 
 void Controller::runChecks() { // this is called by a player
     std::cout << "Triggering board checks, can update the state of the game";
-    if (++TEMP_victory_counter >= 3) {
-        board->setWon();
+    if (++TEMP_victory_counter > 2) {
+        board.setWon();
         player1->updateScore();
-        std::cout << "\n\nTOUR GAGNE PAR JOUEUR 1";
+        std::cout << "\n\nround GAGNE PAR JOUEUR 1";
     }
 }
 

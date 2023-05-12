@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
-#include "src/Controller.cpp"
 #include "src/Board.cpp"
+#include "src/Controller.cpp"
 #include "src/Player.cpp"
 #include "head/Game.h"
+#include "src/Version.cpp"
+#include "src/Supervisor.cpp"
 
 int main() {
   std::cout << "Hello World!\n";
@@ -11,10 +13,9 @@ int main() {
   std::cout << "Anoukhan Skywalker\n";
   std::cout << "coucou";
 
-  Controller* controller = Controller::getController();
-  
-  controller->setPlayer1( new Player );
-  controller->setPlayer2( new Player );
+  Supervisor supervisor = Supervisor::getInstance();
+  supervisor.setController(current_version, "Mike", "Pencie", 1, 2);
+  Controller* controller = supervisor.getController();
   controller->newGame(3);
 
   std::cout << "\n\ndone";
