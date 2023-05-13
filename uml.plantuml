@@ -28,6 +28,14 @@ enum Version {
     Tactique
 }
 
+class Supervisor <singelton> {
+    - controller : Controller* 
+
+    + $getInstance() : Supervisor& 
+    + freeInstance() : void
+    + setController(v : const Version&, name_player1 : const string&, name_player2 : const string&, id_player1 : unsigned int, id_player2, unsigned int) : void
+}
+
 'tous les enfants auront la méthode activation
 'activation() est une abstraction
 class Carte <abstraite> {
@@ -86,7 +94,7 @@ class Pioche {
     + piocher(): const Carte&
 }
 
-class Controleur <singleton> {
+class Controller {
     - version : Version
     - piocheClan : Pioche
     - piocheTactique : Pioche
