@@ -9,9 +9,10 @@ private:
     unsigned int id;
     unsigned int score = 0;
     Hand* hand = nullptr;
+    int pick; // player's card pick to be viewed by the controller
+
     friend class Controller;
 
-    int pick; // player's card pick to be viewed by the controller
 public:
     const string& getName() const { return name; }
     unsigned int getId() const { return id; }
@@ -29,8 +30,8 @@ public:
 
     // initialisation du joueur pour la partie
     void init() { std::cout << "\ninit variables de score pour manche"; score = 0;}
-    // initManche lancée à chaque début de Manche
-    void initManche() { std::cout << "\ninitializing player variables pour le debut de manche : fetching deck cards";}
+    // initRound lancée à chaque début de Manche
+    void initRound() { std::cout << "\ninitializing player variables pour le debut de manche : fetching deck cards";}
     // méthode complexe qui déclenchera l'interface de choix de carte
     // la cascade d'événements suivants du tour
     // (vérifier une borne, intéragir avec l'effet d'une carte tactique...)

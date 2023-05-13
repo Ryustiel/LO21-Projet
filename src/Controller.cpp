@@ -1,41 +1,41 @@
 #include "../head/Controller.h"
 #include <iostream>
 
-void Controller::newGame(int nmanches) { // + additional parameters
+void Controller::newGame(int nbTurns) { // + additional parameters
     std::cout << "\n\nINIT NEW GAME =====";
-    std::cout << "\nmanches_restantes = parametre;";
+    std::cout << "\nremainingRounds = parametre;";
     player1->init(); player2->init();
     
-    manches_restantes = nmanches;
-    manches_total = nmanches;
-    while (manches_restantes > 0 && !stop) { // conditions d'arret des manches
-        handleNewManche();
-        manches_restantes--;
+    remainingRounds = nbTurns;
+    totalRounds = nbTurns;
+    while (remainingRounds > 0 && !stop) { // conditions d'arret des manches
+        handleNewRound();
+        remainingRounds--;
     }
     std::cout << "\n\nFIN DE PARTIE";
 }
 
-void Controller::handleNewManche() {
+void Controller::handleNewRound() {
     std::cout << "\n\nINIT NEW MANCHE =====";
     std::cout << "\nround = 0;";
     std::cout << "\npioche.init();";
     std::cout << "\nTacticController : pioche_tactique.init();";
     board.init();
-    player1->initManche(); player2->initManche();
+    player1->initRound(); player2->initRound();
 
     TEMP_victory_counter = 0;
 
-    runMancheLoop();
+    runRoundLoop();
 
-    std::cout << "\n\nEVENEMENTS DE FIN DE MANCHE --> DEBUT D'UNE NOUVELLE MANCHE OU FIN DE PARTIE (selon scores et nmanches definis)";
+    std::cout << "\n\nEVENEMENTS DE FIN DE MANCHE --> DEBUT D'UNE NOUVELLE MANCHE OU FIN DE PARTIE (selon scores et nbTurns definis)";
     std::cout << "\nSCORES : " << player1->getScore() << " vs " << player2->getScore();
 }
 
-void Controller::runMancheLoop() {
+void Controller::runRoundLoop() {
     std::cout << "\n\nManche Loop ================";
     // gere toute la manche
     while (!board.isWon() && !stop) { // conditions de fin de manche
-        std::cout << "\n\nRunning Manche " << (manches_total - manches_restantes + 1);
+        std::cout << "\n\nRunning Manche " << (totalRounds - remainingRounds + 1);
         if (round) {
             std::cout<<"\n\nplayer1 :";
             player1->playTurn();

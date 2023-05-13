@@ -29,23 +29,23 @@ private:
 
 	// scores de manche stockés ici car impactent directement
 	// la fin de boucle de manche et de partie
-	int manches_restantes;
-    int manches_total;
+	int remainingRounds;
+    int totalRounds;
 
 	// VARIABLE TEMPORAIRE pour faire gagner chaque manche
 	// automatiquement après 3 tours
 	int TEMP_victory_counter;
 
-	void handleNewManche(); // événement de début de manche
+	void handleNewRound(); // événement de début de manche
 	// la méthode de boucle est séparée pour un code plus propre
 	// et éventuellement des événements d'initialisation différents, 
 	// pour différents modes de jeu
-    void runMancheLoop(); // boucle de manche, lancé par handleNewManche
+    void runRoundLoop(); // boucle de manche, lancé par handleNewRound
     void runChecks(); // running card checks on the board
 
 public:
-	Controller(const Controller& j) = delete;
-	Controller& operator=(const Controller& j) = delete;
+	Controller(const Controller& c) = delete;
+	Controller& operator=(const Controller& c) = delete;
 
 	// setting players AI
 	// la manière de générer les instances des classes IA
@@ -56,7 +56,7 @@ public:
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
-	void newGame(int nmanches); // (int nmanches, int typeia, ...)
+	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
@@ -81,6 +81,9 @@ public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)), tacticDeck(new Deck(Game(v))) {
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
+	}
+	~TacticController() {
+		delete tacticDeck;
 	}
 	Deck& getTacticDeck();
 };
