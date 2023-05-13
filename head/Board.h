@@ -54,21 +54,27 @@ private:
 	size_t max_size;
 	size_t size_p1;
 	size_t size_p2;
-	const Card** combination_p1;
-	const Card** combination_p2;
+	Card** combination_p1;
+	Card** combination_p2;
 	Side revendication;
 	Side firstCompleted;
 
 public:
 	Stone()
 		: max_size(3), size_p1(0), size_p2(0),
-		combination_p1(new const Card* [max_size]),
-		combination_p2(new const Card* [max_size]), revendication(Side::none),
+		combination_p1(new Card* [max_size]),
+		combination_p2(new Card* [max_size]), revendication(Side::none),
 		firstCompleted(Side::none) {}
 	~Stone() {
 		delete[] combination_p1;
 		delete[] combination_p2;
 	}
+	size_t getMaxSize() const { return max_size; }
+	size_t getSizeP1() const { return size_p1; }
+	size_t getSizeP2() const { return size_p2; }
+	const Card** getCombinationP1() const { return combination_p1; }
+	const Card** getCombinationP2() const { return combination_p2; }
+	Side getFirstCompleted() const { return firstCompleted; }
 	const Side getRevendication() const { return revendication; }
 	void addCard(const Card& card, const Side side);
 	const Card& removeCard(const Card& card, const Side side);
@@ -108,11 +114,13 @@ public:
 class Board {
 private:
 	Stone* borders;
-	size_t border_nb;
+	size_t stone_nb;
 
 public:
-	Board(size_t size = 9) : border_nb(size), borders(new Stone[size]) {}
+	Board(size_t size = 9) : stone_nb(size), borders(new Stone[size]) {}
 	~Board() { delete[] borders; }
+	const Stone* getStones() const { return borders;  }
+	size_t getBorderNb() const { return stone_nb;  }
 	void addCard(const Card& card, const Side side, const unsigned int n);
 	const Card& removeCard(const Card& card, const Side side,const unsigned int n);
 	//Return which side as won a specific stone

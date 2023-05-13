@@ -201,21 +201,31 @@ class Stone {
     + const Side getRevendication()
     + addCard(card : const Card&, side : const Side) : void 
     + removeCard(card : const Card&, side : const Side) : const Card& 
-	+ changeMaxSize(size : const size_t) : void
+	+ setMaxSize(size : const size_t) : void
+    + getMaxSize() const : size_t
+    + getSizeP1() const : size_t
+    + getSizeP2() const : size_t
+    + getCombinationP1() const : const Card**
+    + getCombinationP2() const : const Card**
+    + getRevendication() const : Side
+    + getFirstCompleted() const : Side
     + const Side isWon(const Card** AvailableCards, const size_t availableCardsCount) const;
 	+ $combinationVariationFromIncompleteCombination(possibleCards : const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, nbOfComninationFound : size_t&) : list<const Card**> 
     + $bestVariation(possibleCards const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, combinationToBeat : CombinationType, sumToBeat : const size_t) : const Card**
     + $combinationTypeFromCompleteCombination(c[] : const Card* , n : size_t, max : int* = nullptr) : const CombinationType
     + $compareCombination(c1[] : const Card*, c2[] : const Card*, n : size_t) : const Side
-    + $compareCombinationType(p1 : const CombinationType&, p2 : const CombinationType&) : const Side 
+    + $compareCombinationType(p1 : const CombinationType&, p2 : const CombinationType&) : const Side
+    + $sum(const Clan *c[], size_t n) : const size_t
 }
 
 class Board {
-    - borders : Stone*
+    - stones : Stone*
 	- border_nb : size_t
 
     + Board(size_t size = 9)
     + ~Board()
+    + getStones() const : const Stone*
+    + getBorderNb() const : size_t
     + addCard(card : const Card&, side : const Side, n : const unsigned int) : void
     + removeCard(card : const Card&, side : const Side, n : const unsigned int) : const Card&
     + isStoneWon(n : const unsigned int, AvailableCards : const Card** , availableCardsCount : const size_t) const : const Side
@@ -253,7 +263,5 @@ Card --o Combinaison
 Player *-- Hand
 
 Hand o-- Card
-
-
 
 @enduml

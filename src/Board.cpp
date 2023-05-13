@@ -561,7 +561,7 @@ const Side Stone::compareCombination(const Clan *c1[], const Clan *c2[], size_t 
 }
 
 void Board::addCard(const Card &card, const Side side, const unsigned int n) {
-  if (n >= border_nb) {
+  if (n >= stone_nb) {
 	throw BoardException("Board add Card : unexistant border");
   }
   borders[n].addCard(card, side);
@@ -569,7 +569,7 @@ void Board::addCard(const Card &card, const Side side, const unsigned int n) {
 
 const Card &Board::removeCard(const Card &card, const Side side,
 							  const unsigned int n) {
-  if (n >= border_nb) {
+  if (n >= stone_nb) {
 	throw BoardException("Board add Card : unexistant border");
   }
   return borders[n].removeCard(card, side);
