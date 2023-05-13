@@ -1,7 +1,6 @@
 @startuml Hello
 
-'Où gérer le tour de Game ? -> Contrôleur ?
-'Parti pris : on ne peut pas changer de version du Schotten Totten entre les manches
+''' ENUMERATIONS '''
 enum Number {
     one 
     two
@@ -28,6 +27,22 @@ enum Version {
     Tactic
 }
 
+enum Side {
+    none
+    s1
+    s2
+}
+
+enum CombinationType {
+	sum
+	straight
+	flush
+	three_of_a_kind
+	straight_flush
+}
+
+
+''' CLASSES '''
 class Supervisor <singelton> {
     - controller : Controller* 
 
@@ -172,50 +187,50 @@ class Deck {
     + draw() : const Card&
 }
 
+class Stone {
+    - max_size : size_t
+	- size_p1 : size_t
+	- size_p2 : size_t
+	- combination_p1 : const Card**
+	- combination_p2 : const Card**
+	- revendication : Side
+	- firstCompleted : Side
 
-' À CORRIGER À PARTIR D'ICI
-
-'tous les enfants auront la méthode activation
-'activation() est une abstraction
+    + Stone()
+    + ~Stone()
+    + const Side getRevendication()
+    + addCard(card : const Card&, side : const Side) : void 
+    + removeCard(card : const Card&, side : const Side) : const Card& 
+	+ changeMaxSize(size : const size_t) : void
+    + getMaxSize() const : size_t
+    + getSizeP1() const : size_t
+    + getCombinationP1() const : const Card**
+    + getCombinationP2() const : const Card**
+    + getRevendication() const : Side
+    + getFirstCompleted() const : Side
+    + const Side isWon(const Card** AvailableCards, const size_t availableCardsCount) const;
+	+ $combinationVariationFromIncompleteCombination(possibleCards : const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, nbOfComninationFound : size_t&) : list<const Card**> 
+    + $bestVariation(possibleCards const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, combinationToBeat : CombinationType, sumToBeat : const size_t) : const Card**
+    + $combinationTypeFromCompleteCombination(c[] : const Card* , n : size_t, max : int* = nullptr) : const CombinationType
+    + $compareCombination(c1[] : const Card*, c2[] : const Card*, n : size_t) : const Side
+    + $compareCombinationType(p1 : const CombinationType&, p2 : const CombinationType&) : const Side
+    + $sum(const Clan *c[], size_t n) : const size_t
+}
 
 class Board {
-    //friend class Controller
-    - Cards: const Card**
-    - nb: size_t
-    - nbMax: size_t
+    - stones : Stone*
+	- border_nb : size_t
+    - won : Side
 
-    - Board()
-    - ~Board() //détruire Cards*
-    + ajouter(c: const Card&)
-    + retirer(c: const Card&): const Card&
-    + print(ostream& f) const : ostream&
+    + Board(size_t size = 9)
+    + ~Board()
+    + getStones() const : const Stone*
+    + getBorderNb() const : size_t
+    + getWon() const : Side
+    + addCard(card : const Card&, side : const Side, n : const unsigned int) : void
+    + removeCard(card : const Card&, side : const Side, n : const unsigned int) : const Card&
+    + isStoneWon(n : const unsigned int, AvailableCards : const Card** , availableCardsCount : const size_t) const : const Side
 }
-
-class Stone {
-    //friend class Board
-    - CombinaisonPlayer1 : Card **
-    - CombinaisonPlayer2 : Card **
-    - tailleCombinaisonJ1 : unsigned int
-    - tailleCombinaisonJ2 : unsigned int
-    - taille_max : int
-    - id : int {1..9} 
-    - est_revendiquee : unsigned int
-    //0 -> pas revendiquee; 1 -> revendiquée par Player 1; 2 -> revendiquée par Player 2
-
-    - Stone()
-    - ~Stone()
-    + getCombinaisonPlayer1() const : Combinaison
-    + getCombinaisonPlayer2() const : Combinaison
-    + printCombinaisonPlayer1() const : void
-    + printCombinaisonPlayer2() const : void
-    + ajouterCard(const Card& c, unsigned int idPlayer) : void //rajouter une Card sur la Stone
-    + changerTailleCombinaison(unsigned int) : void
-
-    'Ou : CombinaisonPlayer1 : Card** // CombinaisonPlayer2 : Card**  (?)
-}
-
-
-
 
 
 ''' HERITAGES '''
@@ -232,23 +247,22 @@ Tactical <|-- Ruses
 
 
 ''' RELATIONS '''
-Game *-- Card
-Board *-- Stone
-
-
-Card --o Deck
-Card --o Board
-Card --o Combinaison
-
-Player o-- Hand
-
-Hand o-- Card
-
+Supervisor *-- Controller
 
 Controller *-- Board
 Controller *-- Deck
 Controller *-- Player
 Controller -- Game
 
+Game *-- Card
+Board *-- Stone
+
+Card --o Deck
+Card --o Board
+Card --o Combinaison
+
+Player *-- Hand
+
+Hand o-- Card
 
 @enduml
