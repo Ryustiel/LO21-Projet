@@ -118,5 +118,5 @@ public:
 	//Return which side as won a specific stone
 	const Side isStoneWon(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const;
 	//Return which side as won on the board
-	const Side isBorderWon() const;
+	//const Side isBorderWon() const;
 };
