@@ -62,6 +62,7 @@ class Controller {
 	- round : bool (initialisé à 0)
     - stop : bool (initialisé à 0)
     - remainingRounds : int
+    - stop : bool
     - totalRounds : int
 
     - handleNewRound() : void
