@@ -61,7 +61,7 @@ class Controller {
 	- player2 : Player*
 	- round : bool (initialisé à 0)
     - stop : bool (initialisé à 0)
-    - reHandingRounds : int
+    - remainingRounds : int
     - totalRounds : int
 
     - handleNewRound() : void
