@@ -53,24 +53,22 @@ class Supervisor <singelton> {
 }
 
 class Controller {
-    - version : const Version (initialisé à Version::legacy)
-	- clanDeck : Deck* (initialisé à nullptr)
+    - version : const Version {initialisé à Version::legacy}
+	- clanDeck : Deck* {initialisé à nullptr}
 	- board : Board
 	- clanGame : Game
 	- player1 : Player*
 	- player2 : Player*
-	- round : bool (initialisé à 0)
-    - stop : bool (initialisé à 0)
-    - reHandingRounds : int
+	- round : bool {initialisé à 0}
+    - stop : bool {initialisé à 0}
+    - remainingRounds : int
     - totalRounds : int
 
     - handleNewRound() : void
     - runRoundLoop() : void
     - runChecks() : void
 
-    + Controller(v : const Version&, name_player1 : const string&,
-        name_player2 : const string&, id_player1 : unsigned int,
-        id_player2 : unsigned int)
+    + Controller(v : const Version&, name_player1 : const string&,name_player2 : const string&, id_player1 : unsigned int,id_player2 : unsigned int)
     + ~Controller()
     + Controller(c : const Controller&) = delete
 	+ Controller& operator=(c : const Controller&) = delete
@@ -82,13 +80,11 @@ class Controller {
 }
 
 class TacticController {
-    - version : const Version (initialisé à Version::tactic)
-	- tacticDeck : Deck* (initialisé à  nullptr)
+    - version : const Version {initialisé à Version::tactic}
+	- tacticDeck : Deck* {initialisé à  nullptr}
 	- tacticGame : Game
 
-    + TacticController(const Version& v, const string& name_player1,
-        const string& name_player2, unsigned int id_player1,
-        unsigned int id_player2)
+    + TacticController(const Version& v, const string& name_player1,const string& name_player2, unsigned int id_player1,unsigned int id_player2)
     + ~TacticController()
     + getTacticDeck() : Deck&
 }
@@ -96,8 +92,8 @@ class TacticController {
 class Player {
     - name : string
     - id : unsigned int
-    - score : unsigned int (initialisé à 0)
-    - hand : Hand* (initialisé à nullptr)
+    - score : unsigned int 
+    - hand : Hand* {initialisé à nullptr}
     - pick : int
 
     + Player(n : const string&, idPlayer : bool)
