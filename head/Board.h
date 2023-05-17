@@ -76,9 +76,10 @@ public:
 	const Card** getCombinationP2() const { return combination_p2; }
 	Side getFirstCompleted() const { return firstCompleted; }
 	const Side getRevendication() const { return revendication; }
+	void setMaxSize(const size_t size);
+
 	void addCard(const Card& card, const Side side);
 	const Card& removeCard(const Card& card, const Side side);
-	void setMaxSize(const size_t size);
 	
 	//determine if the border is won by any side
 	const Side evaluateWinningSide(const Card** AvailableCards, const size_t availableCardsCount) const;
@@ -94,7 +95,6 @@ public:
 
 	//Compare the value of two Combinations type
 	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
-
 };
 
 class Board {
