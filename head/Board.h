@@ -95,16 +95,6 @@ public:
 	//Compare the value of two Combinations type
 	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
 
-	/*
-	//Compare the sum of all card numbers
-	static const Side compareCombinationSum(const Clan* c1[], const Clan* c2[], size_t n);
-		//Determine the sum of the card numbers
-	static const size_t combinationSumFromCompleteCombination(const Clan* c[], size_t n);
-	
-	//Get which side has completed his side first
-	const Side getFirstCompleted() { return firstCompleted; }
-	*/
-
 };
 
 class Board {
