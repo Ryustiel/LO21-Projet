@@ -111,6 +111,4 @@ public:
 	const Card& removeCard(const Card& card, const Side side,const unsigned int n);
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const Card** AvailableCards, const size_t availableCardsCount) const;
-		//Return which side as won on the board
-	//const Side isBorderWon() const;
 };
