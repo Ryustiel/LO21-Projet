@@ -1,6 +1,6 @@
 #include "../head/Board.h"
 
-void Stone::addCard(const Card &card, const Side side) {
+void Stone::addCard(const Card &card, const Side side) { //add card on a given side of the stone
   const Card **combination;
   size_t *size;
   switch (side) {
@@ -27,7 +27,7 @@ void Stone::addCard(const Card &card, const Side side) {
 	firstCompleted = Side::none;
 }
 
-const Card &Stone::removeCard(const Card &card, const Side side) {
+const Card &Stone::removeCard(const Card &card, const Side side) { //remove a card on a given side of the stone
   const Card **combination;
   size_t *size;
   switch (side) {
@@ -60,7 +60,7 @@ const Card &Stone::removeCard(const Card &card, const Side side) {
   return temp;
 }
 
-void Stone::changeMaxSize(const size_t size) {
+void Stone::setMaxSize(const size_t size) {
   if (size == max_size) {
 	return;
   }
@@ -78,7 +78,7 @@ void Stone::changeMaxSize(const size_t size) {
   combination_p2 = new_combination_j2;
 }
 
-const bool recursiveMachin(int* baseComb, const Card* possibleCards[], const size_t maxSize, int* maxSum, const size_t size) {
+const bool recursiveCombinationType(int* baseComb, const Card* possibleCards[], const size_t maxSize, int* maxSum, const size_t size = 0) {
 	*maxSum = 0;
 	if (size == maxSize) {
 		int min = baseComb[0];
@@ -99,20 +99,20 @@ const bool recursiveMachin(int* baseComb, const Card* possibleCards[], const siz
 	}
 	for (auto& nb : possibleCards[size]->possibleNumber()) {
 		baseComb[size] = toInt(nb);
-		if (recursiveMachin(baseComb, possibleCards, maxSize, maxSum, size + 1)) {
+		if (recursiveCombinationType(baseComb, possibleCards, maxSize, maxSum, size + 1)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* c[], size_t n, int* max) { //evaluation of a full card combination
+const CombinationType Stone::evaluateCombination(const Card* c[], size_t n, int* max = nullptr) {//evaluation of a full card combination
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
 	array<list<const Card*>, 9> cardNumberTable = array<list<const Card*>, 9>();
 	int maxSum = 0;
 	for (int i = 0; i < n; i++) {
-		//Search for common colors among the incomplete combination for eventual flush
+		//Search for common colors amongst the incomplete combination for eventual flush
 		list<Color> commonColorsCpy(commonColors);
 		for (auto& pc : commonColorsCpy) {
 			if (!c[i]->canBeUsedAs(pc)) {
@@ -120,7 +120,7 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* 
 			}
 		}
 
-		//Search for common number among the incomplete combination for eventual straight or three-of-a-kind
+		//Search for common number amongst the incomplete combination for eventual straight or three-of-a-kind
 		list<Number> commonNumbersCpy(commonNumbers);
 		for (auto& pn : commonNumbersCpy) {
 			if (!c[i]->canBeUsedAs(pn)) {
@@ -136,14 +136,13 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* 
 	bool flush = !commonColors.empty();
 
 	if (commonNumbers.empty()) {
-		if (recursiveMachin(new int[n], c, n, max)) {
-			cout << "c bon" << endl;
+		if (recursiveCombinationType(new int[n], c, n, max)) {
+			cout << "evaluateCombination : check" << endl;
 			if (flush)
 				return CombinationType::straight_flush;
 			return CombinationType::straight;
 		}
 	}
-
 	
 	//toak
 	if (!commonNumbers.empty()){
@@ -193,7 +192,7 @@ const CombinationType Stone::combinationTypeFromCompleteCombination(const Card* 
 		return CombinationType::flush;
 	return CombinationType::sum;*/
 }
-
+/*
 list<const Card**> Stone::combinationVariationFromIncompleteCombination(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, size_t& nbOfComninationFound) {
 	nbOfComninationFound = 0;
 	list<const Card**> variations;
@@ -206,9 +205,25 @@ list<const Card**> Stone::combinationVariationFromIncompleteCombination(const Ca
 
 
 	}
-
-	
 	return variations;
+}
+*/
+
+const Side Stone::compareCombination(const Card* c1[], const Card* c2[], int combination_size) { //WARNING : mind the order of c1 and c2 arguments !!!
+	int sum_s1 = 0;
+	int sum_s2 = 0;
+	const CombinationType combiType_s1 = evaluateCombination(c1, combination_size, &sum_s1);
+	const CombinationType combiType_s2 = evaluateCombination(c2, combination_size, &sum_s2);
+
+	//comparing combinations types
+	const Side typeEval = compareCombinationType(combiType_s1, combiType_s2);
+	if (typeEval != Side::none) return typeEval;
+
+	//comparing combinations sums
+	if (sum_s1 > sum_s2) return Side::s1;
+	else if (sum_s2 > sum_s1) return Side::s1;
+
+	return Side::none;
 }
 
 list<const Card**> possibleIncompleteStraigh(array<list<const Card*>, 9>& cardNumberTable, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 8) {
@@ -254,14 +269,14 @@ const Side Stone::compareCombinationType(const CombinationType& s1, const Combin
 }
 
 
-const Card** recursivetruc(const Card** possibleCards, const size_t pcn, const Card** baseCombination, const size_t size, const size_t desiredSize, const  CombinationType combinationToBeat,const size_t sumToBeat) {
+const Card** recursiveVariation(const Card** possibleCards, const size_t pcn, const Card** baseCombination, const size_t size, const size_t desiredSize, const  CombinationType combinationToBeat,const size_t sumToBeat) {
 
 	if (size == desiredSize) {
 		int max;
-		CombinationType resultCombType= Stone::combinationTypeFromCompleteCombination(baseCombination, desiredSize, &max);
-		cout << toString(resultCombType)<<endl;
+		CombinationType resultCombType= Stone::evaluateCombination(baseCombination, desiredSize, &max);
+		cout << "\recursiveVariation : end of recursive function\n Combination type = " << toString(resultCombType) << endl;
 		Side s = Stone::compareCombinationType(resultCombType, combinationToBeat);
-		cout << "max : " << max << endl;
+		cout << "recursiveVariation : max sum : " << max << endl;
 		if (s == Side::s1 || (s == Side::none && sumToBeat < max)) {
 			return baseCombination;
 		}
@@ -273,7 +288,7 @@ const Card** recursivetruc(const Card** possibleCards, const size_t pcn, const C
 		const Card* tmp = possibleCards[pcn - 1];
 
 
-		const Card** resultComb= recursivetruc(possibleCards, pcn-1, baseCombination, size + 1, desiredSize, combinationToBeat,  sumToBeat);
+		const Card** resultComb= recursiveVariation(possibleCards, pcn-1, baseCombination, size + 1, desiredSize, combinationToBeat,  sumToBeat);
 		if (resultComb != nullptr) {
 			return resultComb;
 		}
@@ -321,7 +336,7 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 		if (i < icn)
 			combi[i] = incompleteCombination[i];
 	}
-	const Card** resultCombi = recursivetruc(possibleCards, pcn, combi, icn, desiredSize, combinationToBeat, sumToBeat);
+	const Card** resultCombi = recursiveVariation(possibleCards, pcn, combi, icn, desiredSize, combinationToBeat, sumToBeat);
 	return resultCombi;
 	
 
@@ -474,29 +489,72 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 	*/
 }
 
-const Side Stone::isWon(const Card** AvailableCards, const size_t availableCardsCount) const {
-	const Card** p1BestVar;
-	const Card** p2BestVar;
-	const Card** p1WorseVar;
-	const Card** p2WorseVar;
-
-	//p1BestVar = Stone::bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size);
-	//p2BestVar = Stone::bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size);
-
-
+const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t availableCardsCount) const { //evaluate the combinations to determine a winning side (can be none)
+	//in order to compare sides, at least one side must be complete
+	if (size_p1 == max_size && size_p2 == max_size) { //both sides are complete
+		Side winningSide = compareCombination(combination_p1, combination_p1, max_size);
+		if (winningSide != Side::none) return winningSide;
+		return firstCompleted;
+	}
+	//one side is complete and the other is not
+	if (size_p1 == max_size && size_p2 != max_size) {
+		//if a better combination than side 1's can't be determined, s1 can win the border
+		int sum_p1;
+		const CombinationType combiType_p1 = evaluateCombination(combination_p1, max_size, &sum_p1);
+		const Card** bestVar = bestVariation(AvailableCards, availableCardsCount, combination_p2, size_p2, max_size, combiType_p1, sum_p1);
+		//no need to compare the combinations, only the existence of a better hypothetical combination
+		if (bestVar != nullptr) {
+			cout << "A better combination can be made on side S2 !" << endl;
+			for (int i = 0; i < max_size; i++) {
+				if (bestVar[i] != nullptr) {
+					cout << "(Card name : " << bestVar[i]->getName() << endl;
+				}
+				else {
+					cout << "nullptr" << endl;
+				}
+			}
+			//existence of a hypothetical combination can't assure a win
+			return Side::none;
+		} //if a better combination can't be estimated, side s1 can win the stone
+		return Side::s1;
+	}
+	//last case
+	if (size_p1 != max_size && size_p2 == max_size) {
+		//if a better combination than side s2's can't be determined, s2 can win the border
+		int sum_p2;
+		const CombinationType combiType_p1 = evaluateCombination(combination_p2, max_size, &sum_p2);
+		const Card** bestVar = bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size, combiType_p1, sum_p2); //conversion int to size_t !!!
+		//no need to compare the combinations, only the existence of a better hypothetical combination
+		if (bestVar != nullptr) {
+			cout << "A better combination can be made on side S2 !" << endl;
+			for (int i = 0; i < max_size; i++) {
+				if (bestVar[i] != nullptr) {
+					cout << "(Card name : " << bestVar[i]->getName() << endl;
+				}
+				else {
+					cout << "nullptr" << endl;
+				}
+			}
+			//existence of a hypothetical combination can't assure a win
+			return Side::none;
+		} //if a better combination can't be estimated, side s1 can win the stone
+		return Side::s2;
+	}
+	//default return
 	return Side::none;
 }
 
-const Side Board::isStoneWon(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const {
+const Side Board::evaluateStoneWinningSide(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const {
+	if (n < 0 || n > 9) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
 	const Side& revendication = borders[n].getRevendication();
 	if (revendication != Side::none)
 		return revendication;
-	return borders[n].isWon(AvailableCards, availableCardsCount);
+	return borders[n].evaluateWinningSide(AvailableCards, availableCardsCount);
 }
 
 
 /*
-const CombinationType Stone::combinationTypeFromCompleteCombination(const Clan* c[],size_t n) { //evaluation of a full card combination
+const CombinationType Stone::evaluateCombination(const Clan* c[],size_t n) { //evaluation of a full card combination
   bool flush = true;
   bool toak = true;
 
