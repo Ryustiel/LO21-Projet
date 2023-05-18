@@ -13,12 +13,12 @@ int main() {
 	Clan* c6 = new Clan(Color::blue, Number::three);
 
 	Board* b = new Board();
-	b->addCard(*c2, Side::s1, 0);
-	b->addCard(*c1, Side::s1, 0);
 	b->addCard(*c3, Side::s1, 0);
-	b->addCard(*c4, Side::s2, 0);
+	b->addCard(*c5, Side::s1, 0);
+	b->addCard(*c6, Side::s1, 0);
+	b->addCard(*c1, Side::s2, 0);
 	//b->addCard(*c5, Side::s2, 0);
-	b->addCard(*e, Side::s2, 0);
+	//b->addCard(*e, Side::s2, 0);
 
 
 	if (b->getStone(0).getFirstCompleted() != Side::s1) cout << "Incorrect first completed side" << endl;
