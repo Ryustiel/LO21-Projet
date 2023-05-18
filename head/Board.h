@@ -46,8 +46,9 @@ inline string toString(CombinationType c) {
 	}
 }
 
+//bestStraighCompletion is unused
 const Card** bestStraighCompletion(list<const Card*> cardNumberTable[9], const Card** possibleCards, const size_t pcn, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 9, const Card* partialResult[9] = nullptr);
-const bool recursiveMachin(int* baseComb, const Card* possibleCards[],  const size_t maxSize, int* max, const size_t size =0);
+const bool recursiveCombinationType(int* baseComb, const Card* possibleCards[],  const size_t maxSize, int* max, const size_t size =0);
 
 class Stone {
 private:
