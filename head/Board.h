@@ -78,7 +78,17 @@ public:
 	const Card** getCombinationP2() const { return combination_p2; }
 	Side getFirstCompleted() const { return firstCompleted; }
 	const Side getRevendication() const { return revendication; }
+
 	void setMaxSize(const size_t size);
+	void setCombatMode(const CombatMode* cM) {
+		if (combat_mode == nullptr) {
+			combat_mode = cM;
+			if (cM->getName() == "Blind-Man’s Bluff") {
+				max_size += 1;
+				if (firstCompleted != Side::none) firstCompleted = Side::none; //a combination cannot be complete
+			}
+		}
+	}
 
 	void addCard(const Card& card, const Side side);
 	const Card& removeCard(const Card& card, const Side side);
@@ -89,8 +99,11 @@ public:
 	//Return the best and the worse of all possible variations of an incomplete card combination
 	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat, bool combat_mode_mud_prensence);
 
-	//Determines the type out of a card combination, sets the sum of the cards in max if given
-	static const CombinationType evaluateCombination(const Card* c[], size_t combination_size, int* max = nullptr);
+	//Determines the type out of a complete card combination, sets the sum of the cards in max if given
+	static const CombinationType evaluateCompleteCombinaison(const Card* c[], size_t combination_size, int* max = nullptr);
+
+	//Determines the type out of an incomplete card combination, sets the sum of the cards in max if given
+	static const CombinationType evaluateCombinaison(const Card* c[], size_t combination_size, int* max = nullptr);
 
 	//Return which Combination (same size) is the strongest
 	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size, bool combat_mode_mud_prensence = 0); //ajouter un argument ; bool/énum "evaluationType" 
@@ -108,6 +121,10 @@ public:
 	Board(size_t size = 9) : stone_nb(size), borders(new Stone[size]) {}
 	~Board() { delete[] borders; }
 	const Stone* getStones() const { return borders;  }
+	Stone& getStone(unsigned int n) { 
+		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
+		return borders[n];
+	}
 	size_t getBorderNb() const { return stone_nb;  }
 
 	void addCard(const Card& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); borders[n].addCard(card, side); };
