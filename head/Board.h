@@ -41,7 +41,7 @@ inline string toString(CombinationType c) {
 		return "straight_flush";
 		break;
 	default:
-		return "HAHAHAHAHAHAHA";
+		throw ShottenTottenException("toString : unaccurate CombinationType c");
 		break;
 	}
 }
@@ -93,7 +93,7 @@ public:
 	static const CombinationType evaluateCombination(const Card* c[], size_t combination_size, int* max = nullptr);
 
 	//Return which Combination (same size) is the strongest
-	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size); //ajouter un argument ; bool/énum "evaluationType" 
+	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size, bool combat_mode_mud_prensence = 0); //ajouter un argument ; bool/énum "evaluationType" 
 
 	//Compare the value of two Combinations type
 	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
