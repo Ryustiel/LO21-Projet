@@ -3,69 +3,72 @@
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
 #include "head/Game.h"
-
+#include "head/Supervisor.h"
 #include "head/Card.h"
 #include "head/Board.h"
+#include "head/Version.h"
 
 int main() {
 
-	Board* b = new Board();
+	Supervisor::getInstance().setController(Version::legacy, "p1_name", "p2_name", 1, 2); //heap buffer error
+	cout << Supervisor::getInstance().getController()->getPlayer1()->getName();
 
-	b->getStone(0).setRevendication(Side::s1);
-	b->getStone(1).setRevendication(Side::none);
-	b->getStone(2).setRevendication(Side::s2);
-	b->getStone(3).setRevendication(Side::s1);
-	b->getStone(4).setRevendication(Side::s1);
-	b->getStone(5).setRevendication(Side::none);
-	b->getStone(6).setRevendication(Side::s2);
-	b->getStone(7).setRevendication(Side::s2);
-	b->getStone(8).setRevendication(Side::s2);
+	/*char c;
+	int selection;
+	Version selected_version;
+	string p1_name;
+	string p2_name;
 
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "Creating a supervisor..." << endl;
 
+	Supervisor::getInstance();
 
-
-
-
-
-	b->evaluateGameWinner();
-
-	/*Elite* e = new Elite("Chief2", Colors, Numbers);
-	Clan* c1 = new Clan(Color::red, Number::nine);
-	Clan* c2 = new Clan(Color::red, Number::eight);
-	Clan* c3 = new Clan(Color::red, Number::seven);
-	Clan* c4 = new Clan(Color::blue, Number::two);
-	Clan* c5 = new Clan(Color::blue, Number::one);
-	Clan* c6 = new Clan(Color::blue, Number::three);
-	Clan* c7 = new Clan(Color::purple, Number::seven);
-	Clan* c8 = new Clan(Color::yellow, Number::seven);
-
-	Board* b = new Board();
-	b->addCard(*c3, Side::s1, 0);
-	b->addCard(*c7, Side::s1, 0);
-	b->addCard(*c8, Side::s1, 0);
-	b->addCard(*c1, Side::s2, 0);
-	//b->addCard(*c5, Side::s2, 0);
-	//b->addCard(*e, Side::s2, 0);
-
-	if (b->getStone(0).getFirstCompleted() != Side::s1) cout << "Incorrect first completed side" << endl;
-
-	const Card** cards = new const Card * [10];
-	cards = new const Card * [10];
-
-	cards[0] = new Clan(Color::blue, Number::one);
-	cards[1] = new Clan(Color::purple, Number::one);
-	cards[2] = new Clan(Color::yellow, Number::nine);
-	cards[3] = new Clan(Color::blue, Number::nine);
-	//cards[1] = new Elite("Chief2", Colors, Numbers);
-
-	Side s = b->evaluateStoneWinningSide(0, cards, 4);
-
-	cout << "(main.cpp) : evaluateStoneWinningSide returns : ";
-	if (s == Side::s1) cout << "s1";
-	else if (s == Side::s2) cout << "s2";
-	else cout << "none";
-	cout << endl;
-
-	return 0;*/
+	cout << "Supervisor created." << endl;
+	cout << "typer 'o' to continue >";
 	
+	cin >> c;
+
+	cout << system("CLS") << endl;
+
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** VERSION MENU **" << endl;
+	cout << "Available versions :" << endl;
+	for (auto& v : Versions) {
+		cout << v << endl;
+	}
+	cout << endl << "Please select a version :" << endl;
+
+	cin >> selection;
+
+	int i = 0;
+	for (auto& v : Versions) {
+		if (i == selection) {
+			i = -1;
+			selected_version = v;
+			break;
+		}
+		i++;
+	}
+	if (i != -1) { //no version selected
+		exit(1);
+	 }
+
+	cout << "Selected version : " << selected_version << endl;
+
+	cout << "typer 'o' to continue >";
+	cin >> c;
+
+	cout << system("CLS") << endl;
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** SETTINGS MENU **" << endl;
+	cout << "Player 1 name :" << endl;
+	cin >> p1_name;
+	cout << "Player 2 name :" << endl;
+	cin >> p2_name;
+
+	cout << "Creating controller..." << endl;
+	Supervisor::getInstance().setController(selected_version, p1_name, p2_name, 1, 2);
+	cout << "end";
+	*/
 }

@@ -18,6 +18,7 @@ public:
     unsigned int getId() const { return id; }
     unsigned int getScore() const { return score; }
     const Hand* getHand() const { return hand; }
+
     void setHand(const Card* c[6]) {
         if (hand == nullptr) hand = new Hand(c);
     }

@@ -6,15 +6,17 @@ using namespace std;
 
 Game::Game(const Version& version) {
 	if (version == Version::legacy) {
+		cards = new Card * [54];
   		unsigned int i = 0;
-  		for (auto c : Colors) {
-  			for (auto n : Numbers) {
+  		for (auto& c : Colors) {
+  			for (auto& n : Numbers) {
   				cards[i] = new Clan(c, n);
   				i++;
   			}
   		}
 	card_count = i;
 	} else if (version == Version::tactic) {
+		cards = new Card * [10];
 		cards[0] = new Elite("Chief1", Colors, Numbers);
 		cards[1] = new Elite("Chief2", Colors, Numbers);
 		cards[2] = new Elite("Spy",Colors, {Number::seven});

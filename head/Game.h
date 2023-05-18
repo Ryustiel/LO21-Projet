@@ -11,7 +11,7 @@ using namespace std;
 
 class Game {
 private:
-	Card** cards;
+	Card** cards = nullptr;
 	unsigned int card_count;
 public:
 	Game(const Version& v);

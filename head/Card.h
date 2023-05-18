@@ -45,7 +45,7 @@ private:
 	const Color color;
 	const Number number;
 public:
-	Clan(const Color& c, const Number nb): Card(toString(c) + " " + toString(nb)), color(c), number(nb) { }
+	Clan(const Color& c, const Number& nb): Card(toString(c) + " " + toString(nb)), color(c), number(nb) { }
 	void activate() const { return; };
 	const Color& getColor() const { return color; }
 	const Number& getNumber() const { return number; }

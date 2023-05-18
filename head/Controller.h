@@ -54,6 +54,16 @@ public:
 	void setPlayer1(Player* player) { player1 = player; }
     void setPlayer2(Player* player) { player2 = player; }
 
+	Player* getPlayer1() { return player1; }
+	Player* getPlayer2() { return player2; }
+	bool getRound() { return round; }
+	Version getVersion() { return version; }
+	Deck* getClanDeck() { return clanDeck; }
+	bool getStop() { return stop; }
+	int getRemainingRounds() { return remainingRounds; }
+	int getTotalRounds() { return totalRounds; }
+
+
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
@@ -68,8 +78,6 @@ protected:
 		delete player1;
 		delete player2;
 	}
-	Deck& getClanDeck();
-  	Board& getBoard();
 };
 
 class TacticController : public Controller {
