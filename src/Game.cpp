@@ -1,34 +1,44 @@
 #include "../head/Game.h"
+#include "../exception/ShottenTottenException.h"
 
-Game* Game::instance = nullptr;
 
-Game& Game::getInstance() {
-	if (instance == nullptr) {
-		instance = new Game();
+using namespace std;
+
+Game::Game(const Version& version) {
+	if (version == Version::legacy) {
+  		unsigned int i = 0;
+  		for (auto c : Colors) {
+  			for (auto n : Numbers) {
+  				cards[i] = new Clan(c, n);
+  				i++;
+  			}
+  		}
+	card_count = i;
+	} else if (version == Version::expert) {
+		cards[0] = new Elite("Chief1", Colors, Numbers);
+		cards[1] = new Elite("Chief2", Colors, Numbers);
+		cards[2] = new Elite("Spy",Colors, {Number::seven});
+		cards[3] = new Elite("Shield-Bearer", Colors,{Number::one,Number::two,Number::three});
+		cards[4] = new CombatMode("Blind-Man’s Bluff");
+		cards[5] = new CombatMode("Mud Fight");
+		cards[6] = new Ruses("Recruiter");
+		cards[7] = new Ruses("Strategist");
+		cards[8] = new Ruses("Banshee");
+		cards[9] = new Ruses("Traiter");
+		card_count =  10;
+	} else {
+		throw ShottenTottenException("Version Game error : version not known");
 	}
-	return *instance;
 }
 
-void Game::freeInstance() { delete instance; instance = nullptr; }
-
-Game::Game() {
-	size_t i = 0;
-	for (auto c : Colors) {
-		for (auto n : Numbers) {
-			clanCards[i] = new Clan(c, n);
-			i++;
-		}
+Game::~Game() {
+	for (unsigned int i = 0; i < card_count; i++) {
+		delete cards[i];
 	}
-	const string chef1 = "Chief1";
-	tacticalCards[0] = new Elite("Chief1");
-	tacticalCards[1] = new Elite("Chief2");
-	tacticalCards[2] = new Elite("Spy");
-	tacticalCards[3] = new Elite("Shield-Bearer");
-	tacticalCards[4] = new CombatMode("Blind-Man’s Bluff");
-	tacticalCards[5] = new CombatMode("Mud Fight");
-	tacticalCards[6] = new Ruses("Recruiter");
-	tacticalCards[7] = new Ruses("Strategist");
-	tacticalCards[8] = new Ruses("Banshee");
-	tacticalCards[9] = new Ruses("Traiter");
+	delete[] cards;
+}
 
+const Card& Game::getCard(unsigned int i) const {
+	if (i > card_count) throw ShottenTottenException("getCard error : incorrect number");
+	return *cards[i];
 }

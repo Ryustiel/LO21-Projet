@@ -1,143 +1,267 @@
-@startuml haha
+@startuml Hello
 
-enum chiffre {
-    un
-    deux
-    trois
-    quatre
-    cinq
+''' ENUMERATIONS '''
+enum Number {
+    one 
+    two
+    three
+    four
+    five
     six
-    sept
-    huit
-    neuf
+    seven
+    eight
+    nine
 }
 
-enum couleur {
-    bleu
-    jaune
-    rouge
-    vert clair
-    vert foncé
-    violet
+enum Color {
+    red
+    green
+    blue
+    purple
+    yellow
+    brown
 }
 
-'tous les enfants auront la méthode activation
-'activation() est une abstraction
-class Carte <abstraite> {
-    nom : string
-    activation() 
+enum Version {
+    Legacy
+    Tactic
+}
+
+enum Side {
+    none
+    s1
+    s2
+}
+
+enum CombinationType {
+	sum
+	straight
+	flush
+	three_of_a_kind
+	straight_flush
+}
+
+
+''' CLASSES '''
+class Supervisor <singelton> {
+    - controller : Controller* 
+
+    + $getInstance() : Supervisor& 
+    + freeInstance() : void
+    + setController(v : const Version&, name_player1 : const string&, name_player2 : const string&, id_player1 : unsigned int, id_player2, unsigned int) : void
+    + getController() : Controller*
+}
+
+class Controller {
+    - version : const Version (initialisé à Version::legacy)
+	- clanDeck : Deck* (initialisé à nullptr)
+	- board : Board
+	- clanGame : Game
+	- player1 : Player*
+	- player2 : Player*
+	- round : bool (initialisé à 0)
+    - stop : bool (initialisé à 0)
+    - reHandingRounds : int
+    - totalRounds : int
+
+    - handleNewRound() : void
+    - runRoundLoop() : void
+    - runChecks() : void
+
+    + Controller(v : const Version&, name_player1 : const string&,
+        name_player2 : const string&, id_player1 : unsigned int,
+        id_player2 : unsigned int)
+    + ~Controller()
+    + Controller(c : const Controller&) = delete
+	+ Controller& operator=(c : const Controller&) = delete
+    + getClanDeck() : Deck&
+  	+ getBoard() : Board&
+    + setPlayer1(player : Player*) : void
+    + setPlayer2(player : Player*) : void
+    + newGame(nbTurns : int) : void
+}
+
+class TacticController {
+    - version : const Version (initialisé à Version::tactic)
+	- tacticDeck : Deck* (initialisé à  nullptr)
+	- tacticGame : Game
+
+    + TacticController(const Version& v, const string& name_player1,
+        const string& name_player2, unsigned int id_player1,
+        unsigned int id_player2)
+    + ~TacticController()
+    + getTacticDeck() : Deck&
+}
+
+class Player {
+    - name : string
+    - id : unsigned int
+    - score : unsigned int (initialisé à 0)
+    - hand : Hand* (initialisé à nullptr)
+    - pick : int
+
+    + Player(n : const string&, idPlayer : bool)
+    + ~Player()
+    + getName() const : const string& 
+    + getId() const : unsigned int
+    + getScore() const : unsigned int
+    + getHand() const : const Hand*
+    + setHand(c[6] : const Card*) : void
+    + setHand(c : const Card**, n : size_t) : void
+    + updateScore() : void
+    + init() : void
+    + initRound() : void
+    + playTurn() : void
+}
+
+class PlayerAIRandom {
+    - PlayerAIRandom(n : const string&, idPlayer : bool)
+}
+
+class Card <abstract> {
+    - name : string
+
+    + Card(n : const string)
+    + activate() const : void
 }
 
 class Clan {
-    couleur : enum
-    numero : enum
+    - color : Color
+	- number : Number
+
+    + Clan(c : const Color&, nb : const Number)
+    + activate() const : void
+    + getColor() const : const Color&
+    + getNumber() const : const Number&
 }
 
-class Tactique {
-
-}
-
-class Jeu <singleton> {
-
-}
-
-class Pioche {
-    cartes : Cartes**
-    nombre_cartes : int
-    nombre_max_cartes : int
-    'à garder ?
-    piocher()
-}
-
-'Singleton ??
-class Controleur <singleton> {
-    initialiser()
-}
-
-class Plateau {
-
-}
-
-class Borne {
-    CombinaisonJoueur1 : Combinaison
-    CombinaisonJoueur2 : Combinaison
-    nb_max : int
-
-    id : int {1..9} 
-
-    'Ou : CombinaisonJoueur1 : Carte** // CombinaisonJoueur2 : Carte**  (?)
-}
-
-'supprimer combinaison ? 
-'comment faire en sorte que la combi (avec ou non une carte Tactique apposée sur la borne)
-'s'évalue correctement ?
-class Combinaison {
-
-}
-
-class Main {
-    
-}
-
-'Fusionner Joueur et Main ? 
-class Joueur {
-    nom : string
-    est_IA : bool
-    'détermine si le Joueur est une IA ou non
-
-    fonctionIA()
-    'à garder ?
+class Tactical {
+    + Tactical(n : const string)
+    + activate() const : void
 }
 
 class Elite {
-
+    + Elite(n : const string)
 }
 
-class ModeDeCombat {
-
+class CombatMode {
+    + CombatMode(n : const string)
 }
-
 
 class Ruses {
-    'Les cartes ruses, à la fin de leur utilisation, vont ds la défausse
-
+    + Ruses(n : const string)
 }
 
-'faire une classe fille pour un seul objet ?
-class RuseChildren {}
+class Hand {
+	- cards : const Card**
+	- size : size_t
+	- max_size : size_t
 
-class ModeDeCombatChildren {}
+    + Hand(c[6] : const Card*)
+    + Hand(c : const Card**, n : size_t)
+    + add(c : const Card&) : void
+    + play(c : const Card&) : void
+}
 
-'Composition Plateau / Borne
-'-> permet de réinitialiser le jeu à la fin/ au début de chaque manche
-Carte <|-- Clan
-Carte <|-- Tactique
+class Game {
+    - cards : Card**
+    - card_count : unsigned int
 
-Tactique <|-- Elite
-Tactique <|-- ModeDeCombat
-Tactique <|-- Ruses
+    + Game(v : const Version&);
+	+ ~Game();
+	+ getCardCount() const : unsigned int
+}
 
-Ruses <|-- RuseChildren
-ModeDeCombat <|-- ModeDeCombatChildren
+class Deck {
+    - cards : const Card**
+    - card_count : unsigned int
+	- max_card_count : unsigned int
 
-Jeu *-- Carte
-Plateau *-- Borne
+    + Deck(g : const Game&)
+    + ~Deck();
+	+ Deck(p : const Deck&) = delete
+	+ operator=(const Deck& p) : Deck& = delete
+	+ getCardCount() const : unsigned int
+    + getMaxCardCount() const : unsigned int
+    + isEmpty() const : bool
+    + draw() : const Card&
+}
 
-Borne *--Combinaison
+class Stone {
+    - max_size : size_t
+	- size_p1 : size_t
+	- size_p2 : size_t
+	- combination_p1 : const Card**
+	- combination_p2 : const Card**
+	- revendication : Side
+	- firstCompleted : Side
 
-Carte --o Pioche
-Carte --o Plateau
-Carte --o Combinaison
+    + Stone()
+    + ~Stone()
+    + const Side getRevendication()
+    + addCard(card : const Card&, side : const Side) : void 
+    + removeCard(card : const Card&, side : const Side) : const Card& 
+	+ setMaxSize(size : const size_t) : void
+    + getMaxSize() const : size_t
+    + getSizeP1() const : size_t
+    + getSizeP2() const : size_t
+    + getCombinationP1() const : const Card**
+    + getCombinationP2() const : const Card**
+    + getRevendication() const : Side
+    + getFirstCompleted() const : Side
+    + const Side isWon(const Card** AvailableCards, const size_t availableCardsCount) const;
+	+ $combinationVariationFromIncompleteCombination(possibleCards : const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, nbOfComninationFound : size_t&) : list<const Card**> 
+    + $bestVariation(possibleCards const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, combinationToBeat : CombinationType, sumToBeat : const size_t) : const Card**
+    + $combinationTypeFromCompleteCombination(c[] : const Card* , n : size_t, max : int* = nullptr) : const CombinationType
+    + $compareCombination(c1[] : const Card*, c2[] : const Card*, n : size_t) : const Side
+    + $compareCombinationType(p1 : const CombinationType&, p2 : const CombinationType&) : const Side
+    + $sum(const Clan *c[], size_t n) : const size_t
+}
 
-Joueur o-- Main
+class Board {
+    - stones : Stone*
+	- border_nb : size_t
 
-Main o-- Carte
+    + Board(size_t size = 9)
+    + ~Board()
+    + getStones() const : const Stone*
+    + getBorderNb() const : size_t
+    + addCard(card : const Card&, side : const Side, n : const unsigned int) : void
+    + removeCard(card : const Card&, side : const Side, n : const unsigned int) : const Card&
+    + isStoneWon(n : const unsigned int, AvailableCards : const Card** , availableCardsCount : const size_t) const : const Side
+}
 
 
-Controleur *-- Plateau
-Controleur *-- Pioche
-Controleur *-- Joueur
-Controleur -- Jeu
+''' HERITAGES '''
+Controller <|-- TacticController
 
+Player <|-- PlayerAIRandom
+
+Card <|-- Clan
+Card <|-- Tactical
+
+Tactical <|-- Elite
+Tactical <|-- CombatMode
+Tactical <|-- Ruses
+
+
+''' RELATIONS '''
+Supervisor *-- Controller
+
+Controller *-- Board
+Controller *-- Deck
+Controller *-- Player
+Controller -- Game
+
+Game *-- Card
+Board *-- Stone
+
+Card --o Deck
+Card --o Board
+Card --o Combinaison
+
+Player *-- Hand
+
+Hand o-- Card
 
 @enduml

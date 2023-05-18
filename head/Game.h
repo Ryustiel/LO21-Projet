@@ -1,18 +1,21 @@
 #pragma once
+#include <string>
+#include <iostream>
 #include "Card.h"
+#include "../exception/ShottenTottenException.h"
+#include "Version.h"
 
+class Controller;
 
-class Game{
+using namespace std;
+
+class Game {
 private:
-	static Game* instance;
-	Clan* clanCards[clanCardsNumber];
-	Tactical* tacticalCards[tacticalCardsNumber];
+	Card** cards;
+	unsigned int card_count;
 public:
-	Game();
-	Game(const Game& j) = delete;
-	Game& operator= (const Game& j) = delete;
-	static Game& getInstance();
-	static void freeInstance();
+	Game(const Version& v);
+	~Game();
+	unsigned int getCardCount() const { return card_count; }
+	const Card& getCard(unsigned int i) const;
 };
-
-
