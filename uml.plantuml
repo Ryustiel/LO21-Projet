@@ -203,9 +203,10 @@ class Stone {
     + const Side getRevendication()
     + addCard(card : const Card&, side : const Side) : void 
     + removeCard(card : const Card&, side : const Side) : const Card& 
-	+ changeMaxSize(size : const size_t) : void
+	+ setMaxSize(size : const size_t) : void
     + getMaxSize() const : size_t
     + getSizeP1() const : size_t
+    + getSizeP2() const : size_t
     + getCombinationP1() const : const Card**
     + getCombinationP2() const : const Card**
     + getRevendication() const : Side
@@ -221,14 +222,16 @@ class Stone {
 
 class Board {
     - stones : Stone*
-	- border_nb : size_t
+	- border_nb : size_
     - won : Side
+
 
     + Board(size_t size = 9)
     + ~Board()
     + getStones() const : const Stone*
     + getBorderNb() const : size_t
     + getWon() const : Side
+
     + addCard(card : const Card&, side : const Side, n : const unsigned int) : void
     + removeCard(card : const Card&, side : const Side, n : const unsigned int) : const Card&
     + isStoneWon(n : const unsigned int, AvailableCards : const Card** , availableCardsCount : const size_t) const : const Side

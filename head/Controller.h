@@ -5,8 +5,8 @@
 #include "Card.h"
 #include "Version.h"
 #include "Board.h"
-#include "Version.h"
-#include "Player.h"
+#include "Hand.h"
+
 
 
 class Controller{
