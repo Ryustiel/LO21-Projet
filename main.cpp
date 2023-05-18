@@ -8,7 +8,28 @@
 #include "head/Board.h"
 
 int main() {
-	Elite* e = new Elite("Chief2", Colors, Numbers);
+
+	Board* b = new Board();
+
+	b->getStone(0).setRevendication(Side::s1);
+	b->getStone(1).setRevendication(Side::none);
+	b->getStone(2).setRevendication(Side::s2);
+	b->getStone(3).setRevendication(Side::s1);
+	b->getStone(4).setRevendication(Side::s1);
+	b->getStone(5).setRevendication(Side::none);
+	b->getStone(6).setRevendication(Side::s2);
+	b->getStone(7).setRevendication(Side::s2);
+	b->getStone(8).setRevendication(Side::s2);
+
+
+
+
+
+
+
+	b->evaluateGameWinner();
+
+	/*Elite* e = new Elite("Chief2", Colors, Numbers);
 	Clan* c1 = new Clan(Color::red, Number::nine);
 	Clan* c2 = new Clan(Color::red, Number::eight);
 	Clan* c3 = new Clan(Color::red, Number::seven);
@@ -45,6 +66,6 @@ int main() {
 	else cout << "none";
 	cout << endl;
 
-	return 0;
+	return 0;*/
 	
 }

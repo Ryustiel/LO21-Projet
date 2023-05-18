@@ -366,10 +366,54 @@ const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t 
 
 
 const Side Board::evaluateStoneWinningSide(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const {
-	if (n < 0 || n > 9) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
-	const Side& revendication = borders[n].getRevendication();
+	if (n < 0 || n > stone_nb) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
+	const Side& revendication = stones[n].getRevendication();
 	if (revendication != Side::none)
 		return revendication;
-	return borders[n].evaluateWinningSide(AvailableCards, availableCardsCount);
+	return stones[n].evaluateWinningSide(AvailableCards, availableCardsCount);
+}
+
+
+const Side Board::evaluateGameWinner() const {
+	size_t count_p1 = 0;
+	size_t p1_in_a_row = 0;
+	size_t count_p2 = 0;
+	size_t p2_in_a_row = 0;
+
+	for (size_t i = 0; i < stone_nb; i++) {
+		if (stones[i].getRevendication() == Side::s1) {
+			count_p1 += 1;
+			p1_in_a_row += 1;
+			p2_in_a_row = 0;
+		} else if (stones[i].getRevendication() == Side::s2) {
+			count_p2 += 1;
+			p2_in_a_row += 1;
+			p1_in_a_row = 0;
+		}
+		else if (stones[i].getRevendication() == Side::none) {
+			p1_in_a_row = 0;
+			p2_in_a_row = 0;
+		}
+
+		if (count_p1 == 5) {
+			cout << "5 stones won : Player 1 wins !" << endl;
+			return Side::s1;
+		}
+		if (p1_in_a_row == 3) {
+			cout << "3 consecutive stones won : Player 1 wins !" << endl;
+			return Side::s1;
+		}
+
+		if (count_p2 == 5) {
+			cout << "5 stones won : Player 2 wins !" << endl;
+			return Side::s2;
+		}
+		if (p2_in_a_row == 3) {
+			cout << "3 consecutive stones won : Player 2 wins !" << endl;
+			return Side::s2;
+		}
+	}
+	cout << "The game continues !" << endl;
+	return Side::none;
 }
 
