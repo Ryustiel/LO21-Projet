@@ -20,7 +20,7 @@ void Stone::addCard(const Card &card, const Side side) { //add card on a given s
 	throw BoardException("Border addCard : this side of the border is full");
   }
 
-  combination[++*size] = &card;
+  combination[(* size)++] = &card;
   if (*size == max_size)
 	firstCompleted = side;
   else if (*size != max_size && firstCompleted != Side::none)
@@ -220,11 +220,19 @@ const Side Stone::compareCombinationType(const CombinationType& s1, const Combin
 }
 
 
-const Card** recursiveVariation(const Card** possibleCards, const size_t pcn, const Card** baseCombination, const size_t size, const size_t desiredSize, const  CombinationType combinationToBeat,const size_t sumToBeat) {
+const Card** recursiveVariation(const Card** possibleCards, const size_t pcn, const Card** baseCombination, const size_t size, const size_t desiredSize, const CombinationType combinationToBeat,const size_t sumToBeat, bool combat_mode_mud_prensence) {
 
 	if (size == desiredSize) {
 		int max;
 		CombinationType resultCombType= Stone::evaluateCombination(baseCombination, desiredSize, &max);
+		if (combat_mode_mud_prensence) {
+			if (max > sumToBeat) {
+				return baseCombination;
+			}
+			else {
+				return nullptr;
+			}
+		}
 		cout << "\recursiveVariation : end of recursive function\n Combination type = " << toString(resultCombType) << endl;
 		Side s = Stone::compareCombinationType(resultCombType, combinationToBeat);
 		cout << "recursiveVariation : max sum : " << max << endl;
@@ -239,7 +247,7 @@ const Card** recursiveVariation(const Card** possibleCards, const size_t pcn, co
 		const Card* tmp = possibleCards[pcn - 1];
 
 
-		const Card** resultComb= recursiveVariation(possibleCards, pcn-1, baseCombination, size + 1, desiredSize, combinationToBeat,  sumToBeat);
+		const Card** resultComb= recursiveVariation(possibleCards, pcn-1, baseCombination, size + 1, desiredSize, combinationToBeat,  sumToBeat, combat_mode_mud_prensence);
 		if (resultComb != nullptr) {
 			return resultComb;
 		}
@@ -280,14 +288,14 @@ void quickSort(const Card** cards, int end, int start =0) {
 	}
 }
 
-const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat){
+const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat, bool combat_mode_mud_prensence){
 	quickSort(possibleCards, pcn-1);
 	const Card** combi = new const Card*[desiredSize];
 	for (size_t i = 0; i < desiredSize; ++i) {
 		if (i < icn)
 			combi[i] = incompleteCombination[i];
 	}
-	const Card** resultCombi = recursiveVariation(possibleCards, pcn, combi, icn, desiredSize, combinationToBeat, sumToBeat);
+	const Card** resultCombi = recursiveVariation(possibleCards, pcn, combi, icn, desiredSize, combinationToBeat, sumToBeat, combat_mode_mud_prensence);
 	return resultCombi;
 	
 
@@ -296,12 +304,10 @@ const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, 
 
 const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t availableCardsCount) const { //evaluate the combinations to determine a winning side (can be none)
 	//in order to compare sides, at least one side must be complete
+	const bool mud_fight = (combat_mode != nullptr && combat_mode->getName() == "Mud Fight");
 	if (size_p1 == max_size && size_p2 == max_size) { //both sides are complete
 		Side winningSide;
-		if (combat_mode != nullptr && combat_mode->getName() == "Mud Fight")
-			winningSide = compareCombination(combination_p1, combination_p1, max_size, 1);
-		else
-			winningSide = compareCombination(combination_p1, combination_p1, max_size);
+		winningSide = compareCombination(combination_p1, combination_p1, max_size, mud_fight);
 		if (winningSide != Side::none) return winningSide;
 		return firstCompleted;
 	}
@@ -312,7 +318,7 @@ const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t 
 		CombinationType combiType_p1 = evaluateCombination(combination_p1, max_size, &sum_p1);
 		if (combat_mode != nullptr && combat_mode->getName() == "Mud Fight")
 			combiType_p1 = CombinationType::sum;
-		const Card** bestVar = bestVariation(AvailableCards, availableCardsCount, combination_p2, size_p2, max_size, combiType_p1, sum_p1);
+		const Card** bestVar = bestVariation(AvailableCards, availableCardsCount, combination_p2, size_p2, max_size, combiType_p1, sum_p1, mud_fight);
 		//no need to compare the combinations, only the existence of a better hypothetical combination
 		if (bestVar != nullptr) {
 			cout << "A better combination can be made on side S2 !" << endl;
@@ -336,7 +342,7 @@ const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t 
 		CombinationType combiType_p2 = evaluateCombination(combination_p2, max_size, &sum_p2);
 		if (combat_mode != nullptr && combat_mode->getName() == "Mud Fight")
 			combiType_p2 = CombinationType::sum;
-		const Card** bestVar = bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size, combiType_p2, sum_p2); //conversion int to size_t !!!
+		const Card** bestVar = bestVariation(AvailableCards, availableCardsCount, combination_p1, size_p1, max_size, combiType_p2, sum_p2,mud_fight); //conversion int to size_t !!!
 		//no need to compare the combinations, only the existence of a better hypothetical combination
 		if (bestVar != nullptr) {
 			cout << "A better combination can be made on side S2 !" << endl;

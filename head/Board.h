@@ -87,7 +87,7 @@ public:
 	const Side evaluateWinningSide(const Card** AvailableCards, const size_t availableCardsCount) const;
 
 	//Return the best and the worse of all possible variations of an incomplete card combination
-	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat);
+	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat, bool combat_mode_mud_prensence);
 
 	//Determines the type out of a card combination, sets the sum of the cards in max if given
 	static const CombinationType evaluateCombination(const Card* c[], size_t combination_size, int* max = nullptr);
@@ -110,7 +110,7 @@ public:
 	const Stone* getStones() const { return borders;  }
 	size_t getBorderNb() const { return stone_nb;  }
 
-	void addCard(const Card& card, const Side side, const unsigned int n);
+	void addCard(const Card& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); borders[n].addCard(card, side); };
 	const Card& removeCard(const Card& card, const Side side,const unsigned int n);
 
 	//Return which side as won a specific stone
