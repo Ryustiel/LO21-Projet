@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 //#include "src/Controller.cpp"
-#include "src/Player.cpp"
+//#include "src/Player.cpp"
 #include "head/Game.h"
 
 #include "head/Card.h"
@@ -15,17 +15,16 @@ int main() {
 	Clan* c4 = new Clan(Color::blue, Number::two);
 	Clan* c5 = new Clan(Color::blue, Number::one);
 	Clan* c6 = new Clan(Color::blue, Number::three);
+	Clan* c7 = new Clan(Color::purple, Number::seven);
+	Clan* c8 = new Clan(Color::yellow, Number::seven);
 
 	Board* b = new Board();
 	b->addCard(*c3, Side::s1, 0);
-	b->addCard(*c5, Side::s1, 0);
-	b->addCard(*c6, Side::s1, 0);
+	b->addCard(*c7, Side::s1, 0);
+	b->addCard(*c8, Side::s1, 0);
 	b->addCard(*c1, Side::s2, 0);
 	//b->addCard(*c5, Side::s2, 0);
 	//b->addCard(*e, Side::s2, 0);
-
-
-	std::cout << "\n\ndone";
 
 	if (b->getStone(0).getFirstCompleted() != Side::s1) cout << "Incorrect first completed side" << endl;
 
