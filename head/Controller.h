@@ -6,6 +6,7 @@
 #include "Version.h"
 #include "Board.h"
 #include "Hand.h"
+#include "Player.h"
 
 
 

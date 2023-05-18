@@ -20,7 +20,7 @@ void Controller::handleNewRound() {
     std::cout << "\nround = 0;";
     std::cout << "\npioche.init();";
     std::cout << "\nTacticController : pioche_tactique.init();";
-    board.init();
+    //board.init();
     player1->initRound(); player2->initRound();
 
     TEMP_victory_counter = 0;
@@ -30,7 +30,7 @@ void Controller::handleNewRound() {
     std::cout << "\n\nEVENEMENTS DE FIN DE MANCHE --> DEBUT D'UNE NOUVELLE MANCHE OU FIN DE PARTIE (selon scores et nbTurns definis)";
     std::cout << "\nSCORES : " << player1->getScore() << " vs " << player2->getScore();
 }
-
+/*
 void Controller::runRoundLoop() {
     std::cout << "\n\nManche Loop ================";
     // gere toute la manche
@@ -53,11 +53,11 @@ void Controller::runRoundLoop() {
         // le controleur ne fait que changer l'état du jeu en réponse à l'événement de victoire.
     }
 }
-
+*/
 void Controller::runChecks() { // this is called by a player
     std::cout << "Triggering board checks, can update the state of the game";
     if (++TEMP_victory_counter > 2) {
-        board.setWon();
+        //board.setWon();
         player1->updateScore();
         std::cout << "\n\nround GAGNE PAR JOUEUR 1";
     }

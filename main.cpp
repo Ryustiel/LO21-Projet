@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "src/Board.cpp"
-#include "src/Controller.cpp"
+//#include "src/Controller.cpp"
 #include "src/Player.cpp"
 #include "head/Game.h"
 
@@ -26,8 +26,7 @@ int main() {
 	//b->addCard(*e, Side::s2, 0);
 
 
-  std::cout << "\n\ndone";
-}
+	std::cout << "\n\ndone";
 
 	if (b->getStone(0).getFirstCompleted() != Side::s1) cout << "Incorrect first completed side" << endl;
 
