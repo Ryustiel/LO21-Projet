@@ -57,6 +57,7 @@ private:
 	size_t size_p2;
 	const Card** combination_p1;
 	const Card** combination_p2;
+	const CombatMode* combat_mode = nullptr;
 	Side revendication;
 	Side firstCompleted;
 
@@ -88,11 +89,11 @@ public:
 	//Return the best and the worse of all possible variations of an incomplete card combination
 	static const Card** bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat);
 
-	//Determines the type out of a card combination, sets the sum of the cards in max
+	//Determines the type out of a card combination, sets the sum of the cards in max if given
 	static const CombinationType evaluateCombination(const Card* c[], size_t combination_size, int* max = nullptr);
 
-	//Return which Combination is the strongest
-	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size);
+	//Return which Combination (same size) is the strongest
+	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size); //ajouter un argument ; bool/énum "evaluationType" 
 
 	//Compare the value of two Combinations type
 	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
@@ -108,8 +109,10 @@ public:
 	~Board() { delete[] borders; }
 	const Stone* getStones() const { return borders;  }
 	size_t getBorderNb() const { return stone_nb;  }
+
 	void addCard(const Card& card, const Side side, const unsigned int n);
 	const Card& removeCard(const Card& card, const Side side,const unsigned int n);
+
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const Card** AvailableCards, const size_t availableCardsCount) const;
 };

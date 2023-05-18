@@ -157,7 +157,8 @@ const CombinationType Stone::evaluateCombination(const Card* c[], size_t n, int*
 	return CombinationType::sum;
 }
 
-const Side Stone::compareCombination(const Card* c1[], const Card* c2[], int combination_size) { //WARNING : mind the order of c1 and c2 arguments !!!
+//WARNING : mind the order of c1 and c2 arguments !!!
+const Side Stone::compareCombination(const Card* c1[], const Card* c2[], int combination_size) {
 	int sum_s1 = 0;
 	int sum_s2 = 0;
 	const CombinationType combiType_s1 = evaluateCombination(c1, combination_size, &sum_s1);
