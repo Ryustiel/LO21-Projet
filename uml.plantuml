@@ -61,7 +61,9 @@ class Controller {
 	- player2 : Player*
 	- round : bool (initialisé à 0)
     - stop : bool (initialisé à 0)
-    - reHandingRounds : int
+    - remainingRounds : int
+    - round : bool
+    - stop : bool
     - totalRounds : int
 
     - handleNewRound() : void
@@ -220,12 +222,16 @@ class Stone {
 
 class Board {
     - stones : Stone*
-	- border_nb : size_t
+	- border_nb : size_
+    - won : Side
+
 
     + Board(size_t size = 9)
     + ~Board()
     + getStones() const : const Stone*
     + getBorderNb() const : size_t
+    + getWon() const : Side
+
     + addCard(card : const Card&, side : const Side, n : const unsigned int) : void
     + removeCard(card : const Card&, side : const Side, n : const unsigned int) : const Card&
     + isStoneWon(n : const unsigned int, AvailableCards : const Card** , availableCardsCount : const size_t) const : const Side

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "../exception/ShottenTottenException.h"
 #include "Card.h"
 #include "Deck.h"
@@ -83,7 +84,7 @@ public:
 	void setCombatMode(const CombatMode* cM) {
 		if (combat_mode == nullptr) {
 			combat_mode = cM;
-			if (cM->getName() == "Blind-Man�s Bluff") {
+			if (cM->getName() == "Blind-Man’s Bluff") {
 				max_size += 1;
 				if (firstCompleted != Side::none) firstCompleted = Side::none; //a combination cannot be complete
 			}
@@ -106,7 +107,7 @@ public:
 	static const CombinationType evaluateCombinaison(const Card* c[], size_t combination_size, int* max = nullptr);
 
 	//Return which Combination (same size) is the strongest
-	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size, bool combat_mode_mud_prensence = 0); //ajouter un argument ; bool/�num "evaluationType" 
+	static const Side compareCombination(const Card* c1[], const Card* c2[], int combination_size, bool combat_mode_mud_prensence = 0); //ajouter un argument ; bool/énum "evaluationType" 
 
 	//Compare the value of two Combinations type
 	static const Side compareCombinationType(const CombinationType& p1, const CombinationType& p2);
@@ -116,6 +117,9 @@ class Board {
 private:
 	Stone* borders; //const Stone* ?
 	size_t stone_nb;
+
+  // indique si les checks prÃ©cÃ©dents ont dÃ©terminÃ© que la partie Ã©tait gagnÃ©e
+  bool won = false; 
 
 public:
 	Board(size_t size = 9) : stone_nb(size), borders(new Stone[size]) {}

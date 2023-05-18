@@ -361,6 +361,7 @@ const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t 
 	return Side::none;
 }
 
+
 const Side Board::evaluateStoneWinningSide(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const {
 	if (n < 0 || n > 9) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
 	const Side& revendication = borders[n].getRevendication();
@@ -368,3 +369,4 @@ const Side Board::evaluateStoneWinningSide(const unsigned int n,const Card** Ava
 		return revendication;
 	return borders[n].evaluateWinningSide(AvailableCards, availableCardsCount);
 }
+

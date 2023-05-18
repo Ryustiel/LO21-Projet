@@ -1,5 +1,10 @@
 #include <iostream>
+#include <string>
+#include "src/Board.cpp"
+#include "src/Controller.cpp"
+#include "src/Player.cpp"
 #include "head/Game.h"
+
 #include "head/Card.h"
 #include "head/Board.h"
 
@@ -20,6 +25,9 @@ int main() {
 	//b->addCard(*c5, Side::s2, 0);
 	//b->addCard(*e, Side::s2, 0);
 
+
+  std::cout << "\n\ndone";
+}
 
 	if (b->getStone(0).getFirstCompleted() != Side::s1) cout << "Incorrect first completed side" << endl;
 
