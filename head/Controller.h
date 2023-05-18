@@ -8,7 +8,7 @@
 #include "Version.h"
 #include "Player.h"
 
-//using design pattern Singleton
+
 class Controller{
 private:
 	const Version version = Version::legacy;
