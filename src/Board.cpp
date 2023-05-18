@@ -78,7 +78,7 @@ void Stone::setMaxSize(const size_t size) {
   combination_p2 = new_combination_j2;
 }
 
-const bool recursiveCombinationType(int* baseComb, const Card* possibleCards[], const size_t maxSize, int* maxSum, const size_t size = 0) {
+const bool recursiveCombinationType(int* baseComb, const Card* possibleCards[], const size_t maxSize, int* maxSum, const size_t size) {
 	*maxSum = 0;
 	if (size == maxSize) {
 		int min = baseComb[0];
@@ -106,7 +106,7 @@ const bool recursiveCombinationType(int* baseComb, const Card* possibleCards[], 
 	return false;
 }
 
-const CombinationType Stone::evaluateCombination(const Card* c[], size_t n, int* max = nullptr) {//evaluation of a full card combination
+const CombinationType Stone::evaluateCombination(const Card* c[], size_t n, int* max) {//evaluation of a full card combination
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
 	array<list<const Card*>, 9> cardNumberTable = array<list<const Card*>, 9>();
