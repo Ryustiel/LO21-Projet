@@ -30,8 +30,9 @@ void Controller::handleNewRound() {
     std::cout << "\n\nEVENEMENTS DE FIN DE MANCHE --> DEBUT D'UNE NOUVELLE MANCHE OU FIN DE PARTIE (selon scores et nbTurns definis)";
     std::cout << "\nSCORES : " << player1->getScore() << " vs " << player2->getScore();
 }
-/*
+
 void Controller::runRoundLoop() {
+    /*
     std::cout << "\n\nManche Loop ================";
     // gere toute la manche
     while (!board.isWon() && !stop) { // conditions de fin de manche
@@ -51,9 +52,9 @@ void Controller::runRoundLoop() {
         // les scores de manche des joueurs seront mis a jour...
         // en meme temps que le statut de victoire du plateau (pas ici)
         // le controleur ne fait que changer l'état du jeu en réponse à l'événement de victoire.
-    }
+    }*/
 }
-*/
+
 void Controller::runChecks() { // this is called by a player
     std::cout << "Triggering board checks, can update the state of the game";
     if (++TEMP_victory_counter > 2) {

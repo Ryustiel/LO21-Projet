@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "src/Board.cpp"
 //#include "src/Controller.cpp"
 #include "src/Player.cpp"
 #include "head/Game.h"
