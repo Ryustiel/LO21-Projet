@@ -5,35 +5,35 @@
 #include "Card.h"
 #include "Version.h"
 #include "Board.h"
-#include "Version.h"
-#include "Player.h"
+#include "Hand.h"
+
 
 //using design pattern Singleton
 class Controller{
 private:
-	const Version version = Version::legacy;
-	Deck* clanDeck = nullptr;
-	Board board;
-	Game clanGame;
-	Player* player1;
-	Player* player2;
-	bool round = 0;
-	friend class Supervisor;
+	static Controller* instance;
+	Deck* clan_deck;
+	Deck* tactical_deck;
+	Board* board;
+	Hand* hand_j1;
+	Hand* hand_j2;
 public:
+	Deck& getClanDeck();
+	Deck& getTacticalDeck();
+	Board& getBoard();
+	Hand& getHand1();
+	Hand& getHand2();
+	Controller() = default;
+	~Controller() = default;
+	struct Handler {
+		Controller* instance = nullptr;
+		~Handler() { delete instance; }
+	};
+	static Handler handler;
 	Controller(const Controller& j) = delete;
 	Controller& operator=(const Controller& j) = delete;
-protected:
-	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
-		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
-		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
-	}
-	~Controller() {
-		delete clanDeck;
-		delete player1;
-		delete player2;
-	}
-	Deck& getClanDeck();
-  Board& getBoard();
+	static const Controller& getInstance();
+	void freeInstance();
 };
 
 class TacticController : public Controller {
