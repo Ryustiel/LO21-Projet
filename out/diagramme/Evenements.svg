@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="2211px" preserveAspectRatio="none" style="width:1606px;height:2211px;background:#FFFFFF;" version="1.1" viewBox="0 0 1606 2211" width="1606px" zoomAndPan="magnify"><defs/><g><g id="elem_Vue_QT_1"><rect fill="#F1F1F1" height="47.2188" style="stroke:#181818;stroke-width:0.5;" width="134" x="1163.5" y="167"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="1196" y="183.5332">Vue_QT_1</text><line style="stroke:#181818;stroke-width:0.5;" x1="1164.5" x2="1296.5" y1="188.6094" y2="188.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122" x="1169.5" y="207.1426">Choix de la Version</text></g><g id="elem_Vue_QT_2"><rect fill="#F1F1F1" height="47.2188" style="stroke:#181818;stroke-width:0.5;" width="169" x="1146" y="488"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="1196" y="504.5332">Vue_QT_2</text><line style="stroke:#181818;stroke-width:0.5;" x1="1147" x2="1314" y1="509.6094" y2="509.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="157" x="1152" y="528.1426">Paramétrage de la partie</text></g><g id="elem_Vue_QT_3"><rect fill="#F1F1F1" height="64.8281" style="stroke:#181818;stroke-width:0.5;" width="139" x="576" y="998"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="611" y="1014.5332">Vue_QT_3</text><line style="stroke:#181818;stroke-width:0.5;" x1="577" x2="714" y1="1019.6094" y2="1019.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="127" x="582" y="1038.1426">Sélection de l'Action</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="582" y="1055.752">du joueur</text></g><g id="elem_Vue_QT_4"><rect fill="#F1F1F1" height="64.8281" style="stroke:#181818;stroke-width:0.5;" width="122" x="602.5" y="1338.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="629" y="1355.0332">Vue_QT_4</text><line style="stroke:#181818;stroke-width:0.5;" x1="603.5" x2="723.5" y1="1360.1094" y2="1360.1094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110" x="608.5" y="1378.6426">Choix d'une carte</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80" x="608.5" y="1396.252">dans la main</text></g><g id="elem_Vue_QT_5"><rect fill="#F1F1F1" height="64.8281" style="stroke:#181818;stroke-width:0.5;" width="127" x="746" y="1721"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="775" y="1737.5332">Vue_QT_5</text><line style="stroke:#181818;stroke-width:0.5;" x1="747" x2="872" y1="1742.6094" y2="1742.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="115" x="752" y="1761.1426">Choix d'une borne</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86" x="752" y="1778.752">sur le plateau</text></g><g id="elem_Vue_QT_6"><rect fill="#F1F1F1" height="64.8281" style="stroke:#181818;stroke-width:0.5;" width="163" x="7" y="2140"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="54" y="2156.5332">Vue_QT_6</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="169" y1="2161.6094" y2="2161.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="151" x="13" y="2180.1426">Affichage d'un message</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="151" x="13" y="2197.752">avec bouton "continuer"</text></g><g id="elem_qtStart"><rect fill="#F1F1F1" height="82.4375" style="stroke:#181818;stroke-width:0.5;" width="231" x="1115" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="1209.5" y="23.5332">qtStart</text><line style="stroke:#181818;stroke-width:0.5;" x1="1116" x2="1345" y1="28.6094" y2="28.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="152" x="1121" y="47.1426">Creation du superviseur</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="1121" y="64.752">initialisation de QT</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="219" x="1121" y="82.3613">Supervisor::getInstance().qtStart();</text></g><g id="elem_eventRunVersion"><rect fill="#F1F1F1" height="117.6563" style="stroke:#181818;stroke-width:0.5;" width="392" x="901.5" y="292"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="1043" y="308.5332">eventRunVersion</text><line style="stroke:#181818;stroke-width:0.5;" x1="902.5" x2="1292.5" y1="313.6094" y2="313.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="907.5" y="332.1426">PARAMETRES</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="380" x="907.5" y="349.752">Supervisor::getInstance().eventRunVersion(PARAMETRES);</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="352" x="907.5" y="367.3613">Supervisor::getInstance().setController(PARAMETRES);</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="255" x="907.5" y="384.9707">Supervisor::getController().Vue_QT_2();</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="338" x="907.5" y="402.5801">(vue QT 2 spécifique à chaque contrôleur de version)</text></g><g id="elem_eventNewGame"><rect fill="#F1F1F1" height="64.8281" style="stroke:#181818;stroke-width:0.5;" width="289" x="1086" y="613"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="1181" y="629.5332">eventNewGame</text><line style="stroke:#181818;stroke-width:0.5;" x1="1087" x2="1374" y1="634.6094" y2="634.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="1092" y="653.1426">PARAMETERS</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="277" x="1092" y="670.752">Controller::eventNewGame(PARAMETERS);</text></g><g id="elem_newRound"><rect fill="#F1F1F1" height="37.6094" style="stroke:#181818;stroke-width:0.5;" width="81" x="1190" y="756"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="67" x="1197" y="772.5332">newRound</text><line style="stroke:#181818;stroke-width:0.5;" x1="1191" x2="1270" y1="777.6094" y2="777.6094"/></g><g id="elem_eventStartTurn"><rect fill="#F1F1F1" height="64.8281" style="stroke:#181818;stroke-width:0.5;" width="255" x="1005" y="855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95" x="1085" y="871.5332">eventStartTurn</text><line style="stroke:#181818;stroke-width:0.5;" x1="1006" x2="1259" y1="876.6094" y2="876.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="238" x="1011" y="895.1426">Controller::getHand() -&gt; GAME_INFO;</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="243" x="1011" y="912.752">Controller::getBoard() -&gt; GAME_INFO;</text></g><g id="elem_checkRound"><rect fill="#F1F1F1" height="82.4375" style="stroke:#181818;stroke-width:0.5;" width="273" x="1177" y="1330"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="1274" y="1346.5332">checkRound</text><line style="stroke:#181818;stroke-width:0.5;" x1="1178" x2="1449" y1="1351.6094" y2="1351.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="151" x="1183" y="1370.1426">vérifie l'état des bornes,</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="261" x="1183" y="1387.752">l'état du jeu (scores, manches restantes),</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="130" x="1183" y="1405.3613">détermine si victoire.</text></g><g id="elem_eventChoicePlay"><rect fill="#F1F1F1" height="47.2188" style="stroke:#181818;stroke-width:0.5;" width="294" x="498.5" y="1158.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="592.5" y="1175.0332">eventChoicePlay</text><line style="stroke:#181818;stroke-width:0.5;" x1="499.5" x2="791.5" y1="1180.1094" y2="1180.1094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="282" x="504.5" y="1198.6426">Controller::getPickableCards() -&gt; PICKABLE;</text></g><g id="elem_eventCardPicked"><rect fill="#F1F1F1" height="152.875" style="stroke:#181818;stroke-width:0.5;" width="521" x="549" y="1490"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108" x="755.5" y="1506.5332">eventCardPicked</text><line style="stroke:#181818;stroke-width:0.5;" x1="550" x2="1069" y1="1511.6094" y2="1511.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="555" y="1530.1426">PARAMETRES</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="303" x="555" y="1547.752">Controller::getChosableStones() -&gt; CHOSABLE;</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126" x="555" y="1565.3613">si une carte choisie,</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="274" x="555" y="1582.9707">1. stocke la carte choisie dans le controleur</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="509" x="555" y="1600.5801">2. utilise une methode de la carte pour evaluer les bornes jouables (CHOSABLE)</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="38" x="555" y="1618.1895">sinon,</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="426" x="555" y="1635.7988">1. propose toutes les bornes non revendiquees comme CHOSABLE</text></g><g id="elem_eventChoiceClaim"><rect fill="#F1F1F1" height="47.2188" style="stroke:#181818;stroke-width:0.5;" width="315" x="710" y="1253"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="810.5" y="1269.5332">eventChoiceClaim</text><line style="stroke:#181818;stroke-width:0.5;" x1="711" x2="1024" y1="1274.6094" y2="1274.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="303" x="716" y="1293.1426">Controller::getChosableStones() -&gt; CHOSABLE;</text></g><g id="elem_claimStone"><rect fill="#F1F1F1" height="82.4375" style="stroke:#181818;stroke-width:0.5;" width="238" x="485.5" y="1980"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="570" y="1996.5332">claimStone</text><line style="stroke:#181818;stroke-width:0.5;" x1="486.5" x2="722.5" y1="2001.6094" y2="2001.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="188" x="491.5" y="2020.1426">tente de revendiquer la borne</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="226" x="491.5" y="2037.752">stocke un message de résultat pour</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="141" x="491.5" y="2055.3613">le joueur (RESULTAT)</text></g><g id="elem_eventStonePicked"><rect fill="#F1F1F1" height="37.6094" style="stroke:#181818;stroke-width:0.5;" width="128" x="541.5" y="1864"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="548.5" y="1880.5332">eventStonePicked</text><line style="stroke:#181818;stroke-width:0.5;" x1="542.5" x2="668.5" y1="1885.6094" y2="1885.6094"/></g><g id="elem_eventChoiceEndTurn"><rect fill="#F1F1F1" height="37.6094" style="stroke:#181818;stroke-width:0.5;" width="148" x="945.5" y="1163"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134" x="952.5" y="1179.5332">eventChoiceEndTurn</text><line style="stroke:#181818;stroke-width:0.5;" x1="946.5" x2="1092.5" y1="1184.6094" y2="1184.6094"/></g><g id="elem_eventChoiceDraw"><rect fill="#F1F1F1" height="82.4375" style="stroke:#181818;stroke-width:0.5;" width="280" x="112.5" y="1141"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111" x="197" y="1157.5332">eventChoiceDraw</text><line style="stroke:#181818;stroke-width:0.5;" x1="113.5" x2="391.5" y1="1162.6094" y2="1162.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="268" x="118.5" y="1181.1426">Controller::drawCard() / Deck::drawCard();</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="238" x="118.5" y="1198.752">Controller::getHand() -&gt; GAME_INFO;</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="243" x="118.5" y="1216.3613">Controller::getBoard() -&gt; GAME_INFO;</text></g><!--MD5=[b9ce53e8d3456cbcaef5efa69167e397]
+class Card::activate--><g id="elem_Card::activate"><rect fill="#F1F1F1" height="48" id="Card::activate" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="120" x="328.5" y="1997"/><ellipse cx="343.5" cy="2013" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M346.2656,2008.875 Q346.4219,2008.6563 346.6094,2008.5469 Q346.7969,2008.4375 347.0156,2008.4375 Q347.3906,2008.4375 347.625,2008.7031 Q347.8594,2008.9531 347.8594,2009.5625 L347.8594,2011.0156 Q347.8594,2011.625 347.625,2011.8906 Q347.3906,2012.1563 347.0156,2012.1563 Q346.6719,2012.1563 346.4688,2011.9531 Q346.2656,2011.7656 346.1563,2011.25 Q346.1094,2010.8906 345.9219,2010.7031 Q345.5938,2010.3281 344.9844,2010.1094 Q344.375,2009.8906 343.75,2009.8906 Q342.9844,2009.8906 342.3438,2010.2188 Q341.7188,2010.5469 341.2188,2011.2969 Q340.7344,2012.0469 340.7344,2013.0781 L340.7344,2014.1719 Q340.7344,2015.4063 341.625,2016.2344 Q342.5156,2017.0469 344.1094,2017.0469 Q345.0469,2017.0469 345.7031,2016.7969 Q346.0938,2016.6406 346.5156,2016.2031 Q346.7813,2015.9375 346.9219,2015.8594 Q347.0781,2015.7813 347.2813,2015.7813 Q347.6094,2015.7813 347.8594,2016.0469 Q348.125,2016.2969 348.125,2016.6406 Q348.125,2016.9844 347.7813,2017.3906 Q347.2813,2017.9688 346.4844,2018.2969 Q345.4063,2018.75 344.1094,2018.75 Q342.5938,2018.75 341.3906,2018.125 Q340.4063,2017.625 339.7188,2016.5625 Q339.0313,2015.4844 339.0313,2014.2031 L339.0313,2013.0469 Q339.0313,2011.7188 339.6406,2010.5781 Q340.2656,2009.4219 341.3594,2008.8125 Q342.4531,2008.1875 343.6875,2008.1875 Q344.4219,2008.1875 345.0625,2008.3594 Q345.7188,2008.5156 346.2656,2008.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="357.5" y="2018.7285">Card::activate</text><line style="stroke:#181818;stroke-width:0.5;" x1="329.5" x2="447.5" y1="2029" y2="2029"/><line style="stroke:#181818;stroke-width:0.5;" x1="329.5" x2="447.5" y1="2037" y2="2037"/></g><!--MD5=[5c8fd34bedb071174933e1752a0a3751]
+link qtStart to Vue_QT_1--><g id="link_qtStart_Vue_QT_1"><path codeLine="108" d="M1230.5,89.26 C1230.5,112.44 1230.5,140.97 1230.5,161.66 " fill="none" id="qtStart-to-Vue_QT_1" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1230.5,166.74,1234.5,157.74,1230.5,161.74,1226.5,157.74,1230.5,166.74" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="122" x="1231.5" y="133.4951">qtDisplayMainMenu()</text></g><!--MD5=[542ada17b41abdd96ef5aceebfb89ffb]
+link Vue_QT_1 to eventRunVersion--><g id="link_Vue_QT_1_eventRunVersion"><path codeLine="109" d="M1211.44,214.21 C1195.35,233.38 1171.53,261.78 1149.82,287.65 " fill="none" id="Vue_QT_1-to-eventRunVersion" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1146.36,291.78,1155.2104,287.4591,1149.575,287.9506,1149.0834,282.3152,1146.36,291.78" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="1185.5" y="258.4951">PARAMETRES</text></g><!--MD5=[fb4efb1d056543ddbcb57d1c4f03f6bf]
+link eventRunVersion to Vue_QT_2--><g id="link_eventRunVersion_Vue_QT_2"><path codeLine="110" d="M1109.41,410.2 C1114.95,426.97 1122.97,444.39 1134.5,458 C1143.74,468.91 1155.85,477.94 1168.33,485.25 " fill="none" id="eventRunVersion-to-Vue_QT_2" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1172.95,487.87,1167.1063,479.9421,1168.6044,485.397,1163.1495,486.8951,1172.95,487.87" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="201" x="1135.5" y="454.4951">Controller::qtDisplayVersionMenu()</text></g><!--MD5=[d387bce64db562dcf78d4bf03c46cf40]
+link Vue_QT_2 to eventNewGame--><g id="link_Vue_QT_2_eventNewGame"><path codeLine="111" d="M1230.5,535.19 C1230.5,555.07 1230.5,584.32 1230.5,607.56 " fill="none" id="Vue_QT_2-to-eventNewGame" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1230.5,612.73,1234.5,603.73,1230.5,607.73,1226.5,603.73,1230.5,612.73" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="1231.5" y="579.4951">PARAMETERS</text></g><!--MD5=[23c98010118da371e5c1e89d989fac6a]
+link eventNewGame to newRound--><g id="link_eventNewGame_newRound"><path codeLine="112" d="M1230.5,678.02 C1230.5,700.49 1230.5,730.22 1230.5,750.6 " fill="none" id="eventNewGame-to-newRound" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1230.5,755.83,1234.5,746.83,1230.5,750.83,1226.5,746.83,1230.5,755.83" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="131" x="1231.5" y="722.4951">Controller::newRound()</text></g><!--MD5=[7a71f824b53fe39bd2f030cc968b32df]
+link newRound to eventStartTurn--><g id="link_newRound_eventStartTurn"><path codeLine="113" d="M1214.32,794.25 C1200.77,809.52 1181.03,831.77 1164.34,850.6 " fill="none" id="newRound-to-eventStartTurn" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1160.61,854.81,1169.5789,850.7408,1163.9318,851.073,1163.5996,845.4259,1160.61,854.81" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[bec8a117807e2f645bbb84a74034e2f5]
+link checkRound to newRound--><g id="link_checkRound_newRound"><path codeLine="114" d="M1313.5,1329.87 C1313.5,1292.01 1313.5,1233.65 1313.5,1183 C1313.5,886.5 1313.5,886.5 1313.5,886.5 C1313.5,849.76 1283.8,817.43 1259.93,797.39 " fill="none" id="checkRound-to-newRound" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1255.85,794.03,1260.242,802.8454,1259.7051,797.214,1265.3364,796.6772,1255.85,794.03" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="93" x="1314.5" y="1035.9951">[si round gagné]</text></g><!--MD5=[2b037f774888cf4e423a6be58c54fad1]
+link checkRound to Vue_QT_2--><g id="link_checkRound_Vue_QT_2"><path codeLine="115" d="M1371.57,1329.92 C1413.03,1296.13 1461.5,1243.66 1461.5,1183 C1461.5,644.5 1461.5,644.5 1461.5,644.5 C1461.5,576.52 1385.16,543.08 1320.25,526.93 " fill="none" id="checkRound-to-Vue_QT_2" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1315.2,525.7,1322.9946,531.7203,1320.0574,526.8858,1324.8919,523.9485,1315.2,525.7" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="136" x="1462.5" y="892.9951">[si dernier round gagné]</text></g><!--MD5=[5b5f4ae5276b67465c8a7c0db397f906]
+link checkRound to eventStartTurn--><g id="link_checkRound_eventStartTurn"><path codeLine="116" d="M1284.6,1329.58 C1250.92,1280.39 1196.24,1193.64 1167.5,1111 C1145.61,1048.05 1137.35,970.3 1134.28,925.36 " fill="none" id="checkRound-to-eventStartTurn" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1133.95,920.31,1130.5505,929.5536,1134.2788,925.2992,1138.5332,929.0275,1133.95,920.31" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="118" x="1168.5" y="1107.4951">[si round non gagné]</text></g><!--MD5=[9123852274485c61980eadeb3025fa79]
+link eventStartTurn to Vue_QT_3--><g id="link_eventStartTurn_Vue_QT_3"><path codeLine="117" d="M1023.51,920.06 C931.19,946.79 801.27,984.4 720.3,1007.84 " fill="none" id="eventStartTurn-to-Vue_QT_3" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="715.04,1009.37,724.8,1010.69,719.84,1007.97,722.56,1003.01,715.04,1009.37" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="200" x="919.5" y="964.4951">qtDisplayPlayerTurn(GAME_INFO)</text></g><!--MD5=[ed068356e366ee2bf455f2bbbeab8323]
+link Vue_QT_3 to eventChoicePlay--><g id="link_Vue_QT_3_eventChoicePlay"><path codeLine="121" d="M645.5,1063.21 C645.5,1089.77 645.5,1127.34 645.5,1152.86 " fill="none" id="Vue_QT_3-to-eventChoicePlay" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="645.5,1158.11,649.5,1149.11,645.5,1153.11,641.5,1149.11,645.5,1158.11" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[b5703f2b8d65485d629f696665b45088]
+link Vue_QT_3 to eventChoiceEndTurn--><g id="link_Vue_QT_3_eventChoiceEndTurn"><path codeLine="122" d="M715.06,1042.85 C764.34,1052.41 831.23,1068.5 886.5,1093 C926.38,1110.68 967.56,1139.93 993.32,1159.82 " fill="none" id="Vue_QT_3-to-eventChoiceEndTurn" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="997.32,1162.92,992.6629,1154.2418,993.3702,1159.8542,987.7577,1160.5615,997.32,1162.92" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="78" x="922.5" y="1107.4951">[parfois forcé]</text></g><!--MD5=[d7ad9847bb5e3c604691140ea3830e0d]
+link Vue_QT_3 to eventChoiceDraw--><g id="link_Vue_QT_3_eventChoiceDraw"><path codeLine="123" d="M575.82,1047.38 C532.22,1058.22 475.27,1074.03 426.5,1093 C393.56,1105.81 358.54,1122.82 328.62,1138.46 " fill="none" id="Vue_QT_3-to-eventChoiceDraw" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="323.87,1140.95,333.6975,1140.3019,328.2955,1138.623,329.9744,1133.221,323.87,1140.95" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[a5f9914e1b4caf4fb1ded5fe1c6c29ea]
+link eventChoiceDraw to Vue_QT_3--><g id="link_eventChoiceDraw_Vue_QT_3"><path codeLine="136" d="M189.54,1140.93 C173.34,1125.82 163.87,1108.54 177.5,1093 C202.98,1063.95 445.02,1044.32 570.63,1036 " fill="none" id="eventChoiceDraw-to-Vue_QT_3" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="575.79,1035.66,566.5464,1032.2605,570.8008,1035.9888,567.0725,1040.2432,575.79,1035.66" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="200" x="178.5" y="1107.4951">qtDisplayPlayerTurn(GAME_INFO)</text></g><!--MD5=[a05fe6602b81d36c6352958203d4ef73]
+link Vue_QT_3 to eventChoiceClaim--><g id="link_Vue_QT_3_eventChoiceClaim"><path codeLine="124" d="M710.07,1063.03 C743.32,1081.89 782.44,1108.52 809.5,1141 C836.12,1172.95 852.4,1218.97 860.68,1248.04 " fill="none" id="Vue_QT_3-to-eventChoiceClaim" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="862.04,1252.91,863.4823,1243.1673,860.7003,1248.0928,855.7748,1245.3108,862.04,1252.91" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[88feab7536e642ab4170a531ce4e3fb0]
+link eventChoicePlay to Vue_QT_4--><g id="link_eventChoicePlay_Vue_QT_4"><path codeLine="125" d="M560.05,1205.56 C536.74,1216.05 514.17,1231.22 500.5,1253 C489.39,1270.69 489.01,1282.56 500.5,1300 C521.98,1332.6 562.15,1350.08 597.24,1359.42 " fill="none" id="eventChoicePlay-to-Vue_QT_4" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="602.38,1360.74,594.6568,1354.6283,597.5369,1359.4971,592.6682,1362.3772,602.38,1360.74" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="190" x="501.5" y="1281.9951">qtDisplayCardPicker(PICKABLE)</text></g><!--MD5=[b1a810aaff73d9fd6bf626a906e6abe9]
+link Vue_QT_4 to eventCardPicked--><g id="link_Vue_QT_4_eventCardPicked"><path codeLine="126" d="M687.28,1403.52 C704.07,1425.77 727.36,1456.64 749.11,1485.47 " fill="none" id="Vue_QT_4-to-eventCardPicked" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="752.31,1489.7,750.0716,1480.1089,749.294,1485.712,743.6909,1484.9345,752.31,1489.7" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="729.5" y="1456.4951">PARAMETRES</text></g><!--MD5=[e6b137914e1885ae8668fa8bb23ba51a]
+link eventCardPicked to Vue_QT_5--><g id="link_eventCardPicked_Vue_QT_5"><path codeLine="128" d="M809.5,1643.01 C809.5,1668.07 809.5,1694.84 809.5,1715.64 " fill="none" id="eventCardPicked-to-Vue_QT_5" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="809.5,1720.8,813.5,1711.8,809.5,1715.8,805.5,1711.8,809.5,1720.8" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="204" x="810.5" y="1687.4951">qtDisplayStonePicker(CHOSABLE)</text></g><!--MD5=[06b9e1f58b7c434e9b32d37caa1894b5]
+link Vue_QT_5 to eventStonePicked--><g id="link_Vue_QT_5_eventStonePicked"><path codeLine="129" d="M759.07,1786.02 C721.58,1809.45 671.48,1840.76 638.86,1861.15 " fill="none" id="Vue_QT_5-to-eventStonePicked" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="634.57,1863.83,644.3186,1862.4284,638.8036,1861.1697,640.0622,1855.6547,634.57,1863.83" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90" x="708.5" y="1830.4951">PARAMETRES</text></g><!--MD5=[1026ce04646f09c22b6f69358aacbd38]
+link eventStonePicked to Card::activate--><g id="link_eventStonePicked_Card::activate"><path codeLine="130" d="M541.47,1902.07 C520.2,1909.59 496.99,1919.53 477.5,1932 C451.81,1948.44 427.53,1973.31 410.84,1992.43 " fill="none" id="eventStonePicked-to-Card::activate" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="407.19,1996.66,416.1011,1992.4657,410.4592,1992.8768,410.0481,1987.235,407.19,1996.66" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="118" x="478.5" y="1946.4951">[si eventChoicePlay]</text></g><!--MD5=[cc37c441b316f1ca935108837ddc9a24]
+link eventStonePicked to claimStone--><g id="link_eventStonePicked_claimStone"><path codeLine="131" d="M605.37,1902.06 C605.23,1920.48 605.02,1949.78 604.83,1974.57 " fill="none" id="eventStonePicked-to-claimStone" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="604.8,1979.79,608.8514,1970.813,604.8286,1974.7901,600.8515,1970.7673,604.8,1979.79" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="125" x="606.5" y="1946.4951">[si eventChoiceClaim]</text></g><!--MD5=[819e6aa385e64e628f3578b6634c3178]
+link claimStone to Vue_QT_6--><g id="link_claimStone_Vue_QT_6"><path codeLine="132" d="M485.47,2056.49 C390.78,2083.92 260.48,2121.67 175.39,2146.32 " fill="none" id="claimStone-to-Vue_QT_6" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="170.36,2147.78,180.1163,2149.1268,175.1638,2146.3932,177.8974,2141.4407,170.36,2147.78" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="155" x="363.5" y="2106.4951">qtDisplayAlert(RESULTAT)</text></g><!--MD5=[3d72eae2bc314049fff3a15e764889b9]
+link Vue_QT_6 to Vue_QT_3--><g id="link_Vue_QT_6_Vue_QT_3"><path codeLine="133" d="M78.68,2139.77 C70.27,2109.74 59.5,2063.24 59.5,2022 C59.5,1181 59.5,1181 59.5,1181 C59.5,1120.45 106.99,1114.75 163.5,1093 C236.13,1065.05 454.44,1045.44 570.71,1036.67 " fill="none" id="Vue_QT_6-to-Vue_QT_3" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="575.83,1036.29,566.5577,1032.9697,570.8438,1036.6615,567.152,1040.9476,575.83,1036.29" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="104" x="60.5" y="1687.4951">[bouton continuer]</text></g><!--MD5=[edd683c83f197c6ce0b02f37b3c01b76]
+link Card::activate to Vue_QT_3--><g id="link_Card::activate_Vue_QT_3"><path codeLine="134" d="M388.23,1996.9 C387.93,1969.84 387.5,1923.67 387.5,1884 C387.5,1681 387.5,1681 387.5,1681 C387.5,1437.47 343.34,1342.23 480.5,1141 C502.83,1108.24 538.53,1082.77 571.02,1064.68 " fill="none" id="Card::activate-to-Vue_QT_3" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="575.79,1062.06,565.9746,1062.8715,571.4038,1064.4603,569.8151,1069.8894,575.79,1062.06" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124" x="388.5" y="1571.9951">qtDisplayPlayerTurn()</text></g><!--MD5=[9f13971f305eec8ed825d87292f4ca72]
+link eventChoiceClaim to Vue_QT_5--><g id="link_eventChoiceClaim_Vue_QT_5"><path codeLine="137" d="M905.6,1300.14 C958.12,1333.86 1050.47,1402.75 1087.5,1490 C1114.07,1552.6 1117.91,1582.18 1087.5,1643 C1049.8,1718.4 947.93,1742.2 878.56,1749.52 " fill="none" id="eventChoiceClaim-to-Vue_QT_5" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="873.2,1750.06,882.5551,1753.1393,878.1749,1749.5597,881.7545,1745.1794,873.2,1750.06" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="204" x="1071.5" y="1456.4951">qtDisplayStonePicker(CHOSABLE)</text></g><!--MD5=[b9110b97baea9a7b6c7b4ecd1138a2d3]
+link Vue_QT_2 to Vue_QT_1--><g id="link_Vue_QT_2_Vue_QT_1"><path codeLine="140" d="M1307.94,487.91 C1321.26,480.52 1333.4,470.79 1341.5,458 C1394.16,374.84 1343.91,322.48 1284.5,244 C1277.58,234.86 1269.07,225.83 1260.87,217.89 " fill="none" id="Vue_QT_2-to-Vue_QT_1" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1256.87,214.09,1260.6456,223.1864,1260.4971,217.5315,1266.152,217.383,1256.87,214.09" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="84" x="1364.5" y="356.4951">[bouton retour]</text></g><!--MD5=[21d0a30a633ca7ebefb0a8404ce25081]
+link eventChoiceEndTurn to checkRound--><g id="link_eventChoiceEndTurn_checkRound"><path codeLine="141" d="M1021.1,1201.26 C1024.35,1226.99 1034.03,1273.73 1062.5,1300 C1067.24,1304.37 1117.58,1318.75 1171.95,1333.34 " fill="none" id="eventChoiceEndTurn-to-checkRound" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1176.88,1334.66,1169.2123,1328.4789,1172.0484,1333.3735,1167.1538,1336.2096,1176.88,1334.66" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="80" x="1063.5" y="1281.9951">checkRound()</text></g><!--MD5=[5f40eed4506736d3cff35faed6d4cdc2]
+link Vue_QT_3 to Vue_QT_2--><g id="link_Vue_QT_3_Vue_QT_2"><path codeLine="142" d="M670.08,997.85 C688.84,970.48 711.5,929.04 711.5,888.5 C711.5,644.5 711.5,644.5 711.5,644.5 C711.5,556.98 992.2,526.8 1140.73,516.95 " fill="none" id="Vue_QT_3-to-Vue_QT_2" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="1145.96,516.61,1136.7262,513.1841,1140.9699,516.9246,1137.2295,521.1683,1145.96,516.61" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="123" x="712.5" y="780.4951">[bouton quitter partie]</text></g><!--MD5=[d09d8029ca92eaba676b651749e7478b]
+@startuml Evenements
+
+''' VUES '''
+
+object Vue_QT_1 {
+    Choix de la Version
+}
+
+object Vue_QT_2 {
+    Paramétrage de la partie
+}
+
+object Vue_QT_3 {
+    Sélection de l'Action
+    du joueur
+}
+
+object Vue_QT_4 {
+    Choix d'une carte
+    dans la main
+}
+
+object Vue_QT_5 {
+    Choix d'une borne
+    sur le plateau
+}
+
+object Vue_QT_6 {
+    Affichage d'un message
+    avec bouton "continuer"
+}
+
+''' événements '''
+
+object qtStart {
+    Creation du superviseur
+    initialisation de QT
+    Supervisor::getInstance().qtStart();
+}
+
+object eventRunVersion {
+    PARAMETRES
+    Supervisor::getInstance().eventRunVersion(PARAMETRES);
+    Supervisor::getInstance().setController(PARAMETRES);
+    Supervisor::getController().Vue_QT_2();
+    (vue QT 2 spécifique à chaque contrôleur de version)
+}
+
+object eventNewGame {
+    PARAMETERS
+    Controller::eventNewGame(PARAMETERS);
+}
+
+object newRound {
+}
+
+object eventStartTurn {
+    Controller::getHand() -> GAME_INFO;
+    Controller::getBoard() -> GAME_INFO;
+}
+
+object checkRound {
+    vérifie l'état des bornes,
+    l'état du jeu (scores, manches restantes),
+    détermine si victoire.
+}
+
+object eventChoicePlay {
+    Controller::getPickableCards() -> PICKABLE;
+}
+
+object eventCardPicked {
+    PARAMETRES
+    Controller::getChosableStones() -> CHOSABLE;
+    si une carte choisie, 
+        1. stocke la carte choisie dans le controleur
+        2. utilise une methode de la carte pour evaluer les bornes jouables (CHOSABLE)
+    sinon, 
+        1. propose toutes les bornes non revendiquees comme CHOSABLE
+}
+
+object eventChoiceClaim {
+    Controller::getChosableStones() -> CHOSABLE;
+}
+
+object claimStone {
+    tente de revendiquer la borne
+    stocke un message de résultat pour
+    le joueur (RESULTAT)
+}
+
+object eventStonePicked {
+
+}
+
+object eventChoiceEndTurn {
+
+}
+
+object eventChoiceDraw {
+    Controller::drawCard() / Deck::drawCard();
+    Controller::getHand() -> GAME_INFO;
+    Controller::getBoard() -> GAME_INFO;
+}
+
+''' FLECHES '''
+
+''' BOUCLE PRINCIPALE '''
+qtStart - -> Vue_QT_1 : qtDisplayMainMenu()
+Vue_QT_1 - -> eventRunVersion : PARAMETRES
+eventRunVersion - -> Vue_QT_2 : Controller::qtDisplayVersionMenu()
+Vue_QT_2 - -> eventNewGame : PARAMETERS
+eventNewGame - -> newRound : Controller::newRound()
+newRound - -> eventStartTurn
+checkRound - -> newRound : [si round gagné]
+checkRound - -> Vue_QT_2 : [si dernier round gagné]
+checkRound - -> eventStartTurn : [si round non gagné]
+eventStartTurn - -> Vue_QT_3 : qtDisplayPlayerTurn(GAME_INFO)
+
+
+''' EVENEMENTS DE JEU '''
+Vue_QT_3 - -> eventChoicePlay
+Vue_QT_3 - -> eventChoiceEndTurn : [parfois forcé]
+Vue_QT_3 - -> eventChoiceDraw
+Vue_QT_3 - -> eventChoiceClaim
+eventChoicePlay - -> Vue_QT_4 : qtDisplayCardPicker(PICKABLE)
+Vue_QT_4 - -> eventCardPicked : PARAMETRES
+
+eventCardPicked - -> Vue_QT_5 : qtDisplayStonePicker(CHOSABLE)
+Vue_QT_5 - -> eventStonePicked : PARAMETRES
+eventStonePicked - -> Card::activate : [si eventChoicePlay]
+eventStonePicked - -> claimStone : [si eventChoiceClaim]
+claimStone - -> Vue_QT_6 : qtDisplayAlert(RESULTAT)
+Vue_QT_6 - -> Vue_QT_3 : [bouton continuer]
+Card::activate - -> Vue_QT_3 : qtDisplayPlayerTurn()
+
+eventChoiceDraw - -> Vue_QT_3 : qtDisplayPlayerTurn(GAME_INFO)
+eventChoiceClaim - -> Vue_QT_5 : qtDisplayStonePicker(CHOSABLE)
+
+''' QUITTER '''
+Vue_QT_2 - -> Vue_QT_1 : [bouton retour]
+eventChoiceEndTurn - -> checkRound : checkRound()
+Vue_QT_3 - -> Vue_QT_2 : [bouton quitter partie]
+@end
+
+@startuml Evenements
+
+
+object Vue_QT_1 {
+    Choix de la Version
+}
+
+object Vue_QT_2 {
+    Paramétrage de la partie
+}
+
+object Vue_QT_3 {
+    Sélection de l'Action
+    du joueur
+}
+
+object Vue_QT_4 {
+    Choix d'une carte
+    dans la main
+}
+
+object Vue_QT_5 {
+    Choix d'une borne
+    sur le plateau
+}
+
+object Vue_QT_6 {
+    Affichage d'un message
+    avec bouton "continuer"
+}
+
+
+object qtStart {
+    Creation du superviseur
+    initialisation de QT
+    Supervisor::getInstance().qtStart();
+}
+
+object eventRunVersion {
+    PARAMETRES
+    Supervisor::getInstance().eventRunVersion(PARAMETRES);
+    Supervisor::getInstance().setController(PARAMETRES);
+    Supervisor::getController().Vue_QT_2();
+    (vue QT 2 spécifique à chaque contrôleur de version)
+}
+
+object eventNewGame {
+    PARAMETERS
+    Controller::eventNewGame(PARAMETERS);
+}
+
+object newRound {
+}
+
+object eventStartTurn {
+    Controller::getHand() -> GAME_INFO;
+    Controller::getBoard() -> GAME_INFO;
+}
+
+object checkRound {
+    vérifie l'état des bornes,
+    l'état du jeu (scores, manches restantes),
+    détermine si victoire.
+}
+
+object eventChoicePlay {
+    Controller::getPickableCards() -> PICKABLE;
+}
+
+object eventCardPicked {
+    PARAMETRES
+    Controller::getChosableStones() -> CHOSABLE;
+    si une carte choisie, 
+        1. stocke la carte choisie dans le controleur
+        2. utilise une methode de la carte pour evaluer les bornes jouables (CHOSABLE)
+    sinon, 
+        1. propose toutes les bornes non revendiquees comme CHOSABLE
+}
+
+object eventChoiceClaim {
+    Controller::getChosableStones() -> CHOSABLE;
+}
+
+object claimStone {
+    tente de revendiquer la borne
+    stocke un message de résultat pour
+    le joueur (RESULTAT)
+}
+
+object eventStonePicked {
+
+}
+
+object eventChoiceEndTurn {
+
+}
+
+object eventChoiceDraw {
+    Controller::drawCard() / Deck::drawCard();
+    Controller::getHand() -> GAME_INFO;
+    Controller::getBoard() -> GAME_INFO;
+}
+
+
+qtStart - -> Vue_QT_1 : qtDisplayMainMenu()
+Vue_QT_1 - -> eventRunVersion : PARAMETRES
+eventRunVersion - -> Vue_QT_2 : Controller::qtDisplayVersionMenu()
+Vue_QT_2 - -> eventNewGame : PARAMETERS
+eventNewGame - -> newRound : Controller::newRound()
+newRound - -> eventStartTurn
+checkRound - -> newRound : [si round gagné]
+checkRound - -> Vue_QT_2 : [si dernier round gagné]
+checkRound - -> eventStartTurn : [si round non gagné]
+eventStartTurn - -> Vue_QT_3 : qtDisplayPlayerTurn(GAME_INFO)
+
+
+Vue_QT_3 - -> eventChoicePlay
+Vue_QT_3 - -> eventChoiceEndTurn : [parfois forcé]
+Vue_QT_3 - -> eventChoiceDraw
+Vue_QT_3 - -> eventChoiceClaim
+eventChoicePlay - -> Vue_QT_4 : qtDisplayCardPicker(PICKABLE)
+Vue_QT_4 - -> eventCardPicked : PARAMETRES
+
+eventCardPicked - -> Vue_QT_5 : qtDisplayStonePicker(CHOSABLE)
+Vue_QT_5 - -> eventStonePicked : PARAMETRES
+eventStonePicked - -> Card::activate : [si eventChoicePlay]
+eventStonePicked - -> claimStone : [si eventChoiceClaim]
+claimStone - -> Vue_QT_6 : qtDisplayAlert(RESULTAT)
+Vue_QT_6 - -> Vue_QT_3 : [bouton continuer]
+Card::activate - -> Vue_QT_3 : qtDisplayPlayerTurn()
+
+eventChoiceDraw - -> Vue_QT_3 : qtDisplayPlayerTurn(GAME_INFO)
+eventChoiceClaim - -> Vue_QT_5 : qtDisplayStonePicker(CHOSABLE)
+
+Vue_QT_2 - -> Vue_QT_1 : [bouton retour]
+eventChoiceEndTurn - -> checkRound : checkRound()
+Vue_QT_3 - -> Vue_QT_2 : [bouton quitter partie]
+@end
+
+PlantUML version 1.2022.7(Mon Aug 22 19:01:30 CEST 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: fr
+Country: FR
+--></g></svg>

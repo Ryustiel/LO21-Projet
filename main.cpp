@@ -53,7 +53,7 @@ int main() {
 
 	Supervisor::getInstance();
 	Supervisor::getInstance().qtStart(); // => qtDisplayMainMenu()
-	Supervisor::getInstance().runVersion("Version version_name"); // <= interface : menu Choix de Version
+	Supervisor::getInstance().eventRunVersion("Version version_name"); // <= interface : menu Choix de Version
 	// => sup.setController(version_name) => sup.getController().qtDisplayVersionMenu()
 	Supervisor::getInstance().setController(Version::legacy, "p1", "p2", 1, 2);
 	Controller* ctr = Supervisor::getInstance().getController();

@@ -33,7 +33,7 @@ void Controller::newRound() {
 
     TEMP_victory_counter = 0;
 
-    startTurn();
+    eventStartTurn();
 }
 
 void Controller::checkRound() {
