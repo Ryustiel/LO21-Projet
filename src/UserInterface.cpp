@@ -26,13 +26,15 @@ void UserInterface::freeInstance() {
 void UserInterface::launchUserInterface() {
 	switch (state) {
 	case 0 :
-		//BEGIN INTERFACE
+		//BEGIN INTERFACE IF NEEDED
 		break;
 	case 1 :
 		//SELECT : VERSION
+		Version selected_version = UIinterfaceVersionMenu();
 		break;
 	case 2 :
 		//SELECT : GAME SETTINGS
+		///Nombre de tours
 		break;
 	case 3 :
 		//SELECT : TURN : PLAYER ACTION
@@ -45,6 +47,8 @@ void UserInterface::launchUserInterface() {
 		break;
 	case 6 :
 		//SELECT : CONTINUE BUTTON
+		break;
+	default :
 		break;
 	}
 }
@@ -99,6 +103,8 @@ Version UserInterface::UIinterfaceVersionMenu() {
 	
 	//Version selection + callback
 	selected_version = UIselectVersion(functionCallback);
+
+	state += 1;
 	system("pause");
 
 	return selected_version;
@@ -127,7 +133,7 @@ void UserInterface::UIinterfacePlayerMenu(string players_name[]) {
 	cout << endl;
 
 	players_name[0] = UIselectPlayerName(1, functionCallback);
-	players_name[1] =  UIselectPlayerName(2, functionCallback);
+	players_name[1] = UIselectPlayerName(2, functionCallback);
 
 	//cout << "(UIinterfacePlayerMenu) - players_name[0] : " << players_name[0] << endl;
 	//cout << "(UIinterfacePlayerMenu) - players_name[1] : " << players_name[1] << endl;
