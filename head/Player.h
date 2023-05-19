@@ -33,7 +33,7 @@ public:
     void init() { std::cout << "\ninit variables de score pour manche"; score = 0;}
     // initRound lancée à chaque début de Manche
     void initRound() { std::cout << "\ninitializing player variables pour le debut de manche : fetching deck cards";}
-    // méthode complexe qui déclenchera l'interface de choix de carte
+    // méthode complexe qui déclenchera l'UserInterface de choix de carte
     // la cascade d'événements suivants du tour
     // (vérifier une borne, intéragir avec l'effet d'une carte tactique...)
     // sera gérée par le contrôleur

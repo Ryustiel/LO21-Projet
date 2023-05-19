@@ -9,10 +9,49 @@ void functionCallback(const string s) {
 	cout << endl << "(callback function) Selection : " << s << endl;
 }
 
+///INTERFACE SINGLETON METHODS///
+UserInterface::Handler UserInterface::handler = UserInterface::Handler();
+
+UserInterface& UserInterface::getInstance() {
+	if (handler.instance == nullptr) handler.instance = new UserInterface();
+	return *handler.instance;
+}
+
+void UserInterface::freeInstance() {
+	delete handler.instance;
+	handler.instance = nullptr;
+}
+
+//APPLICATION LAUNCHER
+void UserInterface::launchUserInterface() {
+	switch (state) {
+	case 0 :
+		//BEGIN INTERFACE
+		break;
+	case 1 :
+		//SELECT : VERSION
+		break;
+	case 2 :
+		//SELECT : GAME SETTINGS
+		break;
+	case 3 :
+		//SELECT : TURN : PLAYER ACTION
+		break;
+	case 4 :
+		//SELECT : TURN : ACTION : CARD IN HAND
+		break;
+	case 5 :
+		//SELECT : TURN : ACTION : SELECT A STONE
+		break;
+	case 6 :
+		//SELECT : CONTINUE BUTTON
+		break;
+	}
+}
 
 /// SUPERVISOR SETTINGS ///
 //SELECT VERSION
-Version UIselectVersion(void (*callback) (Version v)) { //user select version
+Version UserInterface::UIselectVersion(void (*callback) (Version v)) { //user select version
 	Version selected_version;
 	int selection = 0;
 	int i = 0;
@@ -43,7 +82,7 @@ Version UIselectVersion(void (*callback) (Version v)) { //user select version
 	return selected_version;
 }
 
-Version UIinterfaceVersionMenu() {
+Version UserInterface::UIinterfaceVersionMenu() {
 	int i = 0;
 	Version selected_version;
 
@@ -68,7 +107,7 @@ Version UIinterfaceVersionMenu() {
 
 /// GAME SETTINGS///
 //PLAYERS NAME
-string UIselectPlayerName(int i, void (*callback) (string s)) {
+string UserInterface::UIselectPlayerName(int i, void (*callback) (string s)) {
 	string player;
 
 	cout << "Player " << i << " : ";
@@ -80,7 +119,7 @@ string UIselectPlayerName(int i, void (*callback) (string s)) {
 	return player;
 }
 
-void UIinterfacePlayerMenu(string players_name[]) {
+void UserInterface::UIinterfacePlayerMenu(string players_name[]) {
 
 	system("CLS");
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;

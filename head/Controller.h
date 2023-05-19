@@ -25,7 +25,7 @@ private:
 	// en réponse à des événements spécifiques comme "quitter"
 	// j'utilise une variable plutôt qu'un listener à cause
 	// des boucles de jeu "while" dont on doit sortir de manière asynchrone
-	// asynchrone à cause de l'interface Qt
+	// asynchrone à cause de l'UserInterface Qt
 	bool stop = false;
 
 	// scores de manche stockés ici car impactent directement
@@ -64,8 +64,8 @@ public:
 	int getTotalRounds() { return totalRounds; }
 
 
-	// initialise la partie, lancé via l'interface
-	// tous les paramètres de partie présents sur l'interface doivent lui être passés
+	// initialise la partie, lancé via l'UserInterface
+	// tous les paramètres de partie présents sur l'UserInterface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
 protected:
