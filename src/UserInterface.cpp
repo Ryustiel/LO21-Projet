@@ -1,16 +1,23 @@
 #include "../head/UserInterface.h"
 
-
-void functionCallback(Version v) { //callback
+//SURCHARGE CALLBACK FUNCTION
+void functionCallback(const Version v) { //callback
 	cout << endl << "(callback function) Selection : " << v << endl;
 }
 
-void UIselectVersion(void (*callback) (Version v)) { //user select version
+void functionCallback(const string s) {
+	cout << endl << "(callback function) Selection : " << s << endl;
+}
+
+
+/// SUPERVISOR SETTINGS ///
+//SELECT VERSION
+Version UIselectVersion(void (*callback) (Version v)) { //user select version
 	Version selected_version;
 	int selection = 0;
 	int i = 0;
 
-	cout << endl << "(UIselectVersion) Please select a version (number) :" << endl;
+	cout << endl << "(UIselectVersion) Please select a version (number) : ";
 
 	//user input
 	cin >> selection;
@@ -32,11 +39,15 @@ void UIselectVersion(void (*callback) (Version v)) { //user select version
 
 	//callback
 	callback(selected_version);
+
+	return selected_version;
 }
 
-void UIinterfaceMenu() {
+Version UIinterfaceVersionMenu() {
 	int i = 0;
+	Version selected_version;
 
+	system("CLS");
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** VERSION MENU **" << endl;
 	cout << "Available versions :" << endl;
@@ -48,5 +59,41 @@ void UIinterfaceMenu() {
 	}
 	
 	//Version selection + callback
-	UIselectVersion(functionCallback);
+	selected_version = UIselectVersion(functionCallback);
+	system("pause");
+
+	return selected_version;
 }
+
+
+/// GAME SETTINGS///
+//PLAYERS NAME
+string UIselectPlayerName(int i, void (*callback) (string s)) {
+	string player;
+
+	cout << "Player " << i << " : ";
+	cin >> player;
+	//cout << "(UIselectPlayerName) - Player name : " << player;
+
+	callback(player);
+
+	return player;
+}
+
+void UIinterfacePlayerMenu(string players_name[]) {
+
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** GAME SETTINGS **" << endl;
+	cout << endl;
+
+	players_name[0] = UIselectPlayerName(1, functionCallback);
+	players_name[1] =  UIselectPlayerName(2, functionCallback);
+
+	//cout << "(UIinterfacePlayerMenu) - players_name[0] : " << players_name[0] << endl;
+	//cout << "(UIinterfacePlayerMenu) - players_name[1] : " << players_name[1] << endl;
+
+	system("pause");
+}
+
+

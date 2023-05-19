@@ -10,8 +10,15 @@
 #include "head/UserInterface.h"
 
 int main() {
+	Supervisor::getInstance();
 
-	UIinterfaceMenu();
+	Version selected_version = UIinterfaceVersionMenu();
+	string players_name[2];
+	UIinterfacePlayerMenu(players_name);
+
+	Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], 1, 2);
+	cout << "(main) - Player 1 : " << Supervisor::getInstance().getController()->getPlayer1()->getName() << endl;
+	cout << "(main) - Player 2 : " << Supervisor::getInstance().getController()->getPlayer2()->getName() << endl;
 
 
 	/*int selection;
