@@ -1,0 +1,4 @@
+#ifndef PARAMETERSVIEW_H
+#define PARAMETERSVIEW_H
+
+#endif // PARAMETERSVIEW_H

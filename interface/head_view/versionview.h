@@ -1,0 +1,4 @@
+#ifndef VERSIONVIEW_H
+#define VERSIONVIEW_H
+
+#endif // VERSIONVIEW_H

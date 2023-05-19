@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QPushButton>
-#include "../head_view/gameview.h"
+#include "../head_view/boardview.h"
 
 int main(int argc, char* argv[]) {
 

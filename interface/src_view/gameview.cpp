@@ -9,7 +9,7 @@
 #include <QMessageBox>
 
 #include "../head_view/cardview.h"
-#include "../head_view/gameview.h"
+#include "../head_view/boardview.h"
 
 //constructeur
 VuePartie::VuePartie(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
