@@ -6,6 +6,8 @@
 
 #include "head/Card.h"
 #include "head/Board.h"
+#include "head/Supervisor.h"
+#include "head/Controller.h"
 
 int main() {
 	Elite* e = new Elite("Chief2", Colors, Numbers);
@@ -23,7 +25,6 @@ int main() {
 	b->addCard(*c1, Side::s2, 0);
 	//b->addCard(*c5, Side::s2, 0);
 	//b->addCard(*e, Side::s2, 0);
-
 
 	std::cout << "\n\ndone";
 
@@ -45,6 +46,32 @@ int main() {
 	else if (s == Side::s2) cout << "s2";
 	else cout << "none";
 	cout << endl;
+
+
+	// SCRIPT DE JEU
+	// pour comprendre l'enchainement des evenements
+
+	Supervisor::getInstance();
+	Supervisor::getInstance().qtStart(); // => qtDisplayMainMenu()
+	Supervisor::getInstance().runVersion("Version version_name"); // <= interface : menu Choix de Version
+	// => sup.setController(version_name) => sup.getController().qtDisplayVersionMenu()
+	Supervisor::getInstance().setController(Version::legacy, "p1", "p2", 1, 2);
+	Controller* ctr = Supervisor::getInstance().getController();
+	ctr->eventNewGame(2); // <= interface : menu Paramétrage de la Partie
+	// => ctr.newRound() => ctr.startTurn() => ctr.qtDisplayPlayerTurn()
+	ctr->eventChoiceDraw(); // <= interface : menu Jouer son Tour
+	// => ctr.qtDisplayPlayerTurn()
+	ctr->eventChoicePlay(); // <= interface : menu Jouer son Tour
+	// => ctr.qtDisplayCardPicker();
+	ctr->eventCardPicked("Carte carte_choisie"); // interface : menu Card Picker
+	// => ctr.qtDisplayStonePicker();
+	// carteSelectionnee.activate(); 
+	ctr->qtDisplayPlayerTurn(); // interface : menu Stone Picker
+	ctr->eventChoiceEndTurn(); // interface : menu Jouer son Tour
+	// => ctr.startTurn() => ctr.checkRound(); => ctr.qtDisplayVictoryMenu();
+	ctr->qtDisplayVersionMenu();
+
+
 
 	return 0;
 	
