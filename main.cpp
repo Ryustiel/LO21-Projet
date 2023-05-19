@@ -10,10 +10,6 @@
 
 int main() {
 
-	Supervisor::getInstance().setController(Version::legacy, "p1_name", "p2_name", 1, 2); //heap buffer error
-	cout << Supervisor::getInstance().getController()->getPlayer1()->getName();
-
-	/*char c;
 	int selection;
 	Version selected_version;
 	string p1_name;
@@ -25,11 +21,8 @@ int main() {
 	Supervisor::getInstance();
 
 	cout << "Supervisor created." << endl;
-	cout << "typer 'o' to continue >";
-	
-	cin >> c;
-
-	cout << system("CLS") << endl;
+	//system("pause");
+	//cout << system("CLS") << endl;
 
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** VERSION MENU **" << endl;
@@ -56,10 +49,9 @@ int main() {
 
 	cout << "Selected version : " << selected_version << endl;
 
-	cout << "typer 'o' to continue >";
-	cin >> c;
+	//system("pause");
 
-	cout << system("CLS") << endl;
+	//cout << system("CLS") << endl;
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** SETTINGS MENU **" << endl;
 	cout << "Player 1 name :" << endl;
@@ -69,6 +61,6 @@ int main() {
 
 	cout << "Creating controller..." << endl;
 	Supervisor::getInstance().setController(selected_version, p1_name, p2_name, 1, 2);
+	cout << Supervisor::getInstance().getController()->getPlayer1()->getName();
 	cout << "end";
-	*/
 }
