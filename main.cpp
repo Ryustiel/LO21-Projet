@@ -7,9 +7,14 @@
 #include "head/Card.h"
 #include "head/Board.h"
 #include "head/Version.h"
+#include "head/UserInterface.h"
 
 int main() {
-	int selection;
+
+	UIinterfaceMenu();
+
+
+	/*int selection;
 	Version selected_version;
 	string p1_name;
 	string p2_name;
@@ -67,5 +72,5 @@ int main() {
 	Supervisor::getInstance().setController(selected_version, p1_name, p2_name, 1, 2);
 	cout << Supervisor::getInstance().getController()->getPlayer1()->getName() << endl;
 	cout << Supervisor::getInstance().getController()->getPlayer2()->getName() << endl;
-	cout << "end";
+	cout << "end";*/
 }
