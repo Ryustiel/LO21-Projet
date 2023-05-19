@@ -1014,11 +1014,8 @@ debug/main.o: ../interface/src_view/main.cpp C:/Qt/6.5.0/mingw_64/include/QtWidg
 		C:/Qt/6.5.0/mingw_64/include/QtCore/QSize \
 		C:/Qt/6.5.0/mingw_64/include/QtCore/QSizeF \
 		C:/Qt/6.5.0/mingw_64/include/QtGui/QTransform \
-		../interface/head_view/cardview.h \
+		../interface/head_view/gameview.h \
 		C:/Qt/6.5.0/mingw_64/include/QtWidgets/QWidget \
-		C:/Qt/6.5.0/mingw_64/include/QtGui/QPen \
-		C:/Qt/6.5.0/mingw_64/include/QtGui/qpen.h \
-		C:/Qt/6.5.0/mingw_64/include/QtGui/QBrush \
 		../head/Card.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\interface\src_view\main.cpp
 

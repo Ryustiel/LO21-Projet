@@ -22,8 +22,10 @@ public:
     explicit VuePartie(QWidget *parent = nullptr);
 private:
     //Set::Controleur controleur; // controleur de la partie a ajouter
-    QLabel* score; // texte "Score"
-    QLCDNumber* scoreJoueur; // affichage du score
+    QLabel* scorej1; // texte "Score joueur1"
+    QLabel* scorej2; // texte "Score joueur 2"
+    QLCDNumber* scoreJoueur1; // affichage du score j1
+    QLCDNumber* scoreJoueur2; // affichage du score j2
     QLabel* pioche; // texte "Pioche"
     QProgressBar* nbCartesPioche; // progression de la pioche
     QHBoxLayout* layoutInformations;

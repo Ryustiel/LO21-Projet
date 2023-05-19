@@ -14,24 +14,30 @@
 //constructeur
 VuePartie::VuePartie(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
 {
-    setWindowTitle("Set !"); //titre fenetre
+    setWindowTitle("Jeu Schotten Totten AHHHHHH"); //titre fenetre
+    //setFixedSize(800, 600); //dimensions fenetre
     //distribuer cartes grace au controleur
 
     pioche=new QLabel("Pioche");
-    score=new QLabel("Score");
+    scorej1=new QLabel("Score j1");
+    scorej2=new QLabel("Score j2");
 
     auto nb_cartes_jeu=54;
-    auto nb_cartes_pioche=54;
+    auto nb_cartes_pioche=10;
     //barre de progression pioche
     nbCartesPioche=new QProgressBar;
     nbCartesPioche->setRange(0,nb_cartes_jeu);
     nbCartesPioche->setValue(nb_cartes_pioche);
     nbCartesPioche->setFixedHeight(30);
 
-    //Score
-    scoreJoueur = new QLCDNumber;
-    scoreJoueur->display(0);
-    scoreJoueur->setFixedHeight(30);
+    //Scores joueurs
+    scoreJoueur1 = new QLCDNumber;
+    scoreJoueur1->display(0);
+    scoreJoueur1->setFixedHeight(30);
+
+    scoreJoueur2 = new QLCDNumber;
+    scoreJoueur2->display(0);
+    scoreJoueur2->setFixedHeight(30);
 
     //Layouts
     layoutInformations = new QHBoxLayout;
@@ -40,8 +46,10 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
 
     layoutInformations->addWidget(pioche);
     layoutInformations->addWidget(nbCartesPioche);
-    layoutInformations->addWidget(score);
-    layoutInformations->addWidget(scoreJoueur);
+    layoutInformations->addWidget(scorej1);
+    layoutInformations->addWidget(scorej2);
+    layoutInformations->addWidget(scoreJoueur1);
+    layoutInformations->addWidget(scoreJoueur2);
 
     //afficher carte -> les initialiser avant
     for(size_t i=0;i<20;i++) vuecartes[i]=new VueCarte;
