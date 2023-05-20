@@ -34,7 +34,7 @@ void Controller::newRound() {
 void Controller::checkRound() {
     std::cout << "\n=============================== checkRound";
     remainingRounds--;
-    if (remainingRounds <= 0 || player1->getScore() > maxScore || player2->getScore() > maxScore) {
+    if (remainingRounds <= 0 || player1->getScore() >= maxScore || player2->getScore() >= maxScore) {
         qtGameOver();
     } else {
         newRound();
