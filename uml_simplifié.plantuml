@@ -88,9 +88,7 @@ class TacticController {
 	- tacticDeck : Deck* (initialisé à  nullptr)
 	- tacticGame : Game
 
-    + TacticController(const Version& v, const string& name_player1,
-        const string& name_player2, unsigned int id_player1,
-        unsigned int id_player2)
+    + TacticController(const Version& v, const string& name_player1,const string& name_player2, unsigned int id_player1,unsigned int id_player2)
     + ~TacticController()
     + getTacticDeck() : Deck&
 }
