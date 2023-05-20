@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 //#include "src/Controller.cpp"
-#include "src/Player.cpp"
+//#include "src/Player.cpp"
 #include "head/Game.h"
 
 #include "head/Card.h"
@@ -10,6 +10,21 @@
 #include "head/Controller.h"
 
 int main() {
+
+	Board* b = new Board();
+
+	b->getStone(0).setRevendication(Side::s1);
+	b->getStone(1).setRevendication(Side::none);
+	b->getStone(2).setRevendication(Side::s2);
+	b->getStone(3).setRevendication(Side::s1);
+	b->getStone(4).setRevendication(Side::s1);
+	b->getStone(5).setRevendication(Side::none);
+	b->getStone(6).setRevendication(Side::s2);
+	b->getStone(7).setRevendication(Side::s2);
+	b->getStone(8).setRevendication(Side::s2);
+
+	b->evaluateGameWinner();
+
 	Elite* e = new Elite("Chief2", Colors, Numbers);
 	Clan* c1 = new Clan(Color::red, Number::nine);
 	Clan* c2 = new Clan(Color::red, Number::eight);
@@ -17,11 +32,14 @@ int main() {
 	Clan* c4 = new Clan(Color::blue, Number::two);
 	Clan* c5 = new Clan(Color::blue, Number::one);
 	Clan* c6 = new Clan(Color::blue, Number::three);
+	Clan* c7 = new Clan(Color::purple, Number::seven);
+	Clan* c8 = new Clan(Color::yellow, Number::seven);
 
+	/*
 	Board* b = new Board();
 	b->addCard(*c3, Side::s1, 0);
-	b->addCard(*c5, Side::s1, 0);
-	b->addCard(*c6, Side::s1, 0);
+	b->addCard(*c7, Side::s1, 0);
+	b->addCard(*c8, Side::s1, 0);
 	b->addCard(*c1, Side::s2, 0);
 	//b->addCard(*c5, Side::s2, 0);
 	//b->addCard(*e, Side::s2, 0);
@@ -46,32 +64,29 @@ int main() {
 	else if (s == Side::s2) cout << "s2";
 	else cout << "none";
 	cout << endl;
-
+	*/
+	
 
 	// SCRIPT DE JEU
 	// pour comprendre l'enchainement des evenements
+	// et faire des tests !
 
 	Supervisor::getInstance();
-	Supervisor::getInstance().qtStart(); // => qtDisplayMainMenu()
-	Supervisor::getInstance().eventRunVersion("Version version_name"); // <= interface : menu Choix de Version
-	// => sup.setController(version_name) => sup.getController().qtDisplayVersionMenu()
-	Supervisor::getInstance().setController(Version::legacy, "p1", "p2", 1, 2);
-	Controller* ctr = Supervisor::getInstance().getController();
-	ctr->eventNewGame(2); // <= interface : menu Paramétrage de la Partie
-	// => ctr.newRound() => ctr.startTurn() => ctr.qtDisplayPlayerTurn()
-	ctr->eventChoiceDraw(); // <= interface : menu Jouer son Tour
+	Supervisor::getInstance().eventFirstStart(); // => qtDisplayMainMenu()
+
+	// => réponse qui suit le message qtDisplayMainMenu()
+	// => elle contient les paramètres de la partie et la version choisie.
+	Supervisor::getInstance().eventStartGame(Version::legacy, "player name 1", "player name 2", 3, 2);
+
+	// ctr->eventChoiceDraw(); // <= interface : menu Jouer son Tour
 	// => ctr.qtDisplayPlayerTurn()
-	ctr->eventChoicePlay(); // <= interface : menu Jouer son Tour
-	// => ctr.qtDisplayCardPicker();
-	ctr->eventCardPicked("Carte carte_choisie"); // interface : menu Card Picker
+	// ctr->eventCardPicked("Carte carte_choisie"); // interface : menu Card Picker
 	// => ctr.qtDisplayStonePicker();
 	// carteSelectionnee.activate(); 
-	ctr->qtDisplayPlayerTurn(); // interface : menu Stone Picker
-	ctr->eventChoiceEndTurn(); // interface : menu Jouer son Tour
+	// ctr->qtDisplayPlayerTurn(); // interface : menu Stone Picker
+	// ctr->eventChoiceEndTurn(); // interface : menu Jouer son Tour
 	// => ctr.startTurn() => ctr.checkRound(); => ctr.qtDisplayVictoryMenu();
-	ctr->qtDisplayVersionMenu();
-
-
+	// ctr->qtDisplayVersionMenu();
 
 	return 0;
 	

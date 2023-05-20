@@ -18,32 +18,28 @@ private :
 public :
 	static Supervisor& getInstance();
 	static void freeInstance();
-	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2);
+	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2);
 	Controller* getController() { return controller; }
 	
 	// declenchement initial de l'interface
-	void qtStart() {
-		std::cout << "\n================================ qtStart";
-		std::cout << "\ninitialisation de QT, creer un objet QT et le stocke dans le Superviseur";
-		std::cout << "\nstocke une reference a QT dans le Superviseur";
-		std::cout << "\nlance qtDisplayMainMenu()";
+	void eventFirstStart() {
+		std::cout << "\n================================ eventFirstStart";
+		// événements lors de l'initialisation du contrôleur
+		qtDisplayMainMenu();
 	}
-	void eventRunVersion(string v) { 
-		std::cout << "\n================================ runVersion";
-		std::cout << "\nnom de la version : " << v;
-		std::cout << "\ngenere un controleur avec setController()";
-		std::cout << "\nlance getController()->qtDisplayVersionMenu()";
+	void eventStartGame(Version v, const string& p1name, const string& p2name, int nrounds, int winthreshold) { // game version, number of rounds 
+		std::cout << "\n================================ eventStartGame";
+		Supervisor::getInstance().setController(v, p1name, p2name, 1, 1);
+		Supervisor::getInstance().getController()->runGame(nrounds, winthreshold);
 	}
 	void qtDisplayMainMenu() {
 		std::cout << "\n================================ qtDisplayMainMenu";
-		std::cout << "\nenregistre un listener : callback = runVersion()";
 		std::cout << "\nQT affiche le menu principal...";
 	}
 
 	void quitGame() {
 		std::cout << "\n================================ quitGame";
-		std::cout << "\nenvoie un signal a QT pour revenir a l'ecran principal";
-		std::cout << "\nplus simplement, declenche qtDisplayMainMenu()";
+		qtDisplayMainMenu();
 	}
 
 	void quitApp() {

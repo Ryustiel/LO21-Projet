@@ -4,59 +4,54 @@
 
 object Vue_QT_1 {
     Choix de la Version
+    Paramétrage de la partie
+    Affichage des informations sur la dernière partie (scores, victoire...)
 }
 
 object Vue_QT_2 {
-    Paramétrage de la partie
+    Le joueur peut piocher,
+    choisir une carte à jouer,
+    Revendiquer une borne,
+    ou finir son tour.
+    Certaines options peuvent être
+    bloquées ou automatisées contextuellement
 }
-
 object Vue_QT_3 {
-    Sélection de l'Action
-    du joueur
+    CHOSABLE
+    Choix d'une borne
+    sur le plateau parmi
+    les bornes listées CHOSABLE
 }
 
 object Vue_QT_4 {
-    Choix d'une carte
-    dans la main
-}
-
-object Vue_QT_5 {
-    Choix d'une borne
-    sur le plateau
-}
-
-object Vue_QT_6 {
     Affichage d'un message
     avec bouton "continuer"
 }
 
 ''' événements '''
 
-object qtStart {
-    Creation du superviseur
-    initialisation de QT
-    Supervisor::getInstance().qtStart();
+object main {
+    Création de l'instance QT
+    QT crée l'objet superviseur
 }
 
-object eventRunVersion {
+object eventFirstStart {
+    Supervisor::getInstance().eventFirstStart();
+    Initialisation la plus basique
+}
+
+object eventStartGame {
     PARAMETRES
-    Supervisor::getInstance().eventRunVersion(PARAMETRES);
+    Supervisor::getInstance().eventStartGame(PARAMETRES);
     Supervisor::getInstance().setController(PARAMETRES);
-    Supervisor::getController().Vue_QT_2();
-    (vue QT 2 spécifique à chaque contrôleur de version)
-}
-
-object eventNewGame {
-    PARAMETERS
-    Controller::eventNewGame(PARAMETERS);
 }
 
 object newRound {
+    Controller::newRound()
 }
 
 object eventStartTurn {
-    Controller::getHand() -> GAME_INFO;
-    Controller::getBoard() -> GAME_INFO;
+    Initialise les variables pour un nouveau tour
 }
 
 object checkRound {
@@ -65,22 +60,18 @@ object checkRound {
     détermine si victoire.
 }
 
-object eventChoicePlay {
-    Controller::getPickableCards() -> PICKABLE;
-}
-
 object eventCardPicked {
     PARAMETRES
     Controller::getChosableStones() -> CHOSABLE;
     si une carte choisie, 
         1. stocke la carte choisie dans le controleur
-        2. utilise une methode de la carte pour evaluer les bornes jouables (CHOSABLE)
-    sinon, 
-        1. propose toutes les bornes non revendiquees comme CHOSABLE
+        2. utilise une methode de la carte pour evaluer les bornes jouables 
+        getPlayableStoones(Carte Sélectionnée) -> CHOSABLE
+        : on veut sélectionner une borne sur laquelle lancer la carte.
 }
 
 object eventChoiceClaim {
-    Controller::getChosableStones() -> CHOSABLE;
+    Controller::getUnclaimedStones() -> CHOSABLE;
 }
 
 object claimStone {
@@ -90,54 +81,66 @@ object claimStone {
 }
 
 object eventStonePicked {
-
+    Conserve la valeur de la carte
+    et déclenche d'autres méthodes
+    en fonction de l'état du contrôleur
 }
 
 object eventChoiceEndTurn {
 
 }
 
-object eventChoiceDraw {
-    Controller::drawCard() / Deck::drawCard();
+object qtDisplayPlayerTurn {
     Controller::getHand() -> GAME_INFO;
     Controller::getBoard() -> GAME_INFO;
+    Controller::getPickableCards() -> GAME_INFO;
+}
+
+object eventChoiceDraw {
+    Controller::drawCard() / Deck::drawCard();
+}
+
+object qtGameOver {
+    Controller::qtGameOver();
+    indique à QT que la partie est terminée,
+    QT retourne au menu principal.
 }
 
 ''' FLECHES '''
+main --> eventFirstStart
 
 ''' BOUCLE PRINCIPALE '''
-qtStart --> Vue_QT_1 : qtDisplayMainMenu()
-Vue_QT_1 --> eventRunVersion : PARAMETRES
-eventRunVersion --> Vue_QT_2 : Controller::qtDisplayVersionMenu()
-Vue_QT_2 --> eventNewGame : PARAMETERS
-eventNewGame --> newRound : Controller::newRound()
+eventFirstStart --> Vue_QT_1 : qtDisplayMainMenu()
+Vue_QT_1 --> eventStartGame : PARAMETRES
+eventStartGame --> newRound : Controller::runGame(PARAMETRES)
 newRound --> eventStartTurn
-checkRound --> newRound : [si round gagné]
-checkRound --> Vue_QT_2 : [si dernier round gagné]
-checkRound --> eventStartTurn : [si round non gagné]
-eventStartTurn --> Vue_QT_3 : qtDisplayPlayerTurn(GAME_INFO)
+qtDisplayPlayerTurn --> Vue_QT_2 : GAME_INFO
+qtGameOver --> Vue_QT_1
 
+''' checkRound '''
+checkRound --> newRound : [si round gagné]
+checkRound --> qtGameOver : [si dernier round gagné]
+checkRound --> eventStartTurn : [si round non gagné]
 
 ''' EVENEMENTS DE JEU '''
-Vue_QT_3 --> eventChoicePlay
-Vue_QT_3 --> eventChoiceEndTurn : [parfois forcé]
-Vue_QT_3 --> eventChoiceDraw
-Vue_QT_3 --> eventChoiceClaim
-eventChoicePlay --> Vue_QT_4 : qtDisplayCardPicker(PICKABLE)
-Vue_QT_4 --> eventCardPicked : PARAMETRES
+Vue_QT_2 --> eventChoiceEndTurn : [parfois forcé]
+Vue_QT_2 --> eventChoiceDraw
+Vue_QT_2 --> eventChoiceClaim
+Vue_QT_2 --> eventCardPicked : PARAMETRES
 
-eventCardPicked --> Vue_QT_5 : qtDisplayStonePicker(CHOSABLE)
-Vue_QT_5 --> eventStonePicked : PARAMETRES
-eventStonePicked --> Card::activate : [si eventChoicePlay]
+eventCardPicked --> Vue_QT_3 : qtDisplayStonePicker(CHOSABLE)
+Vue_QT_3 --> eventStonePicked : PARAMETRES
+eventStonePicked --> Card::activate : [si eventCardPicked]
 eventStonePicked --> claimStone : [si eventChoiceClaim]
-claimStone --> Vue_QT_6 : qtDisplayAlert(RESULTAT)
-Vue_QT_6 --> Vue_QT_3 : [bouton continuer]
-Card::activate --> Vue_QT_3 : qtDisplayPlayerTurn()
+claimStone --> Vue_QT_4 : qtDisplayAlert(RESULTAT)
+eventChoiceClaim --> Vue_QT_3 : qtDisplayStonePicker(CHOSABLE)
 
-eventChoiceDraw --> Vue_QT_3 : qtDisplayPlayerTurn(GAME_INFO)
-eventChoiceClaim --> Vue_QT_5 : qtDisplayStonePicker(CHOSABLE)
+''' qtDisplayPlayerTurn '''
+Card::activate --> qtDisplayPlayerTurn
+eventStartTurn --> qtDisplayPlayerTurn
+eventChoiceDraw --> qtDisplayPlayerTurn
+Vue_QT_4 --> qtDisplayPlayerTurn : [bouton continuer]
 
 ''' QUITTER '''
-Vue_QT_2 --> Vue_QT_1 : [bouton retour]
 eventChoiceEndTurn --> checkRound : checkRound()
-Vue_QT_3 --> Vue_QT_2 : [bouton quitter partie]
+Vue_QT_2 --> qtGameOver : [bouton quitter partie]

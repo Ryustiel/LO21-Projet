@@ -90,6 +90,11 @@ public:
 			}
 		}
 	}
+	void setRevendication(Side s) {
+		if (revendication == Side::none) {
+			revendication = s;
+		}
+	}
 
 	void addCard(const Card& card, const Side side);
 	const Card& removeCard(const Card& card, const Side side);
@@ -115,25 +120,31 @@ public:
 
 class Board {
 private:
-	Stone* borders; //const Stone* ?
+	Stone* stones; //const Stone* ?
 	size_t stone_nb;
 
   // indique si les checks prÃ©cÃ©dents ont dÃ©terminÃ© que la partie Ã©tait gagnÃ©e
   bool won = false; 
 
 public:
-	Board(size_t size = 9) : stone_nb(size), borders(new Stone[size]) {}
-	~Board() { delete[] borders; }
-	const Stone* getStones() const { return borders;  }
+	Board(size_t size = 9) : stone_nb(size), stones(new Stone[size]) {}
+	~Board() { delete[] stones; }
+	const Stone* getStones() const { return stones;  }
 	Stone& getStone(unsigned int n) { 
 		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
-		return borders[n];
+		return stones[n];
 	}
-	size_t getBorderNb() const { return stone_nb;  }
+	size_t getStoneNb() const { return stone_nb;  }
 
-	void addCard(const Card& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); borders[n].addCard(card, side); };
+	void init() { std::cout << "\nBoard::init();"; } // initialise le plateau au début d'une manche
+	void getPlayableStones(Card* c) { std::cout << "\nBoard::getPlayableStones();"; }
+
+	void addCard(const Card& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
 	const Card& removeCard(const Card& card, const Side side,const unsigned int n);
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const Card** AvailableCards, const size_t availableCardsCount) const;
+
+	//Evaluates if the game is won
+	const Side evaluateGameWinner() const;
 };

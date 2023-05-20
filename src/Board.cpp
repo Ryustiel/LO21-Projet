@@ -104,6 +104,39 @@ const bool recursiveCombinationType(int* baseComb, const Card* possibleCards[], 
 	return false;
 }
 
+void swap(const Card** cards, int pos1, int pos2) {
+	const Card* temp;
+	temp = cards[pos1];
+	cards[pos1] = cards[pos2];
+	cards[pos2] = temp;
+}
+
+int partition(const Card** cards, int start, int end, int pivot) {
+	int i = start;
+	int j = start;
+	while (i <= end) {
+		if (toInt(cards[i]->higherPossibleNumber()) < pivot) {
+			i++;
+		}
+		else {
+			swap(cards, i, j);
+			i++;
+			j++;
+		}
+	}
+	return j - 1;
+}
+
+void quickSort(const Card** cards, int end, int start = 0) {
+	if (start < end) {
+		int pivot = toInt(cards[end]->higherPossibleNumber());
+		int pos = partition(cards, start, end, pivot);
+
+		quickSort(cards, pos - 1, start);
+		quickSort(cards, end, pos + 1);
+	}
+}
+
 const CombinationType Stone::evaluateCombinaison(const Card* c[], size_t combination_size, int* max) {//evaluation of a full card combination
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
@@ -243,7 +276,10 @@ const Card** recursiveVariation(const Card** possibleCards, const size_t pcn, co
 	for (size_t i = 0; i < pcn; ++i) {
 		baseCombination[size] = possibleCards[i];
 		const Card* tmp = possibleCards[pcn - 1];
+		possibleCards[pcn - 1] = possibleCards[i];
+		possibleCards[i] = tmp;
 
+		//besoin de décaler les éléments ?
 
 		const Card** resultComb= recursiveVariation(possibleCards, pcn-1, baseCombination, size + 1, desiredSize, combinationToBeat,  sumToBeat, combat_mode_mud_prensence);
 		if (resultComb != nullptr) {
@@ -251,39 +287,6 @@ const Card** recursiveVariation(const Card** possibleCards, const size_t pcn, co
 		}
 	}
 	return nullptr;
-}
-
-void swap(const Card** cards, int pos1, int pos2) {
-	const Card* temp;
-	temp = cards[pos1];
-	cards[pos1] = cards[pos2];
-	cards[pos2] = temp;
-}
-
-int partition(const Card** cards, int start, int end, int pivot) {
-	int i = start;
-	int j = start;
-	while (i <= end) {
-		if (toInt(cards[i]->higherPossibleNumber()) < pivot) {
-			i++;
-		}
-		else {
-			swap(cards, i, j);
-			i++;
-			j++;
-		}
-	}
-	return j - 1;
-}
-
-void quickSort(const Card** cards, int end, int start =0) {
-	if (start < end) {
-		int pivot = toInt(cards[end]->higherPossibleNumber());
-		int pos = partition(cards, start, end, pivot);
-
-		quickSort(cards, pos - 1, start);
-		quickSort(cards, end, pos + 1);
-	}
 }
 
 const Card** Stone::bestVariation(const Card** possibleCards, const size_t pcn, const Card** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat, bool combat_mode_mud_prensence){
@@ -363,10 +366,54 @@ const Side Stone::evaluateWinningSide(const Card** AvailableCards, const size_t 
 
 
 const Side Board::evaluateStoneWinningSide(const unsigned int n,const Card** AvailableCards,const size_t availableCardsCount) const {
-	if (n < 0 || n > 9) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
-	const Side& revendication = borders[n].getRevendication();
+	if (n < 0 || n > stone_nb) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
+	const Side& revendication = stones[n].getRevendication();
 	if (revendication != Side::none)
 		return revendication;
-	return borders[n].evaluateWinningSide(AvailableCards, availableCardsCount);
+	return stones[n].evaluateWinningSide(AvailableCards, availableCardsCount);
+}
+
+
+const Side Board::evaluateGameWinner() const {
+	size_t count_p1 = 0;
+	size_t p1_in_a_row = 0;
+	size_t count_p2 = 0;
+	size_t p2_in_a_row = 0;
+
+	for (size_t i = 0; i < stone_nb; i++) {
+		if (stones[i].getRevendication() == Side::s1) {
+			count_p1 += 1;
+			p1_in_a_row += 1;
+			p2_in_a_row = 0;
+		} else if (stones[i].getRevendication() == Side::s2) {
+			count_p2 += 1;
+			p2_in_a_row += 1;
+			p1_in_a_row = 0;
+		}
+		else if (stones[i].getRevendication() == Side::none) {
+			p1_in_a_row = 0;
+			p2_in_a_row = 0;
+		}
+
+		if (count_p1 == 5) {
+			cout << "5 stones won : Player 1 wins !" << endl;
+			return Side::s1;
+		}
+		if (p1_in_a_row == 3) {
+			cout << "3 consecutive stones won : Player 1 wins !" << endl;
+			return Side::s1;
+		}
+
+		if (count_p2 == 5) {
+			cout << "5 stones won : Player 2 wins !" << endl;
+			return Side::s2;
+		}
+		if (p2_in_a_row == 3) {
+			cout << "3 consecutive stones won : Player 2 wins !" << endl;
+			return Side::s2;
+		}
+	}
+	cout << "The game continues !" << endl;
+	return Side::none;
 }
 
