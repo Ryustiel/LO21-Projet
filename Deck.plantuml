@@ -1,0 +1,25 @@
+@startuml Hello
+
+
+''' CLASSES '''
+class Deck {
+    - cards : const Card**
+    - card_count : unsigned int
+	- max_card_count : unsigned int
+
+    + Deck(g : const Game&)
+    + ~Deck();
+	+ Deck(p : const Deck&) = delete
+	+ operator=(const Deck& p) : Deck& = delete
+	+ getCardCount() const : unsigned int
+    + getMaxCardCount() const : unsigned int
+    + isEmpty() const : bool
+    + draw() : const Card&
+}
+
+''' RELATIONS '''
+
+
+
+
+@enduml

@@ -1,0 +1,34 @@
+@startuml Hello
+
+
+''' CLASSES '''
+class Player {
+    - name : string
+    - id : unsigned int
+    - score : unsigned int (initialisé à 0)
+    - hand : Hand* (initialisé à nullptr)
+    - pick : int
+
+    + Player(n : const string&, idPlayer : bool)
+    + ~Player()
+    + getName() const : const string& 
+    + getId() const : unsigned int
+    + getScore() const : unsigned int
+    + getHand() const : const Hand*
+    + setHand(c[6] : const Card*) : void
+    + setHand(c : const Card**, n : size_t) : void
+    + updateScore() : void
+    + init() : void
+    + initRound() : void
+    + playTurn() : void
+}
+
+class PlayerAIRandom {
+    - PlayerAIRandom(n : const string&, idPlayer : bool)
+}
+''' RELATIONS '''
+Player <|- PlayerAIRandom
+
+
+
+@enduml

@@ -1,0 +1,57 @@
+@startuml Hello
+
+
+''' CLASSES '''
+
+class Card <abstract> {
+    - name : string
+
+    + Card(n : const string)
+    + activate() const : void
+}
+
+class Clan {
+    - color : Color
+	- number : Number
+
+    + Clan(c : const Color&, nb : const Number)
+    + activate() const : void
+    + getColor() const : const Color&
+    + getNumber() const : const Number&
+}
+
+class Tactical {
+    + Tactical(n : const string)
+    + activate() const : void
+}
+
+class Elite {
+    + Elite(n : const string)
+}
+
+class CombatMode {
+    + CombatMode(n : const string)
+}
+
+class Ruses {
+    + Ruses(n : const string)
+}
+
+
+''' RELATIONS '''
+Card <|-- Clan
+Card <|-- Tactical
+
+Tactical <|-- Elite
+Tactical <|-- CombatMode
+Tactical <|-- Ruses
+
+Card "*" --o "1" Discard
+Card "*" --o "1" Deck
+Card "*" --o Board
+Card "6|7" --o "1" Hand
+Game "1" *-- "54|64" Card
+
+
+
+@enduml

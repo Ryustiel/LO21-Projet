@@ -1,0 +1,20 @@
+@startuml Hello
+
+
+''' CLASSES '''
+class Hand {
+	- cards : const Card**
+	- size : size_t
+	- max_size : size_t
+
+    + Hand(c[6] : const Card*)
+    + Hand(c : const Card**, n : size_t)
+    + add(c : const Card&) : void
+    + play(c : const Card&) : void
+}
+''' RELATIONS '''
+
+
+
+
+@enduml

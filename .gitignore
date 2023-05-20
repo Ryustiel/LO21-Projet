@@ -12,4 +12,5 @@ x64
 *.vcxproj.user
 *.suo
 *.ipch
+out
 /.vs

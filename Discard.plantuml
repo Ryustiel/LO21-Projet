@@ -1,0 +1,15 @@
+@startuml Hello
+
+
+''' CLASSES '''
+class Discard {
+    - class DiscardIterator
+    + addCard(card : const Card&) : void
+    + removeCard(card : const Card&) : const Card&
+}
+''' RELATIONS '''
+
+
+
+
+@enduml

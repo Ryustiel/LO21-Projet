@@ -1,0 +1,25 @@
+@startuml Hello
+
+
+''' CLASSES '''
+
+class Controller {
+
+}
+class TacticController {
+    - version : const Version (initialisé à Version::tactic)
+	- tacticDeck : Deck* (initialisé à  nullptr)
+	- tacticGame : Game
+
+    + TacticController(const Version& v, const string& name_player1,const string& name_player2, unsigned int id_player1,unsigned int id_player2)
+    + ~TacticController()
+    + getTacticDeck() : Deck&
+}
+
+
+''' RELATIONS '''
+Controller <|-- TacticController
+TacticController "1" *-- "1" Discard
+
+
+@enduml
