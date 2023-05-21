@@ -14,3 +14,5 @@ x64
 *.ipch
 /.vs
 enc_temp_folder/185ed01a1e9817633fc52d70d473e4b9/main.cpp
+/.vscode
+output
