@@ -60,7 +60,8 @@ public:
 	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
-		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
+		: version(v), clanGame(Game(v)), clanDeck(new Deck(clanGame)), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
+		clanDeck= new Deck(clanGame);
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
 	}
 	~Controller() {
@@ -80,7 +81,8 @@ private :
 	friend class Supervisor;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
-		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)), tacticDeck(new Deck(Game(v))) {
+		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)) {
+		tacticDeck = new Deck(tacticGame);
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
 	}
 	~TacticController() {
