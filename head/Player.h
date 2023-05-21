@@ -8,6 +8,7 @@ private:
     std::string name;
     unsigned int score = 0;
     Hand* hand = nullptr;
+    int pick; // player's card pick to be viewed by the controller
 
     friend class Controller;
 
@@ -15,7 +16,6 @@ public:
     const string& getName() const { return name; }
     unsigned int getScore() const { return score; }
     const Hand* getHand() const { return hand; }
-
     void setHand(const Card* c[6]) {
         if (hand == nullptr) hand = new Hand(c);
     }
@@ -24,7 +24,7 @@ public:
     }
 
     // s'utilise avec getScore pour gérer le score de victoire de manches du joueur
-    void updateScore() { score++; }
+    void updateScore() { std::cout << "\nscore mis a jour pour un joueur : " << score++; }
 
     // initialisation du joueur pour la partie
     void initForNewGame() { 
