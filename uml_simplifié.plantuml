@@ -53,14 +53,14 @@ class Supervisor <singelton> {
 }
 
 class Controller {
-    - version : const Version (initialisé à Version::legacy)
-	- clanDeck : Deck* (initialisé à nullptr)
+    - version : const Version
+	- clanDeck : Deck* 
 	- board : Board
 	- clanGame : Game
 	- player1 : Player*
 	- player2 : Player*
-	- round : bool (initialisé à 0)
-    - stop : bool (initialisé à 0)
+	- round : bool
+    - stop : bool
     - remainingRounds : int
     - round : bool
     - stop : bool
@@ -70,9 +70,7 @@ class Controller {
     - runRoundLoop() : void
     - runChecks() : void
 
-    + Controller(v : const Version&, name_player1 : const string&,
-        name_player2 : const string&, id_player1 : unsigned int,
-        id_player2 : unsigned int)
+    + Controller(v : const Version&, name_player1 : const string&, name_player2 : const string&, is_IA_1 : bool, is_IA_2 : bool)
     + ~Controller()
     + Controller(c : const Controller&) = delete
 	+ Controller& operator=(c : const Controller&) = delete
@@ -84,23 +82,22 @@ class Controller {
 }
 
 class TacticController {
-    - version : const Version (initialisé à Version::tactic)
-	- tacticDeck : Deck* (initialisé à  nullptr)
+    - version : const Version 
+	- tacticDeck : Deck*
 	- tacticGame : Game
 
-    + TacticController(const Version& v, const string& name_player1,const string& name_player2, unsigned int id_player1,unsigned int id_player2)
+    + TacticController(v : const Version&, name_player1 : const string&, name_player2 : const string&, unsigned int, is_IA_1 : bool, is_IA_2 : bool)
     + ~TacticController()
     + getTacticDeck() : Deck&
 }
 
 class Player {
     - name : string
-    - id : unsigned int
-    - score : unsigned int (initialisé à 0)
-    - hand : Hand* (initialisé à nullptr)
+    - score : unsigned int
+    - hand : Hand*
     - pick : int
 
-    + Player(n : const string&, idPlayer : bool)
+    + Player(n : const string&)
     + ~Player()
     + getName() const : const string& 
     + getId() const : unsigned int
@@ -115,7 +112,7 @@ class Player {
 }
 
 class PlayerAIRandom {
-    - PlayerAIRandom(n : const string&, idPlayer : bool)
+    - PlayerAIRandom(n : const string&)
 }
 
 class Card <abstract> {
