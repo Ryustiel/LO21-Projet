@@ -48,6 +48,17 @@ public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
 
+	Deck& getClanDeck() const { return *clanDeck; }
+	Game getClanGame() { return clanGame; }
+	Board& getBoard() { return board; }
+	Player& getPlayer1() const  { return *player1; }
+	Player& getPlayer2() const  { return *player2; }
+	bool getRound() const { return round; }
+	bool getStop() const  { return stop; }
+	int getRemainingRounds() const { return remainingRounds; }
+	int getTotalRounds() { return totalRounds; }
+
+
 	// setting players AI
 	// la manière de générer les instances des classes IA
 	// peut être très différente, il faudra qu'on en discute
@@ -69,8 +80,6 @@ protected:
 		delete player1;
 		delete player2;
 	}
-	Deck& getClanDeck();
-  	Board& getBoard();
 };
 
 class TacticController : public Controller {
@@ -88,5 +97,6 @@ public :
 	~TacticController() {
 		delete tacticDeck;
 	}
-	Deck& getTacticDeck();
+	Deck& getTacticDeck() const { return *tacticDeck; }
+	Game& getTacticGame() { return tacticGame; }
 };
