@@ -26,12 +26,12 @@ void UserInterface::freeInstance() {
 
 /// SUPERVISOR SETTINGS ///
 //SELECT VERSION
-Version UserInterface::UIselectVersion(void (*callback) (Version v)) { //user select version
+Version UserInterface::UIselectVersion() { //user select version
 	Version selected_version;
 	int selection = 0;
 	int i = 0;
 
-	cout << endl << "(UIselectVersion) Please select a version (number) : ";
+	cout << endl << "Please select a version (number) : ";
 
 	//user input
 	cin >> selection;
@@ -51,9 +51,6 @@ Version UserInterface::UIselectVersion(void (*callback) (Version v)) { //user se
 		exit(1);
 	}
 
-	//callback
-	callback(selected_version);
-
 	return selected_version;
 }
 
@@ -61,9 +58,7 @@ Version UserInterface::UIVersionMenu() {
 	int i = 0;
 	Version selected_version;
 
-	system("CLS");
-	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
-	cout << "** VERSION MENU **" << endl;
+	cout << endl << "** VERSION MENU**" << endl;
 	cout << "Available versions :" << endl;
 
 	//display versions
@@ -73,10 +68,7 @@ Version UserInterface::UIVersionMenu() {
 	}
 
 	//Version selection + callback
-	selected_version = UIselectVersion(functionCallback);
-
-	state += 1;
-	system("pause");
+	selected_version = UIselectVersion();
 
 	return selected_version;
 }
@@ -84,30 +76,30 @@ Version UserInterface::UIVersionMenu() {
 
 /// GAME SETTINGS///
 //PLAYERS NAME
-string UserInterface::UIselectPlayerName(int i, int& isIA1,void (*callback) (string s)) {
+string UserInterface::UIselectPlayerName(int i, int& isIA) {
 	string player;
 
-	cout << "Player " << i << " : " << endl << endl;
+	cout << endl << "Player " << i << " : " << endl;
 	cout << "Types of player : " << endl;
 	cout << "0 : Human" << endl;
 	cout << "1 : Random IA :" << endl;
 	cout << "Please choose a type of player (number) : ";
-	cin >> isIA1;
+	cin >> isIA;
 
-	cout << endl << "Name " << i << " : ";
+	cout << "Name " << i << " : ";
 	cin >> player;
 
 	//cout << "(UIselectPlayerName) - Player name : " << player;
-
-	callback(player);
 
 	return player;
 }
 
 void UserInterface::UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) {
 
-	players_name[0] = UIselectPlayerName(1, isIA1, functionCallback);
-	players_name[1] = UIselectPlayerName(2, isIA2, functionCallback);
+	cout << endl << "** PLAYER MENU **" << endl;
+
+	players_name[0] = UIselectPlayerName(1, isIA1);
+	players_name[1] = UIselectPlayerName(2, isIA2);
 
 	//cout << "(UIPlayerMenu) - players_name[0] : " << players_name[0] << endl;
 	//cout << "(UIPlayerMenu) - players_name[1] : " << players_name[1] << endl;
@@ -116,9 +108,8 @@ void UserInterface::UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) 
 
 /// GAME SETTINGS ///
 void UserInterface::UIGameInit() {
-	system("CLS");
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
-	cout << "** GAME INITIALISATION **" << endl;
+	cout << "** INITIALISING THE GAME **" << endl;
 	cout << endl;
 
 	string players_name[2];
@@ -168,6 +159,52 @@ void UserInterface::UIGameSettings() {
 	cout << "(UIGameSettings) - Controller : remaining rounds : " << Supervisor::getInstance().getController()->getRemainingRounds() << endl;
 
 	system("pause");
+}
+
+void UserInterface::UITurnLauncher(Player& curr_player) {
+
+}
+
+void UserInterface::UIRoundLauncher() {
+	size_t turns_count = 0;
+	while (Supervisor::getInstance().getController()->getBoard().evaluateGameWinner() == Side::none) {
+		turns_count++;
+		cout << endl << "TURN " << turns_count << endl;
+		Supervisor::getInstance().getController()->getPlayer1().playTurn();
+		Supervisor::getInstance().getController()->getPlayer2().playTurn();
+		cout << endl;
+		//exitting the loop for the tests
+		if (turns_count == 3) break;
+	}
+}
+
+
+void UserInterface::UIGameLauncher() {
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** LET'S PLAY! **" << endl << endl;
+	cout << endl;
+
+	while (Supervisor::getInstance().getController()->getRemainingRounds() != 0) {
+		cout << "* ROUND " << Supervisor::getInstance().getController()->getTotalRounds() - Supervisor::getInstance().getController()->getRemainingRounds() + 1 << "(on " << Supervisor::getInstance().getController()->getTotalRounds() << ") *" << endl;
+		//init the elements
+			// new hand (player), new deck(s), 
+
+		//round
+		UIRoundLauncher();
+
+		//decrementing remaining rounds
+		unsigned int r = Supervisor::getInstance().getController()->getRemainingRounds();
+		Supervisor::getInstance().getController()->setRemainingRounds(r -1);
+	}
+
+	//print the winner :
+	Player* winner = Supervisor::getInstance().getController()->getWinner();
+	if (winner != nullptr) {
+		cout << endl << "The winner is : " << winner->getName() << "! Congratulations!" << endl;
+	} else {
+		cout << endl << "It's a draw! Perhaps could you decide the winner by playing again..." << endl;
+	}
 }
 
 /// GAME LAUNCHER ///

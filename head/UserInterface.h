@@ -42,16 +42,18 @@ public:
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
-    Version UIselectVersion(void (*callback) (Version v));
+    Version UIselectVersion(); // call a callback as argument : void (*callback) (Version v)
     Version UIVersionMenu();
 
     /// GAME SETTINGS///
     //PLAYERS NAME
-    string UIselectPlayerName(int i, int& isIA1, void (*callback) (const string s));
+    string UIselectPlayerName(int i, int& isIA1);
     void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
 
     ///PLAY THE GAME
-    void UIGameLauncher();
+    void UIGameLauncher(); //launches the game
+    void UIRoundLauncher(); //launches the round
+    void UITurnLauncher(Player& curr_player); //launches the turn
 
 };

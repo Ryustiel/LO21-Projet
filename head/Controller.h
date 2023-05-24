@@ -60,6 +60,12 @@ public:
 	int getRemainingRounds() const { return remainingRounds; }
 	int getTotalRounds() { return totalRounds; }
 
+	Player* getWinner() const {
+		if (player1->getScore() > player2->getScore()) return player1;
+		if (player2->getScore() > player1->getScore()) return player2;
+		return nullptr;
+	}
+
 	//SETTERS
 	void setTotalRounds(int n) { totalRounds = n; }
 	void setRemainingRounds(int n) { remainingRounds = n; }

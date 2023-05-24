@@ -35,7 +35,9 @@ public:
     // la cascade d'événements suivants du tour
     // (vérifier une borne, intéragir avec l'effet d'une carte tactique...)
     // sera gérée par le contrôleur
-    void playTurn() { std::cout << "\n\nplayer picking a card, through the controller's methods : card's effect activated, game board updated, combination checks enacted (if player chooses so), scores updated";}
+    void playTurn() {
+        cout << "Here's " << name << "!" << endl;
+    }
     
 protected :
     Player(const string& n)
