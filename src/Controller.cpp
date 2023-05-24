@@ -1,66 +1,72 @@
 #include "../head/Controller.h"
 #include <iostream>
 
-void Controller::newGame(int nbTurns) { // + additional parameters
-    std::cout << "\n\nINIT NEW GAME =====";
-    std::cout << "\nremainingRounds = parametre;";
-    player1->init(); player2->init();
+void Controller::runGame(int nturns, int winthreshold) { // + additional parameters
+
+    std::cout << "\n===================== newGame";
+
+    player1->initForNewGame();
+    player2->initForNewGame();
     
-    remainingRounds = nbTurns;
-    totalRounds = nbTurns;
-    while (remainingRounds > 0 && !stop) { // conditions d'arret des manches
-        handleNewRound();
-        remainingRounds--;
+    // le plateau a-t-il besoin d'�tre initialis� � ce niveau ?
+
+    remainingRounds = nturns;
+    totalRounds = nturns;
+    maxScore = winthreshold;
+
+    newRound();
+}
+
+void Controller::newRound() {
+    std::cout << "\n===================== newRound";
+
+    player1->initForNewRound();
+    player2->initForNewRound();
+
+    board.init();
+    clanDeck->init(); // initialiser la pioche tactique dans la m�thode fille
+
+    turn = false;
+
+    eventStartTurn();
+}
+
+void Controller::checkRound() {
+    std::cout << "\n=============================== checkRound";
+    remainingRounds--;
+    if (remainingRounds <= 0 || player1->getScore() >= maxScore || player2->getScore() >= maxScore) {
+        qtGameOver();
+    } else {
+        newRound();
     }
-    std::cout << "\n\nFIN DE PARTIE";
 }
 
-void Controller::handleNewRound() {
-    std::cout << "\n\nINIT NEW MANCHE =====";
-    std::cout << "\nround = 0;";
-    std::cout << "\npioche.init();";
-    std::cout << "\nTacticController : pioche_tactique.init();";
-    //board.init();
-    player1->initRound(); player2->initRound();
+void Controller::eventStartTurn() {
+    std::cout << "\n====================== startTurn";
 
-    TEMP_victory_counter = 0;
+    Side winning = board.evaluateGameWinner();
+    winning = Side::s1; // TEMP
+    if (winning == Side::none) {
 
-    runRoundLoop();
+        if (turn == false) { turn = true; }
+        else { turn = false; }
+        // initialiser les contraintes d'actions pour le tour en cours
+        qtDisplayPlayerTurn();
 
-    std::cout << "\n\nEVENEMENTS DE FIN DE MANCHE --> DEBUT D'UNE NOUVELLE MANCHE OU FIN DE PARTIE (selon scores et nbTurns definis)";
-    std::cout << "\nSCORES : " << player1->getScore() << " vs " << player2->getScore();
-}
+    } else {
 
-void Controller::runRoundLoop() {
-    /*
-    std::cout << "\n\nManche Loop ================";
-    // gere toute la manche
-    while (!board.isWon() && !stop) { // conditions de fin de manche
-        std::cout << "\n\nRunning Manche " << (totalRounds - remainingRounds + 1);
-        if (round) {
-            std::cout<<"\n\nplayer1 :";
-            player1->playTurn();
-            round=false;
-        } 
-        else {
-            std::cout<<"\n\nplayer2 :";
-            player2->playTurn(); 
-            round=true;
+        if (winning == Side::s1) {
+            player1->updateScore();
         }
-        runChecks(); // TEMP : should be triggered through Player::playTurn()
-        
-        // les scores de manche des joueurs seront mis a jour...
-        // en meme temps que le statut de victoire du plateau (pas ici)
-        // le controleur ne fait que changer l'état du jeu en réponse à l'événement de victoire.
-    }*/
-}
+        else {
+            player2->updateScore();
+        }
+        checkRound();
 
-void Controller::runChecks() { // this is called by a player
-    std::cout << "Triggering board checks, can update the state of the game";
-    if (++TEMP_victory_counter > 2) {
-        //board.setWon();
-        player1->updateScore();
-        std::cout << "\n\nround GAGNE PAR JOUEUR 1";
     }
-}
 
+    
+
+    
+
+}
