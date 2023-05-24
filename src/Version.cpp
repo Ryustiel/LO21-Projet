@@ -25,6 +25,12 @@ string toString(const Version& v) {
 
 }
 
+Version toVersion(const string s) {
+	if (s == "legacy" || s == "Legacy") return Version::legacy;
+	else if (s == "tactic" || s == "Tactic") return Version::tactic;
+	throw ShottenTottenException("to Version : incorrect string (version) specified");
+}
+
 
 std::ostream& operator<<(std::ostream& f, const Version& v) {
 	f << toString(v);
