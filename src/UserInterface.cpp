@@ -1,0 +1,182 @@
+#include "../head/UserInterface.h"
+
+//SURCHARGE CALLBACK FUNCTION
+void functionCallback(const Version v) { //callback
+	cout << endl << "(callback function) Selection : " << v << endl;
+}
+
+void functionCallback(const string s) {
+	cout << endl << "(callback function) Selection : " << s << endl;
+}
+
+///INTERFACE SINGLETON METHODS///
+UserInterface::Handler UserInterface::handler = UserInterface::Handler();
+
+UserInterface& UserInterface::getInstance() {
+	if (handler.instance == nullptr) handler.instance = new UserInterface();
+	return *handler.instance;
+}
+
+void UserInterface::freeInstance() {
+	delete handler.instance;
+	handler.instance = nullptr;
+}
+
+
+
+/// SUPERVISOR SETTINGS ///
+//SELECT VERSION
+Version UserInterface::UIselectVersion(void (*callback) (Version v)) { //user select version
+	Version selected_version;
+	int selection = 0;
+	int i = 0;
+
+	cout << endl << "(UIselectVersion) Please select a version (number) : ";
+
+	//user input
+	cin >> selection;
+
+	//verification
+	i = 0;
+	for (auto& v : Versions) {
+		if (i == selection) {
+			i = -1;
+			selected_version = v;
+			break;
+		}
+		i++;
+	}
+	if (i != -1) { //no version selected
+		cout << "(UIselectVersion) Incorrect selected version. Exitting the process...";
+		exit(1);
+	}
+
+	//callback
+	callback(selected_version);
+
+	return selected_version;
+}
+
+Version UserInterface::UIVersionMenu() {
+	int i = 0;
+	Version selected_version;
+
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** VERSION MENU **" << endl;
+	cout << "Available versions :" << endl;
+
+	//display versions
+	i = 0;
+	for (auto& v : Versions) {
+		cout << i++ << " : " << v << endl;
+	}
+
+	//Version selection + callback
+	selected_version = UIselectVersion(functionCallback);
+
+	state += 1;
+	system("pause");
+
+	return selected_version;
+}
+
+
+/// GAME SETTINGS///
+//PLAYERS NAME
+string UserInterface::UIselectPlayerName(int i, int& isIA1,void (*callback) (string s)) {
+	string player;
+
+	cout << "Player " << i << " : " << endl << endl;
+	cout << "Types of player : " << endl;
+	cout << "0 : Human" << endl;
+	cout << "1 : Random IA :" << endl;
+	cout << "Please choose a type of player (number) : ";
+	cin >> isIA1;
+
+	cout << endl << "Name " << i << " : ";
+	cin >> player;
+
+	//cout << "(UIselectPlayerName) - Player name : " << player;
+
+	callback(player);
+
+	return player;
+}
+
+void UserInterface::UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) {
+
+	players_name[0] = UIselectPlayerName(1, isIA1, functionCallback);
+	players_name[1] = UIselectPlayerName(2, isIA2, functionCallback);
+
+	//cout << "(UIPlayerMenu) - players_name[0] : " << players_name[0] << endl;
+	//cout << "(UIPlayerMenu) - players_name[1] : " << players_name[1] << endl;
+}
+
+
+/// GAME SETTINGS ///
+void UserInterface::UIGameInit() {
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** GAME INITIALISATION **" << endl;
+	cout << endl;
+
+	string players_name[2];
+	int isIA1 = 0;
+	int isIA2 = 0;
+
+	Version selected_version = UIVersionMenu();
+	UIPlayerMenu(players_name, isIA1, isIA2);
+
+	//cout << "(UIGameInit) - players_name[0] : " << players_name[0] << endl;
+	//cout << "(UIGameInit) - players_name[1] : " << players_name[1] << endl;
+
+	//cout << "(UIGameInit) - isIA1 = " << isIA1;
+	//cout << "(UIGameInit) - isIA2 = " << isIA2;
+
+	//initializing controller :
+	Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
+
+	cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
+	cout << "(UIGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
+	cout << "(UIGameInit) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
+
+	system("pause");
+}
+
+unsigned int UserInterface::UISelectRounds() {
+	unsigned int i;
+
+	cout << "Please select the desired number of rounds :";
+	cin >> i;
+
+	return i;
+}
+
+void UserInterface::UIGameSettings() {
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** GAME SETTINGS **" << endl;
+	cout << endl;
+
+	unsigned int rounds_nb = UISelectRounds();
+
+	Supervisor::getInstance().getController()->setTotalRounds(rounds_nb);
+	Supervisor::getInstance().getController()->setRemainingRounds(rounds_nb);
+
+	cout << "(UIGameSettings) - Controller : total rounds : " << Supervisor::getInstance().getController()->getTotalRounds() << endl;
+	cout << "(UIGameSettings) - Controller : remaining rounds : " << Supervisor::getInstance().getController()->getRemainingRounds() << endl;
+
+	system("pause");
+}
+
+/// GAME LAUNCHER ///
+void UserInterface::launchUserInterface() {
+	//PARAMATERS
+	UIGameInit(); //done
+	UIGameSettings(); //done
+
+	//PLAY THE GAME
+	UIGameLauncher();
+
+}
