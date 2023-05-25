@@ -109,7 +109,7 @@ void UserInterface::UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) 
 /// GAME SETTINGS ///
 void UserInterface::UIGameInit() {
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
-	cout << "** INITIALISING THE GAME **" << endl;
+	cout << "** GAME SETTINGS **" << endl;
 	cout << endl;
 
 	string players_name[2];
@@ -167,7 +167,7 @@ void UserInterface::UITurnLauncher(Player& curr_player) {
 
 void UserInterface::UIRoundLauncher() {
 	size_t turns_count = 0;
-	while (Supervisor::getInstance().getController()->getBoard().evaluateGameWinner() == Side::none) {
+	do {
 		turns_count++;
 		cout << endl << "TURN " << turns_count << endl;
 		Supervisor::getInstance().getController()->getPlayer1().playTurn();
@@ -175,7 +175,7 @@ void UserInterface::UIRoundLauncher() {
 		cout << endl;
 		//exitting the loop for the tests
 		if (turns_count == 3) break;
-	}
+	} while (Supervisor::getInstance().getController()->getBoard().evaluateGameWinner() == Side::none);
 }
 
 
@@ -186,7 +186,7 @@ void UserInterface::UIGameLauncher() {
 	cout << endl;
 
 	while (Supervisor::getInstance().getController()->getRemainingRounds() != 0) {
-		cout << "* ROUND " << Supervisor::getInstance().getController()->getTotalRounds() - Supervisor::getInstance().getController()->getRemainingRounds() + 1 << "(on " << Supervisor::getInstance().getController()->getTotalRounds() << ") *" << endl;
+		cout << "* ROUND " << Supervisor::getInstance().getController()->getTotalRounds() - Supervisor::getInstance().getController()->getRemainingRounds() + 1 << " (on " << Supervisor::getInstance().getController()->getTotalRounds() << ") *" << endl;
 		//init the elements
 			// new hand (player), new deck(s), 
 
