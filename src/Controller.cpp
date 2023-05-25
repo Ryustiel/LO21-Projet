@@ -2,7 +2,7 @@
 #include <iostream>
 
 void Controller::newRoundInit() {
-    //init deck
+    //init decks
     clanDeck = new Deck(clanGame);
     //init board
     board = Board();
