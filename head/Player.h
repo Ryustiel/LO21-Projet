@@ -39,7 +39,7 @@ public:
 protected :
     Player(const string& n)
         : name(n) {}
-    ~Player() {
+    virtual ~Player() {
         delete hand;
     }
 };

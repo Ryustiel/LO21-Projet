@@ -94,7 +94,7 @@ protected:
 		}
 	}
 
-	~Controller() {
+	virtual ~Controller() {
 		delete clanDeck;
 		delete player1;
 		delete player2;
