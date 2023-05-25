@@ -39,7 +39,7 @@ private:
 
 	void handleNewRound(); // événement de début de manche
 	// la méthode de boucle est séparée pour un code plus propre
-	// et éventuellement des événements d'initialisation différents, 
+	// et éventuellement des événements d'initialisation différents,
 	// pour différents modes de jeu
     void runRoundLoop(); // boucle de manche, lancé par handleNewRound
     void runChecks(); // running card checks on the board
@@ -89,7 +89,8 @@ protected:
 		clanDeck = new Deck(clanGame);
 		if (isIA1 == 0) { //human player
 			player1 = new Player(name_player1);
-		} else if (isIA1 == 1) { //IA random player
+		}
+		else if (isIA1 == 1) { //IA random player
 			player1 = new PlayerAIRandom(name_player1);
 		}
 		else { //incorrect number
@@ -105,7 +106,8 @@ protected:
 			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
 		}
 	}
-	~Controller() {
+
+	virtual ~Controller() {
 		delete clanDeck;
 		delete player1;
 		delete player2;

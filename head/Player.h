@@ -6,7 +6,6 @@
 class Player {
 private:
     std::string name;
-    unsigned int id;
     unsigned int score = 0;
     Hand* hand = nullptr;
     int pick; // player's card pick to be viewed by the controller
@@ -39,11 +38,11 @@ public:
     void playTurn() {
         cout << "Here's " << name << "!" << endl;
     }
-    
+
 protected :
     Player(const string& n)
         : name(n) {}
-    ~Player() {
+    virtual ~Player() {
         delete hand;
     }
 };
