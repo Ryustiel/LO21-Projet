@@ -11,10 +11,8 @@
 #include "../head_view/parametersview.h"
 
 void VueVersion::buttonClicked(){
-    QString versionstr=choix->currentText();
-    // a changer quand on aura fonction str-> version
-    if(versionstr=="legacy") version=Version::legacy;
-    if(versionstr=="tactic") version=Version::tactic;
+    const QString versionstr=choix->currentText();
+    version=toVersion(versionstr);
 
     VueParametres* param = new VueParametres(nullptr);
     this->hide();
