@@ -8,6 +8,10 @@ void Hand::add(const Card& c) {
 }
 
 void Hand::play(const Card& c) {
+	// recuperer le tableau existant
+	// creer un nouveau tab de taille n + 1
+	// copier le premier tableau
+	// ajouter la carte
 	size_t i = 0;
 	while (cards[i] != &c && i < size) {
 		++i;

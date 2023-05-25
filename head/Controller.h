@@ -25,12 +25,11 @@ private:
 
 	// scores de manche stockés ici car impactent directement
 	// la fin de boucle de manche et de partie
-	int remainingRounds;
-    int totalRounds;
-	int maxScore;
+	unsigned int remainingRounds;
+    unsigned int totalRounds;
+	unsigned int maxScore;
 
 	unsigned int playerCardPick;
-	unsigned int playerStonePick;
 
 	void newRound(); // événement de début de manche
 	void checkRound(); // verifie si la manche est gagnée
@@ -52,18 +51,17 @@ public:
 
 
 	// setting players AI
-	// la manière de générer les instances des classes IA
-	// peut être très différente, il faudra qu'on en discute
 	void setPlayer1(Player* player) { player1 = player; }
     void setPlayer2(Player* player) { player2 = player; }
 
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
-	void runGame(int nbturns, int winthreshold); // (int nbTurns, int typeia, ...)
+	void runGame(unsigned int nbturns, unsigned int winthreshold); // (int nbTurns, int typeia, ...)
 
-	void getPickableCards() {std::cout << "\ngetPickableCards();";} // récupère la liste des cartes jouables
-	void getUnclaimedStones() {std::cout << "\ngetUnclaimedStones();";}
+	// CardIterator getPlayerHand() {}
+	void getPickableCards() { std::cout << "\ngetPickableCards();"; } // récupère la liste des cartes jouables
+	void getUnclaimedStones() { std::cout << "\ngetUnclaimedStones();"; }
 	void getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		Card* card = nullptr;
 		// if (turn) {card = player1->getPick();} else {card = player2->getPick();}
@@ -105,8 +103,25 @@ public:
 	}
 	void eventChoiceDraw() {
 		std::cout << "\n================================ choiceDraw";
-		// const Card c = clanDeck->draw();
+		std::cout << "\n\n\n\n\n TARGETTT !!!!";
+		const Card& c = clanDeck->draw();
 		// updating player's hand
+
+		std::cout << "\nNEW CARD : " << c.getName();
+
+		const Card& c2 = clanDeck->draw();
+		std::cout << "\nNEW CARD : " << c2.getName();
+
+		std::cout << "\nWon't print because game shut down.";
+
+		//player1->getHand()->add(c);
+
+		Hand& hand = *player1->getHand();
+		for (const Card& card : hand) {
+			// Do something with card
+			std::cout << "\nCARD : " << card.getName();
+		}
+
 		qtDisplayPlayerTurn();
 	}
 	void eventChoiceEndTurn() {
@@ -120,9 +135,17 @@ public:
 	}
 protected:
 	Controller(const Version& v, const string& p1name, const string& p2name, unsigned int AI_player1, unsigned int AI_player2)
-		: version(v), clanGame(Game(v)), clanDeck(new Deck(clanGame)), player1(new Player(p1name)), player2(new Player(p2name)) {
-		clanDeck= new Deck(clanGame);
+		: version(v), 
+		clanGame(Game(v)), 
+		clanDeck(new Deck(Game(v))), 
+		board(Board()), 
+		player1(new Player(p1name)), 
+		player2(new Player(p2name)) 
+	{
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+
+		std::cout << "\n\nDRAWING CARDS FOR THE DECK";
+		//player1->getHand()->drawCards(clanDeck, 6);
 	}
 	~Controller() {
 		delete clanDeck;

@@ -14,7 +14,7 @@ private:
 public:
     const string& getName() const { return name; }
     unsigned int getScore() const { return score; }
-    const Hand* getHand() const { return hand; }
+    Hand* getHand() const { return hand; } // was const Hand*
     void setHand(const Card* c[6]) {
         if (hand == nullptr) hand = new Hand(c);
     }
@@ -38,8 +38,7 @@ public:
     }
     
 protected :
-    Player(const string& n)
-        : name(n) {}
+    Player(const string& n) : name(n), hand(new Hand()) {}
     ~Player() {
         delete hand;
     }

@@ -27,9 +27,9 @@ public :
 		// événements lors de l'initialisation du contrôleur
 		qtDisplayMainMenu();
 	}
-	void eventStartGame(Version v, const string& p1name, const string& p2name, int nrounds, int winthreshold) { // game version, number of rounds 
+	void eventStartGame(Version v, const string& p1name, const string& p2name, unsigned int p1AI, unsigned int p2AI, unsigned int nrounds, unsigned int winthreshold) { // game version, number of rounds 
 		std::cout << "\n================================ eventStartGame";
-		Supervisor::getInstance().setController(v, p1name, p2name, 1, 1);
+		Supervisor::getInstance().setController(v, p1name, p2name, p1AI, p2AI);
 		Supervisor::getInstance().getController()->runGame(nrounds, winthreshold);
 	}
 	void qtDisplayMainMenu() {

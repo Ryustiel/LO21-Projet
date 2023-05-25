@@ -8,6 +8,8 @@
 #include "head/Supervisor.h"
 #include "head/Controller.h"
 
+
+
 int main() {
 
 	Board* b = new Board();
@@ -75,8 +77,10 @@ int main() {
 
 	// => réponse qui suit le message qtDisplayMainMenu()
 	// => elle contient les paramètres de la partie et la version choisie.
-	Supervisor::getInstance().eventStartGame(Version::legacy, "player name 1", "player name 2", 3, 2);
+	Supervisor::getInstance().eventStartGame(Version::legacy, "player name 1", "player name 2", 1, 1, 3, 2);
 
+	Supervisor::getInstance().getController()->eventChoiceDraw();
+	// 
 	// ctr->eventChoiceDraw(); // <= interface : menu Jouer son Tour
 	// => ctr.qtDisplayPlayerTurn()
 	// ctr->eventCardPicked("Carte carte_choisie"); // interface : menu Card Picker
@@ -86,6 +90,6 @@ int main() {
 	// ctr->eventChoiceEndTurn(); // interface : menu Jouer son Tour
 	// => ctr.startTurn() => ctr.checkRound(); => ctr.qtDisplayVictoryMenu();
 	// ctr->qtDisplayVersionMenu();
-
+	
 	return 0;
 }

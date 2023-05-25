@@ -1,23 +1,19 @@
 #include "../head/Controller.h"
 #include <iostream>
 
-void Controller::runGame(int nturns, int winthreshold) { // + additional parameters
+void Controller::runGame(unsigned int nturns, unsigned int winthreshold) { // + additional parameters
 
     std::cout << "\n===================== newGame";
 
-    player1->initForNewGame();
-    player2->initForNewGame();
-    
-    // le plateau a-t-il besoin d'�tre initialis� � ce niveau ?
-
-    remainingRounds = nturns;
     totalRounds = nturns;
+    remainingRounds = nturns;
     maxScore = winthreshold;
 
     newRound();
 }
 
 void Controller::newRound() {
+
     std::cout << "\n===================== newRound";
 
     player1->initForNewRound();
@@ -32,7 +28,9 @@ void Controller::newRound() {
 }
 
 void Controller::checkRound() {
+
     std::cout << "\n=============================== checkRound";
+
     remainingRounds--;
     if (remainingRounds <= 0 || player1->getScore() >= maxScore || player2->getScore() >= maxScore) {
         qtGameOver();
@@ -42,6 +40,7 @@ void Controller::checkRound() {
 }
 
 void Controller::eventStartTurn() {
+
     std::cout << "\n====================== startTurn";
 
     Side winning = board.evaluateGameWinner();
