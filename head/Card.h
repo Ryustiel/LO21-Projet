@@ -21,7 +21,7 @@ extern std::initializer_list<Color> Colors;
 extern std::initializer_list<Number> Numbers;
 
 class Card {
-private:
+protected:
 	const string name;
 public:
 	Card(const string n) : name(n){}
@@ -29,50 +29,52 @@ public:
 
 	virtual void activate() const=0;
 
-	virtual const bool canBeUsedAs(const Color& c) const=0;
-	virtual const bool canBeUsedAs(const Number& n) const=0;
-	virtual const bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
-	virtual const Number higherPossibleNumber() const=0;
-	virtual const list<Number> possibleNumber() const = 0;
-
 };
 
 const size_t clanCardsNumber = 54;
 const size_t tacticalCardsNumber = 10;
 
-class Clan : public Card {
+class PlacableCard : public virtual Card {
+public:
+	PlacableCard(const string n):Card(n) {}
+	virtual const bool canBeUsedAs(const Color& c) const = 0;
+	virtual const bool canBeUsedAs(const Number& n) const = 0;
+	virtual const Number higherPossibleNumber()const = 0;
+	virtual const list<Number> possibleNumber() const = 0;
+};
+
+class Clan : public PlacableCard{
 private:
 	const Color color;
 	const Number number;
 public:
-	Clan(const Color& c, const Number nb): Card(toString(c) + " " + toString(nb)), color(c), number(nb) { }
+	Clan(const Color& c, const Number nb): PlacableCard(toString(c) + " " + toString(nb)), color(c), number(nb), Card(toString(c) + " " + toString(nb)) {}
 	void activate() const { return; };
 	const Color& getColor() const { return color; }
 	const Number& getNumber() const { return number; }
 
-	virtual const bool canBeUsedAs(const Color& c) const {return c == color;}
-	virtual const bool canBeUsedAs(const Number& n) const {return n == number;}
-	virtual const Number higherPossibleNumber() const { return getNumber(); };
-	virtual const list<Number> possibleNumber() const { list<Number> tmp = list<Number>(); tmp.push_front(number); return tmp; };
+	const bool canBeUsedAs(const Color& c) const {return c == color;}
+	const bool canBeUsedAs(const Number& n) const {return n == number;}
+	const bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
+	const Number higherPossibleNumber() const { return getNumber(); };
+	const list<Number> possibleNumber() const { list<Number> tmp = list<Number>(); tmp.push_front(number); return tmp; };
 };
 
-class Tactical : public Card {
+class Tactical :public virtual Card {
 public:
 	Tactical(const string n) : Card(n){}
 	void activate() const { return; };
-	virtual const bool canBeUsedAs(const Color& c) const { throw ShottenTottenException("canBeUsedAs Error : This card doesnt have a Color value !"); }
-	virtual const bool canBeUsedAs(const Number& n) const { throw ShottenTottenException("canBeUsedAs Error : This card doesnt have a Number value !"); }
-	virtual const Number higherPossibleNumber() const { throw ShottenTottenException("higherPossibleNumber Error : This card doesnt have a Number value !"); };
-	virtual const list<Number> possibleNumber() const { throw ShottenTottenException("possibleNumber Error : This card doesnt have a Number value !"); };
 };
 
-class Elite : public Tactical {
+class Elite : public Tactical, public PlacableCard {
 private:
 	const list<Color> allowedColors;
 	const list<Number> allowedNumbers;
 public:
-	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers) {}
-	virtual const bool canBeUsedAs(const Color& c) const {
+	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), PlacableCard(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers), Card(n) {}
+	void activate() const { return; }
+	const string& getName() const { return Tactical::name; }
+	const bool canBeUsedAs(const Color& c) const {
 		bool colorFinded = false;
 		for (auto& color : allowedColors) {
 			if (color == c) {
@@ -82,7 +84,7 @@ public:
 		}
 		return colorFinded;
 	}
-	virtual const bool canBeUsedAs(const Number& n) const {
+	const bool canBeUsedAs(const Number& n) const {
 		bool numberFinded = false;
 		for (auto& number : allowedNumbers) {
 			if (number == n) {
@@ -92,7 +94,7 @@ public:
 		}
 		return numberFinded;
 	}
-	virtual const Number higherPossibleNumber()const {
+	const Number higherPossibleNumber()const {
 		Number highest = allowedNumbers.front();
 		for (list<Number>::const_iterator i = allowedNumbers.begin(); i != allowedNumbers.end(); ++i) {
 			if (toInt(*i) > toInt(highest)) {
@@ -101,18 +103,18 @@ public:
 		}
 		return highest;
 	}
-	virtual const list<Number> possibleNumber() const {
+	const list<Number> possibleNumber() const {
 		return allowedNumbers;
 	};
 };
 
 class CombatMode : public Tactical {
 public:
-	CombatMode(const string n) : Tactical(n) {}
+	CombatMode(const string n) : Tactical(n), Card(n) {}
 };
 
 class Ruses : public Tactical {
 public:
-	Ruses(const string n) : Tactical(n) {}
+	Ruses(const string n) : Tactical(n), Card(n) {}
 };
 
