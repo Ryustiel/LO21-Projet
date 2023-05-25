@@ -70,17 +70,18 @@ public:
 	void setTotalRounds(int n) { totalRounds = n; }
 	void setRemainingRounds(int n) { remainingRounds = n; }
 
+	void setPlayersHand() {
+		//player1->setHand();
+	}
+
 	// setting players AI
 	// la manière de générer les instances des classes IA
 	// peut être très différente, il faudra qu'on en discute
-	void setPlayer1(Player* player) { player1 = player; }
-    void setPlayer2(Player* player) { player2 = player; }
+	//void setPlayer1(Player* player) { player1 = player; }
+    //void setPlayer2(Player* player) { player2 = player; }
 
+	void newRoundInit();
 
-	// initialise la partie, lancé via l'interface
-	// tous les paramètres de partie présents sur l'interface doivent lui être passés
-	// on pourrait aussi gérer certains paramètres via le Superviseur.
-	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int isIA1, unsigned int isIA2)
 		: version(v), clanGame(Game(v)), clanDeck(new Deck(clanGame)) {

@@ -20,6 +20,7 @@ public:
     void setHand(const Card* c[6]) {
         if (hand == nullptr) hand = new Hand(c);
     }
+
     void setHand(const Card** c, size_t n) {
         if (hand == nullptr) hand = new Hand(c, n);
     }
