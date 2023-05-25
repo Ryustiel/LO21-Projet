@@ -19,7 +19,7 @@ private:
 	Player* player1;
 	Player* player2;
 	bool round = 0;
-	friend class Supervisor;
+    friend class Supervisor;
 
 	// permet un arrêt prématuré de la partie,
 	// en réponse à des événements spécifiques comme "quitter"

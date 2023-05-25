@@ -4,29 +4,26 @@
 #include <QWidget>
 #include <vector>
 #include <set>
-#include "../../head/Card.h"
 #include "cardview.h"
-#include "boardview.h"
-#include "../../head/Controller.h"
+#include "stoneview.h"
+//#include "../../head/Supervisor.h"
 #include "qlabel.h"
 
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QHBoxLayout;
-class QVBoxLayout;
-class QGridLayout;
-class QProgressBar;
-class QLCDNumber;
-class VueCarte;
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QProgressBar>
+#include <QLCDNumber>
 
 class VuePartie : public QWidget
 {
     Q_OBJECT
 public:
-    explicit VuePartie(QWidget *parent = nullptr);
-private:
-    Controller controleur; // controleur de la partie a ajouter
+    explicit VuePartie(QWidget *parent = nullptr){};
+private: // controleur de la partie a ajouter
     QLabel* joueur1;
     QLabel* joueur2;
     QLabel* scorej1; // texte "Score joueur1"
@@ -49,14 +46,17 @@ private:
     vector<VueCarte*> cartesMain2;
 private slots:
     // slots qui gère les clics sur les cartes
-    void selectioncarte(VueCarte* vc);
-    void selectionborne(VueBorne* vb);
+    void actioncarte(VueCarte* vc);
+    void actionborne(VueBorne* vb);
 };
 
 class VuePartieTactique : public VuePartie {
-    QObject
+    Q_OBJECT
 public :
     explicit VuePartieTactique(QWidget *parent = nullptr);
+    void actioncarte(VueCarte* vc);
+    void actionborne(VueBorne* vb);
+    ~VuePartieTactique();
 private :
     QLabel* pioche2;
     QProgressBar* nbCartesPioche2;

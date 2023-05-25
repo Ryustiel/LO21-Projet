@@ -1,10 +1,12 @@
 QT += widgets
 
 SOURCES += \
+    src_view/boardview.cpp \
     src_view/cardview.cpp \
-    src_view/gameview.cpp \
     src_view/main.cpp \
-    ../src/Card.cpp
+    ../src/Card.cpp \
+    src_view/parametersview.cpp \
+    src_view/versionview.cpp
 
 
 
