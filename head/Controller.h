@@ -70,11 +70,30 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
 protected:
-	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
-		: version(v), clanGame(Game(v)), clanDeck(new Deck(clanGame)), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
-		clanDeck= new Deck(clanGame);
+	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int isIA1, unsigned int isIA2)
+		: version(v), clanGame(Game(v)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+		clanDeck = new Deck(clanGame);
+		if (isIA1 == 0) { //human player
+			player1 = new Player(name_player1);
+		}
+		else if (isIA1 == 1) { //IA random player
+			player1 = new PlayerAIRandom(name_player1);
+		}
+		else { //incorrect number
+			throw ShottenTottenException("Controller constructor : inadequate player (1) specifier");
+		}
+		if (isIA2 == 0) { //human player
+			player2 = new Player(name_player2);
+		}
+		else if (isIA2 == 1) { //IA random player
+			player2 = new PlayerAIRandom(name_player2);
+		}
+		else { //incorrect number
+			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
+		}
 	}
+
 	~Controller() {
 		delete clanDeck;
 		delete player1;
