@@ -82,6 +82,8 @@ public:
 
 	void newRoundInit();
 
+	virtual void revendicateStone(Side s, unsigned int n);
+
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int isIA1, unsigned int isIA2)
 		: version(v), clanGame(Game(v)) {
@@ -112,6 +114,8 @@ protected:
 		delete player1;
 		delete player2;
 	}
+
+	virtual void playTurn(Side s);
 };
 
 class TacticController : public Controller {
@@ -131,4 +135,6 @@ public :
 	}
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
+
+	virtual void revendicateStone(Side s, unsigned int n);
 };

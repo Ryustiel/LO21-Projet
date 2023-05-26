@@ -16,6 +16,7 @@ public:
 	Hand(const Card** c, size_t n) : cards(c), size(n), max_size(n) {}
 	void add(const Card& c);
 	void play(const Card& c); 
-
+	size_t getSize() const { return size; }
+	size_t getMaxSize() const { return max_size; }
 };
 

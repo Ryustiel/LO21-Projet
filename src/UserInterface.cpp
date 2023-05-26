@@ -162,6 +162,8 @@ void UserInterface::UIGameSettings() {
 }
 
 void UserInterface::UITurnLauncher(Player& curr_player) {
+	//play a card
+	//draw from deck (deck method)
 
 }
 

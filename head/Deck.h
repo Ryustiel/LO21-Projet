@@ -20,6 +20,11 @@ public :
 	Deck& operator=(const Deck& p) = delete;
 	unsigned int getCardCount() const { return card_count; }
 	unsigned int getMaxCardCount() const { return max_card_count; }
+	const Card* getCard(unsigned int i) {
+		if (i < 0 || i > card_count) throw ShottenTottenException("getCard : inadequate card number i");
+		return cards[i];
+	}
+
 	bool isEmpty() const { return card_count == 0; }
 	const Card& draw();
 };

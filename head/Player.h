@@ -39,6 +39,8 @@ public:
         cout << "Here's " << name << "!" << endl;
     }
 
+    void revendicateStone();
+
 protected :
     Player(const string& n)
         : name(n) {}
