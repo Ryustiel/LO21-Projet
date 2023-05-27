@@ -41,6 +41,10 @@ public:
 	Controller& operator=(const Controller& c) = delete;
 
 	//GETTERS
+	Player* getCurPlayer() const {
+		if (current_side == Side::s1) return player1;
+		return player2;
+	}
 	Side getCurSide() { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
