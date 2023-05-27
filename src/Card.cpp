@@ -58,5 +58,15 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 void PlacableCard::activate() const{
 	const Controller& c = Controller::getInstance();
 	Stone& s = c.askStoneChoice();
-	s.addCard(*this,c.getSide());
+	s.addCard(*this,c.getPlayingSide());
 };
+
+void Tactical::activate() const {
+	Controller& c = Controller::getInstance();
+	c.incrementTacticalPlayed(c.getPlayingSide());
+};
+
+void Elite::activate() const {
+	Tactical::activate();
+	PlacableCard::activate();
+}

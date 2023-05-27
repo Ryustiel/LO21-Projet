@@ -68,7 +68,9 @@ public:
 		return board.getStone(0);
 	}
 	// A CHANGER !!!!!!
-	Side getSide() const { return Side::s1; }
+	Side getPlayingSide() const { return Side::s1; }
+	// A CHANGER !!!!!!
+	void incrementTacticalPlayed(Side s) { return; };
 protected:
 	static Controller* instance;
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
