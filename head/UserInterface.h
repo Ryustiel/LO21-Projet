@@ -49,6 +49,7 @@ public:
     ///PLAY THE GAME
     void UIGameView2();
     void UIGameView3(); 
+    void UIGameView4();
     void UIRoundLauncher(); //launches the round
     void UITurnLauncher(Player& curr_player); //launches the turn
 

@@ -192,8 +192,6 @@ void UserInterface::UIPlayCard() {
 
 	Supervisor::getInstance().getController()->eventChoiceClaim();
 	Supervisor::getInstance().getController()->eventCardPicked(card_hand_nb);
-
-	state = 2;
 }
 
 void UserInterface::UIGameView2() { //to delete ?
@@ -260,6 +258,11 @@ void UserInterface::UIGameView3() {
 	Supervisor::getInstance().getController()->eventStonePicked(); //COMMENT JE PASSE LA BORNE EN QUESTION ?????
 }
 
+void UserInterface::UIGameView4() {
+	system("pause");
+	Supervisor::getInstance().getController()->qtDisplayPlayerTurn();
+}
+
 /// GAME LAUNCHER ///
 void UserInterface::launchUserInterface() {
 	//PARAMATERS ~= Vue QT 1
@@ -285,14 +288,18 @@ void UserInterface::launchUserInterface() {
 		case 1: //~= Vue QT 2
 			cout << "CASE 1" << endl;
 			UIGameView2();
+			state = 2;
 			break;
 		case 2: //Vue QT 3
 			cout << "CASE 2" << endl;
 			UIGameView3();
+			state = 3;
 			break;
 		case 3:
 			//
 			cout << "CASE 3" << endl;
+			UIGameView4();
+			state = 3;
 			break;
 		case 4:
 			//
