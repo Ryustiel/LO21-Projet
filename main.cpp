@@ -32,7 +32,8 @@ int main() {
 
 	Supervisor& s = Supervisor::getInstance();
 	s.setController(Version::tactic, "lol", "lol2", 0, 1);
-	g->getCard(0).activate();
+	const Card& c = g->getCard(0);
+	c.activate();
 
 	return 0;
 	/*Elite* e = new Elite("Chief2", Colors, Numbers);

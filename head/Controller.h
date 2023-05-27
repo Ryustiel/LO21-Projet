@@ -70,7 +70,7 @@ public:
 	// A CHANGER !!!!!!
 	Side getSide() const { return Side::s1; }
 protected:
-	static Controller* instance = nullptr;
+	static Controller* instance;
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy"); if (instance != nullptr) delete instance; instance = this;

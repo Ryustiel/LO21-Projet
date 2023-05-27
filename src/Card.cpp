@@ -56,7 +56,7 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 
 
 void PlacableCard::activate() const{
-	const Controller& c = *Supervisor::getInstance().getController();
+	const Controller& c = Controller::getInstance();
 	Stone& s = c.askStoneChoice();
 	s.addCard(*this,c.getSide());
 };
