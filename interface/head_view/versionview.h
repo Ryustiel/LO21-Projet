@@ -17,8 +17,9 @@ public:
         choixV = new QLabel("Choisir une version :");
 
         choix = new QComboBox(parent);
-        choix->addItem("legacy");
-        choix->addItem("tactic");
+        for (auto& v : Versions) {
+            choix->addItem(QString::fromStdString(toString(v)));
+        }
 
         go = new QPushButton(parent);
         go->setText("Continuer");
@@ -34,7 +35,7 @@ public:
 
         setLayout(couche);
     };
-    const QString getVersion() const {/*return toString(version);*/} // à changer quand on aura le toString de la version
+    const std::string getVersion() const {return toString(version);} // à changer quand on aura le toString de la version
 private:
     Version version;
     QComboBox* choix;
