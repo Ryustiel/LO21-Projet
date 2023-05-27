@@ -8,6 +8,8 @@
 #include "head/UserInterface.h"
 
 int main() {
+	
+	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
 	//check
@@ -18,7 +20,7 @@ int main() {
 	Supervisor::getInstance().getController()->revendicateStone(Side::s1,0);
 
 	//UserInterface::getInstance().launchUserInterface();
-
+	*/
 
 	return 0;
 }
