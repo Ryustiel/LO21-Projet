@@ -12,6 +12,8 @@
 
 
 
+
+
 class Controller{
 private:
 	const Version version = Version::legacy;
@@ -28,6 +30,7 @@ private:
 	Game clanGame;
 	Player* player1;
 	Player* player2;
+	size_t handSize;
 	unsigned int playerCardPick;
 	unsigned int playerStonePick;
 
@@ -143,8 +146,8 @@ public:
 	virtual void playTurn(Side s);
 
 protected:
-	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
-		: version(v), clanGame(Game(v)) {
+	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
+		: version(v), clanGame(Game(v)), handSize(handSize) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
 		if (AI_player1 == 0) { //human player
 			player1 = new Player(name_player1, Side::s1);
@@ -176,12 +179,12 @@ private :
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
+	size_t handSize = 7;
 	friend class Supervisor;
-
 	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
-		: Controller(Version::legacy, name_player1, name_player2, AI_player1, AI_player2), tacticGame(Game(v)) {
+		: Controller(Version::legacy, name_player1, name_player2, AI_player1, AI_player2, handSize = 7), tacticGame(Game(v)) {
 		tacticDeck = new Deck(tacticGame);
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
 	}
