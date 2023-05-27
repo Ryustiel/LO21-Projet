@@ -6,7 +6,6 @@
 class Player {
 private:
     std::string name;
-    unsigned int id;
     unsigned int score = 0;
     Hand* hand = nullptr;
     int pick; // player's card pick to be viewed by the controller
@@ -15,7 +14,6 @@ private:
 
 public:
     const string& getName() const { return name; }
-    unsigned int getId() const { return id; }
     unsigned int getScore() const { return score; }
     const Hand* getHand() const { return hand; }
     void setHand(const Card* c[6]) {
@@ -39,9 +37,9 @@ public:
     void playTurn() { std::cout << "\n\nplayer picking a card, through the controller's methods : card's effect activated, game board updated, combination checks enacted (if player chooses so), scores updated";}
     
 protected :
-    Player(const string& n, bool idPlayer)
-        : name(n), id(idPlayer) {}
-    ~Player() {
+    Player(const string& n)
+        : name(n) {}
+    virtual ~Player() {
         delete hand;
     }
 };
@@ -50,5 +48,5 @@ class PlayerAIRandom : public Player {
 private:
     //
 public:
-    PlayerAIRandom(const string& n, bool idPlayer) : Player(n, idPlayer) {}
+    PlayerAIRandom(const string& n) : Player(n) {}
 };

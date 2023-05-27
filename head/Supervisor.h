@@ -12,7 +12,7 @@ private :
 		Supervisor* instance = nullptr;
 		~Handler() { delete instance; }
 	};
-    static Handler handler;
+	static Handler handler;
 public :
 	static Supervisor& getInstance();
 	static void freeInstance();

@@ -7,11 +7,12 @@
 #include <QProgressBar>
 #include <QLCDNumber>
 #include <QMessageBox>
+#include "../../head/Version.h"
 #include "../head_view/versionview.h"
 #include "../head_view/parametersview.h"
 
 void VueVersion::buttonClicked(){
-    const QString versionstr=choix->currentText();
+    const std::string versionstr=choix->currentText().toStdString();
     version=toVersion(versionstr);
 
     VueParametres* param = new VueParametres(nullptr);

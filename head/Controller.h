@@ -19,7 +19,7 @@ private:
 	Player* player1;
 	Player* player2;
 	bool round = 0;
-    friend class Supervisor;
+	friend class Supervisor;
 
 	// permet un arrêt prématuré de la partie,
 	// en réponse à des événements spécifiques comme "quitter"
@@ -48,6 +48,17 @@ public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
 
+	Deck& getClanDeck() const { return *clanDeck; }
+	Game getClanGame() { return clanGame; }
+	Board& getBoard() { return board; }
+	Player& getPlayer1() const  { return *player1; }
+	Player& getPlayer2() const  { return *player2; }
+	bool getRound() const { return round; }
+	bool getStop() const  { return stop; }
+	int getRemainingRounds() const { return remainingRounds; }
+	int getTotalRounds() { return totalRounds; }
+
+
 	// setting players AI
 	// la manière de générer les instances des classes IA
 	// peut être très différente, il faudra qu'on en discute
@@ -59,17 +70,35 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
 protected:
-	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
-		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
+	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int isIA1, unsigned int isIA2)
+		: version(v), clanGame(Game(v)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+		clanDeck = new Deck(clanGame);
+		if (isIA1 == 0) { //human player
+			player1 = new Player(name_player1);
+		}
+		else if (isIA1 == 1) { //IA random player
+			player1 = new PlayerAIRandom(name_player1);
+		}
+		else { //incorrect number
+			throw ShottenTottenException("Controller constructor : inadequate player (1) specifier");
+		}
+		if (isIA2 == 0) { //human player
+			player2 = new Player(name_player2);
+		}
+		else if (isIA2 == 1) { //IA random player
+			player2 = new PlayerAIRandom(name_player2);
+		}
+		else { //incorrect number
+			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
+		}
 	}
-	~Controller() {
+
+	virtual ~Controller() {
 		delete clanDeck;
 		delete player1;
 		delete player2;
 	}
-	Deck& getClanDeck();
-  	Board& getBoard();
 };
 
 class TacticController : public Controller {
@@ -80,11 +109,13 @@ private :
 	friend class Supervisor;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
-		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)), tacticDeck(new Deck(Game(v))) {
+		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)) {
+		tacticDeck = new Deck(tacticGame);
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
 	}
 	~TacticController() {
 		delete tacticDeck;
 	}
-	Deck& getTacticDeck();
+	Deck& getTacticDeck() const { return *tacticDeck; }
+	Game& getTacticGame() { return tacticGame; }
 };
