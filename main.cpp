@@ -11,6 +11,8 @@
 
 int main() {
 	
+	UserInterface::getInstance().launchUserInterface();
+
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
@@ -24,6 +26,7 @@ int main() {
 	//UserInterface::getInstance().launchUserInterface();
 	*/
 
+	/*
 	Board* b = new Board();
 
 	b->getStone(0).setRevendication(Side::s1);
@@ -47,6 +50,7 @@ int main() {
 	Clan* c6 = new Clan(Color::blue, Number::three);
 	Clan* c7 = new Clan(Color::purple, Number::seven);
 	Clan* c8 = new Clan(Color::yellow, Number::seven);
+	*/
 
 	/*
 	Board* b = new Board();
@@ -84,12 +88,12 @@ int main() {
 	// pour comprendre l'enchainement des evenements
 	// et faire des tests !
 
-	Supervisor::getInstance();
-	Supervisor::getInstance().eventFirstStart(); // => qtDisplayMainMenu()
+	//Supervisor::getInstance();
+	//Supervisor::getInstance().eventFirstStart(); // => qtDisplayMainMenu()
 
 	// => réponse qui suit le message qtDisplayMainMenu()
 	// => elle contient les paramètres de la partie et la version choisie.
-	Supervisor::getInstance().eventStartGame(Version::legacy, "player name 1", "player name 2", 3, 2);
+	//Supervisor::getInstance().eventStartGame(Version::legacy, "player name 1", "player name 2", 3, 2);
 
 	// ctr->eventChoiceDraw(); // <= interface : menu Jouer son Tour
 	// => ctr.qtDisplayPlayerTurn()

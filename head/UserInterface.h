@@ -13,7 +13,6 @@ void functionCallback(const string s);
 
 class UserInterface { //singleton
 private:
-    int state = 0;
 
     UserInterface() {}
     ~UserInterface() {}
@@ -28,12 +27,7 @@ public:
     static UserInterface& getInstance();
     static void freeInstance();
 
-    void setState(int i) {
-        if (i < 0 || i > 6) throw ShottenTottenException("setState : incorrect integer int");
-        state = i;
-    }
-
-    void launchUserInterface();
+    void launchUserInterface(); //main
     
     //SETTINGS
     void UIGameInit();
