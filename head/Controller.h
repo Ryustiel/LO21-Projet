@@ -123,6 +123,10 @@ private :
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
+
+	unsigned int tacticCardPlayedCountP1 = 0;
+	unsigned int tacticCardPlayedCountP2 = 0;
+
 	friend class Supervisor;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
@@ -135,6 +139,8 @@ public :
 	}
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
+	unsigned int getTacticCardPlayedCountP1() { return tacticCardPlayedCountP1; }
+	unsigned int getTacticCardPlayedCountP2() { return tacticCardPlayedCountP2;  }
 
 	virtual void revendicateStone(Side s, unsigned int n);
 };
