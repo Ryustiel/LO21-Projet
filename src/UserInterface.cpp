@@ -128,9 +128,9 @@ void UserInterface::UIGameInit() {
 	//initializing controller :
 	Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
-	cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
-	cout << "(UIGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
-	cout << "(UIGameInit) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
+	//cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
+	//cout << "(UIGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
+	//cout << "(UIGameInit) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
 
 	system("pause");
 }
@@ -155,8 +155,8 @@ void UserInterface::UIGameSettings() {
 	Supervisor::getInstance().getController()->setTotalRounds(rounds_nb);
 	Supervisor::getInstance().getController()->setRemainingRounds(rounds_nb);
 
-	cout << "(UIGameSettings) - Controller : total rounds : " << Supervisor::getInstance().getController()->getTotalRounds() << endl;
-	cout << "(UIGameSettings) - Controller : remaining rounds : " << Supervisor::getInstance().getController()->getRemainingRounds() << endl;
+	//cout << "(UIGameSettings) - Controller : total rounds : " << Supervisor::getInstance().getController()->getTotalRounds() << endl;
+	//cout << "(UIGameSettings) - Controller : remaining rounds : " << Supervisor::getInstance().getController()->getRemainingRounds() << endl;
 
 	system("pause");
 }

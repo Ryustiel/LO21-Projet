@@ -36,7 +36,7 @@ public:
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
-    Version UIselectVersion(); // call a callback as argument : void (*callback) (Version v)
+    Version UIselectVersion(); //user input
     Version UIVersionMenu();
 
     /// GAME SETTINGS///
