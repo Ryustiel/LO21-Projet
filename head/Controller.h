@@ -48,6 +48,7 @@ private:
 public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
+	static Controller& getInstance() { return *instance; }
 
 	// setting players AI
 	// la manière de générer les instances des classes IA
@@ -69,14 +70,16 @@ public:
 	// A CHANGER !!!!!!
 	Side getSide() const { return Side::s1; }
 protected:
+	static Controller* instance = nullptr;
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {
-		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy"); if (instance != nullptr) delete instance; instance = this;
 	}
 	~Controller() {
 		delete clanDeck;
 		delete player1;
 		delete player2;
+		instance = nullptr;
 	}
 	Deck& getClanDeck();
   	Board& getBoard();
@@ -88,13 +91,16 @@ private :
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
 	friend class Supervisor;
+	static TacticController* tacticInstance;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: Controller(Version::legacy, name_player1, name_player2, id_player1, id_player2), tacticGame(Game(v)), tacticDeck(new Deck(Game(v))) {
-		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
+		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic"); if (tacticInstance != nullptr) delete tacticInstance; tacticInstance = this;
 	}
 	~TacticController() {
 		delete tacticDeck;
+		tacticInstance = nullptr;
 	}
 	Deck& getTacticDeck();
+	TacticController& getInstance() { return *tacticInstance; }
 };

@@ -1,6 +1,10 @@
 #include "../head/Controller.h"
 #include <iostream>
 
+Controller* Controller::instance = nullptr;
+TacticController* TacticController::tacticInstance = nullptr;
+
+
 void Controller::newGame(int nbTurns) { // + additional parameters
     std::cout << "\n\nINIT NEW GAME =====";
     std::cout << "\nremainingRounds = parametre;";
