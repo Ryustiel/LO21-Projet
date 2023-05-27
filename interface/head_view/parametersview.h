@@ -16,14 +16,23 @@ public:
     explicit VueParametres(QWidget *parent = nullptr): QWidget(parent){
         setWindowTitle("Paramètres");
 
-        choixJ = new QLabel("Choisir le type de joueur adverse :");
+        choixJ1 = new QLabel("Choisir le type de joueur 1 :");
 
-        choix = new QComboBox(parent);
-        choix->addItem("Humain");
-        choix->addItem("IA aléatoire");
-        choix->addItem("IA stratégique");
+        choix1 = new QComboBox(parent);
+        choix1->addItem("Humain");
+        choix1->addItem("IA aléatoire");
+        choix1->addItem("IA stratégique");
 
-        connect(choix, SIGNAL(currentIndexChanged(int)), this, SLOT(playerChanged()));
+        connect(choix1, SIGNAL(currentIndexChanged(int)), this, SLOT(player1Changed()));
+
+        choixJ2 = new QLabel("Choisir le type de joueur 2 :");
+
+        choix2 = new QComboBox(parent);
+        choix2->addItem("Humain");
+        choix2->addItem("IA aléatoire");
+        choix2->addItem("IA stratégique");
+
+        connect(choix2, SIGNAL(currentIndexChanged(int)), this, SLOT(player2Changed()));
 
         nom1 = new QLabel("Nom du joueur 1 :");
         name1 = new QLineEdit(parent);
@@ -35,14 +44,17 @@ public:
         go->setText("Continuer");
         connect(go, SIGNAL(clicked()), this, SLOT(handleContinuer()));
 
-        Choix = new QHBoxLayout;
-        Choix->addWidget(choixJ);
-        Choix->addWidget(choix);
+        Choix1 = new QHBoxLayout;
+        Choix1->addWidget(choixJ1);
+        Choix1->addWidget(choix1);
+
+        Choix2 = new QHBoxLayout;
+        Choix2->addWidget(choixJ2);
+        Choix2->addWidget(choix2);
 
         nomJ1 = new QHBoxLayout;
         nomJ1->addWidget(nom1);
         nomJ1->addWidget(name1);
-
 
         nomJ2 = new QHBoxLayout;
         nomJ2->addWidget(nom2);
@@ -53,7 +65,8 @@ public:
         noms->addLayout(nomJ2);
 
         couche = new QVBoxLayout;
-        couche->addLayout(Choix);
+        couche->addLayout(Choix1);
+        couche->addLayout(Choix2);
         couche->addLayout(noms);
         couche->addWidget(go);
 
@@ -61,10 +74,13 @@ public:
     };
     const QString getNom1() const {return name1->text();}
     const QString getNom2() const {return name2->text();}
-    bool est_IA() const {return (choix->currentIndex()==1 || choix->currentIndex()==2);}
+    bool est_IA1() const {return (choix1->currentIndex()==1 || choix1->currentIndex()==2);}
+    bool est_IA2() const {return (choix2->currentIndex()==1 || choix2->currentIndex()==2);}
 private:
-    QComboBox* choix;
-    QLabel* choixJ;
+    QComboBox* choix1;
+    QLabel* choixJ1;
+    QComboBox* choix2;
+    QLabel* choixJ2;
     QLabel* nom1;
     QLabel* nom2;
     QLineEdit* name1;
@@ -72,12 +88,14 @@ private:
     QHBoxLayout* nomJ1;
     QHBoxLayout* nomJ2;
     QVBoxLayout* noms;
-    QHBoxLayout* Choix;
+    QHBoxLayout* Choix1;
+    QHBoxLayout* Choix2;
     QVBoxLayout* couche;
     QPushButton* go;
 private slots:
     // slots qui gère les clics sur le bouton
-    void playerChanged();
+    void player1Changed();
+    void player2Changed();
     void handleContinuer();
 };
 

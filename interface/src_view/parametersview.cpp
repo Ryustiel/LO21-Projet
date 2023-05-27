@@ -11,9 +11,28 @@
 #include "../head_view/boardview.h"
 
 
-void VueParametres::playerChanged(){
+void VueParametres::player1Changed(){
 
-    switch (choix->currentIndex()) {
+    switch (choix1->currentIndex()) {
+    case 0: //Humain
+        nom1->show(); //afficher le champ pour le nom du joueur 2
+        name1->show();
+        break;
+    case 1: //IA aléatoire
+        nom1->hide(); //cacher le champ pour le nom du joueur 2
+        name1->hide();
+        break;
+    case 2: //IA stratégique
+        nom1->hide(); //cacher le champ pour le nom du joueur 2
+        name1->hide();
+        break;
+    }
+
+}
+
+void VueParametres::player2Changed(){
+
+    switch (choix2->currentIndex()) {
     case 0: //Humain
         nom2->show(); //afficher le champ pour le nom du joueur 2
         name2->show();
@@ -31,21 +50,21 @@ void VueParametres::playerChanged(){
 }
 
 void VueParametres::handleContinuer(){
-    if(name1->text()==""){
+    if(choix1->currentIndex()==0 && name1->text()==""){
         QMessageBox messageBox(QMessageBox::Icon::Warning, "Attention", "Nom du joueur 1 vide");
         messageBox.exec();
         return;
     }
 
-    if(choix->currentIndex()==0 && name2->text()==""){
+    if(choix2->currentIndex()==0 && name2->text()==""){
         QMessageBox messageBox(QMessageBox::Icon::Warning, "Attention", "Nom du joueur 2 vide");
         messageBox.exec();
         return;
     }
 
     /*else{
-        if(choix->currentIndex()==1 || choix->currentIndex()==2) name2->setText("IA");
-        VuePartie* partie=new VuePartie(constructeur...);
+        if(choix1->currentIndex()==1 || choix1->currentIndex()==2) name1->setText("IA1");
+        if(choix2->currentIndex()==1 || choix2->currentIndex()==2) name1->setText("IA2");
         this->hide();
         partie->show();
     }*/
