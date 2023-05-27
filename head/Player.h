@@ -18,6 +18,7 @@ public:
     void setHand(const Card* c[6]) {
         if (hand == nullptr) hand = new Hand(c);
     }
+
     void setHand(const Card** c, size_t n) {
         if (hand == nullptr) hand = new Hand(c, n);
     }
@@ -36,11 +37,13 @@ public:
         // hand = new Hand(cards);
         // set pick to None / -1
     }
+
+    void revendicateStone();
     
 protected :
     Player(const string& n)
         : name(n) {}
-    ~Player() {
+    virtual ~Player() {
         delete hand;
     }
 };

@@ -40,6 +40,8 @@ public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
 
+	//GETTERS
+	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
 	Game getClanGame() { return clanGame; }
 	Board& getBoard() { return board; }
@@ -50,13 +52,27 @@ public:
 	int getRemainingRounds() const { return remainingRounds; }
 	int getTotalRounds() { return totalRounds; }
 
+	Player* getWinner() const {
+		if (player1->getScore() > player2->getScore()) return player1;
+		if (player2->getScore() > player1->getScore()) return player2;
+		return nullptr;
+	}
+
+	//SETTERS
+	void setTotalRounds(int n) { totalRounds = n; }
+	void setRemainingRounds(int n) { remainingRounds = n; }
+
+	void setPlayersHand() {
+		//player1->setHand();
+	}
 
 	// setting players AI
 	// la manière de générer les instances des classes IA
 	// peut être très différente, il faudra qu'on en discute
-	void setPlayer1(Player* player) { player1 = player; }
-    void setPlayer2(Player* player) { player2 = player; }
+	//void setPlayer1(Player* player) { player1 = player; }
+    //void setPlayer2(Player* player) { player2 = player; }
 
+	virtual void revendicateStone(Side s, unsigned int n);
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
@@ -119,14 +135,35 @@ public:
 		qtDisplayStonePicker();
 	}
 protected:
-	Controller(const Version& v, const string& p1name, const string& p2name, unsigned int AI_player1, unsigned int AI_player2)
-		: version(v), clanGame(Game(v)), clanDeck(new Deck(clanGame)), player1(new Player(p1name)), player2(new Player(p2name)) {
-		clanDeck= new Deck(clanGame);
+	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
+		: version(v), clanGame(Game(v)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+		clanDeck = new Deck(clanGame);
+		if (AI_player1 == 0) { //human player
+			player1 = new Player(name_player1);
+		}
+		else if (AI_player1 == 1) { //IA random player
+			player1 = new PlayerAIRandom(name_player1);
+		}
+		else { //incorrect number
+			throw ShottenTottenException("Controller constructor : inadequate player (1) specifier");
+		}
+		if (AI_player2 == 0) { //human player
+			player2 = new Player(name_player2);
+		}
+		else if (AI_player2 == 1) { //IA random player
+			player2 = new PlayerAIRandom(name_player2);
+		}
+		else { //incorrect number
+			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
+		}
 	}
-	~Controller() {
+
+	virtual ~Controller() {
 		delete clanDeck;
 	}
+
+	virtual void playTurn(Side s);
 };
 
 class TacticController : public Controller {
@@ -146,4 +183,6 @@ public :
 	}
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
+
+	virtual void revendicateStone(Side s, unsigned int n);
 };
