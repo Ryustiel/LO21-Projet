@@ -1,7 +1,7 @@
 #include "../head/Card.h"
 #include "../exception/ShottenTottenException.h"
-
-
+#include "../head/Controller.h"
+#include "../head/Supervisor.h"
 
 string toString(const Color& color) {
 	switch (color)
@@ -53,3 +53,10 @@ ostream& operator<<(ostream& os, const Number& number) { return os << toString(n
 
 std::initializer_list<Color> Colors = { Color::red, Color::green, Color::blue, Color::brown, Color::purple, Color::yellow };
 std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::three, Number::four, Number::five, Number::six, Number::seven, Number::eight, Number::nine };
+
+
+void PlacableCard::activate() const{
+	const Controller& c = *Supervisor::getInstance().getController();
+	Stone& s = c.askStoneChoice();
+	s.addCard(*this,c.getSide());
+};

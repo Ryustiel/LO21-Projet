@@ -129,7 +129,8 @@ private:
 public:
 	Board(size_t size = 9) : stone_nb(size), stones(new Stone[size]) {}
 	~Board() { delete[] stones; }
-	const Stone* getStones() const { return stones;  }
+	Stone* getStones() const { return stones;  }
+	Stone& getStone(size_t n) const { if (n >= stone_nb) throw BoardException("getStone error : out of range"); return stones[n]; }
 	Stone& getStone(unsigned int n) { 
 		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];

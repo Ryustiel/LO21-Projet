@@ -43,6 +43,7 @@ private:
 	// pour différents modes de jeu
     void runRoundLoop(); // boucle de manche, lancé par handleNewRound
     void runChecks(); // running card checks on the board
+	
 
 public:
 	Controller(const Controller& c) = delete;
@@ -58,6 +59,15 @@ public:
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void newGame(int nbTurns); // (int nbTurns, int typeia, ...)
+
+
+	//Demande à l'utilisateur une Stone sur laquelle placer une carte clan A CHANGER !!!!!!
+	Stone& askStoneChoice() const {
+		// a changer 
+		return board.getStone(0);
+	}
+	// A CHANGER !!!!!!
+	Side getSide() const { return Side::s1; }
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2)
 		: version(v), clanGame(Game(v)), clanDeck(new Deck(Game(v))), board(Board()), player1(new Player(name_player1, id_player1)), player2(new Player(name_player2, id_player2)) {

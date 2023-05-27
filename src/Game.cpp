@@ -18,11 +18,10 @@ Game::Game(const Version& version) {
     }
     else if (version == Version::tactic) {
         cards = new Card * [10];
-        Elite* e = new Elite("Chief1", Colors, Numbers);
         cards[0] = new Elite("Chief1", Colors, Numbers);
-        //cards[1] = new Elite("Chief2", Colors, Numbers);
-        //cards[2] = new Elite("Spy", Colors, { Number::seven });
-        //cards[3] = new Elite("Shield-Bearer", Colors, { Number::one,Number::two,Number::three });
+        cards[1] = new Elite("Chief2", Colors, Numbers);
+        cards[2] = new Elite("Spy", Colors, { Number::seven });
+        cards[3] = new Elite("Shield-Bearer", Colors, { Number::one,Number::two,Number::three });
         cards[4] = new CombatMode("Blind-Man’s Bluff");
         cards[5] = new CombatMode("Mud Fight");
         cards[6] = new Ruses("Recruiter");

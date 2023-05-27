@@ -18,4 +18,5 @@ public :
 	static void freeInstance();
 	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int id_player1, unsigned int id_player2);
 	Controller* getController() { return controller; }
+	Controller* getTacticController() { return controller; }
 };

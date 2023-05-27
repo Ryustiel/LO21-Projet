@@ -10,6 +10,8 @@ using namespace std;
 enum class Color { red, green, blue, purple, yellow, brown };
 enum class Number { one, two, three, four, five, six, seven, eight, nine };
 
+class Controller;
+
 string toString(const Color& color);
 string toString(const Number& number);
 int toInt(const Number& number);
@@ -26,23 +28,24 @@ const size_t tacticalCardsNumber = 10;
 class Card {
 protected:
 	const string name;
-public:
+protected:
 	Card(const string n) : name(n){}
+public:
 	virtual ~Card() = default;
 	const string& getName() const { return name; }
 	virtual void activate() const=0;
-
 };
 
 class PlacableCard : public virtual Card {
 public:
-	PlacableCard(const string n):Card(n) {}
+	PlacableCard(const string n):Card(n){}
 	virtual ~PlacableCard() = default;
 	virtual bool canBeUsedAs(const Color& c) const = 0;
 	virtual bool canBeUsedAs(const Number& n) const = 0;
-	bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
 	virtual Number higherPossibleNumber()const = 0;
 	virtual const list<Number> possibleNumber() const = 0;
+	bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
+	void activate() const override;
 };
 
 class Tactical :public virtual Card {
@@ -57,9 +60,8 @@ private:
 	const Color color;
 	const Number number;
 public:
-	Clan(const Color& c, const Number nb) : PlacableCard(toString(c) + " " + toString(nb)), color(c), number(nb), Card(toString(c) + " " + toString(nb)) {}
+	Clan(const Color& c, const Number nb) : PlacableCard(""), color(c), number(nb), Card(toString(c) + " " + toString(nb)) {}
 	~Clan() final = default;
-	void activate() const final { return; };
 	const Color& getColor() const { return color; }
 	const Number& getNumber() const { return number; }
 
@@ -75,7 +77,6 @@ private:
 	const list<Number> allowedNumbers;
 public:
 	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), PlacableCard(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers), Card(n) {}
-	~Elite() final = default;
 	void activate() const final{ return; }
 	const string& getName() const { return Tactical::name; }
 	bool canBeUsedAs(const Color& c) const {

@@ -3,15 +3,16 @@
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
 #include "head/Game.h"
+#include "head/Supervisor.h"
 
 #include "head/Card.h"
 #include "head/Board.h"
 
 int main() {
-	Game* g = new Game(Version::tactic);
+	Game* g = new Game(Version::legacy);
 	Board* b = new Board();
 
-	b->getStone(0).setRevendication(Side::s1);
+	/*b->getStone(0).setRevendication(Side::s1);
 	b->getStone(1).setRevendication(Side::none);
 	b->getStone(2).setRevendication(Side::s2);
 	b->getStone(3).setRevendication(Side::s1);
@@ -27,8 +28,13 @@ int main() {
 
 
 
-	b->evaluateGameWinner();
+	b->evaluateGameWinner();*/
 
+	Supervisor& s = Supervisor::getInstance();
+	s.setController(Version::tactic, "lol", "lol2", 0, 1);
+	g->getCard(0).activate();
+
+	return 0;
 	/*Elite* e = new Elite("Chief2", Colors, Numbers);
 	Clan* c1 = new Clan(Color::red, Number::nine);
 	Clan* c2 = new Clan(Color::red, Number::eight);
@@ -66,6 +72,6 @@ int main() {
 	else cout << "none";
 	cout << endl;
 
-	return 0;*/
+	*/
 	
 }

@@ -4,7 +4,7 @@
 void Controller::newGame(int nbTurns) { // + additional parameters
     std::cout << "\n\nINIT NEW GAME =====";
     std::cout << "\nremainingRounds = parametre;";
-    player1->init(); player2->init();
+    //player1->init(); player2->init();
     
     remainingRounds = nbTurns;
     totalRounds = nbTurns;
@@ -21,7 +21,7 @@ void Controller::handleNewRound() {
     std::cout << "\npioche.init();";
     std::cout << "\nTacticController : pioche_tactique.init();";
     //board.init();
-    player1->initRound(); player2->initRound();
+    //player1->initRound(); player2->initRound();
 
     TEMP_victory_counter = 0;
 

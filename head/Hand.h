@@ -2,6 +2,8 @@
 #include "Card.h"
 #include "../exception/ShottenTottenException.h"
 
+class Controller;
+
 class HandException : public ShottenTottenException {
 	ShottenTottenException::ShottenTottenException;
 };
@@ -15,7 +17,7 @@ public:
 	Hand(const Card* c[6]) : cards(c), size(6), max_size(6) {}
 	Hand(const Card** c, size_t n) : cards(c), size(n), max_size(n) {}
 	void add(const Card& c);
-	void play(const Card& c); 
+	void play(const Card& card);
 
 };
 
