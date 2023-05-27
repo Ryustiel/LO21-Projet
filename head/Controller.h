@@ -15,11 +15,6 @@
 class Controller{
 private:
 	const Version version = Version::legacy;
-	Deck* clanDeck = nullptr;
-	Board board;
-	Game clanGame;
-	Player* player1;
-	Player* player2;
 	Side current_side = Side::s1;
 	friend class Supervisor;
 
@@ -28,7 +23,11 @@ private:
 	int remainingRounds;
     int totalRounds;
 	int maxScore;
-
+	Deck* clanDeck = nullptr;
+	Board board;
+	Game clanGame;
+	Player* player1;
+	Player* player2;
 	unsigned int playerCardPick;
 	unsigned int playerStonePick;
 
@@ -166,7 +165,7 @@ protected:
 			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
 		}
 	}
-
+	virtual void initForNewRound();
 	virtual ~Controller() {
 		delete clanDeck;
 	}
@@ -178,6 +177,8 @@ private :
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
 	friend class Supervisor;
+
+	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
 		: Controller(Version::legacy, name_player1, name_player2, AI_player1, AI_player2), tacticGame(Game(v)) {
@@ -190,5 +191,6 @@ public :
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 
-	virtual void claimStone(Side s, unsigned int n);
+	void claimStone(Side s, unsigned int n) final;
+
 };

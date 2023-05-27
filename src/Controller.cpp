@@ -18,8 +18,8 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
     newRound();
 }
 
-void Controller::newRound() {
-    std::cout << "\n===================== newRound";
+void Controller::initForNewRound() {
+    std::cout << "\n========= initForNewRound-legacy";
 
     player1->initForNewRound();
     player2->initForNewRound();
@@ -27,7 +27,7 @@ void Controller::newRound() {
     //init the board
     board = Board();
     std::cout << "\nBoard init;";
-    
+
     //init the deck
     delete clanDeck;
     clanDeck = new Deck(clanGame);// initialiser la pioche tactique dans la m�thode fille
@@ -36,7 +36,11 @@ void Controller::newRound() {
     current_side = Side::s1; // TO DO : appliquer la méthode de changement référence de joueur
     //proposition : faire un Side turn, qui prend les valeurs s1/s2 ? + simple pour savoir où poser les éléments sur les bornes (évite les if)
     //(de +, la fct° claimStone demande une Side)
+}
 
+void Controller::newRound() {
+    std::cout << "\n===================== newRound";
+    initForNewRound();
     eventStartTurn();
 }
 
@@ -234,4 +238,14 @@ void TacticController::claimStone(Side s, unsigned int n) {
     else {
         cout << "You can't revendicate this stone!" << endl;
     }
+}
+
+void TacticController::initForNewRound() {
+    Controller::initForNewRound();
+    std::cout << "\n========= initForNewRound-Tactic";
+
+    //init the tactic deck
+    delete tacticDeck;
+    tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
+    std::cout << "\ntacticDeck init;";
 }
