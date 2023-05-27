@@ -34,7 +34,7 @@ public:
 
         setLayout(couche);
     };
-    const QString getVersion() const {return toString(version);} // à changer quand on aura le toString de la version
+    const QString getVersion() const {/*return toString(version);*/} // à changer quand on aura le toString de la version
 private:
     Version version;
     QComboBox* choix;

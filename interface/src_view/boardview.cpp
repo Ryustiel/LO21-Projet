@@ -23,8 +23,10 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent)
     scorej1=new QLabel("Score j1");
     scorej2=new QLabel("Score j2");
 
+    //en dur ici mais a recuperer en backend pour le nb de cartes
     auto nb_cartes_jeu=54;
     auto nb_cartes_pioche=10;
+
     //barre de progression pioche
     nbCartesPioche=new QProgressBar;
     nbCartesPioche->setRange(0,nb_cartes_jeu);
@@ -57,7 +59,7 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent)
     for(size_t i=0;i<20;i++){
         layoutCartes->addWidget(cartesPlateau[i],i/4,i%4);
         //connexion signaux slots
-        connect(cartesPlateau[i],SIGNAL(actioncarte(VueCarte*)),this,SLOT(actioncarte(VueCarte*)));
+        //connect(cartesPlateau[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(actioncarte(VueCarte*)));
     }
 
     /*
@@ -75,6 +77,31 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent)
     couche->addLayout(layoutCartes);
     setLayout(couche);
 }
+
+
+//cas version TACTIQUE
+//constructeur
+VuePartieTactique::VuePartieTactique(QWidget *parent) : VuePartie(parent)
+{
+    QLabel* pioche2;
+    QProgressBar* nbCartesPioche2;
+    pioche2=new QLabel("Pioche Tactique");
+    nbCartesPioche2=new QProgressBar;
+
+    //en dur ici mais a recuperer en backend pour le nb de cartes
+    auto nb_cartes_tactique=10;
+    auto nb_cartes_tactique_restante=10;
+    nbCartesPioche2->setRange(0,nb_cartes_tactique);
+    nbCartesPioche2->setValue(nb_cartes_tactique_restante);
+    nbCartesPioche2->setFixedHeight(30);
+
+    QHBoxLayout* layoutInformations = getLayoutInformations();
+
+    layoutInformations->addWidget(pioche2);
+    layoutInformations->addWidget(nbCartesPioche2);
+}
+
+
 
 /*
 void VuePartie::carteClique(VueCarte* vc){

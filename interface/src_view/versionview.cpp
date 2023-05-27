@@ -12,7 +12,7 @@
 
 void VueVersion::buttonClicked(){
     const QString versionstr=choix->currentText();
-    version=toVersion(versionstr);
+    //version=toVersion(versionstr);
 
     VueParametres* param = new VueParametres(nullptr);
     this->hide();
