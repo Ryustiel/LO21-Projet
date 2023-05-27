@@ -10,7 +10,6 @@
 
 int main() {
 	Game* g = new Game(Version::legacy);
-	Board* b = new Board();
 
 	/*b->getStone(0).setRevendication(Side::s1);
 	b->getStone(1).setRevendication(Side::none);
