@@ -138,7 +138,6 @@ protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
 		: version(v), clanGame(Game(v)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
-		clanDeck = new Deck(clanGame);
 		if (AI_player1 == 0) { //human player
 			player1 = new Player(name_player1);
 		}

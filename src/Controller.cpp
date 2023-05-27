@@ -23,8 +23,14 @@ void Controller::newRound() {
     player1->initForNewRound();
     player2->initForNewRound();
 
-    board.init();
-    clanDeck->init(); // initialiser la pioche tactique dans la m�thode fille
+    //init the board
+    board = Board();
+    std::cout << "\nBoard init;";
+    
+    //init the deck
+    delete clanDeck;
+    clanDeck = new Deck(clanGame);// initialiser la pioche tactique dans la m�thode fille
+    std::cout << "\nclanDeck init;";
 
     turn = false; // TO DO : appliquer la méthode de changement référence de joueur
 
