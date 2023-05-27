@@ -6,6 +6,7 @@ SOURCES += \
     src_view/main.cpp \
     ../src/Card.cpp \
     src_view/parametersview.cpp \
+    src_view/stoneview.cpp \
     src_view/versionview.cpp
 
 

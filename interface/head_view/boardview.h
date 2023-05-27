@@ -18,11 +18,13 @@
 #include <QProgressBar>
 #include <QLCDNumber>
 
+class VueCarte;
+
 class VuePartie : public QWidget
 {
     Q_OBJECT
 public:
-    explicit VuePartie(QWidget *parent = nullptr){};
+    explicit VuePartie(QWidget *parent = nullptr);
 private: // controleur de la partie a ajouter
     QLabel* joueur1;
     QLabel* joueur2;
@@ -40,26 +42,33 @@ private: // controleur de la partie a ajouter
     QVBoxLayout* layoutPioches;
     QGridLayout* layoutMain;
     QVBoxLayout* couche;
-    vector<VueBorne*> bornes;
+    //vector<VueBorne*> bornes;
     vector<VueCarte*> cartesPlateau; // adresses des objets VueCarte
     vector<VueCarte*> cartesMain1;
     vector<VueCarte*> cartesMain2;
+protected:
+    //pour pouvoir recupere le layout info dans VuePartieTactique
+    //faire pareil pour les layout des pioches
+    QHBoxLayout* getLayoutInformations() const {
+        return layoutInformations;
+    }
 private slots:
     // slots qui gère les clics sur les cartes
-    void actioncarte(VueCarte* vc);
-    void actionborne(VueBorne* vb);
+    //void actioncarte(VueCarte* vc);
+    //void actionborne(VueBorne* vb);
 };
 
 class VuePartieTactique : public VuePartie {
     Q_OBJECT
 public :
     explicit VuePartieTactique(QWidget *parent = nullptr);
-    void actioncarte(VueCarte* vc);
-    void actionborne(VueBorne* vb);
-    ~VuePartieTactique();
+    //~VuePartieTactique();
 private :
     QLabel* pioche2;
     QProgressBar* nbCartesPioche2;
+private slots:
+    //void actioncarte(VueCarte* vc);
+    //void actionborne(VueBorne* vb);
 };
 
 

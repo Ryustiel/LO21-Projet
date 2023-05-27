@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
+/*
 class VueBorne : public QPushButton
 {
     Q_OBJECT
@@ -35,5 +36,9 @@ private slots:
     void clickedEvent() { emit carteClicked(this); }
 };
 
+
+
+
+*/
 
 #endif // STONEVIEW_H
