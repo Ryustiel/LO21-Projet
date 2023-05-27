@@ -2,10 +2,12 @@
 #include <iostream>
 #include "../exception/ShottenTottenException.h"
 #include "Hand.h"
+#include "Board.h"
 
 class Player {
 private:
     std::string name;
+    Side side;
     unsigned int score = 0;
     Hand* hand = nullptr;
 
@@ -39,8 +41,9 @@ public:
     }
     
 protected :
-    Player(const string& n)
-        : name(n) {}
+    Player(const string& n, Side s)
+        : name(n), side(s){
+    }
     virtual ~Player() {
         delete hand;
     }
@@ -50,5 +53,5 @@ class PlayerAIRandom : public Player {
 private:
     //
 public:
-    PlayerAIRandom(const string& n) : Player(n) {}
+    PlayerAIRandom(const string& n, Side s) : Player(n, s) {}
 };

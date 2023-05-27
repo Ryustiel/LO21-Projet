@@ -416,4 +416,3 @@ const Side Board::evaluateGameWinner() const {
 	//cout << "The game continues !" << endl;
 	return Side::none;
 }
-
