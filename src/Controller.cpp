@@ -1,4 +1,5 @@
 #include "../head/Controller.h"
+#include "../head/Supervisor.h" 
 #include <iostream>
 
 void Controller::runGame(int nturns, int winthreshold) { // + additional parameters
@@ -32,7 +33,9 @@ void Controller::newRound() {
     clanDeck = new Deck(clanGame);// initialiser la pioche tactique dans la m�thode fille
     std::cout << "\nclanDeck init;";
 
-    turn = false; // TO DO : appliquer la méthode de changement référence de joueur
+    current_side = Side::s1; // TO DO : appliquer la méthode de changement référence de joueur
+    //proposition : faire un Side turn, qui prend les valeurs s1/s2 ? + simple pour savoir où poser les éléments sur les bornes (évite les if)
+    //(de +, la fct° claimStone demande une Side)
 
     eventStartTurn();
 }
@@ -51,14 +54,15 @@ void Controller::eventStartTurn() {
     std::cout << "\n====================== startTurn";
 
     Side winning = board.evaluateGameWinner();
-    winning = Side::s1; // TEMP
+    winning = Side::none; // TEMP
     if (winning == Side::none) {
 
-        if (turn == false) { turn = true; }
-        else { turn = false; }
-        // initialiser les contraintes d'actions pour le tour en cours
-        qtDisplayPlayerTurn();
+        if (current_side == Side::s1) { current_side = Side::s2; }
+        else { current_side = Side::s1; }
 
+        // initialiser les contraintes d'actions pour le tour en cours
+            //display QT interface
+            qtDisplayPlayerTurn();
     }
     else {
 
@@ -135,6 +139,7 @@ void Controller::claimStone(Side s, unsigned int n) {
         cout << "You can't revendicate this stone!" << endl;
     }
 }
+
 
 void Controller::playTurn(Side s) {
     if (s == Side::s1) { //player1

@@ -20,7 +20,7 @@ private:
 	Game clanGame;
 	Player* player1;
 	Player* player2;
-	bool turn = 0;
+	Side current_side = Side::s1;
 	friend class Supervisor;
 
 	// scores de manche stockés ici car impactent directement
@@ -41,6 +41,11 @@ public:
 	Controller& operator=(const Controller& c) = delete;
 
 	//GETTERS
+	Player* getCurPlayer() const {
+		if (current_side == Side::s1) return player1;
+		return player2;
+	}
+	Side getCurSide() { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
 	Game getClanGame() { return clanGame; }
@@ -85,12 +90,16 @@ public:
 		getUnclaimedStones();
 		std::cout << "\ngetPlayableStones();";
 		}
+	void getCurrentPlayerHand() {
+
+	}
 
 	void qtGameOver() {
 		std::cout << "\n================================ qtGameOver";
 	}
 	void qtDisplayPlayerTurn() {
 		std::cout << "\n================================ qtDisplayPlayerTurn";
+		getCurrentPlayerHand();
 		getPickableCards(); // TO DO : then updates accessible variables""
 		// UserInterface::getInstance().UISelectCard(); <= JAMAIS ETRE LANCE
 	}
@@ -99,7 +108,7 @@ public:
 		std::cout << "\nenvoie à qt la liste des bornes sélectionnables pour ce joueur";
 		std::cout << "\ndemande a QT d'afficher le menu pour selectionner des bornes";
 	}
-	void eventCardPicked(string c) {
+	void eventCardPicked(int n) {
 		std::cout << "\n================================ eventCardPicked";
 		playerCardPick = 0; // enregistre le choix du joueur
 		getUnclaimedStones(); // actually getting a return value => passed on to qtDisplayStonePicker()
@@ -139,19 +148,19 @@ protected:
 		: version(v), clanGame(Game(v)) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
 		if (AI_player1 == 0) { //human player
-			player1 = new Player(name_player1);
+			player1 = new Player(name_player1, Side::s1);
 		}
 		else if (AI_player1 == 1) { //IA random player
-			player1 = new PlayerAIRandom(name_player1);
+			player1 = new PlayerAIRandom(name_player1, Side::s1);
 		}
 		else { //incorrect number
 			throw ShottenTottenException("Controller constructor : inadequate player (1) specifier");
 		}
 		if (AI_player2 == 0) { //human player
-			player2 = new Player(name_player2);
+			player2 = new Player(name_player2, Side::s2);
 		}
 		else if (AI_player2 == 1) { //IA random player
-			player2 = new PlayerAIRandom(name_player2);
+			player2 = new PlayerAIRandom(name_player2, Side::s2);
 		}
 		else { //incorrect number
 			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");

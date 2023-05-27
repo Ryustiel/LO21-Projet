@@ -7,8 +7,7 @@
 class Supervisor {
 private :
 	Controller* controller = nullptr;
-
-	bool isQT = true;
+	bool isQT = false;
 
 	Supervisor() {}
 	~Supervisor() {}
@@ -22,6 +21,7 @@ public :
 	static void freeInstance();
 	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2);
 	Controller* getController() { return controller; }
+	bool getIsQT() const { return isQT; }
 	
 	// declenchement initial de l'interface
 	void eventFirstStart() {

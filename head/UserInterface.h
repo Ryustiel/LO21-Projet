@@ -10,6 +10,8 @@
 class UserInterface { //singleton
 private:
 
+    unsigned int state = 0;
+
     UserInterface() {}
     ~UserInterface() {}
 
@@ -19,6 +21,8 @@ private:
     };
     static Handler handler;
 public:
+    void setState(const unsigned int i) { state = i; }
+
     //get l'UserInterface
     static UserInterface& getInstance();
     static void freeInstance();
@@ -39,12 +43,15 @@ public:
     string UIselectPlayerName(int i, int& isIA1);
     void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
-    void UISelectCard();
-
+    unsigned int UISelectCard();
+    unsigned int UISelectStone();
 
     ///PLAY THE GAME
-    void UIGameLauncher(); //launches the game
+    void UIGameView2();
+    void UIGameView3(); 
     void UIRoundLauncher(); //launches the round
     void UITurnLauncher(Player& curr_player); //launches the turn
+
+    void UIPlayCard();
 
 };

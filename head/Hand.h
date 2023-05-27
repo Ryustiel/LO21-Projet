@@ -18,5 +18,9 @@ public:
 	void play(const Card& c); 
 	size_t getSize() const { return size; }
 	size_t getMaxSize() const { return max_size; }
+	const Card* getCard(size_t i) const {
+		if (i < 0 || i >= size) throw ShottenTottenException("get Card : incorrect card number i");
+		return cards[i];
+	}
 };
 
