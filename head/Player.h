@@ -38,7 +38,7 @@ public:
         // set pick to None / -1
     }
 
-    void revendicateStone();
+    void claimStone();
     
 protected :
     Player(const string& n)

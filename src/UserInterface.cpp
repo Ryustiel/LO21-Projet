@@ -172,8 +172,8 @@ void UserInterface::UIRoundLauncher() {
 	do {
 		turns_count++;
 		cout << endl << "TURN " << turns_count << endl;
-		Supervisor::getInstance().getController()->getPlayer1().playTurn();
-		Supervisor::getInstance().getController()->getPlayer2().playTurn();
+		Supervisor::getInstance().getController()->playTurn(Side::s1);
+		Supervisor::getInstance().getController()->playTurn(Side::s2);
 		cout << endl;
 		//exitting the loop for the tests
 		if (turns_count == 3) break;

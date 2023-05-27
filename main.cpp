@@ -19,7 +19,7 @@ int main() {
 		cout << "Card " << i << " : "<< Supervisor::getInstance().getController()->getClanDeck().getCard(i)->getName() << endl;
 	}
 
-	Supervisor::getInstance().getController()->revendicateStone(Side::s1,0);
+	Supervisor::getInstance().getController()->claimStone(Side::s1,0);
 
 	//UserInterface::getInstance().launchUserInterface();
 	*/

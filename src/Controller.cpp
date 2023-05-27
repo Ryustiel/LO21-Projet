@@ -53,7 +53,8 @@ void Controller::eventStartTurn() {
         // initialiser les contraintes d'actions pour le tour en cours
         qtDisplayPlayerTurn();
 
-    } else {
+    }
+    else {
 
         if (winning == Side::s1) {
             player1->updateScore();
@@ -64,10 +65,11 @@ void Controller::eventStartTurn() {
         checkRound();
 
     }
+}
 
-void Controller::revendicateStone(Side s, unsigned int n) {
-    if (s == Side::none) throw ShottenTottenException("revendicateStone : inadequate side s");
-    if (n < 0 || n > board.getStoneNb() ) throw ShottenTottenException("revendicateStone : inadequate stone number n");
+void Controller::claimStone(Side s, unsigned int n) {
+    if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
+    if (n < 0 || n > board.getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
 
     //to revendicate a stone, current player's combination must be completed
     if ((s == Side::s1) && (board.getStone(n).getSizeP1() != board.getStone(n).getMaxSize())) {
@@ -96,7 +98,7 @@ void Controller::revendicateStone(Side s, unsigned int n) {
     size_t i = 0;
     for (; i < clanDeck->getCardCount(); i++) { //adding clan Deck cards
         availableCards[i] = clanDeck->getCard(i);
-        cout << "(revendicateStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
+        cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
     }
     //cout << i;
 
@@ -149,9 +151,9 @@ void Controller::playTurn(Side s) {
 
 //TACTIC CONTROLLER METHODS
 
-void TacticController::revendicateStone(Side s, unsigned int n) {
-    if (s == Side::none) throw ShottenTottenException("revendicateStone : inadequate side s");
-    if (n < 0 || n > getBoard().getStoneNb()) throw ShottenTottenException("revendicateStone : inadequate stone number n");
+void TacticController::claimStone(Side s, unsigned int n) {
+    if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
+    if (n < 0 || n > getBoard().getStoneNb()) throw ShottenTottenException("claimStone : inadequate stone number n");
 
     //to revendicate a stone, current player's combination must be completed
     if ((s == Side::s1) && (getBoard().getStone(n).getSizeP1() != getBoard().getStone(n).getMaxSize())) {
@@ -180,14 +182,14 @@ void TacticController::revendicateStone(Side s, unsigned int n) {
     size_t i = 0;
     for (; i < getClanDeck().getCardCount(); i++) { //adding clan Deck cards
         availableCards[i] = getClanDeck().getCard(i);
-        cout << "(revendicateStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
+        cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
     }
     //cout << i;
 
     //addin tactic cards
     for (size_t k = 0; k < getClanDeck().getCardCount(); k++) { //adding clan Deck cards
         availableCards[i] = tacticDeck->getCard(i);
-        cout << "(revendicateStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
+        cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
         i++;
     }
     //cout << i;
