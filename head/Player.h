@@ -17,13 +17,6 @@ public:
     const string& getName() const { return name; }
     unsigned int getScore() const { return score; }
     const Hand* getHand() const { return hand; }
-    void setHand(const Card* c[6]) {
-        if (hand == nullptr) hand = new Hand(c);
-    }
-
-    void setHand(const Card** c, size_t n) {
-        if (hand == nullptr) hand = new Hand(c, n);
-    }
 
     // s'utilise avec getScore pour gérer le score de victoire de manches du joueur
     void updateScore() { score++; }
@@ -34,9 +27,10 @@ public:
         score = 0;
     }
     // initRound lancée à chaque début de Manche
-    void initForNewRound() { 
+    void initForNewRound(const Card** c, const size_t size) {
         std::cout << "\nPlayer::initForNewRound()";
-        // hand = new Hand(cards);
+        std::cout << "\nHand initialised with " << size << " cards.";
+        hand = new Hand(c, size);
         // set pick to None / -1
     }
     

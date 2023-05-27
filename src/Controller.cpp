@@ -20,10 +20,6 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
 
 void Controller::initForNewRound() {
     std::cout << "\n========= initForNewRound-legacy";
-
-    player1->initForNewRound();
-    player2->initForNewRound();
-
     //init the board
     board = Board();
     std::cout << "\nBoard init;";
@@ -32,6 +28,14 @@ void Controller::initForNewRound() {
     delete clanDeck;
     clanDeck = new Deck(clanGame);// initialiser la pioche tactique dans la m�thode fille
     std::cout << "\nclanDeck init;";
+
+    //init players and their hands
+    const Card** handCards = new const Card * [handSize];
+    const Card** handCards2 = new const Card * [handSize];
+    if (clanDeck->drawMultiple(handCards, handSize) != handSize) throw ShottenTottenException("Controller::initForNewRound error : unable to draw the right amount of cards.");
+    player1->initForNewRound(handCards, handSize);
+    if (clanDeck->drawMultiple(handCards2, handSize) != handSize) throw ShottenTottenException("Controller::initForNewRound error : unable to draw the right amount of cards.");
+    player2->initForNewRound(handCards2, handSize);
 
     current_side = Side::s1; // TO DO : appliquer la méthode de changement référence de joueur
     //proposition : faire un Side turn, qui prend les valeurs s1/s2 ? + simple pour savoir où poser les éléments sur les bornes (évite les if)
