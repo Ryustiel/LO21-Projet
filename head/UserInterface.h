@@ -31,7 +31,6 @@ public:
     
     //SETTINGS
     void UIGameInit();
-    void UIGameSettings();
     unsigned int UISelectRounds(); //select nb rounds (user input)
 
     /// SUPERVISOR SETTINGS ///
@@ -43,6 +42,8 @@ public:
     //PLAYERS NAME
     string UIselectPlayerName(int i, int& isIA1);
     void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2);
+
+    void UISelectCard();
 
 
     ///PLAY THE GAME

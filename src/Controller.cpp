@@ -26,7 +26,7 @@ void Controller::newRound() {
     board.init();
     clanDeck->init(); // initialiser la pioche tactique dans la m�thode fille
 
-    turn = false;
+    turn = false; // TO DO : appliquer la méthode de changement référence de joueur
 
     eventStartTurn();
 }

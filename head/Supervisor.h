@@ -8,6 +8,8 @@ class Supervisor {
 private :
 	Controller* controller = nullptr;
 
+	bool isQT = true;
+
 	Supervisor() {}
 	~Supervisor() {}
 	struct Handler {
@@ -29,7 +31,7 @@ public :
 	}
 	void eventStartGame(Version v, const string& p1name, const string& p2name, int nrounds, int winthreshold) { // game version, number of rounds 
 		std::cout << "\n================================ eventStartGame";
-		Supervisor::getInstance().setController(v, p1name, p2name, 1, 1);
+		Supervisor::getInstance().setController(v, p1name, p2name, 0, 0); // TO DO : ajouter le choix du type de joueur
 		Supervisor::getInstance().getController()->runGame(nrounds, winthreshold);
 	}
 	void qtDisplayMainMenu() {

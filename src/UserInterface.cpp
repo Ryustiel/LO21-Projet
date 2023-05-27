@@ -125,8 +125,16 @@ void UserInterface::UIGameInit() {
 	//cout << "(UIGameInit) - isIA1 = " << isIA1;
 	//cout << "(UIGameInit) - isIA2 = " << isIA2;
 
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** GAME SETTINGS **" << endl;
+	cout << endl;
+
+	unsigned int rounds_nb = UISelectRounds();
+
 	//initializing controller :
-	Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], rounds_nb, 2);
+	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
 	//cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
 	//cout << "(UIGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
@@ -144,23 +152,6 @@ unsigned int UserInterface::UISelectRounds() {
 	return i;
 }
 
-void UserInterface::UIGameSettings() {
-	system("CLS");
-	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
-	cout << "** GAME SETTINGS **" << endl;
-	cout << endl;
-
-	unsigned int rounds_nb = UISelectRounds();
-
-	Supervisor::getInstance().getController()->setTotalRounds(rounds_nb);
-	Supervisor::getInstance().getController()->setRemainingRounds(rounds_nb);
-
-	//cout << "(UIGameSettings) - Controller : total rounds : " << Supervisor::getInstance().getController()->getTotalRounds() << endl;
-	//cout << "(UIGameSettings) - Controller : remaining rounds : " << Supervisor::getInstance().getController()->getRemainingRounds() << endl;
-
-	system("pause");
-}
-
 void UserInterface::UITurnLauncher(Player& curr_player) {
 	//play a card
 	//draw from deck (deck method)
@@ -168,6 +159,10 @@ void UserInterface::UITurnLauncher(Player& curr_player) {
 }
 
 void UserInterface::UIRoundLauncher() {
+	// A la place : 
+	// declenche des evenements dans le controleur
+	// utiliser des getters pour recuperer des valeurs (=> cartes selectionnables etc...)
+	// rappeler des evenements
 	size_t turns_count = 0;
 	do {
 		turns_count++;
@@ -180,6 +175,11 @@ void UserInterface::UIRoundLauncher() {
 	} while (Supervisor::getInstance().getController()->getBoard().evaluateGameWinner() == Side::none);
 }
 
+void UserInterface::UISelectCard() {
+	std::cout << "\nenvoie à qt la liste des cartes jouables pour ce joueur";
+	std::cout << "\ndemande a QT d'afficher le menu pour selectionner des cartes, piocher, ou revandiquer une borne";
+	Supervisor::getInstance().getController()->eventCardPicked("test");
+}
 
 void UserInterface::UIGameLauncher() {
 	system("CLS");
@@ -214,7 +214,6 @@ void UserInterface::UIGameLauncher() {
 void UserInterface::launchUserInterface() {
 	//PARAMATERS
 	UIGameInit(); //done
-	UIGameSettings(); //done
 
 	//PLAY THE GAME
 	UIGameLauncher();

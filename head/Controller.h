@@ -91,9 +91,8 @@ public:
 	}
 	void qtDisplayPlayerTurn() {
 		std::cout << "\n================================ qtDisplayPlayerTurn";
-		getPickableCards(); // actually getting a return value
-		std::cout << "\nenvoie à qt la liste des cartes jouables pour ce joueur";
-		std::cout << "\ndemande a QT d'afficher le menu pour selectionner des cartes, piocher, ou revandiquer une borne";
+		getPickableCards(); // TO DO : then updates accessible variables""
+		// UserInterface::getInstance().UISelectCard(); <= JAMAIS ETRE LANCE
 	}
 	void qtDisplayStonePicker() { // contient la liste des Stones éligibles
 		std::cout << "\n================================ qtDisplayStonePicker";
