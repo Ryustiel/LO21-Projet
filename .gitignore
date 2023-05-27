@@ -13,3 +13,5 @@ x64
 *.suo
 *.ipch
 /.vs
+
+interface\interface.pro.user
