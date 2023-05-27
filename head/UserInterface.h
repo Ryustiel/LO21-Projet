@@ -7,10 +7,6 @@
 #include "Player.h"
 #include "../exception/ShottenTottenException.h"
 
-//SURCHARGE CALLBACK FUNCTION
-void functionCallback(const Version v);
-void functionCallback(const string s);
-
 class UserInterface { //singleton
 private:
 

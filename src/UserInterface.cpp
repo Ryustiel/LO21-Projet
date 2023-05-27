@@ -1,14 +1,5 @@
 #include "../head/UserInterface.h"
 
-//SURCHARGE CALLBACK FUNCTION
-void functionCallback(const Version v) { //callback
-	cout << endl << "(callback function) Selection : " << v << endl;
-}
-
-void functionCallback(const string s) {
-	cout << endl << "(callback function) Selection : " << s << endl;
-}
-
 ///INTERFACE SINGLETON METHODS///
 UserInterface::Handler UserInterface::handler = UserInterface::Handler();
 
@@ -107,17 +98,26 @@ void UserInterface::UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) 
 
 
 /// GAME SETTINGS ///
+unsigned int UserInterface::UISelectRounds() { //to delete ?
+	unsigned int i;
+
+	cout << "Please select the desired number of rounds :";
+	cin >> i;
+
+	return i;
+}
+
 void UserInterface::UIGameInit() {
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** GAME SETTINGS **" << endl;
 	cout << endl;
 
 	string players_name[2];
-	int isIA1 = 0;
-	int isIA2 = 0;
+	int AI_player1 = 0;
+	int AI_player2 = 0;
 
 	Version selected_version = UIVersionMenu();
-	UIPlayerMenu(players_name, isIA1, isIA2);
+	UIPlayerMenu(players_name, AI_player1, AI_player2);
 
 	//cout << "(UIGameInit) - players_name[0] : " << players_name[0] << endl;
 	//cout << "(UIGameInit) - players_name[1] : " << players_name[1] << endl;
@@ -132,24 +132,15 @@ void UserInterface::UIGameInit() {
 
 	unsigned int rounds_nb = UISelectRounds();
 
+	system("pause");
+
 	//initializing controller :
-	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], rounds_nb, 2);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 2);
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
 	//cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
 	//cout << "(UIGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
 	//cout << "(UIGameInit) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
-
-	system("pause");
-}
-
-unsigned int UserInterface::UISelectRounds() {
-	unsigned int i;
-
-	cout << "Please select the desired number of rounds :";
-	cin >> i;
-
-	return i;
 }
 
 void UserInterface::UITurnLauncher(Player& curr_player) {
@@ -181,7 +172,7 @@ void UserInterface::UISelectCard() {
 	Supervisor::getInstance().getController()->eventCardPicked("test");
 }
 
-void UserInterface::UIGameLauncher() {
+void UserInterface::UIGameLauncher() { //to delete ?
 	system("CLS");
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** LET'S PLAY! **" << endl << endl;
@@ -213,9 +204,44 @@ void UserInterface::UIGameLauncher() {
 /// GAME LAUNCHER ///
 void UserInterface::launchUserInterface() {
 	//PARAMATERS
-	UIGameInit(); //done
+	//UIGameInit(); //contente here :
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** GAME SETTINGS **" << endl;
+	cout << endl;
+
+	string players_name[2];
+	int AI_player1 = 0;
+	int AI_player2 = 0;
+
+	Version selected_version = UIVersionMenu();
+	UIPlayerMenu(players_name, AI_player1, AI_player2);
+
+	//cout << "(launchUserInterface) - players_name[0] : " << players_name[0] << endl;
+	//cout << "(launchUserInterface) - players_name[1] : " << players_name[1] << endl;
+
+	//cout << "(launchUserInterface) - isIA1 = " << isIA1;
+	//cout << "(launchUserInterface) - isIA2 = " << isIA2;
+
+	system("CLS");
+	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
+	cout << "** GAME SETTINGS **" << endl;
+	cout << endl;
+
+	unsigned int rounds_nb = UISelectRounds();
+
+	system("pause");
+	system("CLS");
+
+	//initializing controller :
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 2);
+
+	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
+
+	//cout << "(launchUserInterface) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
+	//cout << "(launchUserInterface) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
+	//cout << "(launchUserInterface) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
 
 	//PLAY THE GAME
-	UIGameLauncher();
+	//UIGameLauncher();
 
 }

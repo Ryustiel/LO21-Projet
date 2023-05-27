@@ -37,8 +37,6 @@ public:
         // hand = new Hand(cards);
         // set pick to None / -1
     }
-
-    void claimStone();
     
 protected :
     Player(const string& n)

@@ -11,7 +11,7 @@
 
 int main() {
 	
-	//UserInterface::getInstance().launchUserInterface();
+	UserInterface::getInstance().launchUserInterface();
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
