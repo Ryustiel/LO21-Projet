@@ -27,7 +27,7 @@ void Controller::newRound() {
     board.init();
     clanDeck->init(); // initialiser la pioche tactique dans la m�thode fille
 
-    turn = false; // TO DO : appliquer la méthode de changement référence de joueur
+    current_side = Side::s1; // TO DO : appliquer la méthode de changement référence de joueur
     //proposition : faire un Side turn, qui prend les valeurs s1/s2 ? + simple pour savoir où poser les éléments sur les bornes (évite les if)
     //(de +, la fct° claimStone demande une Side)
 
@@ -51,8 +51,8 @@ void Controller::eventStartTurn() {
     winning = Side::none; // TEMP
     if (winning == Side::none) {
 
-        if (turn == false) { turn = true; } 
-        else { turn = false; }
+        if (current_side == Side::s1) { current_side = Side::s2; }
+        else { current_side = Side::s1; }
 
         // initialiser les contraintes d'actions pour le tour en cours
             //display QT interface

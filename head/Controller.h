@@ -20,7 +20,7 @@ private:
 	Game clanGame;
 	Player* player1;
 	Player* player2;
-	bool turn = 0;
+	Side current_side = Side::s1;
 	friend class Supervisor;
 
 	// scores de manche stockés ici car impactent directement
@@ -41,7 +41,7 @@ public:
 	Controller& operator=(const Controller& c) = delete;
 
 	//GETTERS
-	bool getTurn() { return turn; }
+	Side getCurSide() { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
 	Game getClanGame() { return clanGame; }

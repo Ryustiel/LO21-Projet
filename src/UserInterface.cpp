@@ -178,7 +178,7 @@ void UserInterface::UIPlayCard() {
 
 	//display cards in player's hand
 	cout << "Your hand : " << endl; //CRASHES BC HAND NOT INITIALIZED
-	if (Supervisor::getInstance().getController()->getTurn() == 0) { //curent player is p1
+	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) { //curent player is p1
 		for (size_t i = 0; i < Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++) {
 			cout << i << " : " << Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i)->getName();
 		}
@@ -198,12 +198,12 @@ void UserInterface::UIPlayCard() {
 
 void UserInterface::UIGameView2() { //to delete ?
 	cout << "***  ROUND " << Supervisor::getInstance().getController()->getTotalRounds() - Supervisor::getInstance().getController()->getRemainingRounds() + 1 << " (on " << Supervisor::getInstance().getController()->getTotalRounds() << ") ***" << endl;
-	cout << "* Turn to player " << Supervisor::getInstance().getController()->getTurn() + 1 << " : ";
-	if (Supervisor::getInstance().getController()->getTurn() == 0) { //curent player is p1
-		cout << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
+	cout << "* Turn to player ";
+	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) { //curent player is p1
+		cout << 1 << " : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
 	}
 	else { //current player is P2
-		cout << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
+		cout << 2 << " : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
 	}
 
 	UIPlayCard();
