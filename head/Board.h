@@ -136,7 +136,6 @@ public:
 	}
 	size_t getStoneNb() const { return stone_nb;  }
 
-	void init() { std::cout << "\nBoard::init();"; } // initialise le plateau au début d'une manche
 	void getPlayableStones(Card* c) { std::cout << "\nBoard::getPlayableStones();"; }
 
 	void addCard(const Card& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };

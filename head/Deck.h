@@ -19,7 +19,6 @@ public :
 	Deck(const Deck& p) = delete;
 	Deck& operator=(const Deck& p) = delete;
 
-	void init() { std::cout << "\nDeck::init()"; }
 	unsigned int getCardCount() const { return card_count; }
 	unsigned int getMaxCardCount() const { return max_card_count; }
 	const Card* getCard(unsigned int i) {
