@@ -136,13 +136,15 @@ void Controller::playTurn(Side s) {
         
         //draw card
         
-        //revendicate border
+        //claim stone
 
     }
-    else if (s == Side::s2) {
+    else if (s == Side::s2) { //player2
         //play card
+        
         //draw card
-        //revendicate border
+        
+        //claim stone
     }
     throw ShottenTottenException("playTurn : inadequate side s");
 }
