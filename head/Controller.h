@@ -43,10 +43,11 @@ public:
 	Controller& operator=(const Controller& c) = delete;
 
 	//GETTERS
-	Player* getCurPlayer() const {
+	Player* getCurentPlayer() const {
 		if (current_side == Side::s1) return player1;
 		return player2;
 	}
+	Hand& getCurrentPlayerHand() const { return *getCurentPlayer()->getHand(); }
 	Side getCurSide() { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
@@ -83,7 +84,15 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void runGame(int nbturns, int winthreshold); // (int nbTurns, int typeia, ...)
 
-	void getPickableCards() {std::cout << "\ngetPickableCards();";} // récupère la liste des cartes jouables
+	virtual bool* getPickableCards() { 
+		Hand& curHand = getCurrentPlayerHand();
+		const size_t hs = curHand.getSize();
+		bool* pickable = new bool[hs];
+		for (size_t i = 0; i < hs; ++i) {
+			pickable[i] = true;
+		}
+		return pickable;
+	} // récupère la liste des cartes jouables
 	void getUnclaimedStones() {std::cout << "\ngetUnclaimedStones();";}
 	void getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		Card* card = nullptr;
@@ -92,9 +101,6 @@ public:
 		getUnclaimedStones();
 		std::cout << "\ngetPlayableStones();";
 		}
-	void getCurrentPlayerHand() {
-
-	}
 
 	void qtGameOver() {
 		std::cout << "\n================================ qtGameOver";
@@ -198,6 +204,20 @@ public :
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 
+	bool* getPickableCards() final {
+		if (canPlayerPlayTacticalCard()) {
+			return Controller::getPickableCards();
+		}
+		else {
+			Hand& curHand = getCurrentPlayerHand();
+			const size_t hs = curHand.getSize();
+			bool* pickable = new bool[hs];
+			for (size_t i = 0; i < hs; ++i) {
+				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
+			}
+			return pickable;
+		}
+	}
 	void claimStone(Side s, unsigned int n) final;
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();

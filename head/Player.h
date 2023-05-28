@@ -16,7 +16,7 @@ private:
 public:
     const string& getName() const { return name; }
     unsigned int getScore() const { return score; }
-    const Hand* getHand() const { return hand; }
+    Hand* getHand() const { return hand; }
 
     // s'utilise avec getScore pour gérer le score de victoire de manches du joueur
     void updateScore() { score++; }
