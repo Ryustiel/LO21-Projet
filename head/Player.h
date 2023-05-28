@@ -47,7 +47,6 @@ class PlayerAIRandom : public Player {
 private:
     //
 public:
-    PlayerAIRandom(const string& n) : Player(n) {}
     PlayerAIRandom(const string& n, Side s) : Player(n, s) {}
     virtual unsigned int selectCard() const;
     virtual unsigned int selectStone() const;
