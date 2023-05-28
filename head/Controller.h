@@ -93,7 +93,14 @@ public:
 		}
 		return pickable;
 	} // récupère la liste des cartes jouables
-	void getUnclaimedStones() {std::cout << "\ngetUnclaimedStones();";}
+	bool* getUnclaimedStones() {
+		const size_t sn = board.getStoneNb();
+		bool* unclaimed = new bool[sn];
+		for (size_t i = 0; i < sn; ++i) {
+			unclaimed[i] = board.getStone(i).getRevendication() == Side::none;
+		}
+		return unclaimed;
+	}
 	void getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		Card* card = nullptr;
 		// if (turn) {card = player1->getPick();} else {card = player2->getPick();}
