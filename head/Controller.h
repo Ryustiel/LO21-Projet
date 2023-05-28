@@ -105,7 +105,7 @@ public:
 		const size_t sn = board.getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) {
-			playable[i] = playable && board.getStone(i).getSideSize(current_side);
+			playable[i] = playable && board.getStone(i).getSideSize(current_side) != board.getStone(i).getMaxSize();
 		}
 		return playable;
 	}
