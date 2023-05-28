@@ -11,7 +11,12 @@
 
 int main() {
 	
-	UserInterface::getInstance().launchUserInterface();
+	/*
+	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 1, 1);
+	cout << Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	*/
+
+	//UserInterface::getInstance().launchUserInterface();
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);

@@ -83,17 +83,26 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void runGame(int nbturns, int winthreshold); // (int nbTurns, int typeia, ...)
 
-	void getPickableCards() {std::cout << "\ngetPickableCards();";} // récupère la liste des cartes jouables
+	// récupère la liste des cartes jouables
+	bool* getPickableCards() {
+		std::cout << "\ngetPickableCards();";
+		bool pickable_cards[6] = { 0, 1, 0, 1, 1, 0 };
+		return pickable_cards;;
+	}
 	void getUnclaimedStones() {std::cout << "\ngetUnclaimedStones();";}
-	void getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
+	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		Card* card = nullptr;
 		// if (turn) {card = player1->getPick();} else {card = player2->getPick();}
 		//board.getPlayableStones(card); // actualy getting a return value
 		getUnclaimedStones();
 		std::cout << "\ngetPlayableStones();";
-		}
-	void getCurrentPlayerHand() {
+		bool* pickable_stones = new bool[board.getStoneNb()];
 
+		//FOR THE TESTS : 
+		for (size_t i = 0; i < board.getStoneNb(); i++) {
+			pickable_stones[i] = rand() % 2;
+		}
+		return pickable_stones;
 	}
 
 	void qtGameOver() {
@@ -141,6 +150,14 @@ public:
 		std::cout << "\n================================ choiceClaim";
 		getUnclaimedStones();
 		qtDisplayStonePicker();
+	}
+
+	virtual const Card** getCurrentPlayerHand() {
+		const Card* fakeHand[6];
+		for (int i = 0; i < 6; i++) {
+			fakeHand[i] = &clanDeck->draw();
+		}
+		return fakeHand;
 	}
 
 	virtual void playTurn(Side s);
