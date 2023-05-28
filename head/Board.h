@@ -75,6 +75,7 @@ public:
 	size_t getMaxSize() const { return max_size; }
 	size_t getSizeP1() const { return size_p1; }
 	size_t getSizeP2() const { return size_p2; }
+	size_t getSideSize(Side s) { return s == Side::s1 ? size_p1 : size_p2; }
 	const Card** getCombinationP1() const { return combination_p1; }
 	const Card** getCombinationP2() const { return combination_p2; }
 	Side getFirstCompleted() const { return firstCompleted; }

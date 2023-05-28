@@ -101,13 +101,13 @@ public:
 		}
 		return unclaimed;
 	}
-	void getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
-		Card* card = nullptr;
-		// if (turn) {card = player1->getPick();} else {card = player2->getPick();}
-		//board.getPlayableStones(card); // actualy getting a return value
-		getUnclaimedStones();
-		std::cout << "\ngetPlayableStones();";
+	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
+		const size_t sn = board.getStoneNb();
+		bool* playable = getUnclaimedStones();
+		for (size_t i = 0; i < sn; ++i) {
+			playable[i] = playable && board.getStone(i).getSideSize(current_side);
 		}
+	}
 
 	void qtGameOver() {
 		std::cout << "\n================================ qtGameOver";
