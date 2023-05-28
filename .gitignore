@@ -14,3 +14,6 @@ x64
 *.ipch
 /.vs
 enc_temp_folder
+/.vscode
+output
+/.out

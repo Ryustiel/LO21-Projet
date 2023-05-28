@@ -130,7 +130,6 @@ public:
 	Board(size_t size = 9) : stone_nb(size), stones(new Stone[size]) {}
 	~Board() { delete[] stones; }
 	Stone* getStones() const { return stones;  }
-	Stone& getStone(size_t n) const { if (n >= stone_nb) throw BoardException("getStone error : out of range"); return stones[n]; }
 	Stone& getStone(unsigned int n) { 
 		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];
@@ -139,6 +138,7 @@ public:
 
 	void addCard(const PlacableCard& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
 	const PlacableCard& removeCard(const PlacableCard& card, const Side side,const unsigned int n);
+	void getPlayableStones(PlacableCard* c) { std::cout << "\nBoard::getPlayableStones();"; }
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const PlacableCard** AvailableCards, const size_t availableCardsCount) const;
