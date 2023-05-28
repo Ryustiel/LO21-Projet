@@ -80,6 +80,7 @@ public:
 	const Card** getCombinationP2() const { return combination_p2; }
 	Side getFirstCompleted() const { return firstCompleted; }
 	const Side getRevendication() const { return revendication; }
+	const CombatMode* getCombatMode() const { return combat_mode; }
 
 	void setMaxSize(const size_t size);
 	void setCombatMode(const CombatMode* cM) {
@@ -131,7 +132,7 @@ public:
 	Board(size_t size = 9) : stone_nb(size), stones(new Stone[size]) {}
 	~Board() { delete[] stones; }
 	const Stone* getStones() const { return stones;  }
-	Stone& getStone(unsigned int n) { 
+	Stone& getStone(unsigned int n) const { 
 		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];
 	}

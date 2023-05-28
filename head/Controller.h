@@ -48,15 +48,16 @@ public:
 		return player2;
 	}
 	Hand& getCurrentPlayerHand() const { return *getCurrentPlayer()->getHand(); }
-	Side getCurSide() { return current_side; }
+	Side getCurSide() const { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
-	Game getClanGame() { return clanGame; }
-	Board& getBoard() { return board; }
+	Game getClanGame() const { return clanGame; } //accès en lecture seule
+	Board getBoard() const { return board; } //accès en lecture seule
+	Board& getBoard() { return board; } //accès écriture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
 	int getRemainingRounds() const { return remainingRounds; }
-	int getTotalRounds() { return totalRounds; }
+	int getTotalRounds() const { return totalRounds; }
 
 	Player* getWinner() const {
 		if (player1->getScore() > player2->getScore()) return player1;
@@ -84,7 +85,7 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void runGame(int nbturns, int winthreshold); // (int nbTurns, int typeia, ...)
 
-	virtual bool* getPickableCards() { 
+	virtual bool* getPickableCards() const { 
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
@@ -93,7 +94,7 @@ public:
 		}
 		return pickable;
 	} // récupère la liste des cartes jouables
-	bool* getUnclaimedStones() {
+	bool* getUnclaimedStones() const {
 		const size_t sn = board.getStoneNb();
 		bool* unclaimed = new bool[sn];
 		for (size_t i = 0; i < sn; ++i) {
@@ -212,7 +213,7 @@ public :
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 
-	bool* getPickableCards() final {
+	virtual bool* getPickableCards() final {
 		if (canPlayerPlayTacticalCard()) {
 			return Controller::getPickableCards();
 		}
@@ -226,7 +227,16 @@ public :
 			return pickable;
 		}
 	}
-	void claimStone(Side s, unsigned int n) final;
+
+	bool* getPlayableStonesCombatMode() const {
+		const size_t sn = getBoard().getStoneNb();
+		bool* playable = getUnclaimedStones();
+		for (size_t i = 0; i < sn; ++i) { //unclaimed + uncomplete + no combat mode card
+			playable[i] = playable && getBoard().getStone(i).getSideSize(getCurSide()) != getBoard().getStone(i).getMaxSize() && getBoard().getStone(i).getCombatMode() == nullptr;
+		}
+	}
+
+	virtual void claimStone(Side s, unsigned int n) final;
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
 };
