@@ -168,8 +168,13 @@ void UserInterface::UIRoundLauncher() {
 
 unsigned int UserInterface::UISelectCard() {
 	int card_nb = 0;
-	cout << "Select a card to play in your hand (number) : ";
-	cin >> card_nb;
+	cout << "Select a card to play from your hand (number) : ";
+	card_nb = Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	while (!Supervisor::getInstance().getController()->getPickableCards()[card_nb]) { //user input until correct
+		cout << "You can't play this card. Please select a card to play from your hand : ";
+		card_nb = Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	}
+	cout << "Selected card (number) : " << card_nb;
 	return card_nb;
 }
 
@@ -233,7 +238,11 @@ void UserInterface::UIGameView2() { //to delete ?
 unsigned int UserInterface::UISelectStone() {
 	unsigned int stone_choice = 0;
 	cout << "Select a stone (number) : ";
-	cin >> stone_choice;
+	stone_choice = Supervisor::getInstance().getController()->getCurPlayer()->selectStone();
+	while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_choice]) { //user input until correct
+		cout << "You can't play this card. Please select a card to play from your hand : ";
+		stone_choice = Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	}
 	return stone_choice;
 }
 

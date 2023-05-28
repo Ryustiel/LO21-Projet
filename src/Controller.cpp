@@ -203,7 +203,7 @@ void TacticController::claimStone(Side s, unsigned int n) {
     }
     //cout << i;
 
-    //addin tactic cards
+    //adding tactic cards
     for (size_t k = 0; k < getClanDeck().getCardCount(); k++) { //adding clan Deck cards
         availableCards[i] = tacticDeck->getCard(i);
         cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
