@@ -16,3 +16,11 @@ const Card& Deck::draw() {
 	cards[x] = cards[card_count--];
 	return c;
 }
+
+const size_t Deck::drawMultiple(const Card** cards, const size_t number) {
+	for (size_t i = 0; i < number; ++i) {
+		if (isEmpty()) return i;
+		cards[i] = &draw();
+	}
+	return number;
+}

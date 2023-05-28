@@ -13,3 +13,4 @@ void setVersion(const Version& v);
 string toString(const Version& v);
 Version toVersion(const string s);
 std::ostream& operator<<(std::ostream& f, const Version& v);
+
