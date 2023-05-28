@@ -2,9 +2,6 @@
 #include "../head/Supervisor.h" 
 #include <iostream>
 
-Controller* Controller::instance = nullptr;
-TacticController* TacticController::tacticInstance = nullptr;
-
 void Controller::runGame(int nturns, int winthreshold) { // + additional parameters
 
     std::cout << "\n===================== newGame";
@@ -88,69 +85,86 @@ void Controller::eventStartTurn() {
     }
 }
 
-void Controller::claimStone(Side s, unsigned int n) {
-    if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
-    if (n < 0 || n > board.getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
-
-    //to revendicate a stone, current player's combination must be completed
-    if ((s == Side::s1) && (board.getStone(n).getSizeP1() != board.getStone(n).getMaxSize())) {
-        cout << "You can't revendicate this stone ! (combination not completed yet)";
-        return;
-    }
-    else if ((s == Side::s2) && (board.getStone(n).getSizeP2() != board.getStone(n).getMaxSize())) {
-        cout << "You can't revendicate this stone ! (combination not completed yet)";
-        return;
-    }
-
+bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {
     //defining available cards count
     size_t availableCardsCount = clanDeck->getCardCount();
 
-    if (s == Side::s1) {
-        if(player2->getHand() != nullptr) availableCardsCount += player2->getHand()->getSize();
-    }
-    else {
-        if (player1->getHand() != nullptr) availableCardsCount += player1->getHand()->getSize();
-    }
+    availableCardsCount += player2->getHand()->getSize();
+    availableCardsCount += player1->getHand()->getSize();
 
     //creating tab containing all available cards (deck + opponent's cards)
-    const Card** availableCards = new const Card * [availableCardsCount];
+    availableCards = new const PlacableCard * [availableCardsCount];
 
     //adding deck cards
-    size_t i = 0;
-    for (; i < clanDeck->getCardCount(); i++) { //adding clan Deck cards
-        availableCards[i] = clanDeck->getCard(i);
-        cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
+    foundedSize = 0;
+    size_t j = 0;
+    for (; j < clanDeck->getCardCount(); j++) { //adding clan Deck cards
+        //On vérifie que les cartes prises en comptes sont bien des cartes placable. (si une d'entre elle ne l'est pas )
+        const PlacableCard* cardCandidate = dynamic_cast<const PlacableCard*>(clanDeck->getCard(j));
+        if (cardCandidate != nullptr) {
+            availableCards[foundedSize++] = cardCandidate;
+            cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize]->getName() << endl;
+        }
+        else {
+            //dans ce cas la il reste des cartes tactiques importantes
+            return false;
+        }
     }
     //cout << i;
-
-    if (s == Side::s1) {
+    const Hand* hands[2] = { player1->getHand(), player2->getHand() };
+    for (int hi = 0; hi < 2; ++hi) {
+        const Hand * curHand = hands[hi];
         //adding the opponent's cards to available cards
-        if (player2->getHand() != nullptr) {
-            for (size_t k = 0; k < player2->getHand()->getSize(); k++) {
-                availableCards[i] = clanDeck->getCard(i);
-                i++;
-            }
-        }
-    } else {
-        //adding the opponent's cards to available cards
-        if (player1->getHand() != nullptr) {
-            for (size_t k = 0; k < player1->getHand()->getSize(); k++) {
-                availableCards[i] = clanDeck->getCard(i);
-                i++;
+        if (curHand != nullptr) {
+            for (size_t k = 0; k < curHand->getSize(); k++) {
+                const PlacableCard* cardCandidate = dynamic_cast<const PlacableCard*>(curHand->getCard(k));
+                if (cardCandidate != nullptr) {
+                    availableCards[foundedSize] = cardCandidate;
+                    foundedSize++;
+                    cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize]->getName() << endl;
+                }
+                else {
+                    return false;
+                }
             }
         }
     }
+    return true;
+}
 
+void Controller::claimStone(Side s, unsigned int n) {
+    if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
+    if (n < 0 || n > board.getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
+    Side evaluated_side;
+    bool s1Completed = board.getStone(n).getSizeP1() != board.getStone(n).getMaxSize();
+    bool s2Completed = board.getStone(n).getSizeP2() != board.getStone(n).getMaxSize();
+    //to revendicate a stone, current player's combination must be completed
+    if ((s == Side::s1 && s1Completed)|| (s == Side::s2) && s2Completed) {
+        evaluated_side = Side::none;
+    }
+    if (!s1Completed || !s2Completed) {
+        const PlacableCard** availableCards;
+        size_t foundedSize;
+        if (getAvailableCards(availableCards, foundedSize)) {
+            evaluated_side = board.evaluateStoneWinningSide(n, availableCards, foundedSize);
+        }
+        else {
+            //des cartes tactiques spéciale empêche le claim
+            evaluated_side = Side::none;
+        }
+    }
+    else {
+        evaluated_side = board.evaluateStoneWinningSide(n);
+    }
     //evaluating stone's winner
-    const Side evaluated_side = board.evaluateStoneWinningSide(n, availableCards, availableCardsCount);
     if (evaluated_side == s) {
         //revendicating the stone
+        board.getStone(n).setRevendication(s);
     }
     else {
         cout << "You can't revendicate this stone!" << endl;
     }
 }
-
 
 void Controller::playTurn(Side s) {
     if (s == Side::s1) { //player1
@@ -172,80 +186,7 @@ void Controller::playTurn(Side s) {
 }
 
 
-
 //TACTIC CONTROLLER METHODS
-
-void TacticController::claimStone(Side s, unsigned int n) {
-    if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
-    if (n < 0 || n > getBoard().getStoneNb()) throw ShottenTottenException("claimStone : inadequate stone number n");
-
-    //to revendicate a stone, current player's combination must be completed
-    if ((s == Side::s1) && (getBoard().getStone(n).getSizeP1() != getBoard().getStone(n).getMaxSize())) {
-        cout << "You can't revendicate this stone ! (combination not completed yet)";
-        return;
-    }
-    else if ((s == Side::s2) && (getBoard().getStone(n).getSizeP2() != getBoard().getStone(n).getMaxSize())) {
-        cout << "You can't revendicate this stone ! (combination not completed yet)";
-        return;
-    }
-
-    //defining available cards count
-    size_t availableCardsCount = getClanDeck().getCardCount() + tacticDeck->getCardCount();
-
-    if (s == Side::s1) {
-        if (getPlayer2().getHand() != nullptr) availableCardsCount += getPlayer2().getHand()->getSize();
-    }
-    else {
-        if (getPlayer1().getHand() != nullptr) availableCardsCount += getPlayer1().getHand()->getSize();
-    }
-
-    //creating tab containing all available cards (deck + opponent's cards)
-    const Card** availableCards = new const Card * [availableCardsCount];
-
-    //adding clan deck cards
-    size_t i = 0;
-    for (; i < getClanDeck().getCardCount(); i++) { //adding clan Deck cards
-        availableCards[i] = getClanDeck().getCard(i);
-        cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
-    }
-    //cout << i;
-
-    //addin tactic cards
-    for (size_t k = 0; k < getClanDeck().getCardCount(); k++) { //adding clan Deck cards
-        availableCards[i] = tacticDeck->getCard(i);
-        cout << "(claimStone) Card" << i << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[i]->getName() << endl;
-        i++;
-    }
-    //cout << i;
-
-    if (s == Side::s1) {
-        //adding the opponent's cards to available cards
-        if (getPlayer2().getHand() != nullptr) {
-            for (size_t k = 0; k < getPlayer2().getHand()->getSize(); k++) {
-                availableCards[i] = getClanDeck().getCard(i);
-                i++;
-            }
-        }
-    }
-    else {
-        //adding the opponent's cards to available cards
-        if (getPlayer1().getHand() != nullptr) {
-            for (size_t k = 0; k < getPlayer1().getHand()->getSize(); k++) {
-                availableCards[i] = getClanDeck().getCard(i);
-                i++;
-            }
-        }
-    }
-
-    //evaluating stone's winner
-    const Side evaluated_side = getBoard().evaluateStoneWinningSide(n, availableCards, availableCardsCount);
-    if (evaluated_side == s) {
-        //revendicating the stone
-    }
-    else {
-        cout << "You can't revendicate this stone!" << endl;
-    }
-}
 
 void TacticController::initForNewRound() {
     Controller::initForNewRound();
@@ -255,4 +196,13 @@ void TacticController::initForNewRound() {
     delete tacticDeck;
     tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
     std::cout << "\ntacticDeck init;";
+}
+
+void TacticController::incrementTacticalPlayed(Side s){
+    if (s == Side::s1) {
+        ++p1TacticalCardPlayed;
+    }
+    else if (s == Side::s2) {
+        ++p2TacticalCardPlayed;
+    }
 }

@@ -52,7 +52,7 @@ class Tactical :public virtual Card {
 public:
 	Tactical(const string n) : Card(n){}
 	virtual ~Tactical() = default;
-	void activate() const override { return; };
+	void activate() const override;
 };
 
 class Clan : public PlacableCard {
@@ -77,7 +77,7 @@ private:
 	const list<Number> allowedNumbers;
 public:
 	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), PlacableCard(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers), Card(n) {}
-	void activate() const final{ return; }
+	void activate() const final;
 	const string& getName() const { return Tactical::name; }
 	bool canBeUsedAs(const Color& c) const {
 		bool colorFinded = false;

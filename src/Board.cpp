@@ -75,6 +75,27 @@ void Stone::setMaxSize(const size_t size) {
   delete[] combination_p2;
   combination_p1 = new_combination_j1;
   combination_p2 = new_combination_j2;
+  if (max_size < size) {
+	  firstCompleted = Side::none;//a combination cannot be complete
+  }
+}
+
+void Stone::setCombatMode(const CombatMode* cM) {
+	if (combat_mode == nullptr) {
+		combat_mode = cM;
+		if (cM->getName() == "Blind-Man’s Bluff") {
+			max_size += 1;
+		}
+	}
+}
+
+void Stone::setRevendication(Side s) {
+	if (revendication == Side::none) {
+		revendication = s;
+	}
+	else {
+		throw BoardException("Stone::setRevendication error: this stone is already revendicated !");
+	}
 }
 
 const bool recursiveCombinationType(int* baseComb, const PlacableCard* possibleCards[], const size_t maxSize, int* maxSum, const size_t size) {
@@ -365,6 +386,17 @@ const Side Stone::evaluateWinningSide(const PlacableCard** AvailableCards, const
 	return Side::none;
 }
 
+const Side Stone::evaluateWinningSide() const { //evaluate the combinations to determine a winning side (can be none)
+	const bool mud_fight = (combat_mode != nullptr && combat_mode->getName() == "Mud Fight");
+	if (size_p1 == max_size && size_p2 == max_size) { //both sides are complete
+		Side winningSide;
+		winningSide = compareCombination(combination_p1, combination_p2, max_size, mud_fight);
+		if (winningSide != Side::none) return winningSide;
+		return firstCompleted;
+	}else {
+		throw BoardException("Stone::evaluateWinningSide error: the stone isn't fully complete !");
+	}
+}
 
 const Side Board::evaluateStoneWinningSide(const unsigned int n,const PlacableCard** AvailableCards,const size_t availableCardsCount) const {
 	if (n < 0 || n > stone_nb) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
@@ -374,6 +406,13 @@ const Side Board::evaluateStoneWinningSide(const unsigned int n,const PlacableCa
 	return stones[n].evaluateWinningSide(AvailableCards, availableCardsCount);
 }
 
+const Side Board::evaluateStoneWinningSide(const unsigned int n) const {
+	if (n < 0 || n > stone_nb) throw ShottenTottenException("evaluateStoneWinningSide : incorrect stone number");
+	const Side& revendication = stones[n].getRevendication();
+	if (revendication != Side::none)
+		return revendication;
+	return stones[n].evaluateWinningSide();
+}
 
 const Side Board::evaluateGameWinner() const {
 	size_t count_p1 = 0;

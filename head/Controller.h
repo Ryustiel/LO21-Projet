@@ -41,7 +41,6 @@ private:
 public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
-	static Controller& getInstance() { return *instance; }
 
 	//GETTERS
 	Player* getCurPlayer() const {
@@ -78,7 +77,8 @@ public:
 	//void setPlayer1(Player* player) { player1 = player; }
     //void setPlayer2(Player* player) { player2 = player; }
 
-	virtual void claimStone(Side s, unsigned int n);
+	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize);
+	void claimStone(Side s, unsigned int n);
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
@@ -145,6 +145,7 @@ public:
 	}
 
 	virtual void playTurn(Side s);
+	Stone& askStoneChoice() { return board.getStone(0); }
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
@@ -168,40 +169,35 @@ protected:
 		else { //incorrect number
 			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
 		}
-		if (instance != nullptr) delete instance; instance = this;
 	}
-	static Controller* instance;
 	virtual void initForNewRound();
 	virtual ~Controller() {
 		delete clanDeck;
 		delete player1;
 		delete player2;
-		instance = nullptr;
 	}
 };
 
 class TacticController : public Controller {
 private :
+	friend class Supervisor;
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
 	size_t handSize = 7;
-	friend class Supervisor;
-	static TacticController* tacticInstance;
+	unsigned int p1TacticalCardPlayed = 0;
+	unsigned int p2TacticalCardPlayed = 0;
 	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
 		: Controller(Version::legacy, name_player1, name_player2, AI_player1, AI_player2, handSize = 7), tacticGame(Game(v)) {
 		tacticDeck = new Deck(tacticGame);
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
-		if (tacticInstance != nullptr) delete tacticInstance; tacticInstance = this;
 	}
 	~TacticController() {
 		delete tacticDeck;
-		tacticInstance = nullptr;
 	}
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
-	void claimStone(Side s, unsigned int n) final;
-	TacticController& getInstance() { return *tacticInstance; }
+	void incrementTacticalPlayed(Side s);
 };

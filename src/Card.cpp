@@ -56,14 +56,20 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 
 
 void PlacableCard::activate() const{
-	const Controller& c = Controller::getInstance();
-	Stone& s = c.askStoneChoice();
-	s.addCard(*this,c.getPlayingSide());
+	Controller* c = Supervisor::getInstance().getController();
+	Stone& s = c->askStoneChoice();
+	s.addCard(*this,c->getCurSide());
 };
 
 void Tactical::activate() const {
-	Controller& c = Controller::getInstance();
-	c.incrementTacticalPlayed(c.getPlayingSide());
+	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
+	if (c != nullptr) {
+		c->incrementTacticalPlayed(c->getCurSide());
+	}
+	else {
+		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
+	}
+
 };
 
 void Elite::activate() const {

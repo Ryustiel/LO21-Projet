@@ -81,26 +81,16 @@ public:
 	const Side getRevendication() const { return revendication; }
 
 	void setMaxSize(const size_t size);
-	void setCombatMode(const CombatMode* cM) {
-		if (combat_mode == nullptr) {
-			combat_mode = cM;
-			if (cM->getName() == "Blind-Man’s Bluff") {
-				max_size += 1;
-				if (firstCompleted != Side::none) firstCompleted = Side::none; //a combination cannot be complete
-			}
-		}
-	}
-	void setRevendication(Side s) {
-		if (revendication == Side::none) {
-			revendication = s;
-		}
-	}
+	void setCombatMode(const CombatMode* cM);
+	void setRevendication(Side s);
 
 	void addCard(const PlacableCard& card, const Side side);
 	const PlacableCard& removeCard(const PlacableCard& card, const Side side);
 	
 	//determine if the border is won by any side
 	const Side evaluateWinningSide(const PlacableCard** AvailableCards, const size_t availableCardsCount) const;
+	//same but with complete stone
+	const Side evaluateWinningSide() const;
 
 	//Return the best and the worse of all possible variations of an incomplete card combination
 	static const PlacableCard** bestVariation(const PlacableCard** possibleCards, const size_t pcn, const PlacableCard** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat, bool combat_mode_mud_prensence);
@@ -142,6 +132,8 @@ public:
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const PlacableCard** AvailableCards, const size_t availableCardsCount) const;
+	//same thing but for complete stone
+	const Side evaluateStoneWinningSide(const unsigned int n) const;
 
 	//Evaluates if the game is won
 	const Side evaluateGameWinner() const;
