@@ -46,10 +46,24 @@ public:
     unsigned int UISelectCard();
     unsigned int UISelectStone();
 
+    //INPUT USERS
+    unsigned int userSelectCard() const {
+        unsigned int card_nb = 0;
+        cin >> card_nb;
+        return card_nb;
+    }
+
+    unsigned int selectStone() const {
+        unsigned int stone_nb = 0;
+        cin >> stone_nb;
+        return stone_nb;
+    }
+
     ///PLAY THE GAME
-    void UIGameView2();
-    void UIGameView3(); 
-    void UIGameView4();
+    void UIGameView2(); //pick a card
+    void UIGameView3(); //pick a stone (always after UIGameView2) ; can be skipped
+    void UIGameView4(); //click to continue
+    void UIGameView5(); //draw a card
     void UIRoundLauncher(); //launches the round
     void UITurnLauncher(Player& curr_player); //launches the turn
 
