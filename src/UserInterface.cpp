@@ -169,12 +169,26 @@ void UserInterface::UIRoundLauncher() {
 unsigned int UserInterface::UISelectCard() {
 	int card_nb = 0;
 	cout << "Select a card to play from your hand (number) : ";
-	card_nb = Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurPlayer());
+	if (playerIA == nullptr) { //not IA
+		card_nb = userSelectCard();
+	}
+	else { //is IA
+		card_nb = playerIA->selectCard();
+	}
+
 	while (!Supervisor::getInstance().getController()->getPickableCards()[card_nb]) { //user input until correct
 		cout << "You can't play this card. Please select a card to play from your hand : ";
-		card_nb = Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+		//input :
+		if (playerIA == nullptr) { //not IA
+			card_nb = userSelectCard();
+		}
+		else { //is IA
+			card_nb = playerIA->selectCard();
+		}
 	}
-	cout << "Selected card (number) : " << card_nb;
+	cout << endl << "Selected card (number) : " << card_nb;
 	return card_nb;
 }
 
@@ -195,11 +209,10 @@ void UserInterface::UIPlayCard() {
 	}
 	int card_hand_nb = UISelectCard();
 
-	Supervisor::getInstance().getController()->eventChoiceClaim();
 	Supervisor::getInstance().getController()->eventCardPicked(card_hand_nb);
 }
 
-void UserInterface::UIGameView2() { //to delete ?
+void UserInterface::UIGameView2() {
 	cout << "***  ROUND " << Supervisor::getInstance().getController()->getTotalRounds() - Supervisor::getInstance().getController()->getRemainingRounds() + 1 << " (on " << Supervisor::getInstance().getController()->getTotalRounds() << ") ***" << endl;
 	cout << "* Turn to player ";
 	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) { //curent player is p1
@@ -236,14 +249,27 @@ void UserInterface::UIGameView2() { //to delete ?
 }
 
 unsigned int UserInterface::UISelectStone() {
-	unsigned int stone_choice = 0;
+	unsigned int stone_nb = 0;
 	cout << "Select a stone (number) : ";
-	stone_choice = Supervisor::getInstance().getController()->getCurPlayer()->selectStone();
-	while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_choice]) { //user input until correct
-		cout << "You can't play this card. Please select a card to play from your hand : ";
-		stone_choice = Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurPlayer());
+	if (playerIA == nullptr) { //not IA
+		stone_nb = userSelectCard();
 	}
-	return stone_choice;
+	else { //is IA
+		stone_nb = playerIA->selectCard();
+	}
+	
+	while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
+		cout << "You can't play this card. Please select a card to play from your hand : ";
+		if (playerIA == nullptr) { //not IA
+			stone_nb = userSelectCard();
+		}
+		else { //is IA
+			stone_nb = playerIA->selectCard();
+		}
+	}
+
+	return stone_nb;
 }
 
 void UserInterface::UIGameView3() {
@@ -294,25 +320,26 @@ void UserInterface::launchUserInterface() {
 		case 0 :
 			cout << "exit";
 			break;
-		case 1: //~= Vue QT 2
+		case 1: //~= View QT 2 (cards)
 			cout << "CASE 1" << endl;
 			UIGameView2();
 			state = 2;
 			break;
-		case 2: //Vue QT 3
+		case 2: //View QT 3 (stones)
 			cout << "CASE 2" << endl;
 			UIGameView3();
 			state = 3;
 			break;
-		case 3:
+		case 3: //~= View QT 4 (click to continue)
 			//
 			cout << "CASE 3" << endl;
 			UIGameView4();
-			state = 3;
+			state = 4;
 			break;
 		case 4:
-			//
+			// ~= View QT 2 (draw a card from a deck)
 			cout << "CASE 4" << endl;
+
 			break;
 		case 5:
 			//

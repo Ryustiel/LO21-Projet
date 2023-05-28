@@ -18,18 +18,6 @@ public:
     unsigned int getScore() const { return score; }
     const Hand* getHand() const { return hand; }
 
-    virtual unsigned int selectCard() const {
-        unsigned int card_nb = 0;
-        cin >> card_nb;
-        return card_nb;
-    }
-
-    virtual unsigned int selectStone() const {
-        unsigned int stone_nb = 0;
-        cin >> stone_nb;
-        return stone_nb;
-    }
-
     // s'utilise avec getScore pour gérer le score de victoire de manches du joueur
     void updateScore() { score++; }
 
