@@ -84,6 +84,7 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void runGame(int nbturns, int winthreshold); // (int nbTurns, int typeia, ...)
 
+
 	virtual bool* getPickableCards() { 
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
@@ -154,6 +155,14 @@ public:
 		std::cout << "\n================================ choiceClaim";
 		getUnclaimedStones();
 		qtDisplayStonePicker();
+	}
+
+	virtual const Card** getCurrentPlayerHand() {
+		const Card* fakeHand[6];
+		for (int i = 0; i < 6; i++) {
+			fakeHand[i] = &clanDeck->draw();
+		}
+		return fakeHand;
 	}
 
 	virtual void playTurn(Side s);
