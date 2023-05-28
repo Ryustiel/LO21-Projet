@@ -253,3 +253,20 @@ void TacticController::initForNewRound() {
     tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
     std::cout << "\ntacticDeck init;";
 }
+
+void TacticController::incrementTacticalPlayed(Side s) {
+    if (s == Side::s1) {
+        ++p1TacticalCardPlayed;
+    }
+    else if (s == Side::s2) {
+        ++p2TacticalCardPlayed;
+    }
+}
+
+bool TacticController::canPlayerPlayTacticalCard() {
+    if (getCurSide() == Side::s1) {
+        return p1TacticalCardPlayed <= p2TacticalCardPlayed;
+    }else {
+        return p1TacticalCardPlayed >= p2TacticalCardPlayed;
+    }
+}

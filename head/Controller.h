@@ -176,11 +176,15 @@ protected:
 
 class TacticController : public Controller {
 private :
+	friend class Supervisor;
+
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
 	Game tacticGame;
 	size_t handSize = 7;
-	friend class Supervisor;
+	unsigned int p1TacticalCardPlayed = 0;
+	unsigned int p2TacticalCardPlayed = 0;
+
 	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
@@ -195,5 +199,6 @@ public :
 	Game& getTacticGame() { return tacticGame; }
 
 	void claimStone(Side s, unsigned int n) final;
-
+	void incrementTacticalPlayed(Side s);
+	bool canPlayerPlayTacticalCard();
 };
