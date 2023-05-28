@@ -170,7 +170,7 @@ unsigned int UserInterface::UISelectCard() {
 	int card_nb = 0;
 	cout << "Select a card to play from your hand (number) : ";
 
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurPlayer());
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
 		card_nb = userSelectCard();
 	}
@@ -251,7 +251,7 @@ void UserInterface::UIGameView2() {
 unsigned int UserInterface::UISelectStone() {
 	unsigned int stone_nb = 0;
 	cout << "Select a stone (number) : ";
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurPlayer());
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
 		stone_nb = userSelectCard();
 	}

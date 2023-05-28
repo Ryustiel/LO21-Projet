@@ -13,7 +13,7 @@ int main() {
 	
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 1, 1);
-	cout << Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	cout << Supervisor::getInstance().getController()->getCurrentPlayerHand()->selectCard();
 	*/
 
 	//UserInterface::getInstance().launchUserInterface();

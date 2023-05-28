@@ -43,11 +43,11 @@ public:
 	Controller& operator=(const Controller& c) = delete;
 
 	//GETTERS
-	Player* getCurentPlayer() const {
+	Player* getCurrentPlayer() const {
 		if (current_side == Side::s1) return player1;
 		return player2;
 	}
-	Hand& getCurrentPlayerHand() const { return *getCurentPlayer()->getHand(); }
+	Hand& getCurrentPlayerHand() const { return *getCurrentPlayer()->getHand(); }
 	Side getCurSide() { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
@@ -84,7 +84,6 @@ public:
 	// on pourrait aussi gérer certains paramètres via le Superviseur.
 	void runGame(int nbturns, int winthreshold); // (int nbTurns, int typeia, ...)
 
-
 	virtual bool* getPickableCards() { 
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
@@ -108,6 +107,7 @@ public:
 		for (size_t i = 0; i < sn; ++i) {
 			playable[i] = playable && board.getStone(i).getSideSize(current_side);
 		}
+		return playable;
 	}
 
 	void qtGameOver() {
@@ -155,14 +155,6 @@ public:
 		std::cout << "\n================================ choiceClaim";
 		getUnclaimedStones();
 		qtDisplayStonePicker();
-	}
-
-	virtual const Card** getCurrentPlayerHand() {
-		const Card* fakeHand[6];
-		for (int i = 0; i < 6; i++) {
-			fakeHand[i] = &clanDeck->draw();
-		}
-		return fakeHand;
 	}
 
 	virtual void playTurn(Side s);
