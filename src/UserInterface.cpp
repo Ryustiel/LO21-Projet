@@ -168,7 +168,7 @@ void UserInterface::UIRoundLauncher() {
 
 unsigned int UserInterface::UISelectCard() {
 	int card_nb = 0;
-	cout << "Select a card to play from your hand (number) : ";
+	cout << endl << "Select a card to play from your hand (number) : ";
 
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
@@ -178,8 +178,11 @@ unsigned int UserInterface::UISelectCard() {
 		card_nb = playerIA->selectCard();
 	}
 
-	while (!Supervisor::getInstance().getController()->getPickableCards()[card_nb]) { //user input until correct
-		cout << "You can't play this card. Please select a card to play from your hand : ";
+	unsigned int card_hand_count = Supervisor::getInstance().getController()->getCurrentPlayer()->getHand()->getSize();
+	cout << card_hand_count;
+	cout << (card_nb >= card_hand_count);
+	while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!Supervisor::getInstance().getController()->getPickableCards()[card_nb])) { //user input until correct
+		cout << endl << "You can't play this card. Please select a card to play from your hand : ";
 		//input :
 		if (playerIA == nullptr) { //not IA
 			card_nb = userSelectCard();

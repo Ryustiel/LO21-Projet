@@ -59,6 +59,13 @@ public:
         return stone_nb;
     }
 
+    /*
+    unsigned int selectStoneCombatMode() const { //absurde de l'implémenter dans l'interface...! Pas modulaire.
+        unsigned int stone_nb = 0;
+        bool* list_stones;
+
+    }*/
+
     ///PLAY THE GAME
     void UIGameView2(); //pick a card
     void UIGameView3(); //pick a stone (always after UIGameView2) ; can be skipped
