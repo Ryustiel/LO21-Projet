@@ -9,13 +9,13 @@
 #include "head/UserInterface.h"
 
 int main() {
-	
+
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 1, 1);
 	cout << Supervisor::getInstance().getController()->getCurrentPlayerHand()->selectCard();
 	*/
 
-	UserInterface::getInstance().launchUserInterface();
+	UserInterfaceCmd::getInstance().launchUserInterface();
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
@@ -27,7 +27,7 @@ int main() {
 
 	Supervisor::getInstance().getController()->claimStone(Side::s1,0);
 
-	//UserInterface::getInstance().launchUserInterface();
+	//UserInterfaceCmd::getInstance().launchUserInterfaceCmd();
 	*/
 
 	/*
@@ -86,7 +86,7 @@ int main() {
 	else cout << "none";
 	cout << endl;
 	*/
-	
+
 
 	// SCRIPT DE JEU
 	// pour comprendre l'enchainement des evenements
@@ -103,7 +103,7 @@ int main() {
 	// => ctr.qtDisplayPlayerTurn()
 	// ctr->eventCardPicked("Carte carte_choisie"); // interface : menu Card Picker
 	// => ctr.qtDisplayStonePicker();
-	// carteSelectionnee.activate(); 
+	// carteSelectionnee.activate();
 	// ctr->qtDisplayPlayerTurn(); // interface : menu Stone Picker
 	// ctr->eventChoiceEndTurn(); // interface : menu Jouer son Tour
 	// => ctr.startTurn() => ctr.checkRound(); => ctr.qtDisplayVictoryMenu();
