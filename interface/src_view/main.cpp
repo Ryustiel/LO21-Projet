@@ -8,8 +8,8 @@ int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     VueVersion version;
     VuePartie partie;
-    partie.show();
-    //version.show();
+    //partie.show();
+    version.show();
     return app.exec();
 }
 
