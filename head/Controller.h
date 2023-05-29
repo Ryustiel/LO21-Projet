@@ -88,7 +88,7 @@ public:
 		const size_t sn = board.getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) {
-			playable[i] = playable && board.getStone(i).getSideSize(current_side) != board.getStone(i).getMaxSize();
+			playable[i] = playable[i] && board.getStone(i).getSideSize(current_side) != board.getStone(i).getMaxSize();
 		}
 		return playable;
 	}
@@ -218,9 +218,9 @@ public :
 	~TacticController() {
 		delete tacticDeck;
 	}
+
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
-
 	virtual bool* getPickableCards() final {
 		if (canPlayerPlayTacticalCard()) {
 			return Controller::getPickableCards();
@@ -235,17 +235,16 @@ public :
 			return pickable;
 		}
 	}
-
 	bool* getPlayableStonesCombatMode() const {
 		const size_t sn = getBoard().getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) { //unclaimed + uncomplete + no combat mode card
-			playable[i] = playable && getBoard().getStone(i).getSideSize(getCurSide()) != getBoard().getStone(i).getMaxSize() && getBoard().getStone(i).getCombatMode() == nullptr;
+			Stone& s = getBoard().getStone(i);
+			playable[i] = playable[i] && s.getCombatMode() == nullptr;
 		}
 	}
+	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
-
-	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 };

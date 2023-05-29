@@ -258,7 +258,7 @@ bool TacticController::getAvailableCards(const PlacableCard**& availableCards, s
     for (size_t i = 0; i < tacticDeck->getCardCount(); ++i) {
         const PlacableCard* cardCandidate = dynamic_cast<const PlacableCard*>(tacticDeck->getCard(i));
         if (cardCandidate != nullptr) {
-            availableCards[foundedSizeTemp + i] = tacticDeck->getCard(i);
+            availableCards[foundedSizeTemp + i] = cardCandidate;
         }
         else {
             return false;

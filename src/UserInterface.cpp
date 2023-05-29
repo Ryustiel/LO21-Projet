@@ -250,28 +250,48 @@ void UserInterface::UIGameView2() {
 
 //A COMPLETER !
 unsigned int UserInterface::UISelectStone() {
-	return 1;
-	unsigned int stone_nb = 0;
-	cout << "Select a stone (number) : ";
+	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) { //not IA
-		//stone_nb = userSelectCard();
-	}
-	else { //is IA
-		//stone_nb = playerIA->selectCard();
-	}
-	
-	while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
-		cout << "You can't play this card. Please select a card to play from your hand : ";
-		if (playerIA == nullptr) { //not IA
-			//stone_nb = userSelectCard();
-		}
-		else { //is IA
-			//stone_nb = playerIA->selectCard();
-		}
-	}
+	Controller* c = Supervisor::getInstance().getController();
+	bool* playableStones = c->getPlayableStones();
+	while (true) { //user input until correct
+		cout << "Select a stone (number) : ";
 
-	return stone_nb;
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+		
+		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
+			cout << "This number isn't valid !" << endl;
+			continue;
+		}
+		else if (!playableStones[stone_nb]) {
+			cout << "This Stone is full ! Choose an another one !" << endl;
+			continue;
+		}
+		return stone_nb;
+	}
+}
+
+unsigned int UserInterface::UISelectStoneForCombatMode() {
+	unsigned int stone_nb;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
+	if (c == nullptr) throw ShottenTottenException("UserInterface::UISelectStoneForCombatMode error : no TacticController found !");
+	bool* playableStones = c->getPlayableStonesCombatMode();
+	while (true) { //user input until correct
+		cout << "Select a stone (number) : ";
+
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+
+		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
+			cout << "This number isn't valid !" << endl;
+			continue;
+		}
+		else if (!playableStones[stone_nb]) {
+			cout << "This Stone already have a combat mode ! Choose an another one !" << endl;
+			continue;
+		}
+		return stone_nb;
+	}
 }
 
 void UserInterface::UIGameView3() {

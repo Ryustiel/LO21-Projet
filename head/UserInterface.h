@@ -45,6 +45,7 @@ public:
 
     unsigned int UISelectCard();
     unsigned int UISelectStone();
+    unsigned int UISelectStoneForCombatMode();
     bool UIWantClaimStone() { return false; };
 
     //INPUT USERS
@@ -54,7 +55,7 @@ public:
         return card_nb;
     }
 
-    unsigned int selectStone() const {
+    unsigned int userSelectStone() const {
         unsigned int stone_nb = 0;
         cin >> stone_nb;
         return stone_nb;
