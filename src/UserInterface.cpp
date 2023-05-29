@@ -302,7 +302,7 @@ void UserInterfaceCmd::UIGameView4() {
 }
 
 /// GAME LAUNCHER ///
-void UserInterfaceCmd::launchUserInterfaceCmd() {
+void UserInterfaceCmd::launchUserInterface() {
 	//PARAMATERS ~= Vue QT 1
 	UIGameInit();
 

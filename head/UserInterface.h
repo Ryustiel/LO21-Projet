@@ -13,7 +13,6 @@ private :
     unsigned int state = 0;
 
     UserInterface() {}
-    virtual ~UserInterface() {}
 
     struct Handler { //singleton
         UserInterface* instance = nullptr;
@@ -49,6 +48,8 @@ public :
 
     virtual unsigned int UISelectCard() = 0;
     virtual unsigned int UISelectStone() = 0;
+protected:
+    virtual ~UserInterface() {}
 };
 
 
