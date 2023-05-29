@@ -135,7 +135,7 @@ void UserInterface::UIGameInit() {
 	system("pause");
 
 	//initializing controller :
-	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
 	//cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
@@ -248,24 +248,26 @@ void UserInterface::UIGameView2() {
 		}*/
 }
 
+//A COMPLETER !
 unsigned int UserInterface::UISelectStone() {
+	return 1;
 	unsigned int stone_nb = 0;
 	cout << "Select a stone (number) : ";
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
-		stone_nb = userSelectCard();
+		//stone_nb = userSelectCard();
 	}
 	else { //is IA
-		stone_nb = playerIA->selectCard();
+		//stone_nb = playerIA->selectCard();
 	}
 	
 	while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
 		cout << "You can't play this card. Please select a card to play from your hand : ";
 		if (playerIA == nullptr) { //not IA
-			stone_nb = userSelectCard();
+			//stone_nb = userSelectCard();
 		}
 		else { //is IA
-			stone_nb = playerIA->selectCard();
+			//stone_nb = playerIA->selectCard();
 		}
 	}
 
@@ -302,7 +304,7 @@ void UserInterface::UIGameView4() {
 void UserInterface::launchUserInterface() {
 	//PARAMATERS ~= Vue QT 1
 	UIGameInit();
-
+	/*
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
 	cout << "(launchUserInterface) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
@@ -353,4 +355,5 @@ void UserInterface::launchUserInterface() {
 			throw ShottenTottenException("launchUserInterface : non valid state");
 		}
 	}
+	*/
 }

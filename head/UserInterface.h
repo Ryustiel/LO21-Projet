@@ -7,6 +7,10 @@
 #include "Player.h"
 #include "../exception/ShottenTottenException.h"
 
+class UserInterface {
+
+};
+
 class UserInterface { //singleton
 private:
 
@@ -45,6 +49,7 @@ public:
 
     unsigned int UISelectCard();
     unsigned int UISelectStone();
+    bool UIWantClaimStone() { return false; };
 
     //INPUT USERS
     unsigned int userSelectCard() const {

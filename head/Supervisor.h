@@ -19,7 +19,7 @@ private :
 public :
 	static Supervisor& getInstance();
 	static void freeInstance();
-	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2);
+	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, UserInterface* ui);
 	Controller* getController() { return controller; }
 	bool getIsQT() const { return isQT; }
 	
@@ -29,9 +29,9 @@ public :
 		// événements lors de l'initialisation du contrôleur
 		qtDisplayMainMenu();
 	}
-	void eventStartGame(Version v, const string& p1name, const string& p2name,unsigned int AI_player1, unsigned int AI_player2, int nrounds, int winthreshold) { // game version, number of rounds 
+	void eventStartGame(Version v, const string& p1name, const string& p2name,unsigned int AI_player1, unsigned int AI_player2, int nrounds, int winthreshold, UserInterface* ui) { // game version, number of rounds 
 		std::cout << "\n================================ eventStartGame";
-		Supervisor::getInstance().setController(v, p1name, p2name, AI_player1, AI_player2);
+		Supervisor::getInstance().setController(v, p1name, p2name, AI_player1, AI_player2, ui);
 		Supervisor::getInstance().getController()->runGame(nrounds, winthreshold);
 	}
 	void qtDisplayMainMenu() {

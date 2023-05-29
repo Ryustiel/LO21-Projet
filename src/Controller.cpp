@@ -1,6 +1,7 @@
 #include "../head/Controller.h"
 #include "../head/Supervisor.h" 
 #include <iostream>
+#include "../head/UserInterface.h"
 
 void Controller::runGame(int nturns, int winthreshold) { // + additional parameters
 
@@ -14,8 +15,24 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
     remainingRounds = nturns;
     totalRounds = nturns;
     maxScore = winthreshold;
+    Controller* c = Supervisor::getInstance().getController();
 
-    newRound();
+    while (c->getRemainingRounds() != 0) {
+        cout << "* ROUND " << c->getTotalRounds() - c->getRemainingRounds() + 1 << " (on " << c->getTotalRounds() << ") *" << endl;
+
+        newRound();
+
+        //decrementing remaining rounds
+        unsigned int r = c->getRemainingRounds();
+        c->setRemainingRounds(r - 1);
+    }
+    Player* winner = c->getWinner();
+    if (winner != nullptr) {
+        cout << endl << "The winner is : " << winner->getName() << "! Congratulations!" << endl;
+    }
+    else {
+        cout << endl << "It's a draw! Perhaps could you decide the winner by playing again..." << endl;
+    }
 }
 
 void Controller::initForNewRound() {
@@ -45,7 +62,18 @@ void Controller::initForNewRound() {
 void Controller::newRound() {
     std::cout << "\n===================== newRound";
     initForNewRound();
-    eventStartTurn();
+    Side winning = Side::none;
+    while (winning == Side::none){
+        newTurn();
+        current_side = (current_side == Side::s1) ? Side::s2 : Side::s1;
+        winning = board.evaluateGameWinner();
+    }
+    if (winning == Side::s1) {
+        player1->updateScore();
+    }
+    else {
+        player2->updateScore();
+    }
 }
 
 void Controller::checkRound() {
@@ -58,34 +86,39 @@ void Controller::checkRound() {
     }
 }
 
-void Controller::eventStartTurn() {
-    std::cout << "\n====================== startTurn";
+void Controller::turnPlayCard() {
+    std::cout << "\n=============== turnPlayCard()";
+    unsigned int selectedCardNb = ui->UISelectCard();
+    Hand& curHand = getCurrentPlayerHand();
+    const Card& selectedCard = *curHand.getCard(selectedCardNb);
+    selectedCard.activate();
+    curHand.withdraw(selectedCard);
+}
 
-    Side winning = board.evaluateGameWinner();
-    winning = Side::none; // TEMP
-    if (winning == Side::none) {
+void Controller::turnDrawCard() {
+    std::cout << "\n=============== turnDrawCard()";
+    getCurrentPlayerHand().add(clanDeck->draw());
+}
 
-        if (current_side == Side::s1) { current_side = Side::s2; }
-        else { current_side = Side::s1; }
-
-        // initialiser les contraintes d'actions pour le tour en cours
-            //display QT interface
-            qtDisplayPlayerTurn();
-    }
-    else {
-
-        if (winning == Side::s1) {
-            player1->updateScore();
-        }
-        else {
-            player2->updateScore();
-        }
-        checkRound();
-
+void Controller::turnClaimStone() {
+    std::cout << "\n=============== turnClaimStone()";
+    //A DEFINIR !!!
+    while (ui->UIWantClaimStone()) {
+        //A DEFINIR !!!
+        unsigned int selectedStoneNB = ui->UISelectStone();
+        claimStone(selectedStoneNB);
     }
 }
 
-void Controller::claimStone(Side s, unsigned int n) {
+void Controller::newTurn() {
+    std::cout << "\n================== newTurn";
+    turnPlayCard();
+    turnDrawCard();
+    turnClaimStone();
+}
+
+void Controller::claimStone(unsigned int n) {
+    Side s = getCurSide();
     if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
     if (n < 0 || n > board.getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
 
@@ -247,7 +280,6 @@ void TacticController::claimStone(Side s, unsigned int n) {
 void TacticController::initForNewRound() {
     Controller::initForNewRound();
     std::cout << "\n========= initForNewRound-Tactic";
-
     //init the tactic deck
     delete tacticDeck;
     tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
