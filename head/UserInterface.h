@@ -7,28 +7,57 @@
 #include "Player.h"
 #include "../exception/ShottenTottenException.h"
 
-class UserInterface { //singleton
-private:
 
+class UserInterface { //parent class
+private :
     unsigned int state = 0;
 
     UserInterface() {}
-    ~UserInterface() {}
+    virtual ~UserInterface() {}
 
-    struct Handler {
+    struct Handler { //singleton
         UserInterface* instance = nullptr;
         ~Handler() { delete instance; }
     };
     static Handler handler;
-public:
-    void setState(const unsigned int i) { state = i; }
 
-    //get l'UserInterface
+public :
+    unsigned int getState() const { return state; }
+    unsigned int& getState() { return state; }
+
     static UserInterface& getInstance();
     static void freeInstance();
 
-    void launchUserInterface(); //main
-    
+
+    //get l'UserInterface
+    virtual void launchUserInterface() = 0; //main
+
+    virtual void setState(const unsigned int i) = 0;
+
+    virtual void UIGameInit() = 0;
+    virtual unsigned int UISelectRounds() = 0; //select nb rounds (user input)
+
+    /// SUPERVISOR SETTINGS ///
+    //SELECT VERSION
+    virtual  Version UIselectVersion() = 0; //user input
+    virtual Version UIVersionMenu() = 0;
+
+    /// GAME SETTINGS///
+    //PLAYERS NAME
+    virtual string UIselectPlayerName(int i, int& isIA1) = 0;
+    virtual void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
+
+    virtual unsigned int UISelectCard() = 0;
+    virtual unsigned int UISelectStone() = 0;
+};
+
+
+class UserInterfaceCmd : public UserInterface {
+private:
+    ~UserInterfaceCmd() {}
+public:
+    void launchUserInterface() final; //main
+
     //SETTINGS
     void UIGameInit();
     unsigned int UISelectRounds(); //select nb rounds (user input)

@@ -118,7 +118,7 @@ public:
 		std::cout << "\n================================ qtDisplayPlayerTurn";
 		getCurrentPlayerHand();
 		getPickableCards(); // TO DO : then updates accessible variables""
-		// UserInterface::getInstance().UISelectCard(); <= JAMAIS ETRE LANCE
+		// UserInterfaceCmd::getInstance().UISelectCard(); <= JAMAIS ETRE LANCE
 	}
 	void qtDisplayStonePicker() { // contient la liste des Stones éligibles
 		std::cout << "\n================================ qtDisplayStonePicker";
