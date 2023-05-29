@@ -1,14 +1,14 @@
 #include "../head/UserInterface.h"
 
 ///INTERFACE SINGLETON METHODS///
-UserInterface::Handler UserInterface::handler = UserInterfaceCmd::Handler();
+UserInterfaceCmd::Handler UserInterfaceCmd::handler = UserInterfaceCmd::Handler();
 
-UserInterface& UserInterface::getInstance() {
-	if (handler.instance == nullptr) handler.instance = new UserInterface();
+UserInterfaceCmd& UserInterfaceCmd::getInstance() {
+	if (handler.instance == nullptr) handler.instance = new UserInterfaceCmd();
 	return *handler.instance;
 }
 
-void UserInterface::freeInstance() {
+void UserInterfaceCmd::freeInstance() {
 	delete handler.instance;
 	handler.instance = nullptr;
 }
@@ -178,19 +178,6 @@ unsigned int UserInterfaceCmd::UISelectCard() {
 		card_nb = playerIA->selectCard();
 	}
 
-	unsigned int card_hand_count = Supervisor::getInstance().getController()->getCurrentPlayer()->getHand()->getSize();
-	cout << card_hand_count;
-	cout << (card_nb >= card_hand_count);
-	while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!Supervisor::getInstance().getController()->getPickableCards()[card_nb])) { //user input until correct
-		cout << endl << "You can't play this card. Please select a card to play from your hand : ";
-		//input :
-		if (playerIA == nullptr) { //not IA
-			card_nb = userSelectCard();
-		}
-		else { //is IA
-			card_nb = playerIA->selectCard();
-		}
-	}
 	cout << endl << "Selected card (number) : " << card_nb;
 	return card_nb;
 }
@@ -257,21 +244,11 @@ unsigned int UserInterfaceCmd::UISelectStone() {
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
 		stone_nb = userSelectCard();
-	}
-	else { //is IA
+	} else { //is IA
 		stone_nb = playerIA->selectCard();
 	}
-	
-	while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
-		cout << "You can't play this card. Please select a card to play from your hand : ";
-		if (playerIA == nullptr) { //not IA
-			stone_nb = userSelectCard();
-		}
-		else { //is IA
-			stone_nb = playerIA->selectCard();
-		}
-	}
 
+	cout << "Selected stone (number) : " << stone_nb;
 	return stone_nb;
 }
 

@@ -12,26 +12,14 @@ class UserInterface { //parent class
 private :
     unsigned int state = 0;
 
-    UserInterface() {}
-
-    struct Handler { //singleton
-        UserInterface* instance = nullptr;
-        ~Handler() { delete instance; }
-    };
-    static Handler handler;
-
 public :
     unsigned int getState() const { return state; }
     unsigned int& getState() { return state; }
 
-    static UserInterface& getInstance();
-    static void freeInstance();
-
-
     //get l'UserInterface
     virtual void launchUserInterface() = 0; //main
 
-    virtual void setState(const unsigned int i) = 0;
+    virtual void setState(const unsigned int i) { state = i; }
 
     virtual void UIGameInit() = 0;
     virtual unsigned int UISelectRounds() = 0; //select nb rounds (user input)
@@ -55,8 +43,19 @@ protected:
 
 class UserInterfaceCmd : public UserInterface {
 private:
+    UserInterfaceCmd() {}
     ~UserInterfaceCmd() {}
+
+    struct Handler { //singleton
+        UserInterfaceCmd* instance = nullptr;
+        ~Handler() { delete instance; }
+    };
+    static Handler handler;
 public:
+
+    static UserInterfaceCmd& getInstance();
+    static void freeInstance();
+
     void launchUserInterface() final; //main
 
     //SETTINGS
@@ -80,21 +79,24 @@ public:
     unsigned int userSelectCard() const {
         unsigned int card_nb = 0;
         cin >> card_nb;
+        unsigned int card_hand_count = Supervisor::getInstance().getController()->getCurrentPlayer()->getHand()->getSize();
+        while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!Supervisor::getInstance().getController()->getPickableCards()[card_nb])) { //user input until correct
+            cout << endl << "You can't play this card. Please select a card to play from your hand : ";
+            cin >> card_nb;
+        }
         return card_nb;
     }
 
     unsigned int selectStone() const {
         unsigned int stone_nb = 0;
         cin >> stone_nb;
+        while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
+            cout << "You can't play this card. Please select a card to play from your hand : ";
+            cin >> stone_nb;
+        }
         return stone_nb;
     }
 
-    /*
-    unsigned int selectStoneCombatMode() const { //absurde de l'implémenter dans l'interface...! Pas modulaire.
-        unsigned int stone_nb = 0;
-        bool* list_stones;
-
-    }*/
 
     ///PLAY THE GAME
     void UIGameView2(); //pick a card
