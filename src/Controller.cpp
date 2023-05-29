@@ -245,3 +245,25 @@ bool TacticController::canPlayerPlayTacticalCard() {
         return p1TacticalCardPlayed >= p2TacticalCardPlayed;
     }
 }
+
+bool TacticController::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {
+    const PlacableCard** availableCardsTemp;
+    size_t foundedSizeTemp;
+    if (!Controller::getAvailableCards(availableCardsTemp, foundedSizeTemp)) { return false; }
+    foundedSize = foundedSizeTemp + tacticDeck->getCardCount();
+    availableCards = new PlacableCard * [foundedSize];
+    for (size_t i = 0; i < foundedSizeTemp; ++i) {
+        availableCards[i] = availableCardsTemp[i];
+    }
+    for (size_t i = 0; i < tacticDeck->getCardCount(); ++i) {
+        const PlacableCard* cardCandidate = dynamic_cast<const PlacableCard*>(tacticDeck->getCard(i));
+        if (cardCandidate != nullptr) {
+            availableCards[foundedSizeTemp + i] = tacticDeck->getCard(i);
+        }
+        else {
+            return false;
+        }
+        
+    }
+    return true;
+}

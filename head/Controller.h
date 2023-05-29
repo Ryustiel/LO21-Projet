@@ -107,8 +107,8 @@ public:
     //void setPlayer2(Player* player) { player2 = player; }
 
 
-	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize);
-	virtual void claimStone(unsigned int n);
+	virtual bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize);
+	void claimStone(unsigned int n);
 
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
@@ -246,4 +246,6 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
+
+	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 };
