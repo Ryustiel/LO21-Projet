@@ -244,7 +244,6 @@ public :
 		}
 	}
 
-	virtual void claimStone(Side s, unsigned int n) final;
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
 };

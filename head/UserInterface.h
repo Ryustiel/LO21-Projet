@@ -7,10 +7,6 @@
 #include "Player.h"
 #include "../exception/ShottenTottenException.h"
 
-class UserInterface {
-
-};
-
 class UserInterface { //singleton
 private:
 
