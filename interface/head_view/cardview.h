@@ -23,11 +23,13 @@ public:
     const Clan& getCarte() const { return *carte; }
     bool cartePresente() const { return carte!=nullptr; }
 protected:
-    //void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 private:
     const Clan* carte=nullptr;
     QPen pen;
     QBrush brush;
+    void dessinerNombre(QPainter &painter);
+//signaux & slots
 signals:
     // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
     void carteClicked(VueCarte*);
