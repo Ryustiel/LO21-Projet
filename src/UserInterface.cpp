@@ -239,7 +239,7 @@ void UserInterfaceCmd::UIGameView2() {
 }
 
 //A COMPLETER !
-unsigned int UserInterface::UISelectStone() {
+unsigned int UserInterfaceCmd::UISelectStone() {
 	return 1;
 	unsigned int stone_nb = 0;
 	cout << "Select a stone (number) : ";
