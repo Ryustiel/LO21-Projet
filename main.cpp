@@ -5,7 +5,6 @@
 #include "head/Game.h"
 #include "head/Card.h"
 #include "head/Board.h"
-#include "head/Supervisor.h"
 #include "head/Controller.h"
 #include "head/UserInterface.h"
 

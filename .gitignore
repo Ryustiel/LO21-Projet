@@ -13,7 +13,7 @@ x64
 *.suo
 *.ipch
 /.vs
-enc_temp_folder/185ed01a1e9817633fc52d70d473e4b9/main.cpp
+enc_temp_folder
 /.vscode
 output
 /.out

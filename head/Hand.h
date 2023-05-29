@@ -2,6 +2,8 @@
 #include "Card.h"
 #include "../exception/ShottenTottenException.h"
 
+class Controller;
+
 class HandException : public ShottenTottenException {
 	ShottenTottenException::ShottenTottenException;
 };
