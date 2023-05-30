@@ -1,6 +1,7 @@
 QT += widgets
 
 SOURCES += \
+    ../src/Controller.cpp \
     ../src/Version.cpp \
     src_view/boardview.cpp \
     src_view/cardview.cpp \

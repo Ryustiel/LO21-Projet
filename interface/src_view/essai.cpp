@@ -39,7 +39,7 @@ Essai::Essai(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
         connect(vuecartes[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(carteClique(VueCarte*)));
     }
 
-    //essai du paint avec un 8 bleu
+    //essai du paint avec un 8 bleu => donc utile à chaque fois
 
     Color color=Color::blue;
     Number number=Number::eight;
