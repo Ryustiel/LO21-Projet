@@ -25,8 +25,6 @@ public :
 
     virtual void UIGameInit() = 0;
     virtual unsigned int UISelectRounds() = 0; //select nb rounds (user input)
-    
-    virtual bool UIWantClaimStone() = 0;
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
@@ -43,6 +41,8 @@ public :
     virtual unsigned int UISelectStoneForCombatMode() = 0;
     virtual bool UIWantClaimStone() = 0;
     virtual Deck& UISelectDeck() = 0;
+
+    virtual void UIPrintPlayerHand() = 0;
 protected:
     UserInterface() {}
     virtual ~UserInterface() {}
@@ -116,6 +116,9 @@ public:
     void UITurnLauncher(Player& curr_player); //launches the turn
 
     void UIPlayCard();
+
+    //affichage
+    void UIPrintPlayerHand();
 
 protected :
     UserInterfaceCmd() {}

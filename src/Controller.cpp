@@ -88,7 +88,8 @@ void Controller::checkRound() {
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
-    unsigned int selectedCardNb = ui->UISelectCard();
+    UserInterfaceCmd::getInstance()->UIPrintPlayerHand();
+    unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->UISelectCard();
     Hand& curHand = getCurrentPlayerHand();
     const Card& selectedCard = *curHand.getCard(selectedCardNb);
     selectedCard.activate();

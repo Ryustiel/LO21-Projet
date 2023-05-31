@@ -340,6 +340,14 @@ void UserInterfaceCmd::UIGameView4() {
 	Supervisor::getInstance().getController()->qtDisplayPlayerTurn();
 }
 
+void UserInterfaceCmd::UIPrintPlayerHand() {
+	Hand& cur_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
+	cout << endl << Supervisor::getInstance().getController()->getCurrentPlayer()->getName() << "'s hand :" << endl;
+	for (size_t i = 0; i < cur_hand.getSize(); i++) {
+		cout << i << " : " << cur_hand.getCard(i)->getName() << endl;
+	}
+}
+
 /// GAME LAUNCHER ///
 void UserInterfaceCmd::launchUserInterface() {
 	//PARAMATERS ~= Vue QT 1
