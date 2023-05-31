@@ -272,9 +272,14 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 	Controller* c = Supervisor::getInstance().getController();
 	bool* playableStones = c->getPlayableStones();
 	while (true) { //user input until correct
-		cout << "Select a stone (number) : ";
-
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+		
+		if (playerIA == nullptr) {
+			cout << "Select a stone (number) : ";
+			cin >> stone_nb;
+		}
+		else {
+			stone_nb = playerIA->selectCard();
+		}
 		
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
 			cout << "This number isn't valid !" << endl;
