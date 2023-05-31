@@ -13,6 +13,7 @@ private :
     unsigned int state = 0;
 
 public :
+    static UserInterface* getInstance();
     static void freeInstance();
 
     unsigned int getState() const { return state; }
@@ -59,7 +60,7 @@ private:
 
 public:
 
-    static UserInterface* getInstance();
+
     static void setInstance();
 
     void launchUserInterface() final; //main

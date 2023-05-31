@@ -3,9 +3,9 @@
 ///INTERFACE SINGLETON METHODS///
 UserInterface::Handler UserInterface::handler = UserInterface::Handler();
 
-UserInterface* UserInterfaceCmd::getInstance() {
-	if (handler.instance == nullptr) throw ShottenTottenException("ui getIntsance : doesn't exist!");
-	return handler.instance;
+UserInterface* UserInterface::getInstance() {
+	if (UserInterface::handler.instance == nullptr) throw ShottenTottenException("ui getIntsance : doesn't exist!");
+	return UserInterface::handler.instance;
 }
 
 void UserInterface::freeInstance() {
