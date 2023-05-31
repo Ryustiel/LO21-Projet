@@ -109,16 +109,17 @@ void Controller::turnClaimStone() {
     PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
     if (playerAI) { //is IA
         while (playerAI->WantClaimStone()) {
-            //A DEFINIR !!!
-            unsigned int selectedStoneNB = playerAI->selectStone();
+            unsigned int selectedStoneNB = playerAI->selectStoneForClaim();
             claimStone(selectedStoneNB);
         }
     }
     else { //is Human
         while (UserInterfaceCmd::getInstance()->uiWantClaimStone()) {
             //A DEFINIR !!!
-            unsigned int selectedStoneNB = UserInterfaceCmd::getInstance()->uiSelectStone();
-            claimStone(selectedStoneNB);
+            int selectedStoneNB = UserInterfaceCmd::getInstance()->userSelectStoneForClaim();
+            if (selectedStoneNB >= 0)
+                claimStone(selectedStoneNB);
+            else break; //if user's choice is wrong
         }
     }
 }
@@ -128,6 +129,7 @@ void Controller::newTurn() {
     UserInterfaceCmd::getInstance()->uiPrintGame();
     turnPlayCard();
     UserInterfaceCmd::getInstance()->uiPrintGame();
+    turnDrawCard();
     turnClaimStone();
     cout << "Your turn is over...!";
     system("pause");
@@ -185,10 +187,10 @@ void Controller::claimStone(unsigned int n) {
     if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
     if (n < 0 || n > board->getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
     Side evaluated_side;
-    bool s1Completed = board->getStone(n).getSizeP1() != board->getStone(n).getMaxSize();
-    bool s2Completed = board->getStone(n).getSizeP2() != board->getStone(n).getMaxSize();
+    bool s1Completed = (board->getStone(n).getSizeP1() == board->getStone(n).getMaxSize());
+    bool s2Completed = (board->getStone(n).getSizeP2() == board->getStone(n).getMaxSize());
     //to revendicate a stone, current player's combination must be completed
-    if ((s == Side::s1 && !s1Completed)|| (s == Side::s2) && !s2Completed) {
+    if ((s == Side::s1 && !s1Completed) || (s == Side::s2) && !s2Completed) {
         evaluated_side = Side::none;
     }else if (!s1Completed|| !s2Completed) {
         const PlacableCard** availableCards;
@@ -210,7 +212,7 @@ void Controller::claimStone(unsigned int n) {
         board->getStone(n).setRevendication(s);
     }
     else {
-        cout << "You can't claim this stone!" << endl;
+        cout << endl << "You can't claim stone "<< n << "!" << endl;
     }
 }
 

@@ -12,20 +12,20 @@ unsigned int PlayerAIRandom::selectCard() const {
 }
 
 unsigned int PlayerAIRandom::selectStone() const {
-	unsigned int stone_nb = 0;
+	unsigned int stone_nb = rand() %9;
 	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
 	list_stones = Supervisor::getInstance().getController()->getPlayableStones();
 	while (!list_stones[stone_nb]) {
-		stone_nb++;
+		stone_nb = rand() % 9;
 	}
 	return stone_nb;
 }
 unsigned int PlayerAIRandom::selectStoneForClaim() const {
-	unsigned int stone_nb = 0;
+	unsigned int stone_nb = rand()%9;
 	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
 	list_stones = Supervisor::getInstance().getController()->getUnclaimedStones();
 	while (!list_stones[stone_nb]) {
-		stone_nb++;
+		stone_nb = rand() % 9;
 	}
 	return stone_nb;
 }
