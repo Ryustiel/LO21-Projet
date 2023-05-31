@@ -130,7 +130,7 @@ void Controller::newTurn() {
     UserInterfaceCmd::getInstance()->uiPrintGame();
     turnPlayCard();
     UserInterfaceCmd::getInstance()->uiPrintGame();
-    //turnDrawCard();
+    turnDrawCard(); //pb quand pioche vide
     turnClaimStone();
     cout << "Your turn is over...!";
     system("pause");
