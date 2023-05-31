@@ -122,8 +122,8 @@ void UserInterfaceCmd::UIGameInit() {
 	Version selected_version = UIVersionMenu();
 	UIPlayerMenu(players_name, AI_player1, AI_player2);
 
-	//cout << "(UIGameInit) - players_name[0] : " << players_name[0] << endl;
-	//cout << "(UIGameInit) - players_name[1] : " << players_name[1] << endl;
+	//cout << "(UIGameInit) - players_name[0] : " << [0] << endl;
+	//cout << "(UIGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
 
 	//cout << "(UIGameInit) - isIA1 = " << isIA1;
 	//cout << "(UIGameInit) - isIA2 = " << isIA2;
@@ -243,17 +243,75 @@ void UserInterfaceCmd::UIGameView2() {
 
 //A COMPLETER !
 unsigned int UserInterfaceCmd::UISelectStone() {
-	return 1;
-	unsigned int stone_nb = 0;
-	cout << "Select a stone (number) : ";
+	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) { //not IA
-		stone_nb = userSelectCard();
-	} else { //is IA
-		stone_nb = playerIA->selectCard();
+	Controller* c = Supervisor::getInstance().getController();
+	bool* playableStones = c->getPlayableStones();
+	while (true) { //user input until correct
+		cout << "Select a stone (number) : ";
+
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+		
+		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
+			cout << "This number isn't valid !" << endl;
+			continue;
+		}
+		else if (!playableStones[stone_nb]) {
+			cout << "This Stone is full ! Choose an another one !" << endl;
+			continue;
+		}
+		return stone_nb;
 	}
-	cout << "Selected stone (number) : " << stone_nb;
-	return stone_nb;
+}
+
+unsigned int UserInterfaceCmd::UISelectStoneForCombatMode() {
+	unsigned int stone_nb;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
+	if (c == nullptr) throw ShottenTottenException("UserInterface::UISelectStoneForCombatMode error : no TacticController found !");
+	bool* playableStones = c->getPlayableStonesCombatMode();
+	while (true) { //user input until correct
+		cout << "Select a stone (number) : ";
+
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+
+		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
+			cout << "This number isn't valid !" << endl;
+			continue;
+		}
+		else if (!playableStones[stone_nb]) {
+			cout << "This Stone already have a combat mode ! Choose an another one !" << endl;
+			continue;
+		}
+		return stone_nb;
+	}
+}
+
+Deck& UserInterfaceCmd::UISelectDeck() {
+	Controller* c = Supervisor::getInstance().getController();
+	switch (c->getVersion()) {
+	case Version::tactic:
+		int choice;
+		while (true){
+			cout << "Select a Deck (0: default, 1: tactic) : ";
+			cin >> choice;
+			if (choice >= 2 || choice < 0) {
+				cout << "Choix invalide" << endl;
+			}
+			else {
+				break;
+			}
+		}
+		if (!choice) {
+			TacticController* tc = dynamic_cast<TacticController*>(c);
+			return tc->getTacticDeck();
+		}
+		
+	default:
+	case Version::legacy:
+			return c->getClanDeck();
+	}
+
 }
 
 void UserInterfaceCmd::UIGameView3() {

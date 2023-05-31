@@ -40,6 +40,9 @@ public :
 
     virtual unsigned int UISelectCard() = 0;
     virtual unsigned int UISelectStone() = 0;
+    virtual unsigned int UISelectStoneForCombatMode() = 0;
+    virtual bool UIWantClaimStone() = 0;
+    virtual Deck& UISelectDeck() = 0;
 protected:
     UserInterface() {}
     virtual ~UserInterface() {}
@@ -75,9 +78,11 @@ public:
     string UIselectPlayerName(int i, int& isIA1);
     void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
-    unsigned int UISelectCard();
-    unsigned int UISelectStone();
-    bool UIWantClaimStone() { return false; };
+    unsigned int UISelectCard() final;
+    unsigned int UISelectStone() final;
+    unsigned int UISelectStoneForCombatMode() final;
+    bool UIWantClaimStone() final  { return false; };
+    Deck& UISelectDeck() final;
 
     //INPUT USERS
     unsigned int userSelectCard() const {
@@ -91,7 +96,7 @@ public:
         return card_nb;
     }
 
-    unsigned int selectStone() const {
+    unsigned int userSelectStone() const {
         unsigned int stone_nb = 0;
         cin >> stone_nb;
         while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct

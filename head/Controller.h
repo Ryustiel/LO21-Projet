@@ -88,7 +88,7 @@ public:
 		const size_t sn = board.getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) {
-			playable[i] = playable && board.getStone(i).getSideSize(current_side) != board.getStone(i).getMaxSize();
+			playable[i] = playable[i] && board.getStone(i).getSideSize(current_side) != board.getStone(i).getMaxSize();
 		}
 		return playable;
 	}
@@ -107,8 +107,8 @@ public:
     //void setPlayer2(Player* player) { player2 = player; }
 
 
-	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize);
-	virtual void claimStone(unsigned int n);
+	virtual bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize);
+	void claimStone(unsigned int n);
 
 	// initialise la partie, lancé via l'interface
 	// tous les paramètres de partie présents sur l'interface doivent lui être passés
@@ -218,9 +218,9 @@ public :
 	~TacticController() {
 		delete tacticDeck;
 	}
+
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
-
 	virtual bool* getPickableCards() final {
 		if (canPlayerPlayTacticalCard()) {
 			return Controller::getPickableCards();
@@ -235,14 +235,16 @@ public :
 			return pickable;
 		}
 	}
-
 	bool* getPlayableStonesCombatMode() const {
 		const size_t sn = getBoard().getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) { //unclaimed + uncomplete + no combat mode card
-			playable[i] = playable && getBoard().getStone(i).getSideSize(getCurSide()) != getBoard().getStone(i).getMaxSize() && getBoard().getStone(i).getCombatMode() == nullptr;
+			Stone& s = getBoard().getStone(i);
+			playable[i] = playable[i] && s.getCombatMode() == nullptr;
 		}
+		return playable;
 	}
+	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
