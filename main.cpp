@@ -8,6 +8,8 @@
 #include "head/Controller.h"
 #include "head/UserInterface.h"
 
+#include "head/Player.h"
+
 int main() {
 
 	/*
@@ -17,6 +19,7 @@ int main() {
 
 	UserInterfaceCmd::setInstance();
 	UserInterfaceCmd::getInstance()->launchUserInterface();
+	
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 

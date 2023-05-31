@@ -185,6 +185,30 @@ unsigned int UserInterfaceCmd::uiSelectCard() {
 	return card_nb;
 }
 
+unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
+	int card_nb = 0;
+	cout << endl << "Select a card from this stone (type in a number) : ";
+	size_t nstones; // number on cards on a stone
+
+	// fetching the number of cards placed on the one side
+	if (side == Side::s1) {
+		nstones = stone->getSizeP1();
+	}
+	else {
+		nstones = stone->getSizeP2();
+	}
+
+	// fetching a card number from either the interface or the AI methods
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA == nullptr) {
+		card_nb = playerIA->selectCard(nstones);
+	}
+	else {
+		card_nb = UserInterfaceCmd::userSelectCard(nstones, "This is not a number, or there is no card bearing this number.");
+	}
+	return card_nb;
+}
+
 void UserInterfaceCmd::uiPlayCard() {
 	cout << "Play a card" << endl;
 

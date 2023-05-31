@@ -246,4 +246,6 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
+
+
 };
