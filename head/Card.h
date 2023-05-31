@@ -124,6 +124,6 @@ class Ruses : public Tactical {
 public:
 	Ruses(const string n) : Tactical(n), Card(n) {}
 	~Ruses() final = default;
-	void activate() const final { return; };
+	void activate() const final;
 };
 
