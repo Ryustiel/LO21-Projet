@@ -288,9 +288,11 @@ unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() {
 }
 
 Deck& UserInterfaceCmd::uiSelectDeck() {
+	cout << "Deck Selector "<<endl;
 	Controller* c = Supervisor::getInstance().getController();
 	switch (c->getVersion()) {
 	case Version::tactic:
+		cout << "tactic " << endl;
 		int choice;
 		while (true){
 			cout << "Select a Deck (0: default, 1: tactic) : ";
@@ -302,13 +304,15 @@ Deck& UserInterfaceCmd::uiSelectDeck() {
 				break;
 			}
 		}
-		if (!choice) {
+		if (choice) {
 			TacticController* tc = dynamic_cast<TacticController*>(c);
 			return tc->getTacticDeck();
 		}
 		
 	default:
+		cout << "errroooor" << endl;
 	case Version::legacy:
+		cout << "legacy" << endl;
 			return c->getClanDeck();
 	}
 

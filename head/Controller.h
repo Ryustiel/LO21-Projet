@@ -169,8 +169,7 @@ public:
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
-		: version(v), clanGame(Game(v)), handSize(handSize) {
-		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+		: version(v), clanGame(Game(Version::legacy)), handSize(handSize) {
 		if (AI_player1 == 0) { //human player
 			player1 = new Player(name_player1, Side::s1);
 		}
@@ -211,7 +210,7 @@ private :
 	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
-		: Controller(Version::legacy, name_player1, name_player2, AI_player1, AI_player2, handSize = 7), tacticGame(Game(v)) {
+		: Controller(Version::tactic, name_player1, name_player2, AI_player1, AI_player2, handSize = 7), tacticGame(Game(Version::tactic)) {
 		tacticDeck = new Deck(tacticGame);
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
 	}

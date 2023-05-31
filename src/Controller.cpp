@@ -99,7 +99,8 @@ void Controller::turnPlayCard() {
 
 void Controller::turnDrawCard() {
     std::cout << "\n=============== turnDrawCard()";
-    getCurrentPlayerHand().add(clanDeck->draw());
+    Deck& d = UserInterface::getInstance()->uiSelectDeck();
+    getCurrentPlayerHand().add(d.draw());
 }
 
 void Controller::turnClaimStone() {
