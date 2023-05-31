@@ -34,8 +34,6 @@ private:
 	unsigned int playerCardPick;
 	unsigned int playerStonePick;
 
-	UserInterface* ui;
-
 	void newRound(); // événement de début de manche
 	void checkRound(); // verifie si la manche est gagnée
 	
@@ -170,7 +168,7 @@ public:
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
-		: version(v), clanGame(Game(v)), handSize(handSize), ui(ui) {
+		: version(v), clanGame(Game(v)), handSize(handSize) {
 		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
 		if (AI_player1 == 0) { //human player
 			player1 = new Player(name_player1, Side::s1);
