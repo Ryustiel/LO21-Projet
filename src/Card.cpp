@@ -2,6 +2,7 @@
 #include "../exception/ShottenTottenException.h"
 #include "../head/Controller.h"
 #include "../head/Supervisor.h"
+#include "../head/UserInterface.h"
 
 string toString(const Color& color) {
 	switch (color)
@@ -57,7 +58,8 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 
 void PlacableCard::activate() const{
 	Controller* c = Supervisor::getInstance().getController();
-	Stone& s = c->askStoneChoice();
+	int stoneNum = UserInterface::getInstance()->uiSelectStone();
+	Stone& s = c->getBoard().getStone(stoneNum);
 	s.addCard(*this,c->getCurSide());
 };
 
