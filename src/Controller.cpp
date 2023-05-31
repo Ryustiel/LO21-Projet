@@ -228,6 +228,10 @@ void TacticController::initForNewRound() {
     //init the tactic deck
     delete tacticDeck;
     tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
+
+    delete discard;
+    discard = new Discard();
+
     std::cout << "\ntacticDeck init;";
 }
 

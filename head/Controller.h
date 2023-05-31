@@ -7,8 +7,10 @@
 #include "Board.h"
 #include "Hand.h"
 #include "Player.h"
+#include "Discard.h"
 #include <iostream>
 #include <string>
+
 
 
 class UserInterface;
@@ -201,6 +203,7 @@ private :
 	friend class Supervisor;
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
+	Discard* discard = nullptr;
 	Game tacticGame;
 	size_t handSize = 7;
 	unsigned int p1TacticalCardPlayed = 0;
@@ -218,6 +221,7 @@ public :
 
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
+	Discard& getDiscard() const { return *discard; }
 	virtual bool* getPickableCards() final {
 		if (canPlayerPlayTacticalCard()) {
 			return Controller::getPickableCards();
