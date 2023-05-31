@@ -4,7 +4,7 @@
 UserInterface::Handler UserInterface::handler = UserInterface::Handler();
 
 UserInterface* UserInterfaceCmd::getInstance() {
-	if (handler.instance == nullptr) throw ShottenTottenException("UI getIntsance : doesn't exist!");
+	if (handler.instance == nullptr) throw ShottenTottenException("ui getIntsance : doesn't exist!");
 	return handler.instance;
 }
 
@@ -20,7 +20,7 @@ void UserInterfaceCmd::setInstance() {
 
 /// SUPERVISOR SETTINGS ///
 //SELECT VERSION
-Version UserInterfaceCmd::UIselectVersion() { //user select version
+Version UserInterfaceCmd::uiSelectVersion() { //user select version
 	Version selected_version;
 	int selection = 0;
 	int i = 0;
@@ -41,14 +41,14 @@ Version UserInterfaceCmd::UIselectVersion() { //user select version
 		i++;
 	}
 	if (i != -1) { //no version selected
-		cout << "(UIselectVersion) Incorrect selected version. Exitting the process...";
+		cout << "(uiSelectVersion) Incorrect selected version. Exitting the process...";
 		exit(1);
 	}
 
 	return selected_version;
 }
 
-Version UserInterfaceCmd::UIVersionMenu() {
+Version UserInterfaceCmd::uiVersionMenu() {
 	int i = 0;
 	Version selected_version;
 
@@ -62,7 +62,7 @@ Version UserInterfaceCmd::UIVersionMenu() {
 	}
 
 	//Version selection + callback
-	selected_version = UIselectVersion();
+	selected_version = uiSelectVersion();
 
 	return selected_version;
 }
@@ -70,7 +70,7 @@ Version UserInterfaceCmd::UIVersionMenu() {
 
 /// GAME SETTINGS///
 //PLAYERS NAME
-string UserInterfaceCmd::UIselectPlayerName(int i, int& isIA) {
+string UserInterfaceCmd::uiSelectPlayerName(int i, int& isIA) {
 	string player;
 
 	cout << endl << "Player " << i << " : " << endl;
@@ -83,25 +83,25 @@ string UserInterfaceCmd::UIselectPlayerName(int i, int& isIA) {
 	cout << "Name " << i << " : ";
 	cin >> player;
 
-	//cout << "(UIselectPlayerName) - Player name : " << player;
+	//cout << "(uiSelectPlayerName) - Player name : " << player;
 
 	return player;
 }
 
-void UserInterfaceCmd::UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) {
+void UserInterfaceCmd::uiPlayerMenu(string players_name[], int& isIA1, int& isIA2) {
 
 	cout << endl << "** PLAYER MENU **" << endl;
 
-	players_name[0] = UIselectPlayerName(1, isIA1);
-	players_name[1] = UIselectPlayerName(2, isIA2);
+	players_name[0] = uiSelectPlayerName(1, isIA1);
+	players_name[1] = uiSelectPlayerName(2, isIA2);
 
-	//cout << "(UIPlayerMenu) - players_name[0] : " << players_name[0] << endl;
-	//cout << "(UIPlayerMenu) - players_name[1] : " << players_name[1] << endl;
+	//cout << "(uiPlayerMenu) - players_name[0] : " << players_name[0] << endl;
+	//cout << "(uiPlayerMenu) - players_name[1] : " << players_name[1] << endl;
 }
 
 
 /// GAME SETTINGS ///
-unsigned int UserInterfaceCmd::UISelectRounds() { //to delete ?
+unsigned int UserInterfaceCmd::uiSelectRounds() { //to delete ?
 	unsigned int i;
 
 	cout << "Please select the desired number of rounds : ";
@@ -110,7 +110,7 @@ unsigned int UserInterfaceCmd::UISelectRounds() { //to delete ?
 	return i;
 }
 
-void UserInterfaceCmd::UIGameInit() {
+void UserInterfaceCmd::uiGameInit() {
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** GAME SETTINGS **" << endl;
 	cout << endl;
@@ -119,21 +119,21 @@ void UserInterfaceCmd::UIGameInit() {
 	int AI_player1 = 0;
 	int AI_player2 = 0;
 
-	Version selected_version = UIVersionMenu();
-	UIPlayerMenu(players_name, AI_player1, AI_player2);
+	Version selected_version = uiVersionMenu();
+	uiPlayerMenu(players_name, AI_player1, AI_player2);
 
-	//cout << "(UIGameInit) - players_name[0] : " << [0] << endl;
-	//cout << "(UIGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
+	//cout << "(uiGameInit) - players_name[0] : " << [0] << endl;
+	//cout << "(uiGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
 
-	//cout << "(UIGameInit) - isIA1 = " << isIA1;
-	//cout << "(UIGameInit) - isIA2 = " << isIA2;
+	//cout << "(uiGameInit) - isIA1 = " << isIA1;
+	//cout << "(uiGameInit) - isIA2 = " << isIA2;
 
 	system("CLS");
 	cout << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
 	cout << "** GAME SETTINGS **" << endl;
 	cout << endl;
 
-	unsigned int rounds_nb = UISelectRounds();
+	unsigned int rounds_nb = uiSelectRounds();
 
 	system("pause");
 
@@ -141,18 +141,18 @@ void UserInterfaceCmd::UIGameInit() {
 	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
-	//cout << "(UIGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
-	//cout << "(UIGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
-	//cout << "(UIGameInit) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
+	//cout << "(uiGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
+	//cout << "(uiGameInit) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
+	//cout << "(uiGameInit) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
 }
 
-void UserInterfaceCmd::UITurnLauncher(Player& curr_player) {
+void UserInterfaceCmd::uiTurnLauncher(Player& curr_player) {
 	//play a card
 	//draw from deck (deck method)
 
 }
 
-void UserInterfaceCmd::UIRoundLauncher() {
+void UserInterfaceCmd::uiRoundLauncher() {
 	// A la place :
 	// declenche des evenements dans le controleur
 	// utiliser des getters pour recuperer des valeurs (=> cartes selectionnables etc...)
@@ -169,7 +169,7 @@ void UserInterfaceCmd::UIRoundLauncher() {
 	} while (Supervisor::getInstance().getController()->getBoard().evaluateGameWinner() == Side::none);
 }
 
-unsigned int UserInterfaceCmd::UISelectCard() {
+unsigned int UserInterfaceCmd::uiSelectCard() {
 	int card_nb = 0;
 	cout << endl << "Select a card to play from your hand (number) : ";
 
@@ -185,7 +185,7 @@ unsigned int UserInterfaceCmd::UISelectCard() {
 	return card_nb;
 }
 
-void UserInterfaceCmd::UIPlayCard() {
+void UserInterfaceCmd::uiPlayCard() {
 	cout << "Play a card" << endl;
 
 	//display cards in player's hand
@@ -200,12 +200,12 @@ void UserInterfaceCmd::UIPlayCard() {
 			cout << i << " : " << Supervisor::getInstance().getController()->getPlayer2().getHand()->getCard(i)->getName();
 		}
 	}
-	int card_hand_nb = UISelectCard();
+	int card_hand_nb = uiSelectCard();
 
 	Supervisor::getInstance().getController()->eventCardPicked(card_hand_nb);
 }
 
-void UserInterfaceCmd::UIGameView2() {
+void UserInterfaceCmd::uiGameView2() {
 	cout << "***  ROUND " << Supervisor::getInstance().getController()->getTotalRounds() - Supervisor::getInstance().getController()->getRemainingRounds() + 1 << " (on " << Supervisor::getInstance().getController()->getTotalRounds() << ") ***" << endl;
 	cout << "* Turn to player ";
 	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) { //curent player is p1
@@ -215,7 +215,7 @@ void UserInterfaceCmd::UIGameView2() {
 		cout << 2 << " : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
 	}
 
-	UIPlayCard();
+	uiPlayCard();
 
 
 		/*while (Supervisor::getInstance().getController()->getRemainingRounds() != 0) {
@@ -225,7 +225,7 @@ void UserInterfaceCmd::UIGameView2() {
 
 
 			//round
-			UIRoundLauncher();
+			uiRoundLauncher();
 
 			//decrementing remaining rounds
 			unsigned int r = Supervisor::getInstance().getController()->getRemainingRounds();
@@ -242,7 +242,7 @@ void UserInterfaceCmd::UIGameView2() {
 }
 
 //A COMPLETER !
-unsigned int UserInterfaceCmd::UISelectStone() {
+unsigned int UserInterfaceCmd::uiSelectStone() {
 	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	Controller* c = Supervisor::getInstance().getController();
@@ -264,11 +264,11 @@ unsigned int UserInterfaceCmd::UISelectStone() {
 	}
 }
 
-unsigned int UserInterfaceCmd::UISelectStoneForCombatMode() {
+unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() {
 	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
-	if (c == nullptr) throw ShottenTottenException("UserInterface::UISelectStoneForCombatMode error : no TacticController found !");
+	if (c == nullptr) throw ShottenTottenException("UserInterface::uiSelectStoneForCombatMode error : no TacticController found !");
 	bool* playableStones = c->getPlayableStonesCombatMode();
 	while (true) { //user input until correct
 		cout << "Select a stone (number) : ";
@@ -287,7 +287,7 @@ unsigned int UserInterfaceCmd::UISelectStoneForCombatMode() {
 	}
 }
 
-Deck& UserInterfaceCmd::UISelectDeck() {
+Deck& UserInterfaceCmd::uiSelectDeck() {
 	Controller* c = Supervisor::getInstance().getController();
 	switch (c->getVersion()) {
 	case Version::tactic:
@@ -314,7 +314,7 @@ Deck& UserInterfaceCmd::UISelectDeck() {
 
 }
 
-void UserInterfaceCmd::UIGameView3() {
+void UserInterfaceCmd::uiGameView3() {
 	cout << "STONES :" << endl;
 
 	//display stones + their combinations
@@ -331,16 +331,16 @@ void UserInterfaceCmd::UIGameView3() {
 		cout << endl; //saut de ligne
 	}
 
-	unsigned int stone_choice = UISelectStone(); //COMMENT JE PASSE LA BORNE EN QUESTION ?
+	unsigned int stone_choice = uiSelectStone(); //COMMENT JE PASSE LA BORNE EN QUESTION ?
 	Supervisor::getInstance().getController()->eventStonePicked(); //COMMENT JE PASSE LA BORNE EN QUESTION ?????
 }
 
-void UserInterfaceCmd::UIGameView4() {
+void UserInterfaceCmd::uiGameView4() {
 	system("pause");
 	Supervisor::getInstance().getController()->qtDisplayPlayerTurn();
 }
 
-void UserInterfaceCmd::UIPrintPlayerHand() {
+void UserInterfaceCmd::uiPrintPlayerHand() {
 	Hand& cur_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
 	cout << endl << Supervisor::getInstance().getController()->getCurrentPlayer()->getName() << "'s hand :" << endl;
 	for (size_t i = 0; i < cur_hand.getSize(); i++) {
@@ -351,7 +351,7 @@ void UserInterfaceCmd::UIPrintPlayerHand() {
 /// GAME LAUNCHER ///
 void UserInterfaceCmd::launchUserInterface() {
 	//PARAMATERS ~= Vue QT 1
-	UIGameInit();
+	uiGameInit();
 	/*
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
@@ -372,18 +372,18 @@ void UserInterfaceCmd::launchUserInterface() {
 			break;
 		case 1: //~= View QT 2 (cards)
 			cout << "CASE 1" << endl;
-			UIGameView2();
+			uiGameView2();
 			getState() = 2;
 			break;
 		case 2: //View QT 3 (stones)
 			cout << "CASE 2" << endl;
-			UIGameView3();
+			uiGameView3();
 			getState() = 3;
 			break;
 		case 3: //~= View QT 4 (click to continue)
 			//
 			cout << "CASE 3" << endl;
-			UIGameView4();
+			uiGameView4();
 			getState() = 4;
 			break;
 		case 4:

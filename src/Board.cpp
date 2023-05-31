@@ -2,7 +2,9 @@
 #include "../head/Board.h"
 
 void Stone::addCard(const PlacableCard&card, const Side side) { //add card on a given side of the stone
-  const PlacableCard**combination;
+  const PlacableCard** combination;
+  cout << "(Stone : addCard()) - size = " << max_size;
+
   size_t *size;
   switch (side) {
   case Side::s1:
@@ -21,7 +23,7 @@ void Stone::addCard(const PlacableCard&card, const Side side) { //add card on a 
 	throw BoardException("Border addCard : this side of the border is full");
   }
 
-  combination[(* size)++] = &card;
+  combination[(* size)++] = &card; //exception here
   if (*size == max_size && firstCompleted == Side::none)
 	firstCompleted = side;
 }
