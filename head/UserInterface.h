@@ -21,6 +21,7 @@ public :
 
     //get l'UserInterface
     virtual void launchUserInterface() = 0; //main
+    virtual void quickLaunch(int ia1, int ia2, Version v) = 0;
 
     virtual void setState(const unsigned int i) { state = i; }
 
@@ -38,6 +39,7 @@ public :
     virtual void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
 
     virtual unsigned int uiSelectCard() = 0;
+    virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
     virtual unsigned int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
     virtual int uiSelectStoneForClaim() = 0;
@@ -68,6 +70,7 @@ public:
     static void setInstance();
 
     void launchUserInterface() final; //main
+    void quickLaunch(int ia1, int ia2, Version v) final;
 
     //SETTINGS
     void uiGameInit();
@@ -84,6 +87,7 @@ public:
     void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
     unsigned int uiSelectCard() final;
+    unsigned int uiSelectCard(Stone* stone, Side side) final;
     unsigned int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;
     int uiSelectStoneForClaim() final; //TO DELETE
@@ -109,6 +113,16 @@ public:
         unsigned int card_hand_count = Supervisor::getInstance().getController()->getCurrentPlayer()->getHand()->getSize();
         while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!Supervisor::getInstance().getController()->getPickableCards()[card_nb])) { //user input until correct
             cout << endl << "You can't play this card. Please select a card to play from your hand : ";
+            cin >> card_nb;
+        }
+        return card_nb;
+    }
+
+    unsigned int userSelectCard(unsigned int option_count, const string& retry_message) const {
+        unsigned int card_nb = 0;
+        cin >> card_nb;
+        while ((card_nb < 0) || (card_nb >= option_count)) { // repeat until user enters a valid input
+            cout << endl << retry_message;
             cin >> card_nb;
         }
         return card_nb;

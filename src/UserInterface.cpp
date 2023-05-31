@@ -169,20 +169,6 @@ void UserInterfaceCmd::uiRoundLauncher() {
 	} while (Supervisor::getInstance().getController()->getBoard().evaluateGameWinner() == Side::none);
 }
 
-unsigned int UserInterfaceCmd::uiSelectCard() {
-	int card_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) { //not IA
-		card_nb = userSelectCard();
-	}
-	else { //is IA
-		card_nb = playerIA->selectCard();
-	}
-
-	cout << "Selected card (number) : " << card_nb << endl;
-	return card_nb;
-}
-
 int UserInterfaceCmd::uiSelectStoneForClaim() {
 	int stone_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
@@ -196,6 +182,44 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 		return stone_nb;
 	}
 	return -1;
+}
+
+/*unsigned int UserInterfaceCmd::uiSelectCard() {
+	int card_nb = 0;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA == nullptr) { //not IA
+		card_nb = userSelectCard();
+	}
+	else { //is IA
+		card_nb = playerIA->selectCard();
+	}
+
+	cout << "Selected card (number) : " << card_nb << endl;
+	return card_nb;
+}*/
+
+unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
+	int card_nb = 0;
+	cout << endl << "Select a card from this stone (type in a number) : ";
+	size_t nstones; // number on cards on a stone
+
+	// fetching the number of cards placed on the one side
+	if (side == Side::s1) {
+		nstones = stone->getSizeP1();
+	}
+	else {
+		nstones = stone->getSizeP2();
+	}
+
+	// fetching a card number from either the interface or the AI methods
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA == nullptr) {
+		card_nb = playerIA->selectCard(nstones);
+	}
+	else {
+		card_nb = UserInterfaceCmd::userSelectCard(nstones, "This is not a number, or there is no card bearing this number.");
+	}
+	return card_nb;
 }
 
 void UserInterfaceCmd::uiPlayCard() {
@@ -256,7 +280,7 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 	bool* playableStones = c->getPlayableStones();
 	while (true) { //user input until correct
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
-		
+
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
 			cout << "This number isn't valid !" << endl;
 			continue;
@@ -267,7 +291,7 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 		}
 		cout << "Selected stone (number) : " << stone_nb << endl;
 		return stone_nb;
-	} 
+	}
 }
 
 unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() {
@@ -294,9 +318,11 @@ unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() {
 }
 
 Deck& UserInterfaceCmd::uiSelectDeck() {
+	cout << "Deck Selector "<<endl;
 	Controller* c = Supervisor::getInstance().getController();
 	switch (c->getVersion()) {
 	case Version::tactic:
+		cout << "tactic " << endl;
 		int choice;
 		while (true){
 			cout << "Select a Deck (0: default, 1: tactic) : ";
@@ -308,13 +334,15 @@ Deck& UserInterfaceCmd::uiSelectDeck() {
 				break;
 			}
 		}
-		if (!choice) {
+		if (choice) {
 			TacticController* tc = dynamic_cast<TacticController*>(c);
 			return tc->getTacticDeck();
 		}
-		
+
 	default:
+		cout << "errroooor" << endl;
 	case Version::legacy:
+		cout << "legacy" << endl;
 			return c->getClanDeck();
 	}
 
@@ -374,58 +402,24 @@ void UserInterfaceCmd::uiPrintGame() {
 
 /// GAME LAUNCHER ///
 void UserInterfaceCmd::launchUserInterface() {
-	//PARAMATERS ~= Vue QT 1
 	uiGameInit();
-	/*
-	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
+}
 
-	cout << "(launchUserInterfaceCmd) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
-	cout << "(launchUserInterfaceCmd) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
-	cout << "(launchUserInterfaceCmd) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
+void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 
-	//PLAY THE GAME
-	//system("CLS");
-	cout << endl << endl << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
-	cout << "** LET'S PLAY! **" << endl;
+	string players_name[2] = { "Le Gontil", "Le Michon" };
+	int AI_player1 = ia1;
+	int AI_player2 = ia2;
 
-	getState() = 1;
-	while (getState()) {
-		switch (getState()) {
-		case 0 :
-			cout << "exit";
-			break;
-		case 1: //~= View QT 2 (cards)
-			cout << "CASE 1" << endl;
-			uiGameView2();
-			getState() = 2;
-			break;
-		case 2: //View QT 3 (stones)
-			cout << "CASE 2" << endl;
-			uiGameView3();
-			getState() = 3;
-			break;
-		case 3: //~= View QT 4 (click to continue)
-			//
-			cout << "CASE 3" << endl;
-			uiGameView4();
-			getState() = 4;
-			break;
-		case 4:
-			// ~= View QT 2 (draw a card from a deck)
-			cout << "CASE 4" << endl;
+	Version selected_version = v;
 
-			break;
-		case 5:
-			//
-			cout << "CASE 6" << endl;
-			break;
-		case 6:
-			//
-			cout << "CASE 7" << endl;
-			break;
-		default:
-			throw ShottenTottenException("launchUserInterfaceCmd : non valid state");
-		}
-	}
-	*/
+	//cout << "(uiGameInit) - players_name[0] : " << [0] << endl;
+	//cout << "(uiGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
+
+	//cout << "(uiGameInit) - isIA1 = " << isIA1;
+	//cout << "(uiGameInit) - isIA2 = " << isIA2;
+
+	unsigned int rounds_nb = 5;
+
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
 }

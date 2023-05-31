@@ -99,7 +99,8 @@ void Controller::turnPlayCard() {
 
 void Controller::turnDrawCard() {
     std::cout << "\n=============== turnDrawCard()";
-    getCurrentPlayerHand().add(clanDeck->draw());
+    Deck& d = UserInterface::getInstance()->uiSelectDeck();
+    getCurrentPlayerHand().add(d.draw());
 }
 
 void Controller::turnClaimStone() {
@@ -244,6 +245,10 @@ void TacticController::initForNewRound() {
     //init the tactic deck
     delete tacticDeck;
     tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
+
+    delete discard;
+    discard = new Discard();
+
     std::cout << "\ntacticDeck init;";
 }
 

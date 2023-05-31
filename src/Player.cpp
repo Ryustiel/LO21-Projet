@@ -11,6 +11,11 @@ unsigned int PlayerAIRandom::selectCard() const {
 	return card_nb;
 }
 
+unsigned int PlayerAIRandom::selectCard(size_t nchoices) const {
+	// choses a random int based on n_stones
+	return rand() % nchoices;
+}
+
 unsigned int PlayerAIRandom::selectStone() const {
 	unsigned int stone_nb = rand() %9;
 	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];

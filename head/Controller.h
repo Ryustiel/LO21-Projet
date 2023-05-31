@@ -7,8 +7,10 @@
 #include "Board.h"
 #include "Hand.h"
 #include "Player.h"
+#include "Discard.h"
 #include <iostream>
 #include <string>
+
 
 
 class UserInterface;
@@ -83,6 +85,7 @@ public:
 	}
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		const size_t sn = board->getStoneNb();
+
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) {
 			playable[i] = playable[i] && board->getStone(i).getSideSize(current_side) != board->getStone(i).getMaxSize();
@@ -167,8 +170,7 @@ public:
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
-		: version(v), clanGame(Game(v)), handSize(handSize) {
-		if (v != Version::legacy) throw ShottenTottenException("Controller constructor : version isn't legacy");
+		: version(v), clanGame(Game(Version::legacy)), handSize(handSize) {
 		if (AI_player1 == 0) { //human player
 			player1 = new Player(name_player1, Side::s1);
 		}
@@ -201,6 +203,7 @@ private :
 	friend class Supervisor;
 	const Version version = Version::tactic;
 	Deck* tacticDeck = nullptr;
+	Discard* discard = nullptr;
 	Game tacticGame;
 	size_t handSize = 7;
 	unsigned int p1TacticalCardPlayed = 0;
@@ -208,7 +211,7 @@ private :
 	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
-		: Controller(Version::legacy, name_player1, name_player2, AI_player1, AI_player2, handSize = 7), tacticGame(Game(v)) {
+		: Controller(Version::tactic, name_player1, name_player2, AI_player1, AI_player2, handSize = 7), tacticGame(Game(Version::tactic)) {
 		tacticDeck = new Deck(tacticGame);
 		if (v != Version::tactic) throw ShottenTottenException("Controller constructor : version isn't tactic");
 	}
@@ -218,6 +221,7 @@ public :
 
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
+	Discard& getDiscard() const { return *discard; }
 	virtual bool* getPickableCards() final {
 		if (canPlayerPlayTacticalCard()) {
 			return Controller::getPickableCards();
@@ -245,4 +249,6 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
+
+
 };
