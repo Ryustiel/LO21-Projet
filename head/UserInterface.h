@@ -39,6 +39,7 @@ public :
     virtual void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
 
     virtual unsigned int uiSelectCard() = 0;
+    virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
     virtual unsigned int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
     virtual bool uiWantClaimStone() = 0;
@@ -82,6 +83,7 @@ public:
     void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
     unsigned int uiSelectCard() final;
+    unsigned int uiSelectCard(Stone* stone, Side side) final;
     unsigned int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;
     bool uiWantClaimStone() final {
@@ -109,11 +111,21 @@ public:
         return card_nb;
     }
 
+    unsigned int userSelectCard(unsigned int option_count, const string& retry_message) const {
+        unsigned int card_nb = 0;
+        cin >> card_nb;
+        while ((card_nb < 0) || (card_nb >= option_count)) { // repeat until user enters a valid input
+            cout << endl << retry_message;
+            cin >> card_nb;
+        }
+        return card_nb;
+    }
+
     unsigned int userSelectStone() const {
         unsigned int stone_nb = 0;
         cin >> stone_nb;
         while (!Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
-            cout << "You can't play this card. Please select a card to play from your hand : ";
+            cout << "Either you typed a wrong number or the stone you chose has already been claimed. Please try again. ";
             cin >> stone_nb;
         }
         return stone_nb;

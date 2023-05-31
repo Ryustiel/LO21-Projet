@@ -49,6 +49,7 @@ private:
 public:
     PlayerAIRandom(const string& n, Side s) : Player(n, s) {}
     unsigned int selectCard() const;
+    unsigned int selectCard(size_t nchoices) const;
     unsigned int selectStone() const;
     unsigned int selectDeck() const;
 };
