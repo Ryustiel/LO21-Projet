@@ -23,26 +23,26 @@ public :
 
     virtual void setState(const unsigned int i) { state = i; }
 
-    virtual void UIGameInit() = 0;
-    virtual unsigned int UISelectRounds() = 0; //select nb rounds (user input)
+    virtual void uiGameInit() = 0;
+    virtual unsigned int uiSelectRounds() = 0; //select nb rounds (user input)
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
-    virtual  Version UIselectVersion() = 0; //user input
-    virtual Version UIVersionMenu() = 0;
+    virtual  Version uiSelectVersion() = 0; //user input
+    virtual Version uiVersionMenu() = 0;
 
     /// GAME SETTINGS///
     //PLAYERS NAME
-    virtual string UIselectPlayerName(int i, int& isIA1) = 0;
-    virtual void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
+    virtual string uiSelectPlayerName(int i, int& isIA1) = 0;
+    virtual void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
 
-    virtual unsigned int UISelectCard() = 0;
-    virtual unsigned int UISelectStone() = 0;
-    virtual unsigned int UISelectStoneForCombatMode() = 0;
-    virtual bool UIWantClaimStone() = 0;
-    virtual Deck& UISelectDeck() = 0;
+    virtual unsigned int uiSelectCard() = 0;
+    virtual unsigned int uiSelectStone() = 0;
+    virtual unsigned int uiSelectStoneForCombatMode() = 0;
+    virtual bool uiWantClaimStone() = 0;
+    virtual Deck& uiSelectDeck() = 0;
 
-    virtual void UIPrintPlayerHand() = 0;
+    virtual void uiPrintPlayerHand() = 0;
 protected:
     UserInterface() {}
     virtual ~UserInterface() {}
@@ -65,23 +65,23 @@ public:
     void launchUserInterface() final; //main
 
     //SETTINGS
-    void UIGameInit();
-    unsigned int UISelectRounds(); //select nb rounds (user input)
+    void uiGameInit();
+    unsigned int uiSelectRounds(); //select nb rounds (user input)
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
-    Version UIselectVersion(); //user input
-    Version UIVersionMenu();
+    Version uiSelectVersion(); //user input
+    Version uiVersionMenu();
 
-    /// GAME SETTINGS///
+    /// GAME SETTINGS ///
     //PLAYERS NAME
-    string UIselectPlayerName(int i, int& isIA1);
-    void UIPlayerMenu(string players_name[], int& isIA1, int& isIA2);
+    string uiSelectPlayerName(int i, int& isIA1);
+    void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
-    unsigned int UISelectCard() final;
-    unsigned int UISelectStone() final;
-    unsigned int UISelectStoneForCombatMode() final;
-    bool UIWantClaimStone() final {
+    unsigned int uiSelectCard() final;
+    unsigned int uiSelectStone() final;
+    unsigned int uiSelectStoneForCombatMode() final;
+    bool uiWantClaimStone() final {
         cout << "Do you want to claim a stone ? (0: yes, 1: no)" << endl;
         int result;
         while (true) {
@@ -92,7 +92,7 @@ public:
         }
 
     };
-    Deck& UISelectDeck() final;
+    Deck& uiSelectDeck() final;
 
     //INPUT USERS
     unsigned int userSelectCard() const {
@@ -118,17 +118,17 @@ public:
 
 
     ///PLAY THE GAME
-    void UIGameView2(); //pick a card
-    void UIGameView3(); //pick a stone (always after UIGameView2) ; can be skipped
-    void UIGameView4(); //click to continue
-    void UIGameView5(); //draw a card
-    void UIRoundLauncher(); //launches the round
-    void UITurnLauncher(Player& curr_player); //launches the turn
+    void uiGameView2(); //pick a card
+    void uiGameView3(); //pick a stone (always after uiGameView2) ; can be skipped
+    void uiGameView4(); //click to continue
+    void uiGameView5(); //draw a card
+    void uiRoundLauncher(); //launches the round
+    void uiTurnLauncher(Player& curr_player); //launches the turn
 
-    void UIPlayCard();
+    void uiPlayCard();
 
     //affichage
-    void UIPrintPlayerHand();
+    void uiPrintPlayerHand();
 
 protected :
     UserInterfaceCmd() {}

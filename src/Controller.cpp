@@ -88,8 +88,8 @@ void Controller::checkRound() {
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
-    UserInterfaceCmd::getInstance()->UIPrintPlayerHand();
-    unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->UISelectCard();
+    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
+    unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->uiSelectCard();
     Hand& curHand = getCurrentPlayerHand();
     const Card& selectedCard = *curHand.getCard(selectedCardNb);
     selectedCard.activate();
@@ -106,7 +106,7 @@ void Controller::turnClaimStone() {
     //A DEFINIR !!!
     /*while (1) {
         //A DEFINIR !!!
-        unsigned int selectedStoneNB UISelectStone();
+        unsigned int selectedStoneNB uiSelectStone();
         claimStone(selectedStoneNB);
     }*/
 }
