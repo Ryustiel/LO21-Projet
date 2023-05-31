@@ -251,7 +251,7 @@ bool TacticController::getAvailableCards(const PlacableCard**& availableCards, s
     size_t foundedSizeTemp;
     if (!Controller::getAvailableCards(availableCardsTemp, foundedSizeTemp)) { return false; }
     foundedSize = foundedSizeTemp + tacticDeck->getCardCount();
-    availableCards = new PlacableCard * [foundedSize];
+    availableCards = new const PlacableCard * [foundedSize];
     for (size_t i = 0; i < foundedSizeTemp; ++i) {
         availableCards[i] = availableCardsTemp[i];
     }

@@ -20,3 +20,7 @@ unsigned int PlayerAIRandom::selectStone() const {
 	}
 	return stone_nb;
 }
+
+unsigned int PlayerAIRandom::selectDeck() const {
+	return 0;
+}

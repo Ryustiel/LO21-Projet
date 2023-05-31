@@ -119,8 +119,8 @@ void UserInterfaceCmd::UIGameInit() {
 	Version selected_version = UIVersionMenu();
 	UIPlayerMenu(players_name, AI_player1, AI_player2);
 
-	//cout << "(UIGameInit) - players_name[0] : " << players_name[0] << endl;
-	//cout << "(UIGameInit) - players_name[1] : " << players_name[1] << endl;
+	//cout << "(UIGameInit) - players_name[0] : " << [0] << endl;
+	//cout << "(UIGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
 
 	//cout << "(UIGameInit) - isIA1 = " << isIA1;
 	//cout << "(UIGameInit) - isIA2 = " << isIA2;
@@ -239,7 +239,7 @@ void UserInterfaceCmd::UIGameView2() {
 }
 
 //A COMPLETER !
-unsigned int UserInterface::UISelectStone() {
+unsigned int UserInterfaceCmd::UISelectStone() {
 	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	Controller* c = Supervisor::getInstance().getController();
@@ -261,7 +261,7 @@ unsigned int UserInterface::UISelectStone() {
 	}
 }
 
-unsigned int UserInterface::UISelectStoneForCombatMode() {
+unsigned int UserInterfaceCmd::UISelectStoneForCombatMode() {
 	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
@@ -282,6 +282,33 @@ unsigned int UserInterface::UISelectStoneForCombatMode() {
 		}
 		return stone_nb;
 	}
+}
+
+Deck& UserInterfaceCmd::UISelectDeck() {
+	Controller* c = Supervisor::getInstance().getController();
+	switch (c->getVersion()) {
+	case Version::tactic:
+		int choice;
+		while (true){
+			cout << "Select a Deck (0: default, 1: tactic) : ";
+			cin >> choice;
+			if (choice >= 2 || choice < 0) {
+				cout << "Choix invalide" << endl;
+			}
+			else {
+				break;
+			}
+		}
+		if (!choice) {
+			TacticController* tc = dynamic_cast<TacticController*>(c);
+			return tc->getTacticDeck();
+		}
+		
+	default:
+	case Version::legacy:
+			return c->getClanDeck();
+	}
+
 }
 
 void UserInterfaceCmd::UIGameView3() {

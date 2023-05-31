@@ -242,6 +242,7 @@ public :
 			Stone& s = getBoard().getStone(i);
 			playable[i] = playable[i] && s.getCombatMode() == nullptr;
 		}
+		return playable;
 	}
 	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 
