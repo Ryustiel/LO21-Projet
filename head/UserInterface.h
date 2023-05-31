@@ -43,6 +43,8 @@ public :
     virtual Deck& uiSelectDeck() = 0;
 
     virtual void uiPrintPlayerHand() = 0;
+    virtual void uiPrintGame() = 0;
+
 protected:
     UserInterface() {}
     virtual ~UserInterface() {}
@@ -129,6 +131,7 @@ public:
 
     //affichage
     void uiPrintPlayerHand();
+    void uiPrintGame();
 
 protected :
     UserInterfaceCmd() {}

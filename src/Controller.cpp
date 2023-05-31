@@ -114,8 +114,9 @@ void Controller::turnClaimStone() {
 
 void Controller::newTurn() {
     std::cout << "\n================== newTurn";
+    UserInterfaceCmd::getInstance()->uiPrintGame();
     turnPlayCard();
-    turnDrawCard();
+    UserInterfaceCmd::getInstance()->uiPrintGame();
     turnClaimStone();
 }
 

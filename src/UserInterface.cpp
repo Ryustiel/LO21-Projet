@@ -348,6 +348,24 @@ void UserInterfaceCmd::uiPrintPlayerHand() {
 	}
 }
 
+void UserInterfaceCmd::uiPrintGame() {
+	Board& cur_board = Supervisor::getInstance().getController()->getBoard();
+	cout << endl;
+	for (size_t i = 0; i < cur_board.getStoneNb(); i++) { //for each stone
+		cout << "Stone " << i << endl;
+		Stone& cur_stone = cur_board.getStone(i);
+		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
+		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
+			cout << "		" << k << cur_stone.getCombinationP1()[k]->getName() << endl;
+		}
+		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
+		for (size_t k = 0; k < cur_stone.getSizeP2(); k++) { //display P1 combination
+			cout << "		" << k << cur_stone.getCombinationP2()[k]->getName() << endl;
+		}
+		cout << endl;
+	}
+}
+
 /// GAME LAUNCHER ///
 void UserInterfaceCmd::launchUserInterface() {
 	//PARAMATERS ~= Vue QT 1
