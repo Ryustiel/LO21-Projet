@@ -13,6 +13,7 @@ private :
     unsigned int state = 0;
 
 public :
+    static UserInterface* getInstance();
     static void freeInstance();
 
     unsigned int getState() const { return state; }
@@ -20,6 +21,7 @@ public :
 
     //get l'UserInterface
     virtual void launchUserInterface() = 0; //main
+    virtual void quickLaunch(int ia1, int ia2, Version v) = 0;
 
     virtual void setState(const unsigned int i) { state = i; }
 
@@ -60,10 +62,11 @@ private:
 
 public:
 
-    static UserInterface* getInstance();
+
     static void setInstance();
 
     void launchUserInterface() final; //main
+    void quickLaunch(int ia1, int ia2, Version v) final;
 
     //SETTINGS
     void uiGameInit();

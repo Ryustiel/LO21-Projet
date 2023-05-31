@@ -2,6 +2,7 @@
 #include "../exception/ShottenTottenException.h"
 #include "../head/Controller.h"
 #include "../head/Supervisor.h"
+#include "../head/UserInterface.h"
 
 string toString(const Color& color) {
 	switch (color)
@@ -57,7 +58,8 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 
 void PlacableCard::activate() const{
 	Controller* c = Supervisor::getInstance().getController();
-	Stone& s = c->askStoneChoice();
+	int stoneNum = UserInterface::getInstance()->uiSelectStone();
+	Stone& s = c->getBoard().getStone(stoneNum);
 	s.addCard(*this,c->getCurSide());
 };
 
@@ -75,4 +77,16 @@ void Tactical::activate() const {
 void Elite::activate() const {
 	Tactical::activate();
 	PlacableCard::activate();
+}
+
+void Ruses::activate() const {
+	Controller* c = Supervisor::getInstance().getController();
+	const TacticController* tc = dynamic_cast<const TacticController*>(c);
+	if (tc == nullptr) {
+		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
+	}
+	else {
+		tc->getDiscard().addCard(*this);
+	}
+
 }

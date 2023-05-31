@@ -3,9 +3,9 @@
 ///INTERFACE SINGLETON METHODS///
 UserInterface::Handler UserInterface::handler = UserInterface::Handler();
 
-UserInterface* UserInterfaceCmd::getInstance() {
-	if (handler.instance == nullptr) throw ShottenTottenException("ui getIntsance : doesn't exist!");
-	return handler.instance;
+UserInterface* UserInterface::getInstance() {
+	if (UserInterface::handler.instance == nullptr) throw ShottenTottenException("ui getIntsance : doesn't exist!");
+	return UserInterface::handler.instance;
 }
 
 void UserInterface::freeInstance() {
@@ -374,58 +374,24 @@ void UserInterfaceCmd::uiPrintPlayerHand() {
 
 /// GAME LAUNCHER ///
 void UserInterfaceCmd::launchUserInterface() {
-	//PARAMATERS ~= Vue QT 1
 	uiGameInit();
-	/*
-	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
+}
 
-	cout << "(launchUserInterfaceCmd) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
-	cout << "(launchUserInterfaceCmd) - Controller : Player 1 name : " << Supervisor::getInstance().getController()->getPlayer1().getName() << endl;
-	cout << "(launchUserInterfaceCmd) - Controller : Player 2 name :" << Supervisor::getInstance().getController()->getPlayer2().getName() << endl;
+void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 
-	//PLAY THE GAME
-	//system("CLS");
-	cout << endl << endl << "***  SCHOTTEN TOTTEN  ***" << endl << endl;
-	cout << "** LET'S PLAY! **" << endl;
+	string players_name[2] = { "Le Gontil", "Le Michon" };
+	int AI_player1 = ia1;
+	int AI_player2 = ia2;
 
-	getState() = 1;
-	while (getState()) {
-		switch (getState()) {
-		case 0 :
-			cout << "exit";
-			break;
-		case 1: //~= View QT 2 (cards)
-			cout << "CASE 1" << endl;
-			uiGameView2();
-			getState() = 2;
-			break;
-		case 2: //View QT 3 (stones)
-			cout << "CASE 2" << endl;
-			uiGameView3();
-			getState() = 3;
-			break;
-		case 3: //~= View QT 4 (click to continue)
-			//
-			cout << "CASE 3" << endl;
-			uiGameView4();
-			getState() = 4;
-			break;
-		case 4:
-			// ~= View QT 2 (draw a card from a deck)
-			cout << "CASE 4" << endl;
+	Version selected_version = v;
 
-			break;
-		case 5:
-			//
-			cout << "CASE 6" << endl;
-			break;
-		case 6:
-			//
-			cout << "CASE 7" << endl;
-			break;
-		default:
-			throw ShottenTottenException("launchUserInterfaceCmd : non valid state");
-		}
-	}
-	*/
+	//cout << "(uiGameInit) - players_name[0] : " << [0] << endl;
+	//cout << "(uiGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
+
+	//cout << "(uiGameInit) - isIA1 = " << isIA1;
+	//cout << "(uiGameInit) - isIA2 = " << isIA2;
+
+	unsigned int rounds_nb = 5;
+
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
 }

@@ -38,7 +38,8 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
 void Controller::initForNewRound() {
     std::cout << "\n========= initForNewRound-legacy";
     //init the board
-    board = Board();
+    delete board;
+    board =new Board();
     std::cout << "\nBoard init;";
 
     //init the deck
@@ -66,7 +67,7 @@ void Controller::newRound() {
     while (winning == Side::none){
         newTurn();
         current_side = (current_side == Side::s1) ? Side::s2 : Side::s1;
-        winning = board.evaluateGameWinner();
+        winning = board->evaluateGameWinner();
     }
     if (winning == Side::s1) {
         player1->updateScore();
@@ -168,10 +169,10 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
 void Controller::claimStone(unsigned int n) {
     Side s = getCurSide();
     if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
-    if (n < 0 || n > board.getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
+    if (n < 0 || n > board->getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
     Side evaluated_side;
-    bool s1Completed = board.getStone(n).getSizeP1() != board.getStone(n).getMaxSize();
-    bool s2Completed = board.getStone(n).getSizeP2() != board.getStone(n).getMaxSize();
+    bool s1Completed = board->getStone(n).getSizeP1() != board->getStone(n).getMaxSize();
+    bool s2Completed = board->getStone(n).getSizeP2() != board->getStone(n).getMaxSize();
     //to revendicate a stone, current player's combination must be completed
     if ((s == Side::s1 && !s1Completed)|| (s == Side::s2) && !s2Completed) {
         evaluated_side = Side::none;
@@ -179,7 +180,7 @@ void Controller::claimStone(unsigned int n) {
         const PlacableCard** availableCards;
         size_t foundedSize;
         if (getAvailableCards(availableCards, foundedSize)) {
-            evaluated_side = board.evaluateStoneWinningSide(n, availableCards, foundedSize);
+            evaluated_side = board->evaluateStoneWinningSide(n, availableCards, foundedSize);
         }
         else {
             //des cartes tactiques spéciale empêche le claim
@@ -187,12 +188,12 @@ void Controller::claimStone(unsigned int n) {
         }
     }
     else {
-        evaluated_side = board.evaluateStoneWinningSide(n);
+        evaluated_side = board->evaluateStoneWinningSide(n);
     }
     //evaluating stone's winner
     if (evaluated_side == s) {
         //revendicating the stone
-        board.getStone(n).setRevendication(s);
+        board->getStone(n).setRevendication(s);
     }
     else {
         cout << "You can't revendicate this stone!" << endl;
@@ -227,6 +228,10 @@ void TacticController::initForNewRound() {
     //init the tactic deck
     delete tacticDeck;
     tacticDeck = new Deck(tacticGame);// initialiser la pioche tactique dans la m�thode fille
+
+    delete discard;
+    discard = new Discard();
+
     std::cout << "\ntacticDeck init;";
 }
 
