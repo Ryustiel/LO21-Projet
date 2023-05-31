@@ -26,7 +26,7 @@ private:
     int totalRounds;
 	int maxScore;
 	Deck* clanDeck = nullptr;
-	Board board;
+	Board* board;
 	Game clanGame;
 	Player* player1;
 	Player* player2;
@@ -53,8 +53,7 @@ public:
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
 	Game getClanGame() const { return clanGame; } //accès en lecture seule
-	Board getBoard() const { return board; } //accès en lecture seule
-	Board& getBoard() { return board; } //accès écriture
+	Board& getBoard() { return *board; } //accès écriture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
 	int getRemainingRounds() const { return remainingRounds; }
@@ -75,18 +74,18 @@ public:
 		return pickable;
 	} // récupère la liste des cartes jouables
 	bool* getUnclaimedStones() const {
-		const size_t sn = board.getStoneNb();
+		const size_t sn = board->getStoneNb();
 		bool* unclaimed = new bool[sn];
 		for (size_t i = 0; i < sn; ++i) {
-			unclaimed[i] = board.getStone(i).getRevendication() == Side::none;
+			unclaimed[i] = board->getStone(i).getRevendication() == Side::none;
 		}
 		return unclaimed;
 	}
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
-		const size_t sn = board.getStoneNb();
+		const size_t sn = board->getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) {
-			playable[i] = playable[i] && board.getStone(i).getSideSize(current_side) != board.getStone(i).getMaxSize();
+			playable[i] = playable[i] && board->getStone(i).getSideSize(current_side) != board->getStone(i).getMaxSize();
 		}
 		return playable;
 	}
@@ -164,7 +163,7 @@ public:
 	}
 
 	virtual void playTurn(Side s);
-	Stone& askStoneChoice() { return board.getStone(0); }
+	Stone& askStoneChoice() { return board->getStone(0); }
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
@@ -233,7 +232,7 @@ public :
 			return pickable;
 		}
 	}
-	bool* getPlayableStonesCombatMode() const {
+	bool* getPlayableStonesCombatMode() {
 		const size_t sn = getBoard().getStoneNb();
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) { //unclaimed + uncomplete + no combat mode card
