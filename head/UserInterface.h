@@ -25,8 +25,7 @@ public :
 
     virtual void UIGameInit() = 0;
     virtual unsigned int UISelectRounds() = 0; //select nb rounds (user input)
-    
-    virtual bool UIWantClaimStone() = 0;
+   
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
