@@ -61,7 +61,7 @@ public:
 
     static UserInterface* getInstance();
     static void setInstance();
-        
+
     void launchUserInterface() final; //main
 
     //SETTINGS
