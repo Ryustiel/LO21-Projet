@@ -13,6 +13,8 @@ private :
     unsigned int state = 0;
 
 public :
+    static void freeInstance();
+
     unsigned int getState() const { return state; }
     unsigned int& getState() { return state; }
 
@@ -23,6 +25,8 @@ public :
 
     virtual void UIGameInit() = 0;
     virtual unsigned int UISelectRounds() = 0; //select nb rounds (user input)
+    
+    virtual bool UIWantClaimStone() = 0;
 
     /// SUPERVISOR SETTINGS ///
     //SELECT VERSION
@@ -37,25 +41,24 @@ public :
     virtual unsigned int UISelectCard() = 0;
     virtual unsigned int UISelectStone() = 0;
 protected:
+    UserInterface() {}
     virtual ~UserInterface() {}
+    struct Handler { //singleton
+        UserInterface* instance = nullptr;
+        ~Handler() { delete instance; }
+    };
+    static Handler handler;
 };
 
 
 class UserInterfaceCmd : public UserInterface {
 private:
-    UserInterfaceCmd() {}
-    ~UserInterfaceCmd() {}
 
-    struct Handler { //singleton
-        UserInterfaceCmd* instance = nullptr;
-        ~Handler() { delete instance; }
-    };
-    static Handler handler;
 public:
 
-    static UserInterfaceCmd& getInstance();
-    static void freeInstance();
-
+    static UserInterface* getInstance();
+    static void setInstance();
+        
     void launchUserInterface() final; //main
 
     //SETTINGS
@@ -108,5 +111,9 @@ public:
     void UITurnLauncher(Player& curr_player); //launches the turn
 
     void UIPlayCard();
+
+protected :
+    UserInterfaceCmd() {}
+    virtual ~UserInterfaceCmd() {}
 
 };

@@ -103,11 +103,11 @@ void Controller::turnDrawCard() {
 void Controller::turnClaimStone() {
     std::cout << "\n=============== turnClaimStone()";
     //A DEFINIR !!!
-    while (ui->UIWantClaimStone()) {
+    /*while (1) {
         //A DEFINIR !!!
-        unsigned int selectedStoneNB = ui->UISelectStone();
+        unsigned int selectedStoneNB UISelectStone();
         claimStone(selectedStoneNB);
-    }
+    }*/
 }
 
 void Controller::newTurn() {

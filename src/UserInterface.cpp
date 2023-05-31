@@ -1,18 +1,21 @@
 #include "../head/UserInterface.h"
 
 ///INTERFACE SINGLETON METHODS///
-UserInterfaceCmd::Handler UserInterfaceCmd::handler = UserInterfaceCmd::Handler();
+UserInterface::Handler UserInterface::handler = UserInterface::Handler();
 
-UserInterfaceCmd& UserInterfaceCmd::getInstance() {
-	if (handler.instance == nullptr) handler.instance = new UserInterfaceCmd();
-	return *handler.instance;
+UserInterface* UserInterfaceCmd::getInstance() {
+	if (handler.instance == nullptr) throw ShottenTottenException("UI getIntsance : doesn't exist!");
+	return handler.instance;
 }
 
-void UserInterfaceCmd::freeInstance() {
+void UserInterface::freeInstance() {
 	delete handler.instance;
 	handler.instance = nullptr;
 }
 
+void UserInterfaceCmd::setInstance() {
+	if (handler.instance == nullptr) handler.instance = new UserInterfaceCmd();
+}
 
 
 /// SUPERVISOR SETTINGS ///

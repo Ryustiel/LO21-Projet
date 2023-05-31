@@ -15,8 +15,9 @@ int main() {
 	cout << Supervisor::getInstance().getController()->getCurrentPlayerHand()->selectCard();
 	*/
 
-	UserInterfaceCmd::getInstance().launchUserInterface();
-
+	UserInterfaceCmd::setInstance();
+	UserInterfaceCmd::getInstance();
+	UserInterfaceCmd::getInstance()->launchUserInterface();
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
