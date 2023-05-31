@@ -20,7 +20,20 @@ unsigned int PlayerAIRandom::selectStone() const {
 	}
 	return stone_nb;
 }
+unsigned int PlayerAIRandom::selectStoneForClaim() const {
+	unsigned int stone_nb = 0;
+	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
+	list_stones = Supervisor::getInstance().getController()->getUnclaimedStones();
+	while (!list_stones[stone_nb]) {
+		stone_nb++;
+	}
+	return stone_nb;
+}
 
 unsigned int PlayerAIRandom::selectDeck() const {
-	return 0;
+	return rand() % 2;
+}
+
+bool PlayerAIRandom::WantClaimStone() const {
+	return rand() % 2;
 }

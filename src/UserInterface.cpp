@@ -181,8 +181,19 @@ unsigned int UserInterfaceCmd::uiSelectCard() {
 		card_nb = playerIA->selectCard();
 	}
 
-	cout << endl << "Selected card (number) : " << card_nb;
+	cout << endl << "Selected card (number) : " << card_nb << endl;
 	return card_nb;
+}
+
+unsigned int UserInterfaceCmd::uiSelectStoneForClaim() {
+	int stone_nb = 0;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA == nullptr) {
+		stone_nb = playerIA->selectStoneForClaim();
+	}
+	else {
+		stone_nb = 
+	}
 }
 
 void UserInterfaceCmd::uiPlayCard() {

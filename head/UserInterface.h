@@ -40,6 +40,7 @@ public :
     virtual unsigned int uiSelectCard() = 0;
     virtual unsigned int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
+    virtual unsigned int uiSelectStoneForClaim() = 0;
     virtual bool uiWantClaimStone() = 0;
     virtual Deck& uiSelectDeck() = 0;
 
@@ -84,6 +85,8 @@ public:
     unsigned int uiSelectCard() final;
     unsigned int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;
+    unsigned int uiSelectStoneForClaim() final;
+
     bool uiWantClaimStone() final {
         cout << "Do you want to claim a stone ? (0: yes, 1: no)" << endl;
         int result;
@@ -117,6 +120,16 @@ public:
             cin >> stone_nb;
         }
         return stone_nb;
+    }
+
+    int userSelectStoneForClaim() const {
+        unsigned int stone_nb = 0;
+        cin >> stone_nb;
+        if (!Supervisor::getInstance().getController()->getUnclaimedStones()[stone_nb]) { //user input until correct
+            cout << "You can't claim this stone." << endl;
+            return -1;
+        }
+        else return stone_nb;
     }
 
 

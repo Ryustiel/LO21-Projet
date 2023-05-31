@@ -105,11 +105,22 @@ void Controller::turnDrawCard() {
 void Controller::turnClaimStone() {
     std::cout << "\n=============== turnClaimStone()";
     //A DEFINIR !!!
-    /*while (1) {
-        //A DEFINIR !!!
-        unsigned int selectedStoneNB uiSelectStone();
-        claimStone(selectedStoneNB);
-    }*/
+    bool choice_claim = false;
+    PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
+    if (playerAI) { //is IA
+        while (playerAI->WantClaimStone()) {
+            //A DEFINIR !!!
+            unsigned int selectedStoneNB = playerAI->selectStone();
+            claimStone(selectedStoneNB);
+        }
+    }
+    else { //is Human
+        while (UserInterfaceCmd::getInstance()->uiWantClaimStone()) {
+            //A DEFINIR !!!
+            unsigned int selectedStoneNB = UserInterfaceCmd::getInstance()->uiSelectStone();
+            claimStone(selectedStoneNB);
+        }
+    }
 }
 
 void Controller::newTurn() {
@@ -118,6 +129,8 @@ void Controller::newTurn() {
     turnPlayCard();
     UserInterfaceCmd::getInstance()->uiPrintGame();
     turnClaimStone();
+    cout << "Your turn is over...!";
+    system("pause");
 }
 
 bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {
@@ -197,7 +210,7 @@ void Controller::claimStone(unsigned int n) {
         board->getStone(n).setRevendication(s);
     }
     else {
-        cout << "You can't revendicate this stone!" << endl;
+        cout << "You can't claim this stone!" << endl;
     }
 }
 

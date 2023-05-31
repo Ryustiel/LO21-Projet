@@ -50,5 +50,7 @@ public:
     PlayerAIRandom(const string& n, Side s) : Player(n, s) {}
     unsigned int selectCard() const;
     unsigned int selectStone() const;
+    unsigned int selectStoneForClaim() const;
     unsigned int selectDeck() const;
+    bool WantClaimStone() const;
 };
