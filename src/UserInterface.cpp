@@ -184,7 +184,7 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 	return -1;
 }
 
-/*unsigned int UserInterfaceCmd::uiSelectCard() {
+unsigned int UserInterfaceCmd::uiSelectCard() {
 	int card_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
@@ -196,9 +196,9 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 
 	cout << "Selected card (number) : " << card_nb << endl;
 	return card_nb;
-}*/
+}
 
-unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
+unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) { 
 	int card_nb = 0;
 	cout << endl << "Select a card from this stone (type in a number) : ";
 	size_t nstones; // number on cards on a stone
@@ -232,7 +232,7 @@ void UserInterfaceCmd::uiPlayCard() {
 		cout << i << " : " << Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i)->getName();
 
 	}
-	int card_hand_nb = uiSelectCard();
+	unsigned int card_hand_nb = uiSelectCard();
 	Supervisor::getInstance().getController()->eventCardPicked(card_hand_nb);
 }
 
@@ -279,7 +279,7 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 	Controller* c = Supervisor::getInstance().getController();
 	bool* playableStones = c->getPlayableStones();
 	while (true) { //user input until correct
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
 			cout << "This number isn't valid !" << endl;
@@ -294,7 +294,7 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 	}
 }
 
-unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() {
+unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() { //TO DO
 	unsigned int stone_nb;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
@@ -303,7 +303,7 @@ unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() {
 	while (true) { //user input until correct
 		cout << "Select a stone (number) : ";
 
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectCard();
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
 			cout << "This number isn't valid !" << endl;

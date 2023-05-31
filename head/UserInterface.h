@@ -49,6 +49,7 @@ public :
 
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
+    virtual void uiPlayCard() = 0;
 
 protected:
     UserInterface() {}
