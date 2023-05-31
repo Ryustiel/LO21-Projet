@@ -80,7 +80,17 @@ public:
     unsigned int UISelectCard() final;
     unsigned int UISelectStone() final;
     unsigned int UISelectStoneForCombatMode() final;
-    bool UIWantClaimStone() final  { return false; };
+    bool UIWantClaimStone() final {
+        cout << "Do you want to claim a stone ? (0: yes, 1: no)" << endl;
+        int result;
+        while (true) {
+            cin >> result;
+            if (result < 2 && result >= 0) {
+                return !result;
+            }
+        }
+
+    };
     Deck& UISelectDeck() final;
 
     //INPUT USERS
