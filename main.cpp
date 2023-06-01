@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
 #include "head/Game.h"
@@ -16,7 +17,11 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-	UserInterface::getInstance()->quickLaunch(0,0,Version::tactic);
+	UserInterface::getInstance()->quickLaunch(1,0,Version::tactic);
+
+	// bool blist[] = {true, true, false, true, false};
+	// std::cout << Utility::randchoice(blist, 5) << " ";
+
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
