@@ -4,6 +4,8 @@
 #include "Hand.h"
 #include "Board.h"
 
+#include "../head/Utility.h"
+
 class Player {
 private:
     std::string name;

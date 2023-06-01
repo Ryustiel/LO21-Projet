@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector> // TEMPORARY, for testing in main
+
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
 #include "head/Game.h"
@@ -7,6 +9,8 @@
 #include "head/Board.h"
 #include "head/Controller.h"
 #include "head/UserInterface.h"
+
+#include "head/Utility.h"
 
 int main() {
 
