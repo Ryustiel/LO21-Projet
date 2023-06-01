@@ -93,6 +93,8 @@ public:
 		return playable;
 	}
 
+	virtual unsigned int getDeckCount() const { return 1; }
+
 	//SETTERS
 	void setTotalRounds(int n) { totalRounds = n; }
 	void setRemainingRounds(int n) { remainingRounds = n; }
@@ -219,6 +221,7 @@ public :
 		delete tacticDeck;
 	}
 
+	unsigned int getDeckCount() const override { return 2; }
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
@@ -249,6 +252,4 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	bool canPlayerPlayTacticalCard();
-
-
 };

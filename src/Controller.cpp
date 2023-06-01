@@ -74,6 +74,7 @@ void Controller::newRound() {
     else {
         player2->updateScore();
     }
+    system("pause");
 }
 
 void Controller::checkRound() {
