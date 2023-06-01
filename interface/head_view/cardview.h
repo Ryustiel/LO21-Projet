@@ -1,3 +1,4 @@
+
 #ifndef CARDVIEW_H
 #define CARDVIEW_H
 
@@ -7,103 +8,60 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
+//classe mère abstraite VUE CARTE
 class VueCarte : public QPushButton
 {
     Q_OBJECT
 public:
-    //deux constructeurs differents
-    VueCarte(const Clan& c, QWidget *parent = nullptr);
+    VueCarte(const Card& c, QWidget *parent = nullptr);
     explicit VueCarte(QWidget *parent = nullptr);
 
-    // affecter une nouvelle carte à la vue
-    void setCarte(const Clan& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
+    //permet la création d'une instance VueCarte en fonction du type de carte
+    static VueCarte* createVueCarte(const Card& c, QWidget* parent = nullptr);
 
-    // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
-    const Clan& getCarte() const { return *carte; }
-    bool cartePresente() const { return carte!=nullptr; }
+    void setCarte(const Card& c) { setCheckable(true); setChecked(false); carte = &c; update(); }
+    void setNoCarte() { carte = nullptr; setCheckable(false); update(); }
+    const Card& getCarte() const { return *carte; }
+    bool cartePresente() const { return carte != nullptr; }
+
 protected:
+    virtual void dessiner(QPainter& painter) = 0;
+
     void paintEvent(QPaintEvent *event) override;
+
 private:
-    const Clan* carte=nullptr;
+    const Card* carte = nullptr;
     QPen pen;
     QBrush brush;
-    void dessinerNombre(QPainter &painter);
-//signaux & slots
+
 signals:
-    // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
     void carteClicked(VueCarte*);
+
 public slots:
+
 private slots:
     void clickedEvent() { emit carteClicked(this); }
 };
 
-
-
-//classe fille pour les cartes Clan
+//classe fille CARTE CLAN
 class VueCarteClan : public VueCarte
 {
-    Q_OBJECT
 public:
-    //deux constructeurs differents
-    VueCarteClan(const Clan& c, QWidget *parent = nullptr);
-    explicit VueCarteClan(QWidget *parent = nullptr);
+    VueCarteClan(const Clan& c, QWidget* parent = nullptr) : VueCarte(c, parent) {}
 
-    // affecter une nouvelle carte à la vue
-    void setCarte(const Clan& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
-
-    // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
-    const Clan& getCarte() const { return *carte; }
-    bool cartePresente() const { return carte!=nullptr; }
 protected:
-    void paintEvent(QPaintEvent *event) override;
-private:
-    const Clan* carte=nullptr;
-    QPen pen;
-    QBrush brush;
-    void dessinerNombre(QPainter &painter);
-    //signaux & slots
-signals:
-    // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VueCarte*);
-public slots:
-private slots:
-    void clickedEvent() { emit carteClicked(this); }
+    void dessiner(QPainter& painter) override;
 };
 
-//classe fille pour les cartes Tactiques
-class VueCarteTactique : public VueCarte
+
+//classe fille CARTE CLAN
+class VueCarteTactical : public VueCarte
 {
-    Q_OBJECT
 public:
-    //deux constructeurs differents
-    VueCarteTactique(const Tactical& c, QWidget *parent = nullptr);
-    explicit VueCarteTactique(QWidget *parent = nullptr);
+    VueCarteTactical(const Tactical& t, QWidget* parent = nullptr) : VueCarte(t, parent) {}
 
-    // affecter une nouvelle carte à la vue
-    void setCarte(const Tactical& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
-
-    // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
-    const Clan& getCarte() const { return *carte; }
-    bool cartePresente() const { return carte!=nullptr; }
 protected:
-    void paintEvent(QPaintEvent *event) override;
-private:
-    const Clan* carte=nullptr;
-    QPen pen;
-    QBrush brush;
-    void dessinerNombre(QPainter &painter);
-    //signaux & slots
-signals:
-    // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VueCarte*);
-public slots:
-private slots:
-    void clickedEvent() { emit carteClicked(this); }
+    void dessiner(QPainter& painter) override;
 };
 
 #endif // CARDVIEW_H
-
-

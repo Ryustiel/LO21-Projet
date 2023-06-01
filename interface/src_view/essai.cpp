@@ -9,7 +9,7 @@
 #include <QLCDNumber>
 #include <QMessageBox>
 
-#include "../head_view/cardview.h"
+#include "../head_view/cardview_old.h"
 #include "../head_view/essai.h"
 
 //constructeur
@@ -45,8 +45,12 @@ Essai::Essai(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
     Number number=Number::eight;
     Clan *c=new Clan(color,number);
 
+    Tactical *t=new Tactical("boue");
+
     size_t i=0;
     vuecartes[i]->setCarte(*c);
+    i++;
+    vuecartes[i]->setCarte(*t);
 
     /*
     size_t i=0;

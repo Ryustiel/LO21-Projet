@@ -4,41 +4,40 @@
 #include <QPen>
 #include <QBrush>
 #include <QPushButton>
-#include "../../head/Card.h"
+#include "../../head/Board.h"
 
 /*
 class VueBorne : public QPushButton
 {
     Q_OBJECT
 public:
-    //deux constructeurs differents
-    VueBorne(const Clan& c, QWidget *parent = nullptr);
+    //deux constructeurs (une vue vide, puis une vue affectée d'une stone)
+    VueBorne(const Stone& s, QWidget *parent = nullptr);
     explicit VueBorne(QWidget *parent = nullptr);
 
     // affecter une nouvelle carte à la vue
-    void setCarte(const Clan& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
+    void setStone(const Stone& s) { setCheckable(true); setChecked(false); stone=&s; update(); }
 
-    // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
-    const Clan& getCarte() const { return *carte; }
-    bool cartePresente() const { return carte!=nullptr; }
+    // vue vide, sans pointeur sur stone
+    void setNoStone() { stone=nullptr; setCheckable(false); update(); }
+    const Stone& getStone() const { return *stone; }
+    bool StonePresente() const { return stone!=nullptr; }
 protected:
            //void paintEvent(QPaintEvent *event) override;
 private:
-    const Clan* carte=nullptr;
+    const Stone* stone=nullptr;
+    //un attribut pour savoir le numero de la borne ?? (en termes de placement)
     QPen pen;
     QBrush brush;
+
+//SIGNAUX ET SLOTS
 signals:
-    // quand la vude de carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VueBorne*);
+    // quand la vue de la borne est cliquée, elle émet un signal en transmettant son adresse
+    void stoneClicked(VueBorne*);
 public slots:
 private slots:
-    void clickedEvent() { emit carteClicked(this); }
+    void clickedEvent() { emit stoneClicked(this); }
 };
-
-
-
-
 */
 
 #endif // STONEVIEW_H
