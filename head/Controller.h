@@ -85,6 +85,7 @@ public:
 	}
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		const size_t sn = board->getStoneNb();
+
 		bool* playable = getUnclaimedStones();
 		for (size_t i = 0; i < sn; ++i) {
 			playable[i] = playable[i] && board->getStone(i).getSideSize(current_side) != board->getStone(i).getMaxSize();
