@@ -21,14 +21,7 @@ int main() {
 
 	UserInterfaceCmd::setInstance();
 
-	std::vector<bool> blist({true, true, false, true, false});
-	std::cout << Utility::randChoice(blist) << " ";
-	std::cout << Utility::randChoice(blist) << " ";
-	std::cout << Utility::randChoice(blist) << " ";
-	std::cout << Utility::randChoice(blist) << " ";
-
-	//UserInterface::getInstance()->quickLaunch(1, 1, Version::tactic);
-
+	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
