@@ -13,7 +13,7 @@ unsigned int PlayerAIRandom::selectCard() const {
 
 unsigned int PlayerAIRandom::selectCard(size_t nchoices) const {
 	// choses a random int based on n_stones
-	return Utility::randint(0, nchoices);
+	return rand() % nchoices;
 }
 
 unsigned int PlayerAIRandom::selectStone() const {
