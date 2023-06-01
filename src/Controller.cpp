@@ -1,5 +1,5 @@
 #include "../head/Controller.h"
-#include "../head/Supervisor.h" 
+#include "../head/Supervisor.h"
 #include <iostream>
 #include "../head/UserInterface.h"
 
@@ -9,7 +9,7 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
 
     player1->initForNewGame();
     player2->initForNewGame();
-    
+
     // le plateau a-t-il besoin d'�tre initialis� � ce niveau ?
 
     remainingRounds = nturns;
@@ -21,7 +21,6 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
         cout << "* ROUND " << c->getTotalRounds() - c->getRemainingRounds() + 1 << " (on " << c->getTotalRounds() << ") *" << endl;
 
         newRound();
-
         //decrementing remaining rounds
         unsigned int r = c->getRemainingRounds();
         c->setRemainingRounds(r - 1);
@@ -39,7 +38,7 @@ void Controller::initForNewRound() {
     std::cout << "\n========= initForNewRound-legacy";
     //init the board
     delete board;
-    board =new Board();
+    board = new Board();
     std::cout << "\nBoard init;";
 
     //init the deck
@@ -64,7 +63,7 @@ void Controller::newRound() {
     std::cout << "\n===================== newRound";
     initForNewRound();
     Side winning = Side::none;
-    while (winning == Side::none){
+    while (winning == Side::none) {
         newTurn();
         current_side = (current_side == Side::s1) ? Side::s2 : Side::s1;
         winning = board->evaluateGameWinner();
@@ -82,37 +81,42 @@ void Controller::checkRound() {
     remainingRounds--;
     if (remainingRounds <= 0 || player1->getScore() >= maxScore || player2->getScore() >= maxScore) {
         qtGameOver();
-    } else {
+    }
+    else {
         newRound();
     }
 }
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
-    cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << getCurrentPlayerHand().getSize() << endl;
-    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
-    unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->uiSelectCard();
     Hand& curHand = getCurrentPlayerHand();
+    unsigned int handSize = curHand.getSize();
+    cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;
+    if (handSize) {
+        UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
+        unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->uiSelectCard();
 
-    const Card& selectedCard = *curHand.getCard(selectedCardNb);
+        const Card& selectedCard = *curHand.getCard(selectedCardNb);
 
-    cout << "(Controller::turnPlayCard) - selectedCardNb = " << selectedCardNb << endl;
-    cout << "(Controller::turnPlayCard) - selectedCard = " << selectedCard.getName() << endl;
+        cout << "(Controller::turnPlayCard) - selectedCardNb = " << selectedCardNb << endl;
+        cout << "(Controller::turnPlayCard) - selectedCard = " << selectedCard.getName() << endl;
 
-    selectedCard.activate();
-    curHand.withdraw(selectedCard);
-
+        selectedCard.activate();
+        curHand.withdraw(selectedCard);
+    }
     cout << "(Controller::turnPlayCard) - hand size (fin de l'action : jouer une carte)) = " << curHand.getSize() << endl;
 }
 
 void Controller::turnDrawCard() {
     std::cout << "\n=============== turnDrawCard()";
-    Deck& d = UserInterface::getInstance()->uiSelectDeck();
-    cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d.getCardCount() << endl;
     UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
-    getCurrentPlayerHand().add(d.draw());
-    cout << "(Controller::turnDrawCard()) - selected deck card count (after draw) : " << d.getCardCount() << endl;
-    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
+    Deck* d = UserInterface::getInstance()->uiSelectDeck();
+    if (d) {
+        cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d->getCardCount() << endl;
+        getCurrentPlayerHand().add(d->draw());
+        UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
+        cout << "(Controller::turnDrawCard()) - selected deck card count (after draw) : " << d->getCardCount() << endl;
+    }
 }
 
 void Controller::turnClaimStone() {
@@ -149,6 +153,7 @@ void Controller::newTurn() {
     turnClaimStone();
     cout << "Your turn is over...!";
     //system("pause");
+    //system("cls");
 }
 
 bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {
@@ -169,7 +174,7 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
         const PlacableCard* cardCandidate = dynamic_cast<const PlacableCard*>(clanDeck->getCard(j));
         if (cardCandidate != nullptr) {
             availableCards[foundedSize++] = cardCandidate;
-            cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize]->getName() << endl;
+            cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize-1]->getName() << endl;
         }
         else {
             //dans ce cas la il reste des cartes tactiques importantes
@@ -179,7 +184,7 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
     //cout << i;
     const Hand* hands[2] = { player1->getHand(), player2->getHand() };
     for (int hi = 0; hi < 2; ++hi) {
-        const Hand * curHand = hands[hi];
+        const Hand* curHand = hands[hi];
         //adding the opponent's cards to available cards
         if (curHand != nullptr) {
             for (size_t k = 0; k < curHand->getSize(); k++) {
@@ -187,7 +192,7 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
                 if (cardCandidate != nullptr) {
                     availableCards[foundedSize] = cardCandidate;
                     foundedSize++;
-                    cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize]->getName() << endl;
+                    cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize-1]->getName() << endl;
                 }
                 else {
                     return false;
@@ -201,14 +206,15 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
 void Controller::claimStone(unsigned int n) {
     Side s = getCurSide();
     if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
-    if (n < 0 || n > board->getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
+    if (n < 0 || n > board->getStoneNb()) throw ShottenTottenException("claimStone : inadequate stone number n");
     Side evaluated_side;
     bool s1Completed = (board->getStone(n).getSizeP1() == board->getStone(n).getMaxSize());
     bool s2Completed = (board->getStone(n).getSizeP2() == board->getStone(n).getMaxSize());
     //to revendicate a stone, current player's combination must be completed
     if ((s == Side::s1 && !s1Completed) || (s == Side::s2) && !s2Completed) {
         evaluated_side = Side::none;
-    }else if (!s1Completed|| !s2Completed) {
+    }
+    else if (!s1Completed || !s2Completed) {
         const PlacableCard** availableCards;
         size_t foundedSize;
         if (getAvailableCards(availableCards, foundedSize)) {
@@ -228,24 +234,24 @@ void Controller::claimStone(unsigned int n) {
         board->getStone(n).setRevendication(s);
     }
     else {
-        cout << endl << "You can't claim stone "<< n << "!" << endl;
+        cout << endl << "You can't claim stone " << n << "!" << endl;
     }
 }
 
 void Controller::playTurn(Side s) {
     if (s == Side::s1) { //player1
         //play card
-        
+
         //draw card
-        
+
         //claim stone
 
     }
     else if (s == Side::s2) { //player2
         //play card
-        
+
         //draw card
-        
+
         //claim stone
     }
     throw ShottenTottenException("playTurn : inadequate side s");
@@ -279,7 +285,8 @@ void TacticController::incrementTacticalPlayed(Side s) {
 bool TacticController::canPlayerPlayTacticalCard() {
     if (getCurSide() == Side::s1) {
         return p1TacticalCardPlayed <= p2TacticalCardPlayed;
-    }else {
+    }
+    else {
         return p1TacticalCardPlayed >= p2TacticalCardPlayed;
     }
 }
@@ -301,7 +308,7 @@ bool TacticController::getAvailableCards(const PlacableCard**& availableCards, s
         else {
             return false;
         }
-        
+
     }
     return true;
 }

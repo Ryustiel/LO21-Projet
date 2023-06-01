@@ -25,13 +25,13 @@ public:
 
     // initialisation du joueur pour la partie
     void initForNewGame() { 
-        std::cout << "\nPlayer::initForNewGame()";
+        std::cout << "Player::initForNewGame()"<<endl;
         score = 0;
     }
     // initRound lancée à chaque début de Manche
     void initForNewRound(const Card** c, const size_t size) {
-        std::cout << "\nPlayer::initForNewRound()";
-        std::cout << "\nHand initialised with " << size << " cards.";
+        std::cout << "Player::initForNewRound()" << endl;
+        std::cout << "Hand initialised with " << size << " cards." << endl;
         hand = new Hand(c, size);
         // set pick to None / -1
     }

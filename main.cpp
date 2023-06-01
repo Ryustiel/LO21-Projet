@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector> // TEMPORARY, for testing in main
 
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
@@ -26,8 +27,7 @@ int main() {
 	std::cout << Utility::randchoice(blist, 5) << " ";
 	std::cout << Utility::randchoice(blist, 5) << " ";
 
-	UserInterface::getInstance()->quickLaunch(1, 1, Version::legacy);
-
+	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
