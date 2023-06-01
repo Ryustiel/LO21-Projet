@@ -45,7 +45,7 @@ public :
     virtual int uiSelectStoneForClaim() = 0;
     virtual int userSelectStoneForClaim() const = 0;
     virtual bool uiWantClaimStone() = 0;
-    virtual Deck& uiSelectDeck() = 0;
+    virtual Deck* uiSelectDeck() = 0;
 
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
@@ -105,7 +105,7 @@ public:
         }
         return 1;
     };
-    Deck& uiSelectDeck() final;
+    Deck* uiSelectDeck() final;
 
     void uiPrintCurrentPlayer() final;
 

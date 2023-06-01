@@ -16,7 +16,7 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-	UserInterface::getInstance()->quickLaunch(1,1,Version::legacy);
+	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
 
