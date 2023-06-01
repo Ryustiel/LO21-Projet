@@ -167,7 +167,7 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
         const PlacableCard* cardCandidate = dynamic_cast<const PlacableCard*>(clanDeck->getCard(j));
         if (cardCandidate != nullptr) {
             availableCards[foundedSize++] = cardCandidate;
-            cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize]->getName() << endl;
+            cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize-1]->getName() << endl;
         }
         else {
             //dans ce cas la il reste des cartes tactiques importantes
@@ -185,7 +185,7 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
                 if (cardCandidate != nullptr) {
                     availableCards[foundedSize] = cardCandidate;
                     foundedSize++;
-                    cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize]->getName() << endl;
+                    cout << "(claimStone) Card" << foundedSize << "(copied) (availableCardsCount = " << availableCardsCount << ") : " << availableCards[foundedSize-1]->getName() << endl;
                 }
                 else {
                     return false;
