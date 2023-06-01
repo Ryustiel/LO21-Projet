@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector> // TEMPORARY, for testing in main
 
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
@@ -20,13 +21,13 @@ int main() {
 
 	UserInterfaceCmd::setInstance();
 
-	bool blist[] = {true, true, false, true, false};
-	std::cout << Utility::randchoice(blist, 5) << " ";
-	std::cout << Utility::randchoice(blist, 5) << " ";
-	std::cout << Utility::randchoice(blist, 5) << " ";
-	std::cout << Utility::randchoice(blist, 5) << " ";
+	std::vector<bool> blist({true, true, false, true, false});
+	std::cout << Utility::randChoice(blist) << " ";
+	std::cout << Utility::randChoice(blist) << " ";
+	std::cout << Utility::randChoice(blist) << " ";
+	std::cout << Utility::randChoice(blist) << " ";
 
-	UserInterface::getInstance()->quickLaunch(0, 1, Version::tactic);
+	//UserInterface::getInstance()->quickLaunch(1, 1, Version::tactic);
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);

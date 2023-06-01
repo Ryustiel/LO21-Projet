@@ -3,17 +3,24 @@
 
 unsigned int PlayerAIRandom::selectCard() const {
 	unsigned int card_nb = 0;
+	
+	/*card_nb = Utility::randchoice(
+		Supervisor::getInstance().getController()->getPickableCards()
+	);*/
+	
 	bool* list_cards = new bool [getHand()->getSize()];
 	list_cards = Supervisor::getInstance().getController()->getPickableCards();
 	while (!list_cards[card_nb]) {
 		card_nb++;
 	}
+	
 	return card_nb;
 }
 
 unsigned int PlayerAIRandom::selectCard(size_t nchoices) const {
 	// choses a random int based on n_stones
-	return Utility::randint(0, nchoices);
+	std::cout << "MAKING RANDOM CHOICE " << nchoices << endl;
+	return Utility::randInt(0, nchoices);
 }
 
 unsigned int PlayerAIRandom::selectStone() const {
