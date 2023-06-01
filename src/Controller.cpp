@@ -89,35 +89,64 @@ void Controller::checkRound() {
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
+    cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << getCurrentPlayerHand().getSize() << endl;
     UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
     unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->uiSelectCard();
     Hand& curHand = getCurrentPlayerHand();
+
     const Card& selectedCard = *curHand.getCard(selectedCardNb);
+
+    cout << "(Controller::turnPlayCard) - selectedCardNb = " << selectedCardNb << endl;
+    cout << "(Controller::turnPlayCard) - selectedCard = " << selectedCard.getName() << endl;
+
     selectedCard.activate();
     curHand.withdraw(selectedCard);
+
+    cout << "(Controller::turnPlayCard) - hand size (fin de l'action : jouer une carte)) = " << curHand.getSize() << endl;
 }
 
 void Controller::turnDrawCard() {
     std::cout << "\n=============== turnDrawCard()";
     Deck& d = UserInterface::getInstance()->uiSelectDeck();
+    cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d.getCardCount() << endl;
+    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
     getCurrentPlayerHand().add(d.draw());
+    cout << "(Controller::turnDrawCard()) - selected deck card count (after draw) : " << d.getCardCount() << endl;
+    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
 }
 
 void Controller::turnClaimStone() {
     std::cout << "\n=============== turnClaimStone()";
     //A DEFINIR !!!
-    /*while (1) {
-        //A DEFINIR !!!
-        unsigned int selectedStoneNB uiSelectStone();
-        claimStone(selectedStoneNB);
-    }*/
+    bool choice_claim = false;
+    PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
+    if (playerAI) { //is IA
+        while (playerAI->WantClaimStone()) {
+            unsigned int selectedStoneNB = playerAI->selectStoneForClaim();
+            claimStone(selectedStoneNB);
+        }
+    }
+    else { //is Human
+        while (UserInterfaceCmd::getInstance()->uiWantClaimStone()) {
+            //A DEFINIR !!!
+            int selectedStoneNB = UserInterfaceCmd::getInstance()->userSelectStoneForClaim();
+            if (selectedStoneNB >= 0)
+                claimStone(selectedStoneNB);
+            else break; //if user's choice is wrong
+        }
+    }
 }
 
 void Controller::newTurn() {
     std::cout << "\n================== newTurn";
+    UserInterfaceCmd::getInstance()->uiPrintCurrentPlayer();
+    UserInterfaceCmd::getInstance()->uiPrintGame();
     turnPlayCard();
-    turnDrawCard();
+    UserInterfaceCmd::getInstance()->uiPrintGame();
+    turnDrawCard(); //pb quand pioche vide
     turnClaimStone();
+    cout << "Your turn is over...!";
+    system("pause");
 }
 
 bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {
@@ -172,10 +201,10 @@ void Controller::claimStone(unsigned int n) {
     if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
     if (n < 0 || n > board->getStoneNb() ) throw ShottenTottenException("claimStone : inadequate stone number n");
     Side evaluated_side;
-    bool s1Completed = board->getStone(n).getSizeP1() != board->getStone(n).getMaxSize();
-    bool s2Completed = board->getStone(n).getSizeP2() != board->getStone(n).getMaxSize();
+    bool s1Completed = (board->getStone(n).getSizeP1() == board->getStone(n).getMaxSize());
+    bool s2Completed = (board->getStone(n).getSizeP2() == board->getStone(n).getMaxSize());
     //to revendicate a stone, current player's combination must be completed
-    if ((s == Side::s1 && !s1Completed)|| (s == Side::s2) && !s2Completed) {
+    if ((s == Side::s1 && !s1Completed) || (s == Side::s2) && !s2Completed) {
         evaluated_side = Side::none;
     }else if (!s1Completed|| !s2Completed) {
         const PlacableCard** availableCards;
@@ -197,7 +226,7 @@ void Controller::claimStone(unsigned int n) {
         board->getStone(n).setRevendication(s);
     }
     else {
-        cout << "You can't revendicate this stone!" << endl;
+        cout << endl << "You can't claim stone "<< n << "!" << endl;
     }
 }
 

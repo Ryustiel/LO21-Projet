@@ -17,7 +17,7 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-	UserInterface::getInstance()->quickLaunch(1,0,Version::tactic);
+	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 
 	// bool blist[] = {true, true, false, true, false};
 	// std::cout << Utility::randchoice(blist, 5) << " ";

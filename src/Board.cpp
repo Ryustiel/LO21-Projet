@@ -3,7 +3,7 @@
 
 void Stone::addCard(const PlacableCard&card, const Side side) { //add card on a given side of the stone
   const PlacableCard** combination;
-  cout << "(Stone : addCard()) - size = " << max_size;
+  //cout << "(Stone : addCard()) - size = " << max_size;
 
   size_t *size;
   switch (side) {
