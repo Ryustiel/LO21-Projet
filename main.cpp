@@ -26,7 +26,7 @@ int main() {
 	std::cout << Utility::randchoice(blist, 5) << " ";
 	std::cout << Utility::randchoice(blist, 5) << " ";
 
-	UserInterface::getInstance()->quickLaunch(0, 1, Version::tactic);
+	UserInterface::getInstance()->quickLaunch(1, 1, Version::legacy);
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);

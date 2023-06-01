@@ -123,7 +123,9 @@ void Controller::turnClaimStone() {
     if (playerAI) { //is IA
         while (playerAI->WantClaimStone()) {
             unsigned int selectedStoneNB = playerAI->selectStoneForClaim();
+            cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
             claimStone(selectedStoneNB);
+            cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
         }
     }
     else { //is Human
@@ -146,7 +148,7 @@ void Controller::newTurn() {
     turnDrawCard(); //pb quand pioche vide
     turnClaimStone();
     cout << "Your turn is over...!";
-    system("pause");
+    //system("pause");
 }
 
 bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {

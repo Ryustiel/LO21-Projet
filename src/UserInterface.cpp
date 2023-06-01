@@ -449,7 +449,7 @@ void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 	//cout << "(uiGameInit) - isIA1 = " << isIA1;
 	//cout << "(uiGameInit) - isIA2 = " << isIA2;
 
-	unsigned int rounds_nb = 5;
+	unsigned int rounds_nb = 1;
 
 	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
 }
