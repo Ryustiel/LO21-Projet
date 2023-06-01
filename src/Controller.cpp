@@ -89,18 +89,30 @@ void Controller::checkRound() {
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
+    cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << getCurrentPlayerHand().getSize() << endl;
     UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
     unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->uiSelectCard();
     Hand& curHand = getCurrentPlayerHand();
+
     const Card& selectedCard = *curHand.getCard(selectedCardNb);
+
+    cout << "(Controller::turnPlayCard) - selectedCardNb = " << selectedCardNb << endl;
+    cout << "(Controller::turnPlayCard) - selectedCard = " << selectedCard.getName() << endl;
+
     selectedCard.activate();
     curHand.withdraw(selectedCard);
+
+    cout << "(Controller::turnPlayCard) - hand size (fin de l'action : jouer une carte)) = " << curHand.getSize() << endl;
 }
 
 void Controller::turnDrawCard() {
     std::cout << "\n=============== turnDrawCard()";
     Deck& d = UserInterface::getInstance()->uiSelectDeck();
+    cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d.getCardCount() << endl;
+    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
     getCurrentPlayerHand().add(d.draw());
+    cout << "(Controller::turnDrawCard()) - selected deck card count (after draw) : " << d.getCardCount() << endl;
+    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
 }
 
 void Controller::turnClaimStone() {
@@ -127,6 +139,7 @@ void Controller::turnClaimStone() {
 
 void Controller::newTurn() {
     std::cout << "\n================== newTurn";
+    UserInterfaceCmd::getInstance()->uiPrintCurrentPlayer();
     UserInterfaceCmd::getInstance()->uiPrintGame();
     turnPlayCard();
     UserInterfaceCmd::getInstance()->uiPrintGame();

@@ -348,12 +348,22 @@ Deck& UserInterfaceCmd::uiSelectDeck() {
 
 }
 
-void UserInterfaceCmd::uiGameView3() {
+void UserInterfaceCmd::uiGameView3() { //TO DELETE
 	cout << "STONES :" << endl;
 
 	//display stones + their combinations
 	for (size_t i = 0; i < Supervisor::getInstance().getController()->getBoard().getStoneNb(); i++) {
-		cout << "Stone" << i << " : " << endl;
+		cout << "Stone" << i << " : ";
+		Stone& cur_stone = Supervisor::getInstance().getController()->getBoard().getStone(i);
+		if (cur_stone.getRevendication() == Side::none) {
+			cout << "Unclaimed" << endl;
+		}
+		else if (cur_stone.getRevendication() == Side::s1) {
+			cout << "Claimed by Player 1" << endl;
+		}
+		else { //claimed by player 2
+			cout << "Claimed by Player 1" << endl;
+		}
 		cout << "Combination Player 1 : " << endl;
 		for (size_t k = 0; k < Supervisor::getInstance().getController()->getBoard().getStone(i).getSizeP1(); k++) { //print combination player 1
 			cout << k << " : " << Supervisor::getInstance().getController()->getBoard().getStone(i).getCombinationP1()[k]->getName() << endl;
@@ -382,12 +392,32 @@ void UserInterfaceCmd::uiPrintPlayerHand() {
 	}
 }
 
+void UserInterfaceCmd::uiPrintCurrentPlayer() {
+	Player* cur_player = Supervisor::getInstance().getController()->getCurrentPlayer();
+	cout << endl << cur_player->getName() << " (current score : " << cur_player->getScore() << " point(s)) - ";
+	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) {
+		cout << " player 1" << endl;
+	}
+	else {
+		cout << " player 2" << endl;
+	}
+}
+
 void UserInterfaceCmd::uiPrintGame() {
 	Board& cur_board = Supervisor::getInstance().getController()->getBoard();
 	cout << endl;
 	for (size_t i = 0; i < cur_board.getStoneNb(); i++) { //for each stone
-		cout << "Stone " << i << endl;
+		cout << "Stone " << i << " : ";
 		Stone& cur_stone = cur_board.getStone(i);
+		if (cur_stone.getRevendication() == Side::none) {
+			cout << "Unclaimed" << endl;
+		}
+		else if (cur_stone.getRevendication() == Side::s1) {
+			cout << "Claimed by Player 1" << endl;
+		}
+		else { //claimed by player 2
+			cout << "Claimed by Player 1" << endl;
+		}
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
 			cout << "		" << k << " : " << cur_stone.getCombinationP1()[k]->getName() << endl;

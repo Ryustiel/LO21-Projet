@@ -50,6 +50,7 @@ public :
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
     virtual void uiPlayCard() = 0;
+    virtual void uiPrintCurrentPlayer() = 0;
 
 protected:
     UserInterface() {}
@@ -105,6 +106,8 @@ public:
         return 1;
     };
     Deck& uiSelectDeck() final;
+
+    void uiPrintCurrentPlayer() final;
 
     //INPUT USERS
     unsigned int userSelectCard() const {
