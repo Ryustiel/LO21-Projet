@@ -9,14 +9,14 @@
 #include <QMessageBox>
 
 //fichiers d'en-tête
-#include "../head_view/stoneview.h"
+#include "../head_view/deckview.h"
 
-VueBorne::VueBorne(/*const Stone& s,*/ QWidget *parent) : QPushButton(parent)/*, borne(&s)*/
+VuePioche::VuePioche(const Deck& d, QWidget *parent) : QPushButton(parent), pioche(&d)
 {
-    setText("Borne");
+    setText("Pioche");
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
-    setFixedSize(60,40);
+    setFixedSize(50,80);
     connect(this,SIGNAL(clicked()),this,SLOT(clickedEvent()));
     setCheckable(true);
 }

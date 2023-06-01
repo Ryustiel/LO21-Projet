@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include "../head_view/parametersview.h"
 #include "../head_view/boardview.h"
-
+#include "../../head/Supervisor.h"
 
 void VueParametres::player1Changed(){
 
@@ -46,7 +46,6 @@ void VueParametres::player2Changed(){
         name2->hide();
         break;
     }
-
 }
 
 void VueParametres::handleContinuer(){
@@ -62,10 +61,30 @@ void VueParametres::handleContinuer(){
         return;
     }
 
-    /*else{
+    if(nbManches->text().toInt()==0){
+        QMessageBox messageBox(QMessageBox::Icon::Warning, "Attention", "Le nombre de manche n'est pas correct");
+        messageBox.exec();
+        return;
+    }
+
+    else{
         if(choix1->currentIndex()==1 || choix1->currentIndex()==2) name1->setText("IA1");
-        if(choix2->currentIndex()==1 || choix2->currentIndex()==2) name1->setText("IA2");
+        if(choix2->currentIndex()==1 || choix2->currentIndex()==2) name2->setText("IA2");
         this->hide();
-        partie->show();
-    }*/
+        int rounds = nbManches->text().toInt();
+        int winthreshold=rounds/2+1;
+        //Supervisor::getInstance();
+        Supervisor::getInstance().eventStartGame(version, name1->text().toStdString(), name2->text().toStdString(), choix1->currentIndex(), choix2->currentIndex(), rounds, winthreshold);
+
+        if (version==Version::legacy) {
+            VuePartie* partie= new VuePartie;
+            partie->show();
+            this->hide();
+        }
+        else {
+            VuePartieTactique* partie = new VuePartieTactique;
+            partie->show();
+            this->hide();
+        }
+    }
 }

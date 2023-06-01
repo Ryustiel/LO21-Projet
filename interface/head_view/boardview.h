@@ -1,14 +1,13 @@
-
 #ifndef BOARDVIEW_H
 #define BOARDVIEW_H
+
 #include <QWidget>
 #include <vector>
 #include <set>
 #include "cardview.h"
 #include "stoneview.h"
-//#include "../../head/Supervisor.h"
+#include "../../head/Supervisor.h"
 #include "qlabel.h"
-
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -17,17 +16,18 @@
 #include <QGridLayout>
 #include <QProgressBar>
 #include <QLCDNumber>
-
-class VueCarte;
+#include "cardview.h"
+#include "stoneview.h"
+#include "deckview.h"
 
 class VuePartie : public QWidget
 {
     Q_OBJECT
 public:
     explicit VuePartie(QWidget *parent = nullptr);
-private: // controleur de la partie a ajouter
-    QLabel* joueur1;
-    QLabel* joueur2;
+protected:
+    QLabel* tourJeu;
+    QLabel* tourJoueur;
     QLabel* scorej1; // texte "Score joueur1"
     QLabel* scorej2; // texte "Score joueur 2"
     QLCDNumber* scoreJoueur1; // affichage du score j1
@@ -35,27 +35,25 @@ private: // controleur de la partie a ajouter
     QLabel* instructions;
     QLabel* manche;
     QLCDNumber* mancheValue;
-    QLabel* pioche; // texte "Pioche"
-    QProgressBar* nbCartesPioche; // progression de la pioche
+    QLabel* piocheClan; // texte "Pioche"
+    QProgressBar* nbCartesPiocheClan; // progression de la pioche
+    QVBoxLayout* pbPioches;
+    VuePioche* clanDeck;
     QHBoxLayout* layoutInformations;
     QGridLayout* layoutCartes; // grille des cartes
     QVBoxLayout* layoutPioches;
-    QGridLayout* layoutMain;
+    QGridLayout* layoutMain1;
+    QGridLayout* layoutMain2;
     QVBoxLayout* couche;
-    //vector<VueBorne*> bornes;
+    vector<VueBorne*> bornes;
     vector<VueCarte*> cartesPlateau; // adresses des objets VueCarte
     vector<VueCarte*> cartesMain1;
     vector<VueCarte*> cartesMain2;
-protected:
-    //pour pouvoir recupere le layout info dans VuePartieTactique
-    //faire pareil pour les layout des pioches
-    QHBoxLayout* getLayoutInformations() const {
-        return layoutInformations;
-    }
-private slots:
+protected slots:
     // slots qui gère les clics sur les cartes
-    //void actioncarte(VueCarte* vc);
-    //void actionborne(VueBorne* vb);
+    virtual void actionCarteMain(VueCarte* vc);
+    virtual void actionBorne(VueBorne* vb);
+    void actionPioche();
 };
 
 class VuePartieTactique : public VuePartie {
@@ -64,11 +62,16 @@ public :
     explicit VuePartieTactique(QWidget *parent = nullptr);
     //~VuePartieTactique();
 private :
-    QLabel* pioche2;
-    QProgressBar* nbCartesPioche2;
+    QLabel* piocheTactique;
+    QProgressBar* nbCartesPiocheT;
+    VuePioche* tacticDeck;
+    VueCarte* discard;
 private slots:
-    //void actioncarte(VueCarte* vc);
-    //void actionborne(VueBorne* vb);
+    void actionCarteMain(VueCarte* vc);
+    void actionCartePlateau(VueCarte* vc);
+    void actionBorne(VueBorne* vb);
+    void actionPioche(VuePioche* vp);
+    void actionDefausse();
 };
 
 

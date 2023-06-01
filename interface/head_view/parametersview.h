@@ -2,10 +2,9 @@
 #define PARAMETERSVIEW_H
 
 #include <QWidget>
-#include "../head_view/versionview.h"
-
 #include <QComboBox>
 #include <QLabel>
+#include "../../head/Version.h"
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
@@ -13,7 +12,7 @@
 class VueParametres : public QWidget {
     Q_OBJECT
 public:
-    explicit VueParametres(QWidget *parent = nullptr): QWidget(parent){
+    explicit VueParametres(QWidget *parent = nullptr, Version vers = Version::legacy): QWidget(parent), version(vers){
         setWindowTitle("Paramètres");
 
         choixJ1 = new QLabel("Choisir le type de joueur 1 :");
@@ -21,7 +20,7 @@ public:
         choix1 = new QComboBox(parent);
         choix1->addItem("Humain");
         choix1->addItem("IA aléatoire");
-        choix1->addItem("IA stratégique");
+        //choix1->addItem("IA stratégique");
 
         connect(choix1, SIGNAL(currentIndexChanged(int)), this, SLOT(player1Changed()));
 
@@ -30,7 +29,7 @@ public:
         choix2 = new QComboBox(parent);
         choix2->addItem("Humain");
         choix2->addItem("IA aléatoire");
-        choix2->addItem("IA stratégique");
+        //choix2->addItem("IA stratégique");
 
         connect(choix2, SIGNAL(currentIndexChanged(int)), this, SLOT(player2Changed()));
 
@@ -64,10 +63,17 @@ public:
         noms->addLayout(nomJ1);
         noms->addLayout(nomJ2);
 
+        manches = new QLabel("Nombres de manches à jouer :");
+        nbManches = new QLineEdit(parent);
+        manche = new QVBoxLayout;
+        manche->addWidget(manches);
+        manche->addWidget(nbManches);
+
         couche = new QVBoxLayout;
         couche->addLayout(Choix1);
         couche->addLayout(Choix2);
         couche->addLayout(noms);
+        couche->addLayout(manche);
         couche->addWidget(go);
 
         setLayout(couche);
@@ -77,6 +83,7 @@ public:
     bool est_IA1() const {return (choix1->currentIndex()==1 || choix1->currentIndex()==2);}
     bool est_IA2() const {return (choix2->currentIndex()==1 || choix2->currentIndex()==2);}
 private:
+    Version version;
     QComboBox* choix1;
     QLabel* choixJ1;
     QComboBox* choix2;
@@ -90,6 +97,9 @@ private:
     QVBoxLayout* noms;
     QHBoxLayout* Choix1;
     QHBoxLayout* Choix2;
+    QLabel* manches;
+    QLineEdit* nbManches;
+    QVBoxLayout* manche;
     QVBoxLayout* couche;
     QPushButton* go;
 private slots:
