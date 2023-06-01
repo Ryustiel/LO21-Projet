@@ -9,6 +9,8 @@
 #include "head/Controller.h"
 #include "head/UserInterface.h"
 
+#include "head/Utility.h"
+
 int main() {
 
 	/*
@@ -17,10 +19,14 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 
-	// bool blist[] = {true, true, false, true, false};
-	// std::cout << Utility::randchoice(blist, 5) << " ";
+	bool blist[] = {true, true, false, true, false};
+	std::cout << Utility::randchoice(blist, 5) << " ";
+	std::cout << Utility::randchoice(blist, 5) << " ";
+	std::cout << Utility::randchoice(blist, 5) << " ";
+	std::cout << Utility::randchoice(blist, 5) << " ";
+
+	UserInterface::getInstance()->quickLaunch(0, 1, Version::tactic);
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
