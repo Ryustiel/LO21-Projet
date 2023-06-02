@@ -66,7 +66,7 @@ public:
 		return nullptr;
 	}
 
-	virtual bool* getPickableCards() const {
+	virtual bool* getPickableCards() {
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
@@ -225,8 +225,10 @@ public :
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
-	virtual bool* getPickableCards() final {
-		if (canPlayerPlayTacticalCard()) {
+	bool* getPickableCards() final {
+		bool test = canPlayerPlayTacticalCard();
+		cout << "getPickableCards() final : canPlayerPlayTacticalCard() = " << test << endl;
+		if (test) {
 			return Controller::getPickableCards();
 		}
 		else {

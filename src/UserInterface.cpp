@@ -321,7 +321,7 @@ Deck* UserInterfaceCmd::uiSelectDeck() {
 	TacticController* tc = dynamic_cast<TacticController*>(c);
 	if (c->getClanDeck().isEmpty()) {
 		if (tc && !tc->getTacticDeck().isEmpty()) {
-			cout << "Clan deck is empty ! Drawing the Tactical deck instead" << endl;
+			cout << "Tactical deck is empty ! Drawing the Clan deck instead" << endl;
 			return &tc->getTacticDeck();
 		}
 		else {

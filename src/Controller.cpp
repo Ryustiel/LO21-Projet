@@ -94,8 +94,8 @@ void Controller::turnPlayCard() {
     unsigned int handSize = curHand.getSize();
     cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;
     if (handSize) {
-        UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
-        unsigned int selectedCardNb = UserInterfaceCmd::getInstance()->uiSelectCard();
+        UserInterface::getInstance()->uiPrintPlayerHand();
+        unsigned int selectedCardNb = UserInterface::getInstance()->uiSelectCard();
 
         const Card& selectedCard = *curHand.getCard(selectedCardNb);
 
@@ -110,19 +110,18 @@ void Controller::turnPlayCard() {
 
 void Controller::turnDrawCard() {
     std::cout << "\n=============== turnDrawCard()";
-    UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
+    UserInterface::getInstance()->uiPrintPlayerHand();
     Deck* d = UserInterface::getInstance()->uiSelectDeck();
     if (d) {
         cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d->getCardCount() << endl;
         getCurrentPlayerHand().add(d->draw());
-        UserInterfaceCmd::getInstance()->uiPrintPlayerHand();
+        UserInterface::getInstance()->uiPrintPlayerHand();
         cout << "(Controller::turnDrawCard()) - selected deck card count (after draw) : " << d->getCardCount() << endl;
     }
 }
 
 void Controller::turnClaimStone() {
     std::cout << "\n=============== turnClaimStone()";
-    //A DEFINIR !!!
     bool choice_claim = false;
     PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
     if (playerAI) { //is IA
@@ -134,9 +133,9 @@ void Controller::turnClaimStone() {
         }
     }
     else { //is Human
-        while (UserInterfaceCmd::getInstance()->uiWantClaimStone()) {
+        while (UserInterface::getInstance()->uiWantClaimStone()) {
             //A DEFINIR !!!
-            int selectedStoneNB = UserInterfaceCmd::getInstance()->userSelectStoneForClaim();
+            int selectedStoneNB = UserInterface::getInstance()->userSelectStoneForClaim();
             if (selectedStoneNB >= 0)
                 claimStone(selectedStoneNB);
             else break; //if user's choice is wrong
@@ -146,10 +145,10 @@ void Controller::turnClaimStone() {
 
 void Controller::newTurn() {
     std::cout << "\n================== newTurn";
-    UserInterfaceCmd::getInstance()->uiPrintCurrentPlayer();
-    UserInterfaceCmd::getInstance()->uiPrintGame();
+    UserInterface::getInstance()->uiPrintCurrentPlayer();
+    UserInterface::getInstance()->uiPrintGame();
     turnPlayCard();
-    UserInterfaceCmd::getInstance()->uiPrintGame();
+    UserInterface::getInstance()->uiPrintGame();
     turnDrawCard(); //pb quand pioche vide
     turnClaimStone();
     cout << "Your turn is over...!";
@@ -284,6 +283,8 @@ void TacticController::incrementTacticalPlayed(Side s) {
 }
 
 bool TacticController::canPlayerPlayTacticalCard() {
+    cout << "(canPlayerPlayTacticalCard()) - p1TacticalCardPlayed =  " << p1TacticalCardPlayed << endl;
+    cout << "(canPlayerPlayTacticalCard()) - p2TacticalCardPlayed =  " << p2TacticalCardPlayed << endl;
     if (getCurSide() == Side::s1) {
         return p1TacticalCardPlayed <= p2TacticalCardPlayed;
     }

@@ -123,7 +123,13 @@ public:
 class Ruses : public Tactical {
 public:
 	Ruses(const string n) : Tactical(n), Card(n) {}
-	~Ruses() final = default;
-	void activate() const final;
+	~Ruses() = default;
+	void activate() const override;
 };
 
+class Banshee : public Ruses {
+public :
+	Banshee(const string n) : Ruses(n), Card(n) {}
+	~Banshee() final = default;
+	void activate() const final;
+};
