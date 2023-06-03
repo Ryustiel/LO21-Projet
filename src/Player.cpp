@@ -33,6 +33,8 @@ unsigned int PlayerAIRandom::selectStone() const {
 	while (!list_stones[stone_nb]) {
 		stone_nb++;
 	}
+	// stone_nb sera toujours défini : 
+	// la partie se termine nécessairement avant que list_stones = { false, false, ..., false }
 	return stone_nb;
 }
 unsigned int PlayerAIRandom::selectStoneForClaim() const {

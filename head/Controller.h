@@ -45,7 +45,8 @@ public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
 
-	//GETTERS
+	// INTERNAL GETTERS
+
 	Player* getCurrentPlayer() const {
 		if (current_side == Side::s1) return player1;
 		return player2;
@@ -54,7 +55,7 @@ public:
 	Side getCurSide() const { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
-	Game getClanGame() const { return clanGame; } //accès en lecture seule
+	Game getClanGame() const { return clanGame; } // accès en lecture seule
 	Board& getBoard() { return *board; } //accès écriture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
@@ -65,6 +66,12 @@ public:
 		if (player2->getScore() > player1->getScore()) return player2;
 		return nullptr;
 	}
+
+	// INTERFACE RELATED GETTERS
+
+	// getCurrentPlayerHandIterator() -> HandIterator
+
+	// getBoardContent() -> BoardIterator
 
 	virtual bool* getPickableCards(size_t * size) const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
@@ -85,6 +92,7 @@ public:
 		}
 		return unclaimed;
 	}
+
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		const size_t sn = board->getStoneNb();
 
@@ -97,7 +105,8 @@ public:
 
 	virtual unsigned int getDeckCount() const { return 1; }
 
-	//SETTERS
+	// SETTERS
+
 	void setTotalRounds(int n) { totalRounds = n; }
 	void setRemainingRounds(int n) { remainingRounds = n; }
 	void setPlayersHand() {
@@ -125,22 +134,10 @@ public:
 	void qtGameOver() {
 		std::cout << "\n================================ qtGameOver";
 	}
-	void qtDisplayPlayerTurn() {
-		std::cout << "\n================================ qtDisplayPlayerTurn";
-		getCurrentPlayerHand();
-		// getPickableCards(); // TO DO : then updates accessible variables""
-		// UserInterfaceCmd::getInstance().uiSelectCard(); <= JAMAIS ETRE LANCE
-	}
-	void qtDisplayStonePicker() { // contient la liste des Stones éligibles
-		std::cout << "\n================================ qtDisplayStonePicker";
-		std::cout << "\nenvoie à qt la liste des bornes sélectionnables pour ce joueur";
-		std::cout << "\ndemande a QT d'afficher le menu pour selectionner des bornes";
-	}
 	void eventCardPicked(int n) {
 		std::cout << "\n================================ eventCardPicked";
 		playerCardPick = 0; // enregistre le choix du joueur
 		getUnclaimedStones(); // actually getting a return value => passed on to qtDisplayStonePicker()
-		qtDisplayStonePicker();
 	}
 	void eventStonePicked() {
 		std::cout << "\n================================ eventStonePicked";
@@ -149,15 +146,10 @@ public:
 		// active l'effet de la carte et récupère un message
 		// enregistre le tout dans 
 	}
-	void qtDisplayAlert() {
-		std::cout << "\n================================ qtDisplayAlert";
-		std::cout << "\naffiche un message sur le plateau de jeu";
-	}
 	void eventChoiceDraw() {
 		std::cout << "\n================================ choiceDraw";
 		// const Card c = clanDeck->draw();
 		// updating player's hand
-		qtDisplayPlayerTurn();
 	}
 	void eventChoiceEndTurn() {
 		std::cout << "\n================================ choiceEndTurn";
@@ -166,7 +158,6 @@ public:
 	void eventChoiceClaim() {
 		std::cout << "\n================================ choiceClaim";
 		getUnclaimedStones();
-		qtDisplayStonePicker();
 	}
 
 	virtual void playTurn(Side s);

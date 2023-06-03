@@ -427,7 +427,7 @@ void UserInterfaceCmd::uiGameView3() { //TO DELETE
 }
 
 void UserInterfaceCmd::uiGameView4() {
-	Supervisor::getInstance().getController()->qtDisplayPlayerTurn();
+	Supervisor::getInstance().getController();
 }
 
 void UserInterfaceCmd::uiPrintPlayerHand() {

@@ -18,7 +18,7 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-	UserInterface::getInstance()->quickLaunch(1,0,Version::tactic);
+	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 
 	bool blist[5] = {true, true, false, false, true};
 	int result = Utility::randChoice(blist, 5);
