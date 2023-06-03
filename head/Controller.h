@@ -66,7 +66,7 @@ public:
 		return nullptr;
 	}
 
-	virtual bool* getPickableCards() const {
+	virtual bool* getPickableCards() const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
