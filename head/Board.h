@@ -68,9 +68,9 @@ private:
 		size_t indice;
 	public:
 		StoneIterator(const PlacableCard** cards, size_t i) : cards(cards), indice(i) {};
-		const PlacableCard* operator*() { return cards[indice]; }
-		bool operator==(const StoneIterator& other) { return other.indice == indice; }
-		bool operator!=(const StoneIterator& other) { return other.indice != indice; }
+		const PlacableCard* operator*() const { return cards[indice]; }
+		bool operator==(const StoneIterator& other) const { return other.indice == indice; }
+		bool operator!=(const StoneIterator& other) const { return other.indice != indice; }
 
 		StoneIterator& operator++() {
 			++indice;
@@ -152,9 +152,9 @@ private:
 		size_t indice;
 	public:
 		BoardIterator(const Stone* stones, size_t i) : stones(stones), indice(i) {};
-		const Stone operator*() { return stones[indice]; }
-		bool operator==(const BoardIterator& other) { return other.indice == indice; }
-		bool operator!=(const BoardIterator& other) { return other.indice != indice; }
+		const Stone& operator*() const { return stones[indice]; }
+		bool operator==(const BoardIterator& other) const { return other.indice == indice; }
+		bool operator!=(const BoardIterator& other) const { return other.indice != indice; }
 
 		BoardIterator& operator++() {
 			++indice;
@@ -167,7 +167,7 @@ public:
 	~Board() { delete[] stones; }
 	Stone* getStones() const { return stones;  }
 	Stone& getStone(unsigned int n) const{ 
-		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
+		if (n < 0 || n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];
 	}
 	size_t getStoneNb() const { return stone_nb;  }
@@ -177,8 +177,8 @@ public:
 	void getPlayableStones(PlacableCard* c) { std::cout << "\nBoard::getPlayableStones();"; }
 
 	// ITERATOR : methods
-	BoardIterator begin() { BoardIterator(stones, 0); } // returns an iterator over side 1
-	BoardIterator end() { BoardIterator(stones, stone_nb); } // ends iterator over side 1
+	BoardIterator begin() { return BoardIterator(stones, 0); }
+	BoardIterator end() { return BoardIterator(stones, stone_nb); }
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const PlacableCard** AvailableCards, const size_t availableCardsCount) const;

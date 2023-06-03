@@ -21,8 +21,8 @@ private:
 	public:
 		HandIterator(const Card** cards, size_t i) : cards(cards), indice(i) {};
 		const Card* operator*() { return cards[indice]; }
-		bool operator==(const HandIterator& other) { return other.indice == indice; }
-		bool operator!=(const HandIterator& other) { return other.indice != indice; }
+		bool operator==(const HandIterator& other) const { return other.indice == indice; }
+		bool operator!=(const HandIterator& other) const { return other.indice != indice; }
 
 		HandIterator& operator++() {
 			++indice; 

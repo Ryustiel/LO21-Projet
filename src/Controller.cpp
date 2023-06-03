@@ -91,12 +91,15 @@ void Controller::checkRound() {
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
 
-    std::cout << endl << "DEBUG BoardIterator and StoneIterator <= in Controller::turnPlayCard()";
+    std::cout << endl << "DEBUG BoardIterator and StoneIterator <= in Controller::turnPlayCard()" << endl;
     /*
-    for (auto card : *getHand()) { // iterator on Hand
-        std::cout << endl << card->getName();
+    for (auto stone : getBoard()) { // iterator on Board
+        for (auto it = stone.begin(Side::s1); it != stone.end(Side::s1); ++it) {
+            std::cout << (*it)->getName() << " ";
+        }
     }
     */
+
 
     Hand& curHand = getCurrentPlayerHand();
     unsigned int handSize = curHand.getSize();
