@@ -280,7 +280,9 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid !" << endl;
+			cout << endl << "DEBUG in UserInterfaceCmd::uiSelectStone()";
+			cout << endl << stone_nb << " STONE NB" << endl << c->getBoard().getStoneNb() << " GET BOARD STONE NB" << endl;
+			cout << "This STONE number is not valid !" << endl;
 			continue;
 		}
 		else if (!playableStones[stone_nb]) {
@@ -304,7 +306,7 @@ unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() { //TO DO
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid !" << endl;
+			cout << "This STONE number isn't valid ! (combat mode)" << endl;
 			continue;
 		}
 		else if (!playableStones[stone_nb]) {
