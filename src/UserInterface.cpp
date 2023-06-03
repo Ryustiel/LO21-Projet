@@ -280,14 +280,36 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid !" << endl;
+			cout << "This number isn't valid!" << endl;
 			continue;
 		}
 		else if (!playableStones[stone_nb]) {
-			cout << "This Stone is full ! Choose an another one !" << endl;
+			cout << "This Stone is full! Choose an another one!" << endl;
 			continue;
 		}
-		cout << "Selected stone (number) : " << stone_nb << endl;
+		cout << "Selected stone (number): " << stone_nb << endl;
+		return stone_nb;
+	}
+}
+
+unsigned int UserInterfaceCmd::uiSelectStoneCombatMode() {
+	unsigned int stone_nb;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
+	if (c == nullptr) throw ShottenTottenException("UserInterfaceCmd::uiSelectStoneCombatMode - controller isn't tactical !");
+	bool* playableStonesCM = c->getPlayableCombatModeStones();
+	while (true) { //user input until correct
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
+
+		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
+			cout << "This number isn't valid !" << endl;
+			continue;
+		}
+		else if (!playableStonesCM[stone_nb]) {
+			cout << "This Stone already bears a Combat Mode card! Please select another stone." << endl;
+			continue;
+		}
+		cout << "Selected stone (number): " << stone_nb << endl;
 		return stone_nb;
 	}
 }
@@ -440,13 +462,14 @@ void UserInterfaceCmd::uiPrintPlayerHand() {
 
 void UserInterfaceCmd::uiPrintCurrentPlayer() {
 	Player* cur_player = Supervisor::getInstance().getController()->getCurrentPlayer();
-	cout << endl << cur_player->getName() << " (current score : " << cur_player->getScore() << " point(s)) - ";
+	cout << endl << "--------------------------------------" << cur_player->getName() << " (current score : " << cur_player->getScore() << " point(s)) - ";
 	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) {
-		cout << " player 1" << endl;
+		cout << " player 1 ";
 	}
 	else {
-		cout << " player 2" << endl;
+		cout << " player 2 ";
 	}
+	cout << "--------------------------------------" << endl;
 }
 
 void UserInterfaceCmd::uiPrintGame() {
@@ -464,13 +487,16 @@ void UserInterfaceCmd::uiPrintGame() {
 		else { //claimed by player 2
 			cout << "Claimed by Player 1" << endl;
 		}
+		if (cur_stone.getCombatMode()) {
+			cout << "	Combat mode : " << cur_stone.getCombatMode()->getName() << endl;
+		}
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
-			cout << "		" << k << " : " << cur_stone.getCombinationP1()[k]->getName() << endl;
+			cout << "		Card " << k << " : " << cur_stone.getCombinationP1()[k]->getName() << endl;
 		}
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP2(); k++) { //display P1 combination
-			cout << "		" << k << " : " << cur_stone.getCombinationP2()[k]->getName() << endl;
+			cout << "		Card " << k << " : " << cur_stone.getCombinationP2()[k]->getName() << endl;
 		}
 		cout << endl;
 	}

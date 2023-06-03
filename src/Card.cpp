@@ -79,6 +79,15 @@ void Elite::activate() const {
 	PlacableCard::activate();
 }
 
+void CombatMode::activate() const {
+	Tactical::activate();
+	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
+	int stoneNb = UserInterfaceCmd::getInstance()->uiSelectStoneCombatMode();
+	Stone& s = c->getBoard().getStone(stoneNb);
+	s.setCombatMode(this);
+}
+
+
 void Ruses::activate() const {
 	Controller* c = Supervisor::getInstance().getController();
 	const TacticController* tc = dynamic_cast<const TacticController*>(c);

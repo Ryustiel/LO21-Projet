@@ -22,7 +22,7 @@ Game::Game(const Version& version) {
         cards[1] = new Elite("Chief2", Colors, Numbers);
         cards[2] = new Elite("Spy", Colors, { Number::seven });
         cards[3] = new Elite("Shield-Bearer", Colors, { Number::one,Number::two,Number::three });
-        cards[4] = new CombatMode("Blind-Man’s Bluff");
+        cards[4] = new BlindManBluff("Blind-Man’s Bluff");
         cards[5] = new CombatMode("Mud Fight");
         cards[6] = new Ruses("Recruiter");
         cards[7] = new Ruses("Strategist");

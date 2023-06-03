@@ -41,6 +41,7 @@ public :
     virtual unsigned int uiSelectCard() = 0;
     virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
     virtual unsigned int uiSelectStone() = 0;
+    virtual unsigned int uiSelectStoneCombatMode() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
     virtual int uiSelectStoneForClaim() = 0;
     virtual int userSelectStoneForClaim() const = 0;
@@ -157,7 +158,7 @@ public:
         return stone_nb;
     }
 
-
+    unsigned int uiSelectStoneCombatMode() override;
     ///PLAY THE GAME
     void uiGameView2(); //pick a card
     void uiGameView3(); //pick a stone (always after uiGameView2) ; can be skipped

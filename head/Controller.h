@@ -92,6 +92,18 @@ public:
 		}
 		return playable;
 	}
+	bool* getPlayableCombatModeStones() { //vérifie les bornes sur lesquelles on peut poser une carte Combat mode -> non revendiquées et ne possédant pas déjà une combat mode
+		const size_t sn = board->getStoneNb();
+		bool* playableCM = getUnclaimedStones();
+		for (size_t i = 0; i < sn; ++i) {
+			playableCM[i] = playableCM[i] && (board->getStone(i).getCombatMode() == nullptr);
+		}
+		cout << "(getPlayableCombatModeStones) - bool list : ";
+		for (size_t i = 0; i < sn; ++i) {
+			cout << playableCM[i] << " ; ";
+		}
+		return playableCM;
+	}
 
 	virtual unsigned int getDeckCount() const { return 1; }
 

@@ -116,8 +116,15 @@ public:
 class CombatMode : public Tactical {
 public:
 	CombatMode(const string n) : Tactical(n), Card(n) {}
-	~CombatMode() final = default;
-	void activate() const final { return; };
+	~CombatMode() = default;
+	void activate() const override;
+};
+
+class BlindManBluff : public CombatMode {
+public:
+	BlindManBluff(const string n) : CombatMode(n), Card(n) {}
+	~BlindManBluff() final = default;
+	void activate() const final { CombatMode::activate(); }
 };
 
 class Ruses : public Tactical {
