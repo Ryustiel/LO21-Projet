@@ -69,8 +69,6 @@ public:
 
 	// INTERFACE RELATED GETTERS
 
-	// getCurrentPlayerHandIterator() -> HandIterator
-
 	// getBoardContent() -> BoardIterator
 
 	bool canPlayCard() { // returns True if at least one card is playable
