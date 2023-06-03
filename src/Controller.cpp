@@ -283,7 +283,7 @@ void TacticController::incrementTacticalPlayed(Side s) {
     }
 }
 
-bool TacticController::canPlayerPlayTacticalCard() {
+bool TacticController::playerCanPlayTacticalCard() {
     if (getCurSide() == Side::s1) {
         return p1TacticalCardPlayed <= p2TacticalCardPlayed;
     }

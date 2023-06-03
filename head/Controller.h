@@ -233,7 +233,7 @@ public :
 	Discard& getDiscard() const { return *discard; }
 
 	virtual bool* getPickableCards(size_t * size) final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
-		if (canPlayerPlayTacticalCard()) {
+		if (playerCanPlayTacticalCard()) {
 			return Controller::getPickableCards(size); // seules les cartes tactiques comptent : le joueur peut jouer normalement son tour
 		}
 		else { // réimplémente la fonctionnalité de getPickableCards() en excluant les cartes tactiques
@@ -261,5 +261,5 @@ public :
 	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 
 	void incrementTacticalPlayed(Side s);
-	bool canPlayerPlayTacticalCard();
+	bool playerCanPlayTacticalCard();
 };
