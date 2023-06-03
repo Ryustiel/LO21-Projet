@@ -7,6 +7,7 @@
 #include <typeinfo>
 #include <iostream>
 
+/*
 VueCarte::VueCarte(const Card& c, QWidget *parent) : QPushButton(parent),carte(&c)
 {
     setBackgroundRole(QPalette::Base);
@@ -82,6 +83,8 @@ void VueCarte::paintEvent(QPaintEvent *event)
 
 }
 
+
+*/
 
 
 

@@ -40,7 +40,8 @@ VueCarte* VueCarte::createVueCarte(const Card& c, QWidget* parent)
         //A REVOIR
         // Gérer le cas où le type de carte n'est pas reconnu ou n'a pas de vue correspondante
         // Par exemple, retourner une instance de la classe de base VueCarte ou nullptr.
-        return new VueCarte(c, parent);
+        //return new VueCarte(c, parent); // A REGARDER
+        return nullptr;
     }
 }
 
@@ -74,7 +75,7 @@ void VueCarte::paintEvent(QPaintEvent* event)
 
 void VueCarteClan::dessiner(QPainter& painter)
 {
-    const Clan* c = dynamic_cast<const Clan*>(carte);
+    const Clan* c = dynamic_cast<const Clan*>(&getCarte());
     if (c != nullptr)
     {
         QColor couleurCarte = QColor::fromString(toString(c->getColor()));
@@ -90,7 +91,7 @@ void VueCarteClan::dessiner(QPainter& painter)
 
 void VueCarteTactical::dessiner(QPainter& painter)
 {
-    const Tactical* t = dynamic_cast<const Tactical*>(carte);
+    const Tactical* t = dynamic_cast<const Tactical*>(&getCarte());
     if (t != nullptr)
     {
         painter.setPen(Qt::black);

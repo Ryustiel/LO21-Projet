@@ -8,7 +8,7 @@
 #include <QLCDNumber>
 #include <QMessageBox>
 
-#include "../head_view/cardview_old.h"
+#include "../head_view/cardview.h"
 #include "../head_view/boardview.h"
 
 //constructeur

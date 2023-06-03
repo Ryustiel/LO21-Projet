@@ -19,7 +19,7 @@ public:
     //permet la création d'une instance VueCarte en fonction du type de carte
     static VueCarte* createVueCarte(const Card& c, QWidget* parent = nullptr);
 
-    void setCarte(const Card& c) { setCheckable(true); setChecked(false); carte = &c; update(); }
+    void setCarte(const Card& c); //{ setCheckable(true); setChecked(false); carte = &c; update(); }
     void setNoCarte() { carte = nullptr; setCheckable(false); update(); }
     const Card& getCarte() const { return *carte; }
     bool cartePresente() const { return carte != nullptr; }

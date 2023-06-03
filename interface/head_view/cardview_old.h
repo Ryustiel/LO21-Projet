@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
+/*
 class VueCarte : public QPushButton
 {
     Q_OBJECT
