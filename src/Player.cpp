@@ -3,11 +3,10 @@
 
 unsigned int PlayerAIRandom::selectCard() const {
 	
-	
 	size_t size = 0;
 	bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&size);
 	unsigned int card_nb = Utility::randChoice(pickable, size);
-	
+
 	/*
 	unsigned int card_nb = 0;
 	bool* list_cards = new bool[getHand()->getSize()];
@@ -17,6 +16,12 @@ unsigned int PlayerAIRandom::selectCard() const {
 	}
 	*/
 	
+	std::cout << endl << "DEBUG IN PlayerAIRandom::selectCard()";
+	for (int i = 0; i < size; i++) {
+		std::cout << endl << pickable[i] << " [" << i << "]";
+	}
+	std::cout << endl << card_nb << endl;
+
 	return card_nb;
 }
 
@@ -28,13 +33,26 @@ unsigned int PlayerAIRandom::selectCard(size_t nchoices) const {
 
 unsigned int PlayerAIRandom::selectStone() const {
 	unsigned int stone_nb = 0;
-	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
+	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
+	bool* list_stones = new bool[max_stones];
 	list_stones = Supervisor::getInstance().getController()->getPlayableStones();
 	while (!list_stones[stone_nb]) {
 		stone_nb++;
 	}
 	// stone_nb sera toujours défini : 
 	// la partie se termine nécessairement avant que list_stones = { false, false, ..., false }
+	if (stone_nb >= max_stones) {
+		std::cout << endl << "selectStone() DEBUG ALERT";
+		std::cout << endl << "stone_nb [" << stone_nb << "] ; MAX stones [" << max_stones;
+		std::cout << "]";
+		for (int i = 0; i < max_stones; i++) {
+			std::cout << endl << list_stones[i] << " [" << i << "]";
+		}
+		std::cout << endl;
+
+	}
+
+
 	return stone_nb;
 }
 unsigned int PlayerAIRandom::selectStoneForClaim() const {
