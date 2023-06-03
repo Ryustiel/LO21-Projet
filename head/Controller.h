@@ -38,14 +38,15 @@ private:
 
 	void newRound(); // événement de début de manche
 	void checkRound(); // verifie si la manche est gagnée
-	
+
 	virtual void newTurn(); // lance un nouveau tour de joueur
 
 public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
 
-	//GETTERS
+	// INTERNAL GETTERS
+
 	Player* getCurrentPlayer() const {
 		if (current_side == Side::s1) return player1;
 		return player2;
@@ -54,7 +55,7 @@ public:
 	Side getCurSide() const { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
-	Game getClanGame() const { return clanGame; } //accès en lecture seule
+	Game getClanGame() const { return clanGame; } // accès en lecture seule
 	Board& getBoard() { return *board; } //accès écriture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
@@ -65,16 +66,34 @@ public:
 		if (player2->getScore() > player1->getScore()) return player2;
 		return nullptr;
 	}
+	// INTERFACE RELATED GETTERS
 
-	virtual bool* getPickableCards() {
+	// getBoardContent() -> BoardIterator
+
+	bool canPlayCard() { // returns True if at least one card is playable
+		size_t size;
+		bool* playable = getPickableCards(&size);
+		bool at_least_one = false;
+		for (size_t i = 0; i < size; i++) {
+			if (playable[i]) {
+				at_least_one = true;
+				break;
+			}
+		}
+		return at_least_one;
+	}
+
+	virtual bool* getPickableCards(size_t * size) const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
 		for (size_t i = 0; i < hs; ++i) {
 			pickable[i] = true;
 		}
+		*size = hs; // sauvegarde une valeur pour exporter
 		return pickable;
 	} // récupère la liste des cartes jouables
+
 	bool* getUnclaimedStones() const {
 		const size_t sn = board->getStoneNb();
 		bool* unclaimed = new bool[sn];
@@ -83,6 +102,7 @@ public:
 		}
 		return unclaimed;
 	}
+
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		const size_t sn = board->getStoneNb();
 
@@ -107,7 +127,8 @@ public:
 
 	virtual unsigned int getDeckCount() const { return 1; }
 
-	//SETTERS
+	// SETTERS
+
 	void setTotalRounds(int n) { totalRounds = n; }
 	void setRemainingRounds(int n) { remainingRounds = n; }
 	void setPlayersHand() {
@@ -135,39 +156,22 @@ public:
 	void qtGameOver() {
 		std::cout << "\n================================ qtGameOver";
 	}
-	void qtDisplayPlayerTurn() {
-		std::cout << "\n================================ qtDisplayPlayerTurn";
-		getCurrentPlayerHand();
-		getPickableCards(); // TO DO : then updates accessible variables""
-		// UserInterfaceCmd::getInstance().uiSelectCard(); <= JAMAIS ETRE LANCE
-	}
-	void qtDisplayStonePicker() { // contient la liste des Stones éligibles
-		std::cout << "\n================================ qtDisplayStonePicker";
-		std::cout << "\nenvoie à qt la liste des bornes sélectionnables pour ce joueur";
-		std::cout << "\ndemande a QT d'afficher le menu pour selectionner des bornes";
-	}
 	void eventCardPicked(int n) {
 		std::cout << "\n================================ eventCardPicked";
 		playerCardPick = 0; // enregistre le choix du joueur
 		getUnclaimedStones(); // actually getting a return value => passed on to qtDisplayStonePicker()
-		qtDisplayStonePicker();
 	}
 	void eventStonePicked() {
 		std::cout << "\n================================ eventStonePicked";
 		std::cout << "\nactive l'effet de la carte, les modifications sur l'etat du jeu";
 		// vérifie si la carte requiert plus de bornes à sélectionner (effets actifs)
 		// active l'effet de la carte et récupère un message
-		// enregistre le tout dans 
-	}
-	void qtDisplayAlert() {
-		std::cout << "\n================================ qtDisplayAlert";
-		std::cout << "\naffiche un message sur le plateau de jeu";
+		// enregistre le tout dans
 	}
 	void eventChoiceDraw() {
 		std::cout << "\n================================ choiceDraw";
 		// const Card c = clanDeck->draw();
 		// updating player's hand
-		qtDisplayPlayerTurn();
 	}
 	void eventChoiceEndTurn() {
 		std::cout << "\n================================ choiceEndTurn";
@@ -176,7 +180,6 @@ public:
 	void eventChoiceClaim() {
 		std::cout << "\n================================ choiceClaim";
 		getUnclaimedStones();
-		qtDisplayStonePicker();
 	}
 
 	virtual void playTurn(Side s);
@@ -237,19 +240,21 @@ public :
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
-	bool* getPickableCards() final {
-		bool test = canPlayerPlayTacticalCard();
-		cout << "getPickableCards() final : canPlayerPlayTacticalCard() = " << test << endl;
-		if (test) {
-			return Controller::getPickableCards();
+
+	virtual bool* getPickableCards(size_t * size) final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
+		if (playerCanPlayTacticalCard()) {
+			return Controller::getPickableCards(size); // seules les cartes tactiques comptent : le joueur peut jouer normalement son tour
 		}
-		else {
+		else { // réimplémente la fonctionnalité de getPickableCards() en excluant les cartes tactiques
 			Hand& curHand = getCurrentPlayerHand();
 			const size_t hs = curHand.getSize();
 			bool* pickable = new bool[hs];
 			for (size_t i = 0; i < hs; ++i) {
 				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
 			}
+
+			*size = hs;
+
 			return pickable;
 		}
 	}
@@ -265,5 +270,5 @@ public :
 	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 
 	void incrementTacticalPlayed(Side s);
-	bool canPlayerPlayTacticalCard();
+	bool playerCanPlayTacticalCard();
 };

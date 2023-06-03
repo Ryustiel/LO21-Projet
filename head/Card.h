@@ -34,6 +34,15 @@ public:
 	virtual ~Card() = default;
 	const string& getName() const { return name; }
 	virtual void activate() const=0;
+	
+	// playability methods
+	/*
+	virtual bool isPlayable(Board& b) { return true; }; // checks if the card is playable on at least one stone
+	virtual bool* getPlayableStones(BoardSideIterator it) { // returns the playable stones for that card
+		bool TEMP[2] = { true, true };
+		return TEMP;
+	};
+	*/
 };
 
 class PlacableCard : public virtual Card {

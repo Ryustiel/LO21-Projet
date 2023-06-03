@@ -115,8 +115,9 @@ public:
         unsigned int card_nb = 0;
         cout << endl << "Select a card to play from your hand (number) : ";
         cin >> card_nb;
-        unsigned int card_hand_count = Supervisor::getInstance().getController()->getCurrentPlayer()->getHand()->getSize();
-        while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!Supervisor::getInstance().getController()->getPickableCards()[card_nb])) { //user input until correct
+        size_t card_hand_count = 0; // la valeur sera mise à jour avec getPickableCards()
+        bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&card_hand_count);
+        while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!pickable[card_nb])) { // user input until correct
             cout << endl << "You can't play this card. Please select a card to play from your hand : ";
             cin >> card_nb;
         }

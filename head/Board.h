@@ -47,8 +47,8 @@ inline string toString(CombinationType c) {
 	}
 }
 
-//bestStraighCompletion is unused
-const PlacableCard** bestStraighCompletion(list<const PlacableCard*> cardNumberTable[9], const PlacableCard** possibleCards, const size_t pcn, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 9, const PlacableCard* partialResult[9] = nullptr);
+//bestStraightCompletion is unused
+const PlacableCard** bestStraightCompletion(list<const PlacableCard*> cardNumberTable[9], const PlacableCard** possibleCards, const size_t pcn, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 9, const PlacableCard* partialResult[9] = nullptr);
 const bool recursiveCombinationType(int* baseComb, const PlacableCard* possibleCards[],  const size_t maxSize, int* max, const size_t size =0);
 
 class Stone {
@@ -61,6 +61,22 @@ private:
 	const CombatMode* combat_mode = nullptr;
 	Side revendication;
 	Side firstCompleted;
+
+	class StoneIterator { // iterator
+	private:
+		const PlacableCard** cards;
+		size_t indice;
+	public:
+		StoneIterator(const PlacableCard** cards, size_t i) : cards(cards), indice(i) {};
+		const PlacableCard* operator*() const { return cards[indice]; }
+		bool operator==(const StoneIterator& other) const { return other.indice == indice; }
+		bool operator!=(const StoneIterator& other) const { return other.indice != indice; }
+
+		StoneIterator& operator++() {
+			++indice;
+			return *this;
+		}
+	};
 
 public:
 	Stone()
@@ -88,6 +104,16 @@ public:
 
 	void addCard(const PlacableCard& card, const Side side);
 	const PlacableCard& removeCard(const PlacableCard& card, const Side side);
+
+	// ITERATOR : methods
+	StoneIterator begin(Side side) { 
+		if (side == Side::s1) { return StoneIterator(combination_p1, 0); }
+		else { return StoneIterator(combination_p2, 0); }
+		}
+	StoneIterator end(Side side) {
+		if (side == Side::s1) { return StoneIterator(combination_p1, size_p1); }
+		else { return StoneIterator(combination_p2, size_p2); }
+	}
 	
 	//determine if the border is won by any side
 	const Side evaluateWinningSide(const PlacableCard** AvailableCards, const size_t availableCardsCount) const;
@@ -115,15 +141,33 @@ private:
 	Stone* stones; //const Stone* ?
 	size_t stone_nb;
 
-  // indique si les checks prÃ©cÃ©dents ont dÃ©terminÃ© que la partie Ã©tait gagnÃ©e
-  bool won = false; 
+	// indique si les checks prÃ©cÃ©dents ont dÃ©terminÃ© que la partie Ã©tait gagnÃ©e
+	bool won = false; 
+
+	// BoardIterator renvoie des iterateurs qui correspondent à chaque Stone
+	// Les iterateurs StoneIterator renvoient les side
+	class BoardIterator {
+	private:
+		const Stone* stones;
+		size_t indice;
+	public:
+		BoardIterator(const Stone* stones, size_t i) : stones(stones), indice(i) {};
+		const Stone& operator*() const { return stones[indice]; }
+		bool operator==(const BoardIterator& other) const { return other.indice == indice; }
+		bool operator!=(const BoardIterator& other) const { return other.indice != indice; }
+
+		BoardIterator& operator++() {
+			++indice;
+			return *this;
+		}
+	};
 
 public:
 	Board(size_t size = 9) : stone_nb(size), stones(new Stone[size]) {}
 	~Board() { delete[] stones; }
 	Stone* getStones() const { return stones;  }
 	Stone& getStone(unsigned int n) const{ 
-		if (n < 0 && n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
+		if (n < 0 || n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];
 	}
 	size_t getStoneNb() const { return stone_nb;  }
@@ -131,6 +175,10 @@ public:
 	void addCard(const PlacableCard& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
 	const PlacableCard& removeCard(const PlacableCard& card, const Side side,const unsigned int n);
 	void getPlayableStones(PlacableCard* c) { std::cout << "\nBoard::getPlayableStones();"; }
+
+	// ITERATOR : methods
+	BoardIterator begin() { return BoardIterator(stones, 0); }
+	BoardIterator end() { return BoardIterator(stones, stone_nb); }
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const PlacableCard** AvailableCards, const size_t availableCardsCount) const;

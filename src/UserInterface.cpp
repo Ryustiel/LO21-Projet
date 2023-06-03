@@ -196,7 +196,7 @@ unsigned int UserInterfaceCmd::uiSelectCard() {
 	return card_nb;
 }
 
-unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) { 
+unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
 	int card_nb = 0;
 	cout << endl << "Select a card from this stone (type in a number) : ";
 	size_t nstones; // number on cards on a stone
@@ -225,11 +225,14 @@ void UserInterfaceCmd::uiPlayCard() {
 
 	//display cards in player's hand
 	cout << "Your hand : " << endl;
-	Hand& cur_player_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
+	Hand& curr_player_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
+	/*
 	for (size_t i = 0; i < cur_player_hand.getSize(); i++) {
 		cout << i << " : " << Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i)->getName();
-
 	}
+	*/
+	size_t i = 0;
+	for (auto card : curr_player_hand) { std::cout << i++ << " : " << card->getName(); }
 	unsigned int card_hand_nb = uiSelectCard();
 	Supervisor::getInstance().getController()->eventCardPicked(card_hand_nb);
 }
@@ -280,7 +283,9 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid!" << endl;
+			cout << endl << "DEBUG in UserInterfaceCmd::uiSelectStone()";
+			cout << endl << stone_nb << " STONE NB" << endl << c->getBoard().getStoneNb() << " GET BOARD STONE NB" << endl;
+			cout << "This stone number is not valid !" << endl;
 			continue;
 		}
 		else if (!playableStones[stone_nb]) {
@@ -326,7 +331,7 @@ unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() { //TO DO
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid !" << endl;
+			cout << "This STONE number isn't valid ! (combat mode)" << endl;
 			continue;
 		}
 		else if (!playableStones[stone_nb]) {
@@ -449,7 +454,7 @@ void UserInterfaceCmd::uiGameView3() { //TO DELETE
 }
 
 void UserInterfaceCmd::uiGameView4() {
-	Supervisor::getInstance().getController()->qtDisplayPlayerTurn();
+	Supervisor::getInstance().getController();
 }
 
 void UserInterfaceCmd::uiPrintPlayerHand() {

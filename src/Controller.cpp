@@ -90,6 +90,17 @@ void Controller::checkRound() {
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
+
+    std::cout << endl << "DEBUG BoardIterator and StoneIterator <= in Controller::turnPlayCard()" << endl;
+    /*
+    for (auto stone : getBoard()) { // iterator on Board
+        for (auto it = stone.begin(Side::s1); it != stone.end(Side::s1); ++it) {
+            std::cout << (*it)->getName() << " ";
+        }
+    }
+    */
+
+
     Hand& curHand = getCurrentPlayerHand();
     unsigned int handSize = curHand.getSize();
     cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;
@@ -282,9 +293,9 @@ void TacticController::incrementTacticalPlayed(Side s) {
     }
 }
 
-bool TacticController::canPlayerPlayTacticalCard() {
-    cout << "(canPlayerPlayTacticalCard()) - p1TacticalCardPlayed =  " << p1TacticalCardPlayed << endl;
-    cout << "(canPlayerPlayTacticalCard()) - p2TacticalCardPlayed =  " << p2TacticalCardPlayed << endl;
+bool TacticController::playerCanPlayTacticalCard() {
+  cout << "(canPlayerPlayTacticalCard()) - p1TacticalCardPlayed =  " << p1TacticalCardPlayed << endl;
+  cout << "(canPlayerPlayTacticalCard()) - p2TacticalCardPlayed =  " << p2TacticalCardPlayed << endl;
     if (getCurSide() == Side::s1) {
         return p1TacticalCardPlayed <= p2TacticalCardPlayed;
     }
