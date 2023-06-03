@@ -66,15 +66,17 @@ public:
 		return nullptr;
 	}
 
-	virtual bool* getPickableCards() const { // modifier ça pour avoir une size TO DO
+	virtual bool* getPickableCards(size_t * size) const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
 		for (size_t i = 0; i < hs; ++i) {
 			pickable[i] = true;
 		}
+		*size = hs; // sauvegarde une valeur pour exporter 
 		return pickable;
 	} // récupère la liste des cartes jouables
+
 	bool* getUnclaimedStones() const {
 		const size_t sn = board->getStoneNb();
 		bool* unclaimed = new bool[sn];
@@ -126,7 +128,7 @@ public:
 	void qtDisplayPlayerTurn() {
 		std::cout << "\n================================ qtDisplayPlayerTurn";
 		getCurrentPlayerHand();
-		getPickableCards(); // TO DO : then updates accessible variables""
+		// getPickableCards(); // TO DO : then updates accessible variables""
 		// UserInterfaceCmd::getInstance().uiSelectCard(); <= JAMAIS ETRE LANCE
 	}
 	void qtDisplayStonePicker() { // contient la liste des Stones éligibles
@@ -225,17 +227,21 @@ public :
 	Deck& getTacticDeck() const { return *tacticDeck; }
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
-	virtual bool* getPickableCards() final {
+
+	virtual bool* getPickableCards(size_t * size) final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
 		if (canPlayerPlayTacticalCard()) {
-			return Controller::getPickableCards();
+			return Controller::getPickableCards(size); // seules les cartes tactiques comptent : le joueur peut jouer normalement son tour
 		}
-		else {
+		else { // réimplémente la fonctionnalité de getPickableCards() en excluant les cartes tactiques
 			Hand& curHand = getCurrentPlayerHand();
 			const size_t hs = curHand.getSize();
 			bool* pickable = new bool[hs];
 			for (size_t i = 0; i < hs; ++i) {
 				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
 			}
+
+			*size = hs;
+
 			return pickable;
 		}
 	}

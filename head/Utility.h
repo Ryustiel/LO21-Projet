@@ -4,9 +4,9 @@
 
 namespace Utility {
 
-	std::vector<unsigned int> boolToIndices(std::vector<bool> blist);
+	std::vector<unsigned int> boolToIndices(bool* blist, size_t size);
 	
 	int randInt(unsigned int min, unsigned int max);
 
-	int randChoice(std::vector<bool> blist);
+	int randChoice(bool* blist, size_t size);
 }

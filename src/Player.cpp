@@ -2,17 +2,20 @@
 #include "../head/Supervisor.h"
 
 unsigned int PlayerAIRandom::selectCard() const {
+	
+	
+	size_t size = 0;
+	bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&size);
+	unsigned int card_nb = Utility::randChoice(pickable, size);
+	
+	/*
 	unsigned int card_nb = 0;
-	
-	/*card_nb = Utility::randchoice(
-		Supervisor::getInstance().getController()->getPickableCards()
-	);*/
-	
-	bool* list_cards = new bool [getHand()->getSize()];
+	bool* list_cards = new bool[getHand()->getSize()];
 	list_cards = Supervisor::getInstance().getController()->getPickableCards();
 	while (!list_cards[card_nb]) {
 		card_nb++;
 	}
+	*/
 	
 	return card_nb;
 }
