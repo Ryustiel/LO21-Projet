@@ -1,5 +1,5 @@
 #include "../head/Controller.h"
-#include "../head/Supervisor.h" 
+#include "../head/Supervisor.h"
 #include <iostream>
 #include "../head/UserInterface.h"
 
@@ -74,6 +74,7 @@ void Controller::newRound() {
     else {
         player2->updateScore();
     }
+    system("pause");
 }
 
 void Controller::checkRound() {
@@ -127,7 +128,9 @@ void Controller::turnClaimStone() {
     if (playerAI) { //is IA
         while (playerAI->WantClaimStone()) {
             unsigned int selectedStoneNB = playerAI->selectStoneForClaim();
+            cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
             claimStone(selectedStoneNB);
+            cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
         }
     }
     else { //is Human
@@ -151,7 +154,7 @@ void Controller::newTurn() {
     turnClaimStone();
     cout << "Your turn is over...!";
     //system("pause");
-    system("cls");
+    //system("cls");
 }
 
 bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t& foundedSize) {

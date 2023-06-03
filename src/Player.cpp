@@ -51,7 +51,8 @@ unsigned int PlayerAIRandom::selectStoneForClaim() const {
 }
 
 unsigned int PlayerAIRandom::selectDeck() const {
-	return rand() % 2;
+	unsigned int deck_count = Supervisor::getInstance().getController()->getDeckCount();
+	return rand() % deck_count;
 }
 
 bool PlayerAIRandom::WantClaimStone() const {

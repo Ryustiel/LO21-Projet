@@ -9,7 +9,6 @@
 #include "head/Board.h"
 #include "head/Controller.h"
 #include "head/UserInterface.h"
-
 #include "head/Utility.h"
 
 int main() {
@@ -20,7 +19,6 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-
 	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
