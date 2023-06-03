@@ -73,6 +73,19 @@ public:
 
 	// getBoardContent() -> BoardIterator
 
+	bool canPlayCard() { // returns True if at least one card is playable
+		size_t size;
+		bool* playable = getPickableCards(&size);
+		bool at_least_one = false;
+		for (size_t i = 0; i < size; i++) {
+			if (playable[i]) { 
+				at_least_one = true;
+				break;
+			}
+		}
+		return at_least_one;
+	}
+
 	virtual bool* getPickableCards(size_t * size) const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
