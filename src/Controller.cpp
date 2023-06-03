@@ -90,6 +90,14 @@ void Controller::checkRound() {
 
 void Controller::turnPlayCard() {
     std::cout << "\n=============== turnPlayCard()";
+
+    std::cout << endl << "DEBUG BoardIterator and StoneIterator <= in Controller::turnPlayCard()";
+    /*
+    for (auto card : *getHand()) { // iterator on Hand
+        std::cout << endl << card->getName();
+    }
+    */
+
     Hand& curHand = getCurrentPlayerHand();
     unsigned int handSize = curHand.getSize();
     cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;

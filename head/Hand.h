@@ -17,9 +17,9 @@ private:
 	class HandIterator {
 	private:
 		const Card** cards;
-		unsigned indice;
+		size_t indice;
 	public:
-		HandIterator(const Card** cards, unsigned int i) : cards(cards), indice(i) {};
+		HandIterator(const Card** cards, size_t i) : cards(cards), indice(i) {};
 		const Card* operator*() { return cards[indice]; }
 		bool operator==(const HandIterator& other) { return other.indice == indice; }
 		bool operator!=(const HandIterator& other) { return other.indice != indice; }
