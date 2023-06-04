@@ -22,14 +22,15 @@ public :
 	void setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2);
 	Controller* getController() { return controller; }
 	bool getIsQT() const { return isQT; }
-	
+
 	// declenchement initial de l'interface
 	void eventFirstStart() {
 		std::cout << "\n================================ eventFirstStart";
 		// événements lors de l'initialisation du contrôleur
 		qtDisplayMainMenu();
-	}
-    void eventStartGame(Version v, const string& p1name, const string& p2name,unsigned int AI_player1, unsigned int AI_player2, int nrounds, int winthreshold) { // game version, number of rounds
+
+  void eventStartGame(Version v, const string& p1name, const string& p2name,unsigned int AI_player1, unsigned int AI_player2, int nrounds, int winthreshold) { // game version, number of rounds
+
 		std::cout << "\n================================ eventStartGame";
 		Supervisor::getInstance().setController(v, p1name, p2name, AI_player1, AI_player2);
 		Supervisor::getInstance().getController()->runGame(nrounds, winthreshold);

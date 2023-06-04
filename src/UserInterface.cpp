@@ -136,7 +136,7 @@ void UserInterfaceCmd::uiGameInit() {
 	unsigned int rounds_nb = uiSelectRounds();
 
 	//initializing controller :
-	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
 	//cout << "(uiGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
@@ -556,7 +556,7 @@ void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 
 	unsigned int rounds_nb = 5;
 
-	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
 }
 
 void UserInterfaceCmd::uiPrintDiscard() {
