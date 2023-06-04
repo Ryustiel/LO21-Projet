@@ -115,12 +115,6 @@ void Banshee::activate() const {
 		UserInterfaceCmd::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
 		Stone& s = c->getBoard().getStone(stoneNb);
 
-		while (cardNb == -1) {
-			UserInterface::getInstance()->uiInvalidChoiceMsg();
-			int stoneNb = UserInterface::getInstance()->uiSelectUnclaimedStone();
-			Stone& s = c->getBoard().getStone(stoneNb);
-			cardNb = UserInterface::getInstance()->uiSelectCardOnStone(opponent_side, stoneNb);
-		}
 
 		const PlacableCard& selected_card = *s.getCombinationSide(opponent_side)[cardNb];
 		s.removeCard(selected_card, opponent_side);
@@ -145,5 +139,25 @@ void Strategist::activate() const {
 	s.removeCard(selected_card, c->getCurSide());
 
 	//putting it on the right stone -> playable card activation
+	selected_card.PlacableCard::activate();
+}
+
+void Traiter::activate() const {
+	Ruses::activate();
+	Controller* c = Supervisor::getInstance().getController();
+	const TacticController* tc = dynamic_cast<const TacticController*>(c);
+	if (tc == nullptr) {
+		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
+	}
+	Side opponent_side = c->getCurSide() == Side::s2 ? Side::s1 : Side::s2;
+
+	unsigned int cardNb;
+	unsigned int stoneNb;
+	UserInterfaceCmd::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+	Stone& s = c->getBoard().getStone(stoneNb);
+
+
+	const PlacableCard& selected_card = *s.getCombinationSide(opponent_side)[cardNb];
+	s.removeCard(selected_card, opponent_side);
 	selected_card.PlacableCard::activate();
 }

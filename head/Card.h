@@ -156,3 +156,10 @@ public:
 	~Strategist() final = default;
 	void activate() const final;
 };
+
+class Traiter : public Ruses {
+public:
+	Traiter(const string n) : Ruses(n), Card(n) {}
+	~Traiter() final = default;
+	void activate() const final;
+};
