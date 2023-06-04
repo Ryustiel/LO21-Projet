@@ -77,12 +77,14 @@ void VueParametres::handleContinuer(){
         Supervisor::getInstance().eventStartGame(version, name1->text().toStdString(), name2->text().toStdString(), choix1->currentIndex(), choix2->currentIndex(), rounds, winthreshold);
 
         if (version==Version::legacy) {
-            VuePartie* partie= new VuePartie;
+            VuePartie::setInstance();
+            VuePartie * partie=dynamic_cast<VuePartie*>(VuePartie::getInstance());
             partie->show();
             this->hide();
         }
         else {
-            VuePartieTactique* partie = new VuePartieTactique;
+            VuePartieTactique::setInstance();
+            VuePartieTactique * partie=dynamic_cast<VuePartieTactique*>(VuePartieTactique::getInstance());
             partie->show();
             this->hide();
         }

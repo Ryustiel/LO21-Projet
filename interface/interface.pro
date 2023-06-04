@@ -9,6 +9,7 @@ SOURCES += \
     ../src/Hand.cpp \
     ../src/Player.cpp \
     ../src/Supervisor.cpp \
+    ../src/UserInterface.cpp \
     ../src/Version.cpp \
     src_view/boardview.cpp \
     src_view/cardview.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     ../head/Hand.h \
     ../head/Player.h \
     ../head/Supervisor.h \
+    ../head/UserInterface.h \
     ../head/Version.h \
     head_view/boardview.h \
     head_view/cardview.h \

@@ -82,6 +82,7 @@ public:
     const QString getNom2() const {return name2->text();}
     bool est_IA1() const {return (choix1->currentIndex()==1 || choix1->currentIndex()==2);}
     bool est_IA2() const {return (choix2->currentIndex()==1 || choix2->currentIndex()==2);}
+    Version getVersion() const {return version;}
 private:
     Version version;
     QComboBox* choix1;

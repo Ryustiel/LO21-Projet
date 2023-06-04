@@ -7,6 +7,7 @@
 #include "cardview.h"
 #include "stoneview.h"
 #include "../../head/Supervisor.h"
+#include "../../head/UserInterface.h"
 #include "qlabel.h"
 #include <QLabel>
 #include <QLineEdit>
@@ -20,11 +21,33 @@
 #include "stoneview.h"
 #include "deckview.h"
 
-class VuePartie : public QWidget
+class VuePartie : public QWidget, public UserInterface
 {
     Q_OBJECT
-public:
     explicit VuePartie(QWidget *parent = nullptr);
+public:
+    static void setInstance() {
+        if (handler.instance == nullptr) handler.instance = new VuePartie;
+    }
+    unsigned int uiSelectCard() final;
+    unsigned int uiSelectCard(Stone* stone, Side side) final;
+    unsigned int uiSelectStone() final;
+    unsigned int uiSelectStoneCombatMode() final;
+    unsigned int uiSelectStoneForCombatMode() final;
+    int uiSelectStoneForClaim() final;
+    int userSelectStoneForClaim() const final;
+    bool uiWantClaimStone() final;
+    Deck* uiSelectDeck() final;
+    unsigned int uiSelectUnclaimedStone() final;
+    int uiSelectCardOnStone(Side s, unsigned int stone_nb) final;
+
+    void uiPrintPlayerHand() final;
+    void uiPrintGame() final;
+    void uiPlayCard() final;
+    void uiPrintCurrentPlayer() final;
+    void uiPrintDiscard() final;
+
+    //void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
 protected:
     QLabel* tourJeu;
     QLabel* tourJoueur;
@@ -59,9 +82,12 @@ protected slots:
 class VuePartieTactique : public VuePartie {
     Q_OBJECT
 public :
-    explicit VuePartieTactique(QWidget *parent = nullptr);
+    static void setInstance() {
+        if (handler.instance == nullptr) handler.instance = new VuePartieTactique;
+    }
     //~VuePartieTactique();
 private :
+    explicit VuePartieTactique(QWidget *parent = nullptr);
     QLabel* piocheTactique;
     QProgressBar* nbCartesPiocheT;
     VuePioche* tacticDeck;

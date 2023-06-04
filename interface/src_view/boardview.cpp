@@ -52,7 +52,7 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent),
     manches->addWidget(mancheValue);
 
     //Joueur actuel
-    tourJeu = new QLabel("Tour de " + QString::fromStdString(Supervisor::getInstance().getController()->getCurPlayer()->getName()));
+    tourJeu = new QLabel("Tour de " + QString::fromStdString(Supervisor::getInstance().getController()->getCurrentPlayer()->getName()));
 
     QVBoxLayout* tour = new QVBoxLayout;
     tour->addWidget(tourJeu);
@@ -271,6 +271,25 @@ VuePartieTactique::VuePartieTactique(QWidget *parent) : VuePartie(parent)
 
     setLayout(couche);
 }
+
+unsigned int uiSelectCard() {return 1;};
+unsigned int uiSelectCard(Stone* stone, Side side) {return 1;};
+unsigned int uiSelectStone() {return 1;};
+unsigned int uiSelectStoneCombatMode() {return 1;};
+unsigned int uiSelectStoneForCombatMode() {return 1;};
+int uiSelectStoneForClaim() {return 1;};
+int userSelectStoneForClaim() {return 1;};
+bool uiWantClaimStone() {return 1;};
+Deck* uiSelectDeck() {return &Supervisor::getInstance().getController()->getClanDeck();};
+unsigned int uiSelectUnclaimedStone() { return 1;};
+int uiSelectCardOnStone(Side s, unsigned int stone_nb) {return 1;};
+
+void uiPrintPlayerHand() {return;};
+void uiPrintGame() {return;};
+void uiPlayCard() {return;};
+void uiPrintCurrentPlayer() {return;};
+void uiPrintDiscard() {return;};
+
 
 void VuePartie::actionCarteMain(VueCarte* vc){}
 void VuePartieTactique::actionCarteMain(VueCarte* vc){}
