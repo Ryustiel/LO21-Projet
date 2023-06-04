@@ -149,3 +149,10 @@ public :
 	~Banshee() final = default;
 	void activate() const final;
 };
+
+class Strategist : public Ruses {
+public:
+	Strategist(const string n) : Ruses(n), Card(n) {}
+	~Strategist() final = default;
+	void activate() const final;
+};

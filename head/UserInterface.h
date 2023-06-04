@@ -180,12 +180,12 @@ public:
         if (stone_size == 0) return -1; //no card on this side
 
         int card_nb = 0;
-        cout << "Select a card to steal on your opponent's side:";
+        cout << "Select a card to steal : ";
         cin >> card_nb;
         cout << endl;
 
         while (card_nb < 0 || card_nb >= 9) {
-            cout << "Your choice is incorrect. Please select a card to steal on your opponent's side:";
+            cout << "Your choice is incorrect. Please select a card to steal :";
             cin >> card_nb;
             cout << endl;
         }

@@ -25,7 +25,7 @@ Game::Game(const Version& version) {
         cards[4] = new BlindManBluff("Blind-Man’s Bluff");
         cards[5] = new CombatMode("Mud Fight");
         cards[6] = new Ruses("Recruiter");
-        cards[7] = new Ruses("Strategist");
+        cards[7] = new Strategist("Strategist");
         cards[8] = new Banshee("Banshee");
         cards[9] = new Ruses("Traiter");
         card_count = 10;
