@@ -163,3 +163,10 @@ public:
 	~Traiter() final = default;
 	void activate() const final;
 };
+
+class Recruiter : public Ruses {
+public:
+	Recruiter(const string n) : Ruses(n), Card(n) {}
+	~Recruiter() final = default;
+	void activate() const final;
+};

@@ -24,3 +24,7 @@ const size_t Deck::drawMultiple(const Card** cards, const size_t number) {
 	}
 	return number;
 }
+
+void Deck::addCard(const Card& c) {
+	cards[card_count++] = &c;
+}

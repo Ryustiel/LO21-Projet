@@ -113,15 +113,18 @@ void Controller::turnPlayCard() {
         cout << "(Controller::turnPlayCard) - selectedCardNb = " << selectedCardNb << endl;
         cout << "(Controller::turnPlayCard) - selectedCard = " << selectedCard.getName() << endl;
 
-        selectedCard.activate();
         curHand.withdraw(selectedCard);
+        selectedCard.activate();
     }
     cout << "(Controller::turnPlayCard) - hand size (fin de l'action : jouer une carte)) = " << curHand.getSize() << endl;
 }
 
 void Controller::turnDrawCard() {
-    std::cout << "\n=============== turnDrawCard()";
     UserInterface::getInstance()->uiPrintPlayerHand();
+    std::cout << "\n=============== turnDrawCard()";
+    if (getCurrentPlayerHand().getSize() == getCurrentPlayerHand().getMaxSize()) {
+        return;
+    }
     Deck* d = UserInterface::getInstance()->uiSelectDeck();
     if (d) {
         cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d->getCardCount() << endl;
