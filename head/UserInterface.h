@@ -48,7 +48,8 @@ public :
     virtual bool uiWantClaimStone() = 0;
     virtual Deck* uiSelectDeck() = 0;
     virtual unsigned int uiSelectUnclaimedStone() = 0;
-    virtual int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
+    virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
+    virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
 
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
@@ -184,7 +185,7 @@ public:
         cin >> card_nb;
         cout << endl;
 
-        while (card_nb < 0 || card_nb >= 9) {
+        while (card_nb < 0 || card_nb >= stone_size) {
             cout << "Your choice is incorrect. Please select a card to steal :";
             cin >> card_nb;
             cout << endl;
@@ -204,7 +205,8 @@ public:
     void uiPlayCard();
 
     unsigned int uiSelectUnclaimedStone() override;
-    int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
+    void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
 
     //affichage
     void uiPrintPlayerHand();

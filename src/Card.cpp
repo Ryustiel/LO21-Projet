@@ -108,13 +108,12 @@ void Banshee::activate() const {
 		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
 	}
 	else {
-		int cardNb = -1;
-		int stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
+		Side opponent_side = c->getCurSide() == Side::s2 ? Side::s1 : Side::s2;
+		
+		unsigned int cardNb;
+		unsigned int stoneNb;
+		UserInterfaceCmd::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
 		Stone& s = c->getBoard().getStone(stoneNb);
-		Side opponent_side = Side::s1;
-		if (c->getCurSide() == Side::s1) opponent_side = Side::s2;
-		cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(opponent_side, stoneNb);
-		cout << "(Banshee::activate()) - cardNb = " << cardNb << endl;
 
 		while (cardNb == -1) {
 			UserInterface::getInstance()->uiInvalidChoiceMsg();
@@ -136,23 +135,15 @@ void Strategist::activate() const {
 	if (tc == nullptr) throw ShottenTottenException("Tactical::activate error: no tactic controller !");
 
 	//select stone then card to move
-	int cardNb = -1;
-	int stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
+	unsigned int cardNb;
+	unsigned int stoneNb;
+	UserInterfaceCmd::getInstance()->uiSelectCardAndStone(c->getCurSide(), cardNb, stoneNb);
 	Stone& s = c->getBoard().getStone(stoneNb);
-	cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(c->getCurSide(), stoneNb);
-	cout << "(Strategist::activate()) - cardNb = " << cardNb << endl;
-
-	while (cardNb == -1) {
-		UserInterface::getInstance()->uiInvalidChoiceMsg();
-		stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
-		Stone& s = c->getBoard().getStone(stoneNb);
-		cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(c->getCurSide(), stoneNb);
-	}
 
 	//removing selected card from its stone
 	const PlacableCard& selected_card = *s.getCombinationSide(c->getCurSide())[cardNb];
 	s.removeCard(selected_card, c->getCurSide());
 
 	//putting it on the right stone -> playable card activation
-	selected_card.activate();
+	selected_card.PlacableCard::activate();
 }

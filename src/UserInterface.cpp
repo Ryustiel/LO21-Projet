@@ -519,7 +519,7 @@ unsigned int UserInterfaceCmd::uiSelectUnclaimedStone() {
 	return stone_nb;
 }
 
-int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
+unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
 	//displayStone() //TO DO
 	if (s == Side::none) throw ShottenTottenException("(UserInterfaceCmd::uiSelectCardOnStone) - side s can't be Side::none");
 
@@ -533,6 +533,49 @@ int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
 		card_nb = userSelectCardOnStone(s, stone_nb);
 	}
 	return card_nb;
+}
+
+void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {
+	Controller* c = Supervisor::getInstance().getController();
+	cardNb = -1;
+
+	while (true) {
+		stoneNb = this->uiSelectUnclaimedStone();
+		while (true){
+			int choice;
+			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
+			cin >> choice;
+			if (choice < 0 || choice >1) {
+				cout << "Choix non valide." << endl;
+			}
+			else {
+				if (choice) {
+					break;
+				}
+				else {
+					cardNb = this->uiSelectCardOnStone(s, stoneNb);
+					if (cardNb == -1) {
+						cout << "This Stone is empty" << endl;
+						break;
+					}
+					return;
+				}
+			}
+
+		}
+
+	}
+
+
+	
+	cardNb = this->uiSelectCardOnStone(s, stoneNb);
+	cout << "(Strategist::activate()) - cardNb = " << cardNb << endl;
+
+	while (cardNb == -1) {
+		UserInterface::getInstance()->uiInvalidChoiceMsg();
+		stoneNb = this->uiSelectUnclaimedStone();
+		cardNb = this->uiSelectCardOnStone(s, stoneNb);
+	}
 }
 
 /// GAME LAUNCHER ///
