@@ -126,6 +126,6 @@ void Banshee::activate() const {
 		const PlacableCard& selected_card = *s.getCombinationSide(oppenent_side)[cardNb];
 		s.removeCard(selected_card, oppenent_side);
 		tc->getDiscard().addCard(selected_card);
-		tc->getDiscard().addCard(*this);
+		Ruses::activate();
 	}
 }
