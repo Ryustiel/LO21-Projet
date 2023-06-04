@@ -572,11 +572,8 @@ void UserInterfaceCmd::uiPrintDiscard() {
 		return;
 	}
 
-	Discard::DiscardIterator it = tc->getDiscard().begin();
-	int i = 0;
-	while (!it.isDone()) {
-		cout << "	" << i << " : " << (*it).getName() << endl;
-		it.next();
+	for (size_t i = 0; i < tc->getDiscard().getSize(); i++) {
+		cout << "	" << i << " : " << tc->getDiscard().getCards()[i]->getName() << endl;
 	}
 
 }

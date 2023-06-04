@@ -56,19 +56,10 @@ const PlacableCard&Stone::removeCard(const PlacableCard&card, const Side side) {
 	throw BoardException("Border removeCard : this side of the border doesn't "
 						 "contain this PlacableCard");
   }
-  const PlacableCard&temp = *combination[i];
-  combination[i] = combination[(*size)--];
-
-  //décaler le tableau
-  for (size_t d = i + 1; d < *size; d++) {
-	  combination[d - 1] = combination[d];
-
-	  /*
-	  const PlacableCard* temp_decalage = combination[d];
-	  combination[d] = combination[d - 1];
-	  temp_decalage = combination[d - 1];*/
-  }
-
+  const PlacableCard& temp = *combination[i];
+  combination[i] = combination[*size-1];
+  (*size)--;
+  cout << "(PlacableCard&Stone::removeCard) - card i = " << combination[i]->getName();
   return temp;
 }
 
