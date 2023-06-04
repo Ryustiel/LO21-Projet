@@ -10,6 +10,8 @@ using namespace std;
 enum class Color { red, green, blue, purple, yellow, brown };
 enum class Number { one, two, three, four, five, six, seven, eight, nine };
 
+class Controller;
+
 string toString(const Color& color);
 string toString(const Number& number);
 int toInt(const Number& number);
@@ -20,59 +22,73 @@ ostream& operator<<(const ostream& os, const Color& number);
 extern std::initializer_list<Color> Colors;
 extern std::initializer_list<Number> Numbers;
 
-class Card {
-private:
-	const string name;
-public:
-	Card(const string n) : name(n){}
-	const string& getName() const { return name; }
-
-	virtual void activate() const=0;
-
-	virtual const bool canBeUsedAs(const Color& c) const=0;
-	virtual const bool canBeUsedAs(const Number& n) const=0;
-	virtual const bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
-	virtual const Number higherPossibleNumber() const=0;
-	virtual const list<Number> possibleNumber() const = 0;
-
-};
-
 const size_t clanCardsNumber = 54;
 const size_t tacticalCardsNumber = 10;
 
-class Clan : public Card {
+class Card {
+protected:
+	const string name;
+protected:
+	Card(const string n) : name(n){}
+public:
+	virtual ~Card() = default;
+	const string& getName() const { return name; }
+	virtual void activate() const=0;
+	
+	// playability methods
+	/*
+	virtual bool isPlayable(Board& b) { return true; }; // checks if the card is playable on at least one stone
+	virtual bool* getPlayableStones(BoardSideIterator it) { // returns the playable stones for that card
+		bool TEMP[2] = { true, true };
+		return TEMP;
+	};
+	*/
+};
+
+class PlacableCard : public virtual Card {
+public:
+	PlacableCard(const string n):Card(n){}
+	virtual ~PlacableCard() = default;
+	virtual bool canBeUsedAs(const Color& c) const = 0;
+	virtual bool canBeUsedAs(const Number& n) const = 0;
+	virtual Number higherPossibleNumber()const = 0;
+	virtual const list<Number> possibleNumber() const = 0;
+	bool canBeUsedAs(const Color& c, const Number& n) const { return canBeUsedAs(c) && canBeUsedAs(n); };
+	void activate() const override;
+};
+
+class Tactical :public virtual Card {
+public:
+	Tactical(const string n) : Card(n){}
+	virtual ~Tactical() = default;
+	void activate() const override;
+};
+
+class Clan : public PlacableCard {
 private:
 	const Color color;
 	const Number number;
 public:
-	Clan(const Color& c, const Number nb): Card(toString(c) + " " + toString(nb)), color(c), number(nb) { }
-	void activate() const { return; };
+	Clan(const Color& c, const Number nb) : PlacableCard(""), color(c), number(nb), Card(toString(c) + " " + toString(nb)) {}
+	~Clan() final = default;
 	const Color& getColor() const { return color; }
 	const Number& getNumber() const { return number; }
 
-	virtual const bool canBeUsedAs(const Color& c) const {return c == color;}
-	virtual const bool canBeUsedAs(const Number& n) const {return n == number;}
-	virtual const Number higherPossibleNumber() const { return getNumber(); };
-	virtual const list<Number> possibleNumber() const { list<Number> tmp = list<Number>(); tmp.push_front(number); return tmp; };
+	bool canBeUsedAs(const Color& c) const final { return c == color; }
+	bool canBeUsedAs(const Number& n) const final { return n == number; }
+	Number higherPossibleNumber() const final { return getNumber(); };
+	const list<Number> possibleNumber() const final { list<Number> tmp = list<Number>(); tmp.push_front(number); return tmp; };
 };
 
-class Tactical : public Card {
-public:
-	Tactical(const string n) : Card(n){}
-	void activate() const { return; };
-	virtual const bool canBeUsedAs(const Color& c) const { throw ShottenTottenException("canBeUsedAs Error : This card doesnt have a Color value !"); }
-	virtual const bool canBeUsedAs(const Number& n) const { throw ShottenTottenException("canBeUsedAs Error : This card doesnt have a Number value !"); }
-	virtual const Number higherPossibleNumber() const { throw ShottenTottenException("higherPossibleNumber Error : This card doesnt have a Number value !"); };
-	virtual const list<Number> possibleNumber() const { throw ShottenTottenException("possibleNumber Error : This card doesnt have a Number value !"); };
-};
-
-class Elite : public Tactical {
+class Elite : public Tactical, public PlacableCard {
 private:
 	const list<Color> allowedColors;
 	const list<Number> allowedNumbers;
 public:
-	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers) {}
-	virtual const bool canBeUsedAs(const Color& c) const {
+	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), PlacableCard(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers), Card(n) {}
+	void activate() const final;
+	const string& getName() const { return Tactical::name; }
+	bool canBeUsedAs(const Color& c) const {
 		bool colorFinded = false;
 		for (auto& color : allowedColors) {
 			if (color == c) {
@@ -82,7 +98,7 @@ public:
 		}
 		return colorFinded;
 	}
-	virtual const bool canBeUsedAs(const Number& n) const {
+	bool canBeUsedAs(const Number& n) const {
 		bool numberFinded = false;
 		for (auto& number : allowedNumbers) {
 			if (number == n) {
@@ -92,7 +108,7 @@ public:
 		}
 		return numberFinded;
 	}
-	virtual const Number higherPossibleNumber()const {
+	Number higherPossibleNumber()const {
 		Number highest = allowedNumbers.front();
 		for (list<Number>::const_iterator i = allowedNumbers.begin(); i != allowedNumbers.end(); ++i) {
 			if (toInt(*i) > toInt(highest)) {
@@ -101,18 +117,35 @@ public:
 		}
 		return highest;
 	}
-	virtual const list<Number> possibleNumber() const {
+	const list<Number> possibleNumber() const {
 		return allowedNumbers;
 	};
 };
 
 class CombatMode : public Tactical {
 public:
-	CombatMode(const string n) : Tactical(n) {}
+	CombatMode(const string n) : Tactical(n), Card(n) {}
+	~CombatMode() = default;
+	void activate() const override;
+};
+
+class BlindManBluff : public CombatMode {
+public:
+	BlindManBluff(const string n) : CombatMode(n), Card(n) {}
+	~BlindManBluff() final = default;
+	void activate() const final { CombatMode::activate(); }
 };
 
 class Ruses : public Tactical {
 public:
-	Ruses(const string n) : Tactical(n) {}
+	Ruses(const string n) : Tactical(n), Card(n) {}
+	~Ruses() = default;
+	void activate() const override;
 };
 
+class Banshee : public Ruses {
+public :
+	Banshee(const string n) : Ruses(n), Card(n) {}
+	~Banshee() final = default;
+	void activate() const final;
+};
