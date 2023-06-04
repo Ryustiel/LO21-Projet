@@ -171,7 +171,7 @@ void TacticController::newTurn() {
     std::cout << "\n================== newTurn";
     UserInterface::getInstance()->uiPrintCurrentPlayer();
     UserInterface::getInstance()->uiPrintGame();
-    UserInterfaceCmd::getInstance()->uiPrintDiscard();
+    UserInterface::getInstance()->uiPrintDiscard();
     turnPlayCard();
     UserInterface::getInstance()->uiPrintGame();
     turnDrawCard(); //pb quand pioche vide

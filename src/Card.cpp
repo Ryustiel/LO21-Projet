@@ -82,7 +82,7 @@ void Elite::activate() const {
 void CombatMode::activate() const {
 	Tactical::activate();
 	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
-	int stoneNb = UserInterfaceCmd::getInstance()->uiSelectStoneCombatMode();
+	int stoneNb = UserInterface::getInstance()->uiSelectStoneCombatMode();
 	Stone& s = c->getBoard().getStone(stoneNb);
 	s.setCombatMode(this);
 }
@@ -112,7 +112,7 @@ void Banshee::activate() const {
 		
 		unsigned int cardNb;
 		unsigned int stoneNb;
-		UserInterfaceCmd::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+		UserInterface::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
 		Stone& s = c->getBoard().getStone(stoneNb);
 
 
@@ -131,7 +131,7 @@ void Strategist::activate() const {
 	//select stone then card to move
 	unsigned int cardNb;
 	unsigned int stoneNb;
-	UserInterfaceCmd::getInstance()->uiSelectCardAndStone(c->getCurSide(), cardNb, stoneNb);
+	UserInterface::getInstance()->uiSelectCardAndStone(c->getCurSide(), cardNb, stoneNb);
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 	//removing selected card from its stone
@@ -153,7 +153,7 @@ void Traiter::activate() const {
 
 	unsigned int cardNb;
 	unsigned int stoneNb;
-	UserInterfaceCmd::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+	UserInterface::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 
