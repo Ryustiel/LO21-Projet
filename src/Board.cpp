@@ -57,7 +57,18 @@ const PlacableCard&Stone::removeCard(const PlacableCard&card, const Side side) {
 						 "contain this PlacableCard");
   }
   const PlacableCard&temp = *combination[i];
-  combination[i] = combination[*size--];
+  combination[i] = combination[(*size)--];
+
+  //décaler le tableau
+  for (size_t d = i + 1; d < *size; d++) {
+	  combination[d - 1] = combination[d];
+
+	  /*
+	  const PlacableCard* temp_decalage = combination[d];
+	  combination[d] = combination[d - 1];
+	  temp_decalage = combination[d - 1];*/
+  }
+
   return temp;
 }
 

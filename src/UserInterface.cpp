@@ -171,7 +171,7 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 	int stone_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA != nullptr) {
-		stone_nb = playerIA->selectStoneForClaim();
+		stone_nb = playerIA->selectUnclaimedStone();
 	}
 	else {
 		stone_nb = userSelectStoneForClaim();
@@ -507,6 +507,34 @@ void UserInterfaceCmd::uiPrintGame() {
 	}
 }
 
+unsigned int UserInterfaceCmd::uiSelectUnclaimedStone() {
+	unsigned int stone_nb = 0;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA != nullptr) {
+		stone_nb = playerIA->selectUnclaimedStone();
+	}
+	else {
+		stone_nb = userSelectUnclaimedStone();
+	}
+	return stone_nb;
+}
+
+int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
+	//displayStone() //TO DO
+	if (s == Side::none) throw ShottenTottenException("(UserInterfaceCmd::uiSelectCardOnStone) - side s can't be Side::none");
+
+	//selection on the side given
+	int card_nb = -1;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA != nullptr) {
+		card_nb = playerIA->selectCardOnStone(s, stone_nb);
+	}
+	else {
+		card_nb = userSelectCardOnStone(s, stone_nb);
+	}
+	return card_nb;
+}
+
 /// GAME LAUNCHER ///
 void UserInterfaceCmd::launchUserInterface() {
 	uiGameInit();
@@ -529,4 +557,26 @@ void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 	unsigned int rounds_nb = 5;
 
 	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
+}
+
+void UserInterfaceCmd::uiPrintDiscard() {
+	Controller* c = Supervisor::getInstance().getController();
+	const TacticController* tc = dynamic_cast<const TacticController*>(c);
+	if (tc == nullptr) {
+		throw ShottenTottenException("(UserInterfaceCmd::uiPrintDiscard) - error: no tactic controller !");
+	}
+
+	cout << "Discard :" << endl;
+	if (tc->getDiscard().getSize() == 0) {
+		cout << "	Discard is empty.";
+		return;
+	}
+
+	Discard::DiscardIterator it = tc->getDiscard().begin();
+	int i = 0;
+	while (!it.isDone()) {
+		cout << "	" << i << " : " << (*it).getName() << endl;
+		it.next();
+	}
+
 }

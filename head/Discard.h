@@ -17,6 +17,8 @@ public:
 	~Discard();
 	void addCard(const Card& c);
 	void withdrawCard(const Card& c);
+	size_t getSize() const { return size; }
+	size_t getMaxSize() const { return max_size; }
 	class DiscardIterator {
 	private:
 		friend Discard;
@@ -26,7 +28,8 @@ public:
 		DiscardIterator(const Card* begin, size_t size): begin(begin),cur(begin),size(size) {}
 	public:
 		void next() { if (cur == begin + size) throw DiscardException("DiscardIterator next error : iterator ended !"); cur++; }
-		bool isDone() { return cur == begin; }
+		bool isDone() { return cur == begin + size; }
+		const Card& operator*() const { return *cur; }
 	};
 	DiscardIterator begin() { return DiscardIterator(cards[0], size); }
 };

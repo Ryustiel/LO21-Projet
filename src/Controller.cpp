@@ -137,7 +137,7 @@ void Controller::turnClaimStone() {
     PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
     if (playerAI) { //is IA
         while (playerAI->WantClaimStone()) {
-            unsigned int selectedStoneNB = playerAI->selectStoneForClaim();
+            unsigned int selectedStoneNB = playerAI->selectUnclaimedStone();
             cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
             claimStone(selectedStoneNB);
             cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
@@ -158,6 +158,20 @@ void Controller::newTurn() {
     std::cout << "\n================== newTurn";
     UserInterface::getInstance()->uiPrintCurrentPlayer();
     UserInterface::getInstance()->uiPrintGame();
+    turnPlayCard();
+    UserInterface::getInstance()->uiPrintGame();
+    turnDrawCard(); //pb quand pioche vide
+    turnClaimStone();
+    cout << "Your turn is over...!";
+    //system("pause");
+    //system("cls");
+}
+
+void TacticController::newTurn() {
+    std::cout << "\n================== newTurn";
+    UserInterface::getInstance()->uiPrintCurrentPlayer();
+    UserInterface::getInstance()->uiPrintGame();
+    UserInterfaceCmd::getInstance()->uiPrintDiscard();
     turnPlayCard();
     UserInterface::getInstance()->uiPrintGame();
     turnDrawCard(); //pb quand pioche vide

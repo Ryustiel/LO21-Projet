@@ -106,6 +106,26 @@ void Banshee::activate() const {
 		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
 	}
 	else {
+		int cardNb = -1;
+		int stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
+		Stone& s = c->getBoard().getStone(stoneNb);
+		Side oppenent_side = Side::s1;
+		if (c->getCurSide() == Side::s1) oppenent_side = Side::s2;
+		cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(oppenent_side, stoneNb);
+		cout << "(Banshee::activate) - cardNb = " << cardNb << endl;
+
+		while (cardNb == -1) {
+			UserInterface::getInstance()->uiInvalidChoiceMsg();
+			int stoneNb = UserInterface::getInstance()->uiSelectUnclaimedStone();
+			Stone& s = c->getBoard().getStone(stoneNb);
+			Side oppenent_side = Side::s1;
+			if (c->getCurSide() == Side::s1) oppenent_side = Side::s2;
+			cardNb = UserInterface::getInstance()->uiSelectCardOnStone(oppenent_side, stoneNb);
+		}
+
+		const PlacableCard& selected_card = *s.getCombinationSide(oppenent_side)[cardNb];
+		s.removeCard(selected_card, oppenent_side);
+		tc->getDiscard().addCard(selected_card);
 		tc->getDiscard().addCard(*this);
 	}
 }

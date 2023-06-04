@@ -94,6 +94,11 @@ public:
 	size_t getSideSize(Side s) { return s == Side::s1 ? size_p1 : size_p2; }
 	const PlacableCard** getCombinationP1() const { return combination_p1; }
 	const PlacableCard** getCombinationP2() const { return combination_p2; }
+	const PlacableCard** getCombinationSide(Side s) const {
+		if (s == Side::none) throw ShottenTottenException("(Stone::getCombinationSide()) - Side s can't be none.");
+		if (s == Side::s1) return combination_p1;
+		return combination_p2;
+	}
 	Side getFirstCompleted() const { return firstCompleted; }
 	const Side getRevendication() const { return revendication; }
 	const CombatMode* getCombatMode() const { return combat_mode; }

@@ -271,4 +271,6 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	bool playerCanPlayTacticalCard();
+
+	void newTurn() override;
 };
