@@ -41,7 +41,7 @@ private:
 public:
 	Controller(const Controller& c) = delete;
 	Controller& operator=(const Controller& c) = delete;
-
+	
 	//GETTERS
 	Player* getCurPlayer() const {
 		if (current_side == Side::s1) return player1;
@@ -185,6 +185,7 @@ protected:
 			throw ShottenTottenException("Controller constructor : inadequate player (2) specifier");
 		}
 	}
+
 	virtual void initForNewRound();
 	virtual ~Controller() {
 		delete clanDeck;
