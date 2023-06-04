@@ -89,6 +89,7 @@ void CombatMode::activate() const {
 
 
 void Ruses::activate() const {
+	Tactical::activate();
 	Controller* c = Supervisor::getInstance().getController();
 	const TacticController* tc = dynamic_cast<const TacticController*>(c);
 	if (tc == nullptr) {
@@ -100,6 +101,7 @@ void Ruses::activate() const {
 }
 
 void Banshee::activate() const {
+	Ruses::activate();
 	Controller* c = Supervisor::getInstance().getController();
 	const TacticController* tc = dynamic_cast<const TacticController*>(c);
 	if (tc == nullptr) {
@@ -109,23 +111,48 @@ void Banshee::activate() const {
 		int cardNb = -1;
 		int stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
 		Stone& s = c->getBoard().getStone(stoneNb);
-		Side oppenent_side = Side::s1;
-		if (c->getCurSide() == Side::s1) oppenent_side = Side::s2;
-		cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(oppenent_side, stoneNb);
-		cout << "(Banshee::activate) - cardNb = " << cardNb << endl;
+		Side opponent_side = Side::s1;
+		if (c->getCurSide() == Side::s1) opponent_side = Side::s2;
+		cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(opponent_side, stoneNb);
+		cout << "(Banshee::activate()) - cardNb = " << cardNb << endl;
 
 		while (cardNb == -1) {
 			UserInterface::getInstance()->uiInvalidChoiceMsg();
 			int stoneNb = UserInterface::getInstance()->uiSelectUnclaimedStone();
 			Stone& s = c->getBoard().getStone(stoneNb);
-			Side oppenent_side = Side::s1;
-			if (c->getCurSide() == Side::s1) oppenent_side = Side::s2;
-			cardNb = UserInterface::getInstance()->uiSelectCardOnStone(oppenent_side, stoneNb);
+			cardNb = UserInterface::getInstance()->uiSelectCardOnStone(opponent_side, stoneNb);
 		}
 
-		const PlacableCard& selected_card = *s.getCombinationSide(oppenent_side)[cardNb];
-		s.removeCard(selected_card, oppenent_side);
+		const PlacableCard& selected_card = *s.getCombinationSide(opponent_side)[cardNb];
+		s.removeCard(selected_card, opponent_side);
 		tc->getDiscard().addCard(selected_card);
-		Ruses::activate();
 	}
+}
+
+void Strategist::activate() const {
+	Ruses::activate();
+	Controller* c = Supervisor::getInstance().getController();
+	const TacticController* tc = dynamic_cast<const TacticController*>(c);
+	if (tc == nullptr) throw ShottenTottenException("Tactical::activate error: no tactic controller !");
+
+	//select stone then card to move
+	int cardNb = -1;
+	int stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
+	Stone& s = c->getBoard().getStone(stoneNb);
+	cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(c->getCurSide(), stoneNb);
+	cout << "(Strategist::activate()) - cardNb = " << cardNb << endl;
+
+	while (cardNb == -1) {
+		UserInterface::getInstance()->uiInvalidChoiceMsg();
+		stoneNb = UserInterfaceCmd::getInstance()->uiSelectUnclaimedStone();
+		Stone& s = c->getBoard().getStone(stoneNb);
+		cardNb = UserInterfaceCmd::getInstance()->uiSelectCardOnStone(c->getCurSide(), stoneNb);
+	}
+
+	//removing selected card from its stone
+	const PlacableCard& selected_card = *s.getCombinationSide(c->getCurSide())[cardNb];
+	s.removeCard(selected_card, c->getCurSide());
+
+	//putting it on the right stone -> playable card activation
+	selected_card.activate();
 }
