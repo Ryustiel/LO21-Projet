@@ -204,6 +204,7 @@ unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
 	// fetching the number of cards placed on the one side
 	if (side == Side::s1) {
 		nstones = stone->getSizeP1();
+
 	}
 	else {
 		nstones = stone->getSizeP2();

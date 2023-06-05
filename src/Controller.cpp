@@ -99,6 +99,11 @@ void Controller::turnPlayCard() {
         }
     }
     */
+    /*
+    for (auto it = stone.begin(Side::s1); it != stone.end(Side::s1); ++it) {
+        std::cout << (*it)->getName() << " ";
+    }
+    */
 
 
     Hand& curHand = getCurrentPlayerHand();
