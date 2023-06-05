@@ -136,7 +136,7 @@ void UserInterfaceCmd::uiGameInit() {
 	unsigned int rounds_nb = uiSelectRounds();
 
 	//initializing controller :
-	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
 	//Supervisor::getInstance().setController(selected_version, players_name[0], players_name[1], isIA1, isIA2);
 
 	//cout << "(uiGameInit) - Controller : Version : " << Supervisor::getInstance().getController()->getVersion() << endl;
@@ -171,7 +171,7 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 	int stone_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA != nullptr) {
-		stone_nb = playerIA->selectStoneForClaim();
+		stone_nb = playerIA->selectUnclaimedStone();
 	}
 	else {
 		stone_nb = userSelectStoneForClaim();
@@ -196,7 +196,7 @@ unsigned int UserInterfaceCmd::uiSelectCard() {
 	return card_nb;
 }
 
-unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) { 
+unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
 	int card_nb = 0;
 	cout << endl << "Select a card from this stone (type in a number) : ";
 	size_t nstones; // number on cards on a stone
@@ -286,14 +286,36 @@ unsigned int UserInterfaceCmd::uiSelectStone() {
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
 			cout << endl << "DEBUG in UserInterfaceCmd::uiSelectStone()";
 			cout << endl << stone_nb << " STONE NB" << endl << c->getBoard().getStoneNb() << " GET BOARD STONE NB" << endl;
-			cout << "This STONE number is not valid !" << endl;
+			cout << "This stone number is not valid !" << endl;
 			continue;
 		}
 		else if (!playableStones[stone_nb]) {
-			cout << "This Stone is full ! Choose an another one !" << endl;
+			cout << "This Stone is full! Choose an another one!" << endl;
 			continue;
 		}
-		cout << "Selected stone (number) : " << stone_nb << endl;
+		cout << "Selected stone (number): " << stone_nb << endl;
+		return stone_nb;
+	}
+}
+
+unsigned int UserInterfaceCmd::uiSelectStoneCombatMode() {
+	unsigned int stone_nb;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
+	if (c == nullptr) throw ShottenTottenException("UserInterfaceCmd::uiSelectStoneCombatMode - controller isn't tactical !");
+	bool* playableStonesCM = c->getPlayableCombatModeStones();
+	while (true) { //user input until correct
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
+
+		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
+			cout << "This number isn't valid !" << endl;
+			continue;
+		}
+		else if (!playableStonesCM[stone_nb]) {
+			cout << "This Stone already bears a Combat Mode card! Please select another stone." << endl;
+			continue;
+		}
+		cout << "Selected stone (number): " << stone_nb << endl;
 		return stone_nb;
 	}
 }
@@ -327,7 +349,7 @@ Deck* UserInterfaceCmd::uiSelectDeck() {
 	TacticController* tc = dynamic_cast<TacticController*>(c);
 	if (c->getClanDeck().isEmpty()) {
 		if (tc && !tc->getTacticDeck().isEmpty()) {
-			cout << "Clan deck is empty ! Drawing the Tactical deck instead" << endl;
+			cout << "Tactical deck is empty ! Drawing the Clan deck instead" << endl;
 			return &tc->getTacticDeck();
 		}
 		else {
@@ -446,13 +468,14 @@ void UserInterfaceCmd::uiPrintPlayerHand() {
 
 void UserInterfaceCmd::uiPrintCurrentPlayer() {
 	Player* cur_player = Supervisor::getInstance().getController()->getCurrentPlayer();
-	cout << endl << cur_player->getName() << " (current score : " << cur_player->getScore() << " point(s)) - ";
+	cout << endl << "--------------------------------------" << cur_player->getName() << " (current score : " << cur_player->getScore() << " point(s)) - ";
 	if (Supervisor::getInstance().getController()->getCurSide() == Side::s1) {
-		cout << " player 1" << endl;
+		cout << " player 1 ";
 	}
 	else {
-		cout << " player 2" << endl;
+		cout << " player 2 ";
 	}
+	cout << "--------------------------------------" << endl;
 }
 
 void UserInterfaceCmd::uiPrintGame() {
@@ -470,15 +493,89 @@ void UserInterfaceCmd::uiPrintGame() {
 		else { //claimed by player 2
 			cout << "Claimed by Player 1" << endl;
 		}
+		if (cur_stone.getCombatMode()) {
+			cout << "	Combat mode : " << cur_stone.getCombatMode()->getName() << endl;
+		}
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
-			cout << "		" << k << " : " << cur_stone.getCombinationP1()[k]->getName() << endl;
+			cout << "		Card " << k << " : " << cur_stone.getCombinationP1()[k]->getName() << endl;
 		}
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP2(); k++) { //display P1 combination
-			cout << "		" << k << " : " << cur_stone.getCombinationP2()[k]->getName() << endl;
+			cout << "		Card " << k << " : " << cur_stone.getCombinationP2()[k]->getName() << endl;
 		}
 		cout << endl;
+	}
+}
+
+unsigned int UserInterfaceCmd::uiSelectUnclaimedStone() {
+	unsigned int stone_nb = 0;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA != nullptr) {
+		stone_nb = playerIA->selectUnclaimedStone();
+	}
+	else {
+		stone_nb = userSelectUnclaimedStone();
+	}
+	return stone_nb;
+}
+
+unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
+	//displayStone() //TO DO
+	if (s == Side::none) throw ShottenTottenException("(UserInterfaceCmd::uiSelectCardOnStone) - side s can't be Side::none");
+
+	//selection on the side given
+	int card_nb = -1;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA != nullptr) {
+		card_nb = playerIA->selectCardOnStone(s, stone_nb);
+	}
+	else {
+		card_nb = userSelectCardOnStone(s, stone_nb);
+	}
+	return card_nb;
+}
+
+void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {
+	Controller* c = Supervisor::getInstance().getController();
+	cardNb = -1;
+
+	while (true) {
+		stoneNb = this->uiSelectUnclaimedStone();
+		while (true){
+			int choice;
+			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
+			cin >> choice;
+			if (choice < 0 || choice >1) {
+				cout << "Choix non valide." << endl;
+			}
+			else {
+				if (choice) {
+					break;
+				}
+				else {
+					cardNb = this->uiSelectCardOnStone(s, stoneNb);
+					if (cardNb == -1) {
+						cout << "This Stone is empty" << endl;
+						break;
+					}
+					return;
+				}
+			}
+
+		}
+
+	}
+
+
+	
+	cardNb = this->uiSelectCardOnStone(s, stoneNb);
+	cout << "(Strategist::activate()) - cardNb = " << cardNb << endl;
+
+	while (cardNb == -1) {
+		UserInterface::getInstance()->uiInvalidChoiceMsg();
+		stoneNb = this->uiSelectUnclaimedStone();
+		cardNb = this->uiSelectCardOnStone(s, stoneNb);
 	}
 }
 
@@ -501,7 +598,26 @@ void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 	//cout << "(uiGameInit) - isIA1 = " << isIA1;
 	//cout << "(uiGameInit) - isIA2 = " << isIA2;
 
-	unsigned int rounds_nb = 2;
+	unsigned int rounds_nb = 5;
 
-	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4, this);
+	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
+}
+
+void UserInterfaceCmd::uiPrintDiscard() {
+	Controller* c = Supervisor::getInstance().getController();
+	const TacticController* tc = dynamic_cast<const TacticController*>(c);
+	if (tc == nullptr) {
+		throw ShottenTottenException("(UserInterfaceCmd::uiPrintDiscard) - error: no tactic controller !");
+	}
+
+	cout << "Discard :" << endl;
+	if (tc->getDiscard().getSize() == 0) {
+		cout << "	Discard is empty.";
+		return;
+	}
+
+	for (size_t i = 0; i < tc->getDiscard().getSize(); i++) {
+		cout << "	" << i << " : " << tc->getDiscard().getCards()[i]->getName() << endl;
+	}
+
 }

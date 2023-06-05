@@ -41,16 +41,23 @@ public :
     virtual unsigned int uiSelectCard() = 0;
     virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
     virtual unsigned int uiSelectStone() = 0;
+    virtual unsigned int uiSelectStoneCombatMode() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
     virtual int uiSelectStoneForClaim() = 0;
     virtual int userSelectStoneForClaim() const = 0;
     virtual bool uiWantClaimStone() = 0;
     virtual Deck* uiSelectDeck() = 0;
+    virtual unsigned int uiSelectUnclaimedStone() = 0;
+    virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
+    virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
 
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
     virtual void uiPlayCard() = 0;
     virtual void uiPrintCurrentPlayer() = 0;
+    virtual void uiPrintDiscard() = 0;
+
+    void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
 
 protected:
     UserInterface() {}
@@ -67,8 +74,6 @@ class UserInterfaceCmd : public UserInterface {
 private:
 
 public:
-
-
     static void setInstance();
 
     void launchUserInterface() final; //main
@@ -133,6 +138,18 @@ public:
         return card_nb;
     }
 
+    unsigned int userSelectUnclaimedStone() const {
+        unsigned int stone_nb = 0;
+        unsigned int stone_count = Supervisor::getInstance().getController()->getBoard().getStoneNb();
+        cout << "Select a stone (number) : ";
+        cin >> stone_nb;
+        while (stone_nb < 0 || stone_nb >= stone_count || !Supervisor::getInstance().getController()->getUnclaimedStones()[stone_nb]) { //user input until correct
+            cout << "You can't choose this stone. Please select another stone : ";
+            cin >> stone_nb;
+        }
+        return stone_nb;
+    }
+
     unsigned int userSelectStone() const {
         unsigned int stone_nb = 0;
         unsigned int stone_count = Supervisor::getInstance().getController()->getBoard().getStoneNb();
@@ -158,7 +175,25 @@ public:
         return stone_nb;
     }
 
+    int userSelectCardOnStone(Side s, unsigned int stone_nb) {
+        Stone& cur_stone = Supervisor::getInstance().getController()->getBoard().getStone(stone_nb);
+        size_t stone_size = cur_stone.getSideSize(s);
+        if (stone_size == 0) return -1; //no card on this side
 
+        int card_nb = 0;
+        cout << "Select a card to steal : ";
+        cin >> card_nb;
+        cout << endl;
+
+        while (card_nb < 0 || card_nb >= stone_size) {
+            cout << "Your choice is incorrect. Please select a card to steal :";
+            cin >> card_nb;
+            cout << endl;
+        }
+        return card_nb;
+    }
+
+    unsigned int uiSelectStoneCombatMode() override;
     ///PLAY THE GAME
     void uiGameView2(); //pick a card
     void uiGameView3(); //pick a stone (always after uiGameView2) ; can be skipped
@@ -169,9 +204,14 @@ public:
 
     void uiPlayCard();
 
+    unsigned int uiSelectUnclaimedStone() override;
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
+    void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
+
     //affichage
     void uiPrintPlayerHand();
     void uiPrintGame();
+    void uiPrintDiscard() override;
 
 protected :
     UserInterfaceCmd() {}

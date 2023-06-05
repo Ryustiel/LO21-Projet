@@ -55,7 +55,7 @@ unsigned int PlayerAIRandom::selectStone() const {
 
 	return stone_nb;
 }
-unsigned int PlayerAIRandom::selectStoneForClaim() const {
+unsigned int PlayerAIRandom::selectUnclaimedStone() const {
 	unsigned int stone_nb = rand()%9;
 	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
 	list_stones = Supervisor::getInstance().getController()->getUnclaimedStones();
@@ -80,4 +80,12 @@ unsigned int PlayerAIRandom::selectDeck() const {
 
 bool PlayerAIRandom::WantClaimStone() const {
 	return rand() % 2;
+}
+
+int PlayerAIRandom::selectCardOnStone(Side s, unsigned int stone_nb) const {
+	Stone& cur_stone = Supervisor::getInstance().getController()->getBoard().getStone(stone_nb);
+	size_t stone_size = cur_stone.getSideSize(s);
+	if (stone_size == 0) return -1; //no card on this side
+	int card_nb = rand() % stone_size;
+	return card_nb;
 }

@@ -38,7 +38,7 @@ private:
 
 	void newRound(); // événement de début de manche
 	void checkRound(); // verifie si la manche est gagnée
-	
+
 	virtual void newTurn(); // lance un nouveau tour de joueur
 
 public:
@@ -66,7 +66,6 @@ public:
 		if (player2->getScore() > player1->getScore()) return player2;
 		return nullptr;
 	}
-
 	// INTERFACE RELATED GETTERS
 
 	// getBoardContent() -> BoardIterator
@@ -76,7 +75,7 @@ public:
 		bool* playable = getPickableCards(&size);
 		bool at_least_one = false;
 		for (size_t i = 0; i < size; i++) {
-			if (playable[i]) { 
+			if (playable[i]) {
 				at_least_one = true;
 				break;
 			}
@@ -91,7 +90,7 @@ public:
 		for (size_t i = 0; i < hs; ++i) {
 			pickable[i] = true;
 		}
-		*size = hs; // sauvegarde une valeur pour exporter 
+		*size = hs; // sauvegarde une valeur pour exporter
 		return pickable;
 	} // récupère la liste des cartes jouables
 
@@ -112,6 +111,18 @@ public:
 			playable[i] = playable[i] && board->getStone(i).getSideSize(current_side) != board->getStone(i).getMaxSize();
 		}
 		return playable;
+	}
+	bool* getPlayableCombatModeStones() { //vérifie les bornes sur lesquelles on peut poser une carte Combat mode -> non revendiquées et ne possédant pas déjà une combat mode
+		const size_t sn = board->getStoneNb();
+		bool* playableCM = getUnclaimedStones();
+		for (size_t i = 0; i < sn; ++i) {
+			playableCM[i] = playableCM[i] && (board->getStone(i).getCombatMode() == nullptr);
+		}
+		cout << "(getPlayableCombatModeStones) - bool list : ";
+		for (size_t i = 0; i < sn; ++i) {
+			cout << playableCM[i] << " ; ";
+		}
+		return playableCM;
 	}
 
 	virtual unsigned int getDeckCount() const { return 1; }
@@ -155,7 +166,7 @@ public:
 		std::cout << "\nactive l'effet de la carte, les modifications sur l'etat du jeu";
 		// vérifie si la carte requiert plus de bornes à sélectionner (effets actifs)
 		// active l'effet de la carte et récupère un message
-		// enregistre le tout dans 
+		// enregistre le tout dans
 	}
 	void eventChoiceDraw() {
 		std::cout << "\n================================ choiceDraw";
@@ -260,4 +271,6 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	bool playerCanPlayTacticalCard();
+
+	void newTurn() override;
 };

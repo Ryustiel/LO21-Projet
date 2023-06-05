@@ -53,7 +53,8 @@ public:
     unsigned int selectCard() const;
     unsigned int selectCard(size_t nchoices) const;
     unsigned int selectStone() const;
-    unsigned int selectStoneForClaim() const;
+    unsigned int selectUnclaimedStone() const;
     unsigned int selectDeck() const;
     bool WantClaimStone() const;
+    int selectCardOnStone(Side s, unsigned int stone_nb) const;
 };

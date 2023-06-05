@@ -125,14 +125,48 @@ public:
 class CombatMode : public Tactical {
 public:
 	CombatMode(const string n) : Tactical(n), Card(n) {}
-	~CombatMode() final = default;
-	void activate() const final { return; };
+	~CombatMode() = default;
+	void activate() const override;
+};
+
+class BlindManBluff : public CombatMode {
+public:
+	BlindManBluff(const string n) : CombatMode(n), Card(n) {}
+	~BlindManBluff() final = default;
+	void activate() const final { CombatMode::activate(); }
 };
 
 class Ruses : public Tactical {
 public:
 	Ruses(const string n) : Tactical(n), Card(n) {}
-	~Ruses() final = default;
+	~Ruses() = default;
+	void activate() const override;
+};
+
+class Banshee : public Ruses {
+public :
+	Banshee(const string n) : Ruses(n), Card(n) {}
+	~Banshee() final = default;
 	void activate() const final;
 };
 
+class Strategist : public Ruses {
+public:
+	Strategist(const string n) : Ruses(n), Card(n) {}
+	~Strategist() final = default;
+	void activate() const final;
+};
+
+class Traiter : public Ruses {
+public:
+	Traiter(const string n) : Ruses(n), Card(n) {}
+	~Traiter() final = default;
+	void activate() const final;
+};
+
+class Recruiter : public Ruses {
+public:
+	Recruiter(const string n) : Ruses(n), Card(n) {}
+	~Recruiter() final = default;
+	void activate() const final;
+};

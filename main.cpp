@@ -18,12 +18,14 @@ int main() {
 	*/
 
 	UserInterfaceCmd::setInstance();
-	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
 
-	bool blist[5] = {true, true, false, false, true};
+	UserInterface::getInstance()->quickLaunch(0,0,Version::tactic);
+
+	/*bool blist[5] = {true, true, false, false, true};
 	int result = Utility::randChoice(blist, 5);
-	
-	std::cout << result;
+
+	std::cout << result;*/
+
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);

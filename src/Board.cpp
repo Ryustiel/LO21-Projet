@@ -56,8 +56,10 @@ const PlacableCard&Stone::removeCard(const PlacableCard&card, const Side side) {
 	throw BoardException("Border removeCard : this side of the border doesn't "
 						 "contain this PlacableCard");
   }
-  const PlacableCard&temp = *combination[i];
-  combination[i] = combination[*size--];
+  const PlacableCard& temp = *combination[i];
+  combination[i] = combination[*size-1];
+  (*size)--;
+  cout << "(PlacableCard&Stone::removeCard) - card i = " << combination[i]->getName();
   return temp;
 }
 
@@ -85,7 +87,8 @@ void Stone::setMaxSize(const size_t size) {
 void Stone::setCombatMode(const CombatMode* cM) {
 	if (combat_mode == nullptr) {
 		combat_mode = cM;
-		if (cM->getName() == "Blind-Man’s Bluff") {
+		const BlindManBluff* c = dynamic_cast<const BlindManBluff*>(cM);
+		if (c != nullptr) { //increase stone size
 			max_size += 1;
 		}
 	}
@@ -329,7 +332,8 @@ const PlacableCard** Stone::bestVariation(const PlacableCard** possibleCards, co
 
 const Side Stone::evaluateWinningSide(const PlacableCard** AvailableCards, const size_t availableCardsCount) const { //evaluate the combinations to determine a winning side (can be none)
 	//in order to compare sides, at least one side must be complete
-	const bool mud_fight = (combat_mode != nullptr && combat_mode->getName() == "Mud Fight");
+	const BlindManBluff* c = dynamic_cast<const BlindManBluff*>(combat_mode);
+	const bool mud_fight = (combat_mode != nullptr && c==nullptr); //if c!=nullptr -> blind man's bluff, no use here
 	if (size_p1 == max_size && size_p2 == max_size) { //both sides are complete
 		Side winningSide;
 		winningSide = compareCombination(combination_p1, combination_p2, max_size, mud_fight);
