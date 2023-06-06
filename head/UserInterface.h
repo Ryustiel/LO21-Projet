@@ -50,7 +50,7 @@ public :
     virtual unsigned int uiSelectUnclaimedStone() = 0;
     virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
     virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
-    virtual void uiSelectPlayOrDiscard() = 0;
+    virtual bool uiSelectPlayOrDiscard() = 0;
 
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
@@ -194,6 +194,12 @@ public:
         return card_nb;
     }
 
+    bool userBooleanChoice() {
+        bool choice = 0;
+        cin >> choice;
+        return choice;
+    }
+
     unsigned int uiSelectStoneCombatMode() override;
     ///PLAY THE GAME
     void uiGameView2(); //pick a card
@@ -208,7 +214,7 @@ public:
     unsigned int uiSelectUnclaimedStone() override;
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
-    void uiSelectPlayOrDiscard() override;
+    bool uiSelectPlayOrDiscard() override;
 
     //affichage
     void uiPrintPlayerHand();

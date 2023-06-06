@@ -622,11 +622,21 @@ void UserInterfaceCmd::uiPrintDiscard() {
 
 }
 
-void UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
+bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 	Controller* c = Supervisor::getInstance().getController();
 	const TacticController* tc = dynamic_cast<const TacticController*>(c);
 	if (tc == nullptr) {
 		throw ShottenTottenException("(UserInterfaceCmd::uiSelectPlayOrDiscard) - error: no tactic controller !");
 	}
-
+	bool choice = 0;
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+	if (playerIA != nullptr) {
+		choice = playerIA->booleanChoice();
+	}
+	else {
+		cout << "Put the card in discard (0) or play the card (1) : ";
+		choice = userBooleanChoice();
+		cout << endl;
+	}
+	return choice;
 }

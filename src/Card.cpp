@@ -149,8 +149,15 @@ void Strategist::activate() const {
 	const PlacableCard& selected_card = *s.getCombinationSide(c->getCurSide())[cardNb];
 	s.removeCard(selected_card, c->getCurSide());
 
-	//putting it on the right stone -> playable card activation
-	selected_card.PlacableCard::activate();
+	bool choice = UserInterface::getInstance()->uiSelectPlayOrDiscard();
+	if (choice) {
+		//putting it on the right stone -> playable card activation
+		selected_card.PlacableCard::activate();
+	}
+	else {
+		//putting card in discard
+		tc->getDiscard().addCard(selected_card);
+	}
 }
 
 void Traiter::activate() const {

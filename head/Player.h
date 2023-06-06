@@ -57,4 +57,7 @@ public:
     unsigned int selectDeck() const;
     bool WantClaimStone() const;
     int selectCardOnStone(Side s, unsigned int stone_nb) const;
+    bool booleanChoice() const {
+        return rand() % 2;
+    }
 };
