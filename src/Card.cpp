@@ -78,7 +78,7 @@ void Chief::activate() const {
 	Elite::activate();
 	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
 	if (c != nullptr) {
-		c->incrementChiefCardPlayer(c->getCurSide());
+		c->incrementChiefCardPlayed(c->getCurSide());
 	}
 	else {
 		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
