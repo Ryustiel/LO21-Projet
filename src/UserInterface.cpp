@@ -545,7 +545,13 @@ void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsign
 		while (true){
 			int choice;
 			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
-			cin >> choice;
+			PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
+			if (playerIA != nullptr) {
+				choice = playerIA->booleanChoice();
+			}
+			else {
+				choice = userBooleanChoice();
+			}
 			if (choice < 0 || choice >1) {
 				cout << "Choix non valide." << endl;
 			}
