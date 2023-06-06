@@ -74,6 +74,17 @@ void Tactical::activate() const {
 
 };
 
+void Chief::activate() const {
+	Elite::activate();
+	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
+	if (c != nullptr) {
+		c->incrementChiefCardPlayer(c->getCurSide());
+	}
+	else {
+		throw ShottenTottenException("Tactical::activate error: no tactic controller !");
+	}
+}
+
 void Elite::activate() const {
 	Tactical::activate();
 	PlacableCard::activate();

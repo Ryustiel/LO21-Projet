@@ -308,11 +308,18 @@ void TacticController::initForNewRound() {
 
 void TacticController::incrementTacticalPlayed(Side s) {
     if (s == Side::s1) {
-        ++p1TacticalCardPlayed;
+        ++p1TacticalCardPlayed; return;
     }
     else if (s == Side::s2) {
-        ++p2TacticalCardPlayed;
+        ++p2TacticalCardPlayed; return;
     }
+    else if (s == Side::none) throw ShottenTottenException("(TacticController::incrementTacticalPlayed) - Side can't be none.");
+}
+
+void TacticController::incrementChiefCardPlayed(Side s) {
+    if (s == Side::none) throw ShottenTottenException("(TacticController::incrementChiefCardPlayer) - Side can't be none.");
+    if (s == Side::s1) ++p1ChiefCardPlayed;
+    else if (s == Side::s2) ++p2ChiefCardPlayed;
 }
 
 bool TacticController::playerCanPlayTacticalCard() {
@@ -323,6 +330,15 @@ bool TacticController::playerCanPlayTacticalCard() {
     }
     else {
         return p1TacticalCardPlayed >= p2TacticalCardPlayed;
+    }
+}
+
+bool TacticController::playerCanPlayChiefCard() {
+    if (getCurSide() == Side::s1) {
+        return p1ChiefCardPlayed == 0;
+    }
+    else {
+        return p2ChiefCardPlayed == 0;
     }
 }
 

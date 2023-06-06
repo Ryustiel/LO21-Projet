@@ -621,3 +621,12 @@ void UserInterfaceCmd::uiPrintDiscard() {
 	}
 
 }
+
+void UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
+	Controller* c = Supervisor::getInstance().getController();
+	const TacticController* tc = dynamic_cast<const TacticController*>(c);
+	if (tc == nullptr) {
+		throw ShottenTottenException("(UserInterfaceCmd::uiSelectPlayOrDiscard) - error: no tactic controller !");
+	}
+
+}

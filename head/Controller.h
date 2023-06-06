@@ -225,6 +225,9 @@ private :
 	size_t handSize = 7;
 	unsigned int p1TacticalCardPlayed = 0;
 	unsigned int p2TacticalCardPlayed = 0;
+	unsigned int p1ChiefCardPlayed = 0;
+	unsigned int p2ChiefCardPlayed = 0;
+
 	void initForNewRound() final;
 public :
 	TacticController(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2)
@@ -243,7 +246,21 @@ public :
 
 	virtual bool* getPickableCards(size_t * size) final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
 		if (playerCanPlayTacticalCard()) {
-			return Controller::getPickableCards(size); // seules les cartes tactiques comptent : le joueur peut jouer normalement son tour
+			if (playerCanPlayChiefCard()) {
+				return Controller::getPickableCards(size); // toutes les cartes sont jouables
+			}
+			else { //le joueur ne peut pas jouer de carte Chef de clan : on renvoie la main sans chef de clan
+				Hand& curHand = getCurrentPlayerHand();
+				const size_t hs = curHand.getSize();
+				bool* pickable = new bool[hs];
+				for (size_t i = 0; i < hs; ++i) {
+					pickable[i] = !dynamic_cast<const Chief*>(curHand.getCard(i));
+				}
+
+				*size = hs;
+
+				return pickable;
+			}
 		}
 		else { // réimplémente la fonctionnalité de getPickableCards() en excluant les cartes tactiques
 			Hand& curHand = getCurrentPlayerHand();
@@ -270,7 +287,9 @@ public :
 	bool getAvailableCards(const PlacableCard**& cards, size_t& foundedSize) final;
 
 	void incrementTacticalPlayed(Side s);
+	void incrementChiefCardPlayed(Side s);
 	bool playerCanPlayTacticalCard();
+	bool playerCanPlayChiefCard();
 
 	void newTurn() override;
 };

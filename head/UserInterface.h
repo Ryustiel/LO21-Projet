@@ -50,6 +50,7 @@ public :
     virtual unsigned int uiSelectUnclaimedStone() = 0;
     virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
     virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
+    virtual void uiSelectPlayOrDiscard() = 0;
 
     virtual void uiPrintPlayerHand() = 0;
     virtual void uiPrintGame() = 0;
@@ -207,6 +208,7 @@ public:
     unsigned int uiSelectUnclaimedStone() override;
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
+    void uiSelectPlayOrDiscard() override;
 
     //affichage
     void uiPrintPlayerHand();

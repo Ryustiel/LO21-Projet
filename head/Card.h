@@ -86,7 +86,7 @@ private:
 	const list<Number> allowedNumbers;
 public:
 	Elite(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Tactical(n), PlacableCard(n), allowedColors(allowedColors), allowedNumbers(allowedNumbers), Card(n) {}
-	void activate() const final;
+	void activate() const override;
 	const string& getName() const { return Tactical::name; }
 	bool canBeUsedAs(const Color& c) const {
 		bool colorFinded = false;
@@ -120,6 +120,12 @@ public:
 	const list<Number> possibleNumber() const {
 		return allowedNumbers;
 	};
+};
+
+class Chief : public Elite {
+public :
+	Chief(const string n, list<Color> allowedColors, list<Number> allowedNumbers) : Elite(n, allowedColors, allowedNumbers), Card(n) {}
+	void activate() const final;
 };
 
 class CombatMode : public Tactical {
