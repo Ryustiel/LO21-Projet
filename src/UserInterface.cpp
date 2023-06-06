@@ -640,7 +640,7 @@ bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 		choice = playerIA->booleanChoice();
 	}
 	else {
-		cout << "Put the card in discard (0) or play the card (1) : ";
+		cout << "Put the card in discard (0) or place the card (1) : ";
 		choice = userBooleanChoice();
 		cout << endl;
 	}
