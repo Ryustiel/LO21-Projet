@@ -244,7 +244,7 @@ public :
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
 
-	virtual bool* getPickableCards(size_t * size) final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
+	bool* getPickableCards(size_t * size)const final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
 		if (playerCanPlayTacticalCard()) {
 			if (playerCanPlayChiefCard()) {
 				return Controller::getPickableCards(size); // toutes les cartes sont jouables
@@ -288,8 +288,8 @@ public :
 
 	void incrementTacticalPlayed(Side s);
 	void incrementChiefCardPlayed(Side s);
-	bool playerCanPlayTacticalCard();
-	bool playerCanPlayChiefCard();
+	bool playerCanPlayTacticalCard() const;
+	bool playerCanPlayChiefCard() const;
 
 	void newTurn() override;
 };

@@ -322,7 +322,7 @@ void TacticController::incrementChiefCardPlayed(Side s) {
     else if (s == Side::s2) ++p2ChiefCardPlayed;
 }
 
-bool TacticController::playerCanPlayTacticalCard() {
+bool TacticController::playerCanPlayTacticalCard() const{
   cout << "(canPlayerPlayTacticalCard()) - p1TacticalCardPlayed =  " << p1TacticalCardPlayed << endl;
   cout << "(canPlayerPlayTacticalCard()) - p2TacticalCardPlayed =  " << p2TacticalCardPlayed << endl;
     if (getCurSide() == Side::s1) {
@@ -333,7 +333,7 @@ bool TacticController::playerCanPlayTacticalCard() {
     }
 }
 
-bool TacticController::playerCanPlayChiefCard() {
+bool TacticController::playerCanPlayChiefCard() const{
     if (getCurSide() == Side::s1) {
         return p1ChiefCardPlayed == 0;
     }

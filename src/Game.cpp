@@ -24,8 +24,8 @@ Game::Game(const Version& version) {
         cards[3] = new Elite("Shield-Bearer", Colors, { Number::one,Number::two,Number::three });
         cards[4] = new BlindManBluff("Blind-Man’s Bluff");
         cards[5] = new CombatMode("Mud Fight");
-        cards[1] = new Recruiter("Recruiter");
-        cards[7] = new Strategist("Strategist");
+        cards[7] = new Recruiter("Recruiter");
+        cards[1] = new Strategist("Strategist");
         cards[8] = new Banshee("Banshee");
         cards[9] = new Traiter("Traiter");
         card_count = 10;
