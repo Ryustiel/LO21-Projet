@@ -13,7 +13,7 @@
 #include "../head_view/boardview.h"
 
 //constructeur
-VuePartie::VuePartie(QWidget *parent) : QWidget(parent),
+VuePartie::VuePartie() : QWidget(),
     cartesPlateau(Supervisor::getInstance().getController()->getBoard().getStoneNb()*3*2,nullptr),
     cartesMain1(Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(),nullptr),
     cartesMain2(Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(),nullptr),
@@ -219,7 +219,7 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent),
 
 //cas version TACTIQUE
 //constructeur
-VuePartieTactique::VuePartieTactique(QWidget *parent) : VuePartie(parent)
+VuePartieTactique::VuePartieTactique() : VuePartie()
 {
     //ajout bar de progression pioche tactique
     piocheTactique=new QLabel("Pioche tactique");

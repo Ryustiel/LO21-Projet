@@ -24,28 +24,34 @@
 class VuePartie : public QWidget, public UserInterface
 {
     Q_OBJECT
-    explicit VuePartie(QWidget *parent = nullptr);
+    //explicit VuePartie(QWidget *parent = nullptr);
 public:
+    VuePartie();
     static void setInstance() {
         if (handler.instance == nullptr) handler.instance = new VuePartie;
     }
-    unsigned int uiSelectCard() final;
-    unsigned int uiSelectCard(Stone* stone, Side side) final;
-    unsigned int uiSelectStone() final;
-    unsigned int uiSelectStoneCombatMode() final;
-    unsigned int uiSelectStoneForCombatMode() final;
-    int uiSelectStoneForClaim() final;
-    int userSelectStoneForClaim() const final;
-    bool uiWantClaimStone() final;
-    Deck* uiSelectDeck() final;
-    unsigned int uiSelectUnclaimedStone() final;
-    int uiSelectCardOnStone(Side s, unsigned int stone_nb) final;
 
-    void uiPrintPlayerHand() final;
-    void uiPrintGame() final;
-    void uiPlayCard() final;
-    void uiPrintCurrentPlayer() final;
-    void uiPrintDiscard() final;
+    void launchUserInterface() {};
+    void quickLaunch(int ia1, int ia2, Version v) {};
+
+    unsigned int uiSelectCard(bool taticCheck = true) final {};
+    unsigned int uiSelectCard(Stone* stone, Side side) {};
+    unsigned int uiSelectStone() {};
+    unsigned int uiSelectStoneCombatMode() {};
+    unsigned int uiSelectStoneForCombatMode() {};
+    int uiSelectStoneForClaim() {};
+    int userSelectStoneForClaim() const {};
+    bool uiWantClaimStone() {};
+    Deck* uiSelectDeck() {};
+    unsigned int uiSelectUnclaimedStone() {};
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) {};
+    void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {};
+    bool uiSelectPlayOrDiscard() {}
+
+    void uiPrintPlayerHand() {};
+    void uiPrintGame() {};
+    void uiPrintDiscard() {};
+    void uiPrintCurrentPlayer() {};
 
     //void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
 protected:
@@ -82,12 +88,13 @@ protected slots:
 class VuePartieTactique : public VuePartie {
     Q_OBJECT
 public :
+    VuePartieTactique();
     static void setInstance() {
         if (handler.instance == nullptr) handler.instance = new VuePartieTactique;
     }
     //~VuePartieTactique();
 private :
-    explicit VuePartieTactique(QWidget *parent = nullptr);
+    //explicit VuePartieTactique(QWidget *parent = nullptr);
     QLabel* piocheTactique;
     QProgressBar* nbCartesPiocheT;
     VuePioche* tacticDeck;

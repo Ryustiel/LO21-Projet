@@ -10,6 +10,7 @@ SOURCES += \
     ../src/Player.cpp \
     ../src/Supervisor.cpp \
     ../src/UserInterface.cpp \
+    ../src/Utility.cpp \
     ../src/Version.cpp \
     src_view/boardview.cpp \
     src_view/cardview.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     ../head/Player.h \
     ../head/Supervisor.h \
     ../head/UserInterface.h \
+    ../head/Utility.h \
     ../head/Version.h \
     head_view/boardview.h \
     head_view/cardview.h \
