@@ -13,12 +13,14 @@
 #include "../head_view/boardview.h"
 
 //constructeur
-VuePartie::VuePartie() : QWidget(),
-    cartesPlateau(Supervisor::getInstance().getController()->getBoard().getStoneNb()*3*2,nullptr),
-    cartesMain1(Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(),nullptr),
-    cartesMain2(Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(),nullptr),
-    bornes(Supervisor::getInstance().getController()->getBoard().getStoneNb(),nullptr)
-{
+VuePartie::VuePartie() : QWidget(){}
+
+void VuePartie::startWindow(){
+    cartesPlateau = vector<VueCarte *>(Supervisor::getInstance().getController()->getBoard().getStoneNb()*3*2,nullptr);
+    cartesMain1 = vector<VueCarte *>(Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(),nullptr);
+    bornes = vector<VueBorne *>(Supervisor::getInstance().getController()->getBoard().getStoneNb(),nullptr);
+
+
     setWindowTitle("Schotten Totten"); //titre fenetre
     //setFixedSize(800, 600); //dimensions fenetre
     //distribuer cartes grace au controleur
@@ -205,18 +207,51 @@ VuePartie::VuePartie() : QWidget(),
 
     switch(Supervisor::getInstance().getController()->getCurSide()){
     case(Side::s1):
-           couche->removeItem(main2);
-            break;
+        couche->removeItem(main2);
+        break;
 
     case(Side::s2):
-           couche->removeItem(main1);
+        couche->removeItem(main1);
 
     }
 
     setLayout(couche);
 }
 
+void VuePartie::launchUserInterface(){
+    connect(&(vVersion.getVueParametres()), SIGNAL(isDone()), this, SLOT(receiveVersionInfos()));
+    vVersion.show();
 
+}
+
+void VuePartie::StartSupervisor(){
+
+}
+
+void VuePartie::receiveVersionInfos(){
+    VueParametres& vp = vVersion.getVueParametres();
+    Supervisor::getInstance().eventStartGame(vVersion.getVersion(),vp.getNom1().toStdString(),vp.getNom2().toStdString(),vp.est_IA1(),vp.est_IA2(),vp.getRoundNb(),4);
+    startWindow();
+}
+
+void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
+
+    string players_name[2] = { "Le Gontil", "Le Michon" };
+    int AI_player1 = ia1;
+    int AI_player2 = ia2;
+
+    Version selected_version = v;
+
+    //cout << "(uiGameInit) - players_name[0] : " << [0] << endl;
+    //cout << "(uiGameInit) - players_name[1] : " << playplayers_nameers_name[1] << endl;
+
+    //cout << "(uiGameInit) - isIA1 = " << isIA1;
+    //cout << "(uiGameInit) - isIA2 = " << isIA2;
+
+    unsigned int rounds_nb = 5;
+
+    Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
+}
 //cas version TACTIQUE
 //constructeur
 VuePartieTactique::VuePartieTactique() : VuePartie()

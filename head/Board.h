@@ -167,7 +167,7 @@ private:
 
 public:
 	Board(size_t size = 9) : stones(size) {}
-	~Board() = default;
+    ~Board() = default;
 	Board(const Board&) = delete;
 	Board& operator=(const Board&) = delete;
 	Stone& getStone(unsigned int n){ 

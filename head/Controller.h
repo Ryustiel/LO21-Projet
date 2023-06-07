@@ -28,10 +28,10 @@ private:
     int totalRounds;
 	int maxScore;
 	Deck* clanDeck = nullptr;
-	Board* board;
+	Board* board = nullptr;
 	Game clanGame;
-	Player* player1;
-	Player* player2;
+	Player* player1 = nullptr;
+	Player* player2 = nullptr;
 	size_t handSize;
 	unsigned int playerCardPick;
 	unsigned int playerStonePick;

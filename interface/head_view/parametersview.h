@@ -12,7 +12,7 @@
 class VueParametres : public QWidget {
     Q_OBJECT
 public:
-    explicit VueParametres(QWidget *parent = nullptr, Version vers = Version::legacy): QWidget(parent), version(vers){
+    explicit VueParametres(QWidget *parent = nullptr): QWidget(parent){
         setWindowTitle("Paramètres");
 
         choixJ1 = new QLabel("Choisir le type de joueur 1 :");
@@ -35,9 +35,11 @@ public:
 
         nom1 = new QLabel("Nom du joueur 1 :");
         name1 = new QLineEdit(parent);
+        name1->setText("Le Gontil");
 
         nom2 = new QLabel("Nom du joueur 2 :");
         name2 = new QLineEdit(parent);
+        name2->setText("Le Michon");
 
         go = new QPushButton(parent);
         go->setText("Continuer");
@@ -65,6 +67,7 @@ public:
 
         manches = new QLabel("Nombres de manches à jouer :");
         nbManches = new QLineEdit(parent);
+        nbManches->setText("5");
         manche = new QVBoxLayout;
         manche->addWidget(manches);
         manche->addWidget(nbManches);
@@ -82,9 +85,10 @@ public:
     const QString getNom2() const {return name2->text();}
     bool est_IA1() const {return (choix1->currentIndex()==1 || choix1->currentIndex()==2);}
     bool est_IA2() const {return (choix2->currentIndex()==1 || choix2->currentIndex()==2);}
-    Version getVersion() const {return version;}
+    int getRoundNb(){return nbManches->text().toInt();}
+signals:
+    void isDone();
 private:
-    Version version;
     QComboBox* choix1;
     QLabel* choixJ1;
     QComboBox* choix2;

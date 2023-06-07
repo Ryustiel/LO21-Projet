@@ -37,12 +37,14 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
 void Controller::initForNewRound() {
     std::cout << "\n========= initForNewRound-legacy";
     //init the board
-    delete board;
+    if (board)
+        delete board;
     board = new Board();
     std::cout << "\nBoard init;";
 
     //init the deck
-    delete clanDeck;
+    if(clanDeck)
+        delete clanDeck;
     clanDeck = new Deck(clanGame);// initialiser la pioche tactique dans la m�thode fille
     std::cout << "\nclanDeck init;";
 

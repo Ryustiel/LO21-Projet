@@ -8,6 +8,7 @@
 #include "stoneview.h"
 #include "../../head/Supervisor.h"
 #include "../../head/UserInterface.h"
+#include "versionview.h"
 #include "qlabel.h"
 #include <QLabel>
 #include <QLineEdit>
@@ -31,8 +32,10 @@ public:
         if (handler.instance == nullptr) handler.instance = new VuePartie;
     }
 
-    void launchUserInterface() {};
-    void quickLaunch(int ia1, int ia2, Version v) {};
+    void launchUserInterface();
+    void startWindow();
+    void StartSupervisor();
+    void quickLaunch(int ia1, int ia2, Version v);
 
     unsigned int uiSelectCard(bool taticCheck = true) final {};
     unsigned int uiSelectCard(Stone* stone, Side side) {};
@@ -54,6 +57,7 @@ public:
     void uiPrintCurrentPlayer() {};
 
     //void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
+    VueVersion vVersion;
 protected:
     QLabel* tourJeu;
     QLabel* tourJoueur;
@@ -83,6 +87,7 @@ protected slots:
     virtual void actionCarteMain(VueCarte* vc);
     virtual void actionBorne(VueBorne* vb);
     void actionPioche();
+    void receiveVersionInfos();
 };
 
 class VuePartieTactique : public VuePartie {
