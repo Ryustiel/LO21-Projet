@@ -222,23 +222,6 @@ unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
 	return card_nb;
 }
 
-void UserInterfaceCmd::uiPlayCard() {
-	cout << "Play a card" << endl;
-
-	//display cards in player's hand
-	cout << "Your hand : " << endl;
-	Hand& curr_player_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
-	/*
-	for (size_t i = 0; i < cur_player_hand.getSize(); i++) {
-		cout << i << " : " << Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i)->getName();
-	}
-	*/
-	size_t i = 0;
-	for (auto card : curr_player_hand) { std::cout << i++ << " : " << card->getName(); }
-	unsigned int card_hand_nb = uiSelectCard();
-	Supervisor::getInstance().getController()->eventCardPicked(card_hand_nb);
-}
-
 bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 	Controller* c = Supervisor::getInstance().getController();
 	const TacticController* tc = dynamic_cast<const TacticController*>(c);
