@@ -6,6 +6,7 @@
 #include "Hand.h"
 #include <list>
 #include <array>
+#include <vector>
 
 using namespace std;
 
@@ -54,14 +55,11 @@ const bool recursiveCombinationType(int* baseComb, const PlacableCard* possibleC
 class Stone {
 private:
 	size_t max_size;
-	size_t size_p1;
-	size_t size_p2;
-	const PlacableCard** combination_p1;
-	const PlacableCard** combination_p2;
+	vector<const PlacableCard*> combination_p1;
+	vector<const PlacableCard*> combination_p2;
 	const CombatMode* combat_mode = nullptr;
 	Side revendication;
 	Side firstCompleted;
-
 	class StoneIterator { // iterator
 	private:
 		const PlacableCard** cards;
@@ -80,25 +78,26 @@ private:
 
 public:
 	Stone()
-		: max_size(3), size_p1(0), size_p2(0),
-		combination_p1(new const PlacableCard* [max_size]),
-		combination_p2(new const PlacableCard* [max_size]), revendication(Side::none),
+		: max_size(3),
+		combination_p1(0),
+		combination_p2(0), revendication(Side::none),
 		firstCompleted(Side::none) {}
 	~Stone() {
-		delete[] combination_p1;
-		delete[] combination_p2;
 	}
+	Stone(const Stone&) = delete;
+	Stone& operator=(const Stone&) = delete;
 	size_t getMaxSize() const { return max_size; }
-	size_t getSizeP1() const { return size_p1; }
-	size_t getSizeP2() const { return size_p2; }
-	size_t getSideSize(Side s) { return s == Side::s1 ? size_p1 : size_p2; }
-	const PlacableCard** getCombinationP1() const { return combination_p1; }
-	const PlacableCard** getCombinationP2() const { return combination_p2; }
-	const PlacableCard** getCombinationSide(Side s) const {
+	size_t getSizeP1() const { return combination_p1.size(); }
+	size_t getSizeP2() const { return combination_p2.size(); }
+	size_t getSideSize(Side s) const { return s == Side::s1 ? combination_p1.size() : combination_p2.size(); }
+	const PlacableCard* getCard(Side s, unsigned int n) { return (s == Side::s1) ? combination_p1[n] : combination_p2[n]; }
+	//const PlacableCard** getCombinationP1() const { return combination_p1; }
+	//const PlacableCard** getCombinationP2() const { return combination_p2; }
+	/*const PlacableCard** getCombinationSide(Side s) const {
 		if (s == Side::none) throw ShottenTottenException("(Stone::getCombinationSide()) - Side s can't be none.");
 		if (s == Side::s1) return combination_p1;
 		return combination_p2;
-	}
+	}*/
 	Side getFirstCompleted() const { return firstCompleted; }
 	const Side getRevendication() const { return revendication; }
 	const CombatMode* getCombatMode() const { return combat_mode; }
@@ -108,17 +107,17 @@ public:
 	void setRevendication(Side s);
 
 	void addCard(const PlacableCard& card, const Side side);
-	const PlacableCard& removeCard(const PlacableCard& card, const Side side);
+	void removeCard(const PlacableCard& card, const Side side);
 
 	// ITERATOR : methods
-	StoneIterator begin(Side side) { 
+	/*StoneIterator begin(Side side) {
 		if (side == Side::s1) { return StoneIterator(combination_p1, 0); }
 		else { return StoneIterator(combination_p2, 0); }
 		}
 	StoneIterator end(Side side) {
 		if (side == Side::s1) { return StoneIterator(combination_p1, size_p1); }
 		else { return StoneIterator(combination_p2, size_p2); }
-	}
+	}*/
 	
 	//determine if the border is won by any side
 	const Side evaluateWinningSide(const PlacableCard** AvailableCards, const size_t availableCardsCount) const;
@@ -143,15 +142,14 @@ public:
 
 class Board {
 private:
-	Stone* stones; //const Stone* ?
-	size_t stone_nb;
+	vector<Stone> stones; //const Stone* ?
 
 	// indique si les checks prÃ©cÃ©dents ont dÃ©terminÃ© que la partie Ã©tait gagnÃ©e
 	bool won = false; 
 
 	// BoardIterator renvoie des iterateurs qui correspondent à chaque Stone
 	// Les iterateurs StoneIterator renvoient les side
-	class BoardIterator {
+	/*class BoardIterator : vector<Stone>::iterator {
 	private:
 		const Stone* stones;
 		size_t indice;
@@ -165,25 +163,25 @@ private:
 			++indice;
 			return *this;
 		}
-	};
+	};*/
 
 public:
-	Board(size_t size = 9) : stone_nb(size), stones(new Stone[size]) {}
-	~Board() { delete[] stones; }
-	Stone* getStones() const { return stones;  }
-	Stone& getStone(unsigned int n) const{ 
+	Board(size_t size = 9) : stones(size) {}
+	~Board() = default;
+	Board(const Board&) = delete;
+	Board& operator=(const Board&) = delete;
+	Stone& getStone(unsigned int n){ 
 		if (n < 0 || n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];
 	}
-	size_t getStoneNb() const { return stone_nb;  }
+	size_t getStoneNb() const { return stones.size(); }
 
-	void addCard(const PlacableCard& card, const Side side, const unsigned int n) const { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
-	const PlacableCard& removeCard(const PlacableCard& card, const Side side,const unsigned int n);
+	void addCard(const PlacableCard& card, const Side side, const unsigned int n) { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
 	void getPlayableStones(PlacableCard* c) { std::cout << "\nBoard::getPlayableStones();"; }
 
 	// ITERATOR : methods
-	BoardIterator begin() { return BoardIterator(stones, 0); }
-	BoardIterator end() { return BoardIterator(stones, stone_nb); }
+	//BoardIterator begin() { return stones.begin(); }
+	//BoardIterator end() { return BoardIterator(stones, stone_nb); }
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const PlacableCard** AvailableCards, const size_t availableCardsCount) const;

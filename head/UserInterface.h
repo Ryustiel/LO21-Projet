@@ -9,36 +9,16 @@
 
 
 class UserInterface { //parent class
-private :
-    unsigned int state = 0;
-
 public :
     static UserInterface* getInstance();
     static void freeInstance();
 
-    unsigned int getState() const { return state; }
-    unsigned int& getState() { return state; }
 
-    //get l'UserInterface
-    virtual void launchUserInterface() = 0; //main
+    virtual void launchUserInterface() = 0; 
     virtual void quickLaunch(int ia1, int ia2, Version v) = 0;
 
-    virtual void setState(const unsigned int i) { state = i; }
 
-    virtual void uiGameInit() = 0;
-    virtual unsigned int uiSelectRounds() = 0; //select nb rounds (user input)
-
-    /// SUPERVISOR SETTINGS ///
-    //SELECT VERSION
-    virtual  Version uiSelectVersion() = 0; //user input
-    virtual Version uiVersionMenu() = 0;
-
-    /// GAME SETTINGS///
-    //PLAYERS NAME
-    virtual string uiSelectPlayerName(int i, int& isIA1) = 0;
-    virtual void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
-
-    virtual unsigned int uiSelectCard() = 0;
+    virtual unsigned int uiSelectCard(bool taticCheck = true) = 0;
     virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
     virtual unsigned int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneCombatMode() = 0;
@@ -48,15 +28,15 @@ public :
     virtual bool uiWantClaimStone() = 0;
     virtual Deck* uiSelectDeck() = 0;
     virtual unsigned int uiSelectUnclaimedStone() = 0;
-    virtual int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
-
-    virtual void uiPrintPlayerHand() = 0;
-    virtual void uiPrintGame() = 0;
-    virtual void uiPlayCard() = 0;
-    virtual void uiPrintCurrentPlayer() = 0;
-    virtual void uiPrintDiscard() = 0;
-
+    virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
+    virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
+    virtual bool uiSelectPlayOrDiscard() = 0;
     void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
+
+    virtual void uiPrintPlayerHand()=0;
+    virtual void uiPrintGame()=0;
+    virtual void uiPrintDiscard()=0;
+    virtual void uiPrintCurrentPlayer() =0;
 
 protected:
     UserInterface() {}
@@ -76,28 +56,25 @@ public:
     static void setInstance();
 
     void launchUserInterface() final; //main
-    void quickLaunch(int ia1, int ia2, Version v) final;
+    void quickLaunch(int ia1, int ia2, Version v);
 
-    //SETTINGS
-    void uiGameInit();
-    unsigned int uiSelectRounds(); //select nb rounds (user input)
 
     /// SUPERVISOR SETTINGS ///
-    //SELECT VERSION
     Version uiSelectVersion(); //user input
     Version uiVersionMenu();
+    unsigned int uiSelectRounds(); //select nb rounds (user input)
 
     /// GAME SETTINGS ///
-    //PLAYERS NAME
     string uiSelectPlayerName(int i, int& isIA1);
     void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
-    unsigned int uiSelectCard() final;
+
+
+    unsigned int uiSelectCard(bool taticCheck = true) final;
     unsigned int uiSelectCard(Stone* stone, Side side) final;
     unsigned int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;
     int uiSelectStoneForClaim() final; //TO DELETE
-
     bool uiWantClaimStone() final {
         cout << "Do you want to claim a stone ? (0: yes, 1: no)" << endl;
         int result;
@@ -111,7 +88,7 @@ public:
     };
     Deck* uiSelectDeck() final;
 
-    void uiPrintCurrentPlayer() final;
+    
 
     //INPUT USERS
     unsigned int userSelectCard() const {
@@ -184,12 +161,18 @@ public:
         cin >> card_nb;
         cout << endl;
 
-        while (card_nb < 0 || card_nb >= 9) {
+        while (card_nb < 0 || card_nb >= stone_size) {
             cout << "Your choice is incorrect. Please select a card to steal :";
             cin >> card_nb;
             cout << endl;
         }
         return card_nb;
+    }
+
+    bool userBooleanChoice() {
+        bool choice = 0;
+        cin >> choice;
+        return choice;
     }
 
     unsigned int uiSelectStoneCombatMode() override;
@@ -204,12 +187,15 @@ public:
     void uiPlayCard();
 
     unsigned int uiSelectUnclaimedStone() override;
-    int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
+    void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
+    bool uiSelectPlayOrDiscard() override;
 
     //affichage
+    void uiPrintCurrentPlayer();
     void uiPrintPlayerHand();
     void uiPrintGame();
-    void uiPrintDiscard() override;
+    void uiPrintDiscard() ;
 
 protected :
     UserInterfaceCmd() {}

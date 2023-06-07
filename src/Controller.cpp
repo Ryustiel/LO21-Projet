@@ -99,6 +99,11 @@ void Controller::turnPlayCard() {
         }
     }
     */
+    /*
+    for (auto it = stone.begin(Side::s1); it != stone.end(Side::s1); ++it) {
+        std::cout << (*it)->getName() << " ";
+    }
+    */
 
 
     Hand& curHand = getCurrentPlayerHand();
@@ -113,15 +118,18 @@ void Controller::turnPlayCard() {
         cout << "(Controller::turnPlayCard) - selectedCardNb = " << selectedCardNb << endl;
         cout << "(Controller::turnPlayCard) - selectedCard = " << selectedCard.getName() << endl;
 
-        selectedCard.activate();
         curHand.withdraw(selectedCard);
+        selectedCard.activate();
     }
     cout << "(Controller::turnPlayCard) - hand size (fin de l'action : jouer une carte)) = " << curHand.getSize() << endl;
 }
 
 void Controller::turnDrawCard() {
-    std::cout << "\n=============== turnDrawCard()";
     UserInterface::getInstance()->uiPrintPlayerHand();
+    std::cout << "\n=============== turnDrawCard()";
+    if (getCurrentPlayerHand().getSize() == getCurrentPlayerHand().getMaxSize()) {
+        return;
+    }
     Deck* d = UserInterface::getInstance()->uiSelectDeck();
     if (d) {
         cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d->getCardCount() << endl;
@@ -171,7 +179,7 @@ void TacticController::newTurn() {
     std::cout << "\n================== newTurn";
     UserInterface::getInstance()->uiPrintCurrentPlayer();
     UserInterface::getInstance()->uiPrintGame();
-    UserInterfaceCmd::getInstance()->uiPrintDiscard();
+    UserInterface::getInstance()->uiPrintDiscard();
     turnPlayCard();
     UserInterface::getInstance()->uiPrintGame();
     turnDrawCard(); //pb quand pioche vide
@@ -300,14 +308,21 @@ void TacticController::initForNewRound() {
 
 void TacticController::incrementTacticalPlayed(Side s) {
     if (s == Side::s1) {
-        ++p1TacticalCardPlayed;
+        ++p1TacticalCardPlayed; return;
     }
     else if (s == Side::s2) {
-        ++p2TacticalCardPlayed;
+        ++p2TacticalCardPlayed; return;
     }
+    else if (s == Side::none) throw ShottenTottenException("(TacticController::incrementTacticalPlayed) - Side can't be none.");
 }
 
-bool TacticController::playerCanPlayTacticalCard() {
+void TacticController::incrementChiefCardPlayed(Side s) {
+    if (s == Side::none) throw ShottenTottenException("(TacticController::incrementChiefCardPlayer) - Side can't be none.");
+    if (s == Side::s1) ++p1ChiefCardPlayed;
+    else if (s == Side::s2) ++p2ChiefCardPlayed;
+}
+
+bool TacticController::playerCanPlayTacticalCard() const{
   cout << "(canPlayerPlayTacticalCard()) - p1TacticalCardPlayed =  " << p1TacticalCardPlayed << endl;
   cout << "(canPlayerPlayTacticalCard()) - p2TacticalCardPlayed =  " << p2TacticalCardPlayed << endl;
     if (getCurSide() == Side::s1) {
@@ -315,6 +330,15 @@ bool TacticController::playerCanPlayTacticalCard() {
     }
     else {
         return p1TacticalCardPlayed >= p2TacticalCardPlayed;
+    }
+}
+
+bool TacticController::playerCanPlayChiefCard() const{
+    if (getCurSide() == Side::s1) {
+        return p1ChiefCardPlayed == 0;
+    }
+    else {
+        return p2ChiefCardPlayed == 0;
     }
 }
 
