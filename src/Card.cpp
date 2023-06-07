@@ -127,7 +127,7 @@ void Banshee::activate() const {
 		Stone& s = c->getBoard().getStone(stoneNb);
 
 
-		const PlacableCard& selected_card = *s.getCombinationSide(opponent_side)[cardNb];
+		const PlacableCard& selected_card = *s.getCard(opponent_side, cardNb);
 		s.removeCard(selected_card, opponent_side);
 		tc->getDiscard().addCard(selected_card);
 	}
@@ -146,7 +146,7 @@ void Strategist::activate() const {
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 	//removing selected card from its stone
-	const PlacableCard& selected_card = *s.getCombinationSide(c->getCurSide())[cardNb];
+	const PlacableCard& selected_card = *s.getCard(c->getCurSide(),cardNb);
 	s.removeCard(selected_card, c->getCurSide());
 
 	bool choice = UserInterface::getInstance()->uiSelectPlayOrDiscard();
@@ -175,7 +175,7 @@ void Traiter::activate() const {
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 
-	const PlacableCard& selected_card = *s.getCombinationSide(opponent_side)[cardNb];
+	const PlacableCard& selected_card = *s.getCard(opponent_side,cardNb);
 	s.removeCard(selected_card, opponent_side);
 	selected_card.PlacableCard::activate();
 }

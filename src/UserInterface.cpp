@@ -448,11 +448,11 @@ void UserInterfaceCmd::uiGameView3() { //TO DELETE
 		}
 		cout << "Combination Player 1 : " << endl;
 		for (size_t k = 0; k < Supervisor::getInstance().getController()->getBoard().getStone(i).getSizeP1(); k++) { //print combination player 1
-			cout << k << " : " << Supervisor::getInstance().getController()->getBoard().getStone(i).getCombinationP1()[k]->getName() << endl;
+			cout << k << " : " << Supervisor::getInstance().getController()->getBoard().getStone(i).getCard(Side::s1,k)->getName() << endl;
 		}
 		cout << "Combination Player 2 : " << endl;
 		for (size_t k = 0; k < Supervisor::getInstance().getController()->getBoard().getStone(i).getSizeP2(); k++) { //print combination player 1
-			cout << k << " : " << Supervisor::getInstance().getController()->getBoard().getStone(i).getCombinationP2()[k]->getName() << endl;
+			cout << k << " : " << Supervisor::getInstance().getController()->getBoard().getStone(i).getCard(Side::s2,k)->getName() << endl;
 		}
 		cout << endl; //saut de ligne
 	}
@@ -505,11 +505,11 @@ void UserInterfaceCmd::uiPrintGame() {
 		}
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
-			cout << "		Card " << k << " : " << cur_stone.getCombinationP1()[k]->getName() << endl;
+			cout << "		Card " << k << " : " << cur_stone.getCard(Side::s1,k)->getName() << endl;
 		}
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
 		for (size_t k = 0; k < cur_stone.getSizeP2(); k++) { //display P1 combination
-			cout << "		Card " << k << " : " << cur_stone.getCombinationP2()[k]->getName() << endl;
+			cout << "		Card " << k << " : " << cur_stone.getCard(Side::s2,k)->getName() << endl;
 		}
 		cout << endl;
 	}
