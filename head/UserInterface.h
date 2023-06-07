@@ -38,7 +38,7 @@ public :
     virtual string uiSelectPlayerName(int i, int& isIA1) = 0;
     virtual void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2) = 0;
 
-    virtual unsigned int uiSelectCard() = 0;
+    virtual unsigned int uiSelectCard(bool taticCheck = true) = 0;
     virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
     virtual unsigned int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneCombatMode() = 0;
@@ -94,7 +94,7 @@ public:
     string uiSelectPlayerName(int i, int& isIA1);
     void uiPlayerMenu(string players_name[], int& isIA1, int& isIA2);
 
-    unsigned int uiSelectCard() final;
+    unsigned int uiSelectCard(bool taticCheck = true) final;
     unsigned int uiSelectCard(Stone* stone, Side side) final;
     unsigned int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;

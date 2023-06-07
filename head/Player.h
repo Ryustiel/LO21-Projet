@@ -53,6 +53,7 @@ public:
     unsigned int selectCard() const;
     unsigned int selectCard(size_t nchoices) const;
     unsigned int selectStone() const;
+    unsigned int selectStoneForCombatMode() const;
     unsigned int selectUnclaimedStone() const;
     unsigned int selectDeck() const;
     bool WantClaimStone() const;

@@ -182,11 +182,18 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 	return -1;
 }
 
-unsigned int UserInterfaceCmd::uiSelectCard() {
+unsigned int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
 	int card_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
-		card_nb = userSelectCard();
+		if (tacticCheck) {
+			Controller* c = Supervisor::getInstance().getController();
+			card_nb = userSelectCard(c->getCurrentPlayerHand().getSize(),"error");
+		}
+		else {
+			card_nb = userSelectCard();
+		}
+		
 	}
 	else { //is IA
 		card_nb = playerIA->selectCard();
