@@ -5,7 +5,7 @@
 class Controller;
 
 class HandException : public ShottenTottenException {
-	ShottenTottenException::ShottenTottenException;
+	using ShottenTottenException::ShottenTottenException;
 };
 
 class Hand{
