@@ -184,7 +184,6 @@ public:
     void uiRoundLauncher(); //launches the round
     void uiTurnLauncher(Player& curr_player); //launches the turn
 
-    void uiPlayCard();
 
     unsigned int uiSelectUnclaimedStone() override;
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
