@@ -57,6 +57,7 @@ public:
 	Deck& getClanDeck() const { return *clanDeck; }
 	Game getClanGame() const { return clanGame; } // accès en lecture seule
 	Board& getBoard() { return *board; } //accès écriture
+	const Board& getBoard() const { return *board; } //accès lecture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
 	int getRemainingRounds() const { return remainingRounds; }
@@ -245,6 +246,39 @@ public :
 	Discard& getDiscard() const { return *discard; }
 
 	bool* getPickableCards(size_t * size)const final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
+
+		Hand& curHand = getCurrentPlayerHand();
+		const size_t hs = curHand.getSize();
+		bool* pickable = new bool[hs];
+		pickable = Controller::getPickableCards(size);
+
+		if (playerCanPlayTacticalCard()) { //can play tactical cards
+
+			if (!playerCanPlayCombatMode()) { //on retire les combat mode des cartes jouables
+				for (size_t i = 0; i < hs; ++i) {
+					if (pickable[i]) pickable[i] = !dynamic_cast<const CombatMode*>(curHand.getCard(i));
+				}
+			}
+
+			if (!playerCanPlayChiefCard()) { //on retire les combat mode des cartes jouables
+				for (size_t i = 0; i < hs; ++i) {
+					if (pickable[i]) pickable[i] = !dynamic_cast<const Chief*>(curHand.getCard(i));
+				}
+			}
+
+			return pickable;
+		}
+		else { //can't play tactical cards
+			for (size_t i = 0; i < hs; ++i) {
+				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
+			}
+
+			*size = hs;
+
+			return pickable;
+		}
+
+	/* //je laisse le code au cas-où
 		if (playerCanPlayTacticalCard()) {
 			if (playerCanPlayChiefCard()) {
 				return Controller::getPickableCards(size); // toutes les cartes sont jouables
@@ -274,7 +308,9 @@ public :
 
 			return pickable;
 		}
+		*/
 	}
+
 	bool* getPlayableStonesCombatMode() {
 		const size_t sn = getBoard().getStoneNb();
 		bool* playable = getUnclaimedStones();
@@ -290,6 +326,7 @@ public :
 	void incrementChiefCardPlayed(Side s);
 	bool playerCanPlayTacticalCard() const;
 	bool playerCanPlayChiefCard() const;
+	bool playerCanPlayCombatMode() const;
 
 	void newTurn() override;
 };
