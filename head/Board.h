@@ -79,8 +79,8 @@ public:
 	bool isFull(Side s) {
 		return revendication != Side::none || (s == Side::s1 ? getSizeP1() : getSizeP2()) == max_size;
 	}
-	//const PlacableCard** getCombinationP1() const { return combination_p1; }
-	//const PlacableCard** getCombinationP2() const { return combination_p2; }
+	const vector<const PlacableCard*> getCombinationP1() const { return combination_p1; }
+	const vector<const PlacableCard*> getCombinationP2() const { return combination_p2; }
 	/*const PlacableCard** getCombinationSide(Side s) const {
 		if (s == Side::none) throw ShottenTottenException("(Stone::getCombinationSide()) - Side s can't be none.");
 		if (s == Side::s1) return combination_p1;
