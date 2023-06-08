@@ -1,4 +1,3 @@
-
 #include "../head_view/cardview.h"
 #include <QPainter>
 #include <QString>
@@ -7,6 +6,7 @@
 #include <string>
 #include <iostream>
 
+
 VueCarte::VueCarte(const Card& c, QWidget* parent) : QPushButton(parent), carte(&c)
 {
     setBackgroundRole(QPalette::Base);
@@ -14,6 +14,8 @@ VueCarte::VueCarte(const Card& c, QWidget* parent) : QPushButton(parent), carte(
     setFixedSize(120, 200);
     connect(this, SIGNAL(clicked()), this, SLOT(clickedEvent()));
     setCheckable(true);
+    setProperty("class", "open");
+    //setStyleSheet("QPushButton:open{ border: 2px solid red;  }");
 }
 
 VueCarte::VueCarte(QWidget* parent) : QPushButton(parent)
@@ -23,8 +25,11 @@ VueCarte::VueCarte(QWidget* parent) : QPushButton(parent)
     setFixedSize(120, 200);
     connect(this, SIGNAL(clicked()), this, SLOT(clickedEvent()));
     setCheckable(false);
+    setProperty("class", "open");
+    //setStyleSheet("QPushButton:open{ border: 2px solid red;  }");
 }
 
+/*
 VueCarte* VueCarte::createVueCarte(const Card& c, QWidget* parent)
 {
     if (const Clan* clanCard = dynamic_cast<const Clan*>(&c))
@@ -44,7 +49,9 @@ VueCarte* VueCarte::createVueCarte(const Card& c, QWidget* parent)
         return nullptr;
     }
 }
+*/
 
+/*
 void VueCarte::setCarte(const Card& c){
     VueCarte* newVueCarte = createVueCarte(c, parentWidget());
 
@@ -64,6 +71,7 @@ void VueCarte::setCarte(const Card& c){
     // Supprimer l'ancienne vue de carte (si présente)
     delete newVueCarte;
 }
+*/
 
 void VueCarte::paintEvent(QPaintEvent* event)
 {
@@ -73,11 +81,12 @@ void VueCarte::paintEvent(QPaintEvent* event)
     dessiner(painter);
 }
 
-void VueCarteClan::dessiner(QPainter& painter)
+void VueCarte::dessiner(QPainter& painter)
 {
     const Clan* c = dynamic_cast<const Clan*>(&getCarte());
     if (c != nullptr)
     {
+        qDebug() << "dessiner Clan OK";
         QColor couleurCarte = QColor::fromString(toString(c->getColor()));
         painter.setPen(couleurCarte);
         painter.setFont(QFont("Arial", 20));

@@ -1,0 +1,4 @@
+
+QPushButton:open {
+    border: 1px solid red; /* Exemple de couleur de contour rouge */
+}

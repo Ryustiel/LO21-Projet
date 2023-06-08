@@ -48,9 +48,11 @@ Essai::Essai(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
     Tactical *t=new Tactical("boue");
 
     size_t i=0;
+    qDebug() << "message";
     vuecartes[i]->setCarte(*c);
     i++;
     vuecartes[i]->setCarte(*t);
+
 
     /*
     size_t i=0;

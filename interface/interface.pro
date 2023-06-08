@@ -38,3 +38,10 @@ HEADERS += \
     head_view/parametersview.h \
     head_view/stoneview.h \
     head_view/versionview.h
+
+RESOURCES += \
+    resources.qrc
+
+
+
+

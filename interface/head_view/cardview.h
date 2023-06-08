@@ -1,4 +1,3 @@
-
 #ifndef CARDVIEW_H
 #define CARDVIEW_H
 
@@ -8,7 +7,7 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
-//classe mère abstraite VUE CARTE
+//classe mère VUE CARTE (CLAN en fait par défaut)
 class VueCarte : public QPushButton
 {
     Q_OBJECT
@@ -19,13 +18,14 @@ public:
     //permet la création d'une instance VueCarte en fonction du type de carte
     static VueCarte* createVueCarte(const Card& c, QWidget* parent = nullptr);
 
-    void setCarte(const Card& c); //{ setCheckable(true); setChecked(false); carte = &c; update(); }
+    //void setCarte(const Card& c);
+    void setCarte(const Card& c){ setCheckable(true); setChecked(false); carte = &c; update(); }
     void setNoCarte() { carte = nullptr; setCheckable(false); update(); }
     const Card& getCarte() const { return *carte; }
     bool cartePresente() const { return carte != nullptr; }
 
 protected:
-    virtual void dessiner(QPainter& painter) = 0;
+    virtual void dessiner(QPainter& painter);
 
     void paintEvent(QPaintEvent *event) override;
 
@@ -40,10 +40,15 @@ signals:
 public slots:
 
 private slots:
-    void clickedEvent() { emit carteClicked(this); }
+    void clickedEvent() {
+        emit carteClicked(this);
+        qDebug() << "card CLICK";
+    }
 };
 
 //classe fille CARTE CLAN
+
+/*
 class VueCarteClan : public VueCarte
 {
 public:
@@ -52,13 +57,15 @@ public:
 protected:
     void dessiner(QPainter& painter) override;
 };
+*/
 
 
-//classe fille CARTE CLAN
+//classe fille CARTE TACTIQUE
 class VueCarteTactical : public VueCarte
 {
 public:
     VueCarteTactical(const Tactical& t, QWidget* parent = nullptr) : VueCarte(t, parent) {}
+    //void setCarte(const Tactical& t) { setCheckable(true); setChecked(false); carte= &t; update(); }
 
 protected:
     void dessiner(QPainter& painter) override;
