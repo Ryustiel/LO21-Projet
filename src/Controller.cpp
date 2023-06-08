@@ -364,3 +364,14 @@ bool TacticController::getAvailableCards(const PlacableCard**& availableCards, s
     }
     return true;
 }
+
+bool TacticController::playerCanPlayCombatMode() const {
+    for (size_t i = 0; i < getBoard().getStoneNb(); i++) {
+        const Stone& cur_stone = getBoard().getStone(i);
+        bool check_claim = cur_stone.getRevendication() == Side::none;
+        bool check_cm = cur_stone.getCombatMode() == nullptr;
+        if (check_cm && check_claim) return true;
+    }
+    return false;
+}
+

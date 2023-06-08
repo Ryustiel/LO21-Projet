@@ -144,6 +144,10 @@ public:
 		if (n < 0 || n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
 		return stones[n];
 	}
+	const Stone& getStone(unsigned int n) const {
+		if (n < 0 || n > 9) throw ShottenTottenException("getStone : incorrect stone number n");
+		return stones[n];
+	}
 	size_t getStoneNb() const { return stones.size(); }
 
 	void addCard(const PlacableCard& card, const Side side, const unsigned int n) { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
