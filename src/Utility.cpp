@@ -15,6 +15,7 @@ namespace Utility {
 		return itable;
 	}
 	int randInt(unsigned int min, unsigned int max) {
+		if (min == max && max == 0) { throw ShottenTottenException("Should not generate random integer from min max (0, 0)"); }
 		std::srand(seed++);
 		int n = rand() % (max - min); // max - min : the modulo operator
 		return n + min;
