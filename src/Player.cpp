@@ -1,10 +1,21 @@
 #include "../head/Player.h"
 #include "../head/Supervisor.h"
 
-unsigned int PlayerAIRandom::selectCard() const {
+int PlayerAIRandom::selectCard() const {
 	
 	size_t size = 0;
 	bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&size);
+	bool allunpickable = true;
+	for (int i = 0; i < size; ++i) {
+		if (pickable[i]) {
+			allunpickable = false;
+			break;
+		}
+	}
+	if (allunpickable) {
+		cout << "No usable card ! Too bad for you :p";
+		return -1;
+	}
 	unsigned int card_nb = Utility::randChoice(pickable, size);
 
 	/*

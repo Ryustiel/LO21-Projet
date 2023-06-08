@@ -59,6 +59,7 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 void PlacableCard::activate() const{
 	Controller* c = Supervisor::getInstance().getController();
 	int stoneNum = UserInterface::getInstance()->uiSelectStone();
+	if (stoneNum < 0) return;
 	Stone& s = c->getBoard().getStone(stoneNum);
 	s.addCard(*this,c->getCurSide());
 };
@@ -186,7 +187,8 @@ void Recruiter::activate() const {
 	if (!c) { throw ShottenTottenException("Recruiter::activate error: no tactic controller !"); }
 	for (unsigned int i = 0; i < 2; ++i) {
 		cout << "Choose a card to discard !" << endl;
-		unsigned int cardNb = UserInterface::getInstance()->uiSelectCard(false);
+		int cardNb = UserInterface::getInstance()->uiSelectCard(false);
+		if (cardNb < 0) return;
 		const Card* selectedCard = c->getCurrentPlayerHand().getCard(cardNb);
 		c->getCurrentPlayerHand().withdraw(*selectedCard);
 		Deck* d;
