@@ -176,7 +176,7 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 	return -1;
 }
 
-unsigned int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
+int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
 	int card_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
@@ -187,7 +187,7 @@ unsigned int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
 		else {
 			card_nb = userSelectCard();
 		}
-		
+
 	}
 	else { //is IA
 		card_nb = playerIA->selectCard();
@@ -197,7 +197,7 @@ unsigned int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
 	return card_nb;
 }
 
-unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
+int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
 	int card_nb = 0;
 	cout << endl << "Select a card from this stone (type in a number) : ";
 	size_t nstones; // number on cards on a stone
@@ -241,10 +241,14 @@ bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 	return choice;
 }
 
-unsigned int UserInterfaceCmd::uiSelectStone() {
+int UserInterfaceCmd::uiSelectStone() {
 	unsigned int stone_nb;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	Controller* c = Supervisor::getInstance().getController();
+	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+	if (c->getBoard().full(c->getCurSide())) {
+		cout << "all stones are full !"<< endl;
+		return -1;
+	}
 	bool* playableStones = c->getPlayableStones();
 	while (true) { //user input until correct
 		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
