@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "../exception/ShottenTottenException.h"
 
 namespace Utility {
 
