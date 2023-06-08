@@ -180,7 +180,7 @@ unsigned int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
 	int card_nb = 0;
 	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
 	if (playerIA == nullptr) { //not IA
-		if (tacticCheck) {
+		if (!tacticCheck) {
 			Controller* c = Supervisor::getInstance().getController();
 			card_nb = userSelectCard(c->getCurrentPlayerHand().getSize(),"error");
 		}
@@ -271,7 +271,7 @@ unsigned int UserInterfaceCmd::uiSelectStoneCombatMode() {
 	if (c == nullptr) throw ShottenTottenException("UserInterfaceCmd::uiSelectStoneCombatMode - controller isn't tactical !");
 	bool* playableStonesCM = c->getPlayableCombatModeStones();
 	while (true) { //user input until correct
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
+		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStoneForCombatMode();
 
 		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
 			cout << "This number isn't valid !" << endl;

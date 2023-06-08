@@ -186,7 +186,7 @@ void Recruiter::activate() const {
 	if (!c) { throw ShottenTottenException("Recruiter::activate error: no tactic controller !"); }
 	for (unsigned int i = 0; i < 2; ++i) {
 		cout << "Choose a card to discard !" << endl;
-		unsigned int cardNb = UserInterface::getInstance()->uiSelectCard();
+		unsigned int cardNb = UserInterface::getInstance()->uiSelectCard(false);
 		const Card* selectedCard = c->getCurrentPlayerHand().getCard(cardNb);
 		c->getCurrentPlayerHand().withdraw(*selectedCard);
 		Deck* d;
