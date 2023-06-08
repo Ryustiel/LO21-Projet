@@ -474,10 +474,10 @@ Deck* UserInterfaceCmd::uiSelectDeck() {
 /// PRINTS ///
 
 void UserInterfaceCmd::uiPrintPlayerHand() {
-	Hand& cur_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
 	cout << endl << Supervisor::getInstance().getController()->getCurrentPlayer()->getName() << "'s hand :" << endl;
-	for (size_t i = 0; i < cur_hand.getSize(); i++) {
-		cout << i << " : " << cur_hand.getCard(i)->getName() << endl;
+	unsigned int i = 0;
+	for (auto card : Supervisor::getInstance().getController()->getCurrentPlayerHand()) {
+		cout << i++ << " : " << card->getName() << endl;
 	}
 }
 
@@ -494,30 +494,32 @@ void UserInterfaceCmd::uiPrintCurrentPlayer() {
 }
 
 void UserInterfaceCmd::uiPrintGame() {
-	Board& cur_board = Supervisor::getInstance().getController()->getBoard();
+	Board& curr_board = Supervisor::getInstance().getController()->getBoard();
 	cout << endl;
-	for (size_t i = 0; i < cur_board.getStoneNb(); i++) { //for each stone
-		cout << "Stone " << i << " : ";
-		Stone& cur_stone = cur_board.getStone(i);
-		if (cur_stone.getRevendication() == Side::none) {
+	unsigned int i = 0;
+	for (Stone& stone : curr_board.getStones()) { //for each stone
+		cout << "Stone " << i++ << " : ";
+
+		if (stone.getRevendication() == Side::none) {
 			cout << "Unclaimed" << endl;
 		}
-		else if (cur_stone.getRevendication() == Side::s1) {
+		else if (stone.getRevendication() == Side::s1) {
 			cout << "Claimed by Player 1" << endl;
 		}
 		else { //claimed by player 2
 			cout << "Claimed by Player 1" << endl;
 		}
-		if (cur_stone.getCombatMode()) {
-			cout << "	Combat mode : " << cur_stone.getCombatMode()->getName() << endl;
+		if (stone.getCombatMode()) {
+			cout << "	Combat mode : " << stone.getCombatMode()->getName() << endl;
 		}
+		int k = 0;
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
-		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
-			cout << "		Card " << k << " : " << cur_stone.getCard(Side::s1,k)->getName() << endl;
+		for (auto card : stone.getCombinationP1()) { //display P1 combination
+			cout << "		Card " << k << " : " << card->getName() << endl;
 		}
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
-		for (size_t k = 0; k < cur_stone.getSizeP2(); k++) { //display P1 combination
-			cout << "		Card " << k << " : " << cur_stone.getCard(Side::s2,k)->getName() << endl;
+		for (auto card : stone.getCombinationP2()) { //display P1 combination
+			cout << "		Card " << k << " : " << card->getName() << endl;
 		}
 		cout << endl;
 	}

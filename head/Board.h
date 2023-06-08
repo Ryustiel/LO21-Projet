@@ -60,21 +60,6 @@ private:
 	const CombatMode* combat_mode = nullptr;
 	Side revendication;
 	Side firstCompleted;
-	class StoneIterator { // iterator
-	private:
-		const PlacableCard** cards;
-		size_t indice;
-	public:
-		StoneIterator(const PlacableCard** cards, size_t i) : cards(cards), indice(i) {};
-		const PlacableCard* operator*() const { return cards[indice]; }
-		bool operator==(const StoneIterator& other) const { return other.indice == indice; }
-		bool operator!=(const StoneIterator& other) const { return other.indice != indice; }
-
-		StoneIterator& operator++() {
-			++indice;
-			return *this;
-		}
-	};
 
 public:
 	Stone()
@@ -150,24 +135,6 @@ private:
 	// indique si les checks prÃ©cÃ©dents ont dÃ©terminÃ© que la partie Ã©tait gagnÃ©e
 	bool won = false; 
 
-	// BoardIterator renvoie des iterateurs qui correspondent à chaque Stone
-	// Les iterateurs StoneIterator renvoient les side
-	/*class BoardIterator : vector<Stone>::iterator {
-	private:
-		const Stone* stones;
-		size_t indice;
-	public:
-		BoardIterator(const Stone* stones, size_t i) : stones(stones), indice(i) {};
-		const Stone& operator*() const { return stones[indice]; }
-		bool operator==(const BoardIterator& other) const { return other.indice == indice; }
-		bool operator!=(const BoardIterator& other) const { return other.indice != indice; }
-
-		BoardIterator& operator++() {
-			++indice;
-			return *this;
-		}
-	};*/
-
 public:
 	Board(size_t size = 9) : stones(size) {}
 	~Board() = default;
@@ -191,6 +158,8 @@ public:
 	// ITERATOR : methods
 	//BoardIterator begin() { return stones.begin(); }
 	//BoardIterator end() { return BoardIterator(stones, stone_nb); }
+
+	vector<Stone>& getStones() { return stones; }
 
 	//Return which side as won a specific stone
 	const Side evaluateStoneWinningSide(const unsigned int n, const PlacableCard** AvailableCards, const size_t availableCardsCount) const;
