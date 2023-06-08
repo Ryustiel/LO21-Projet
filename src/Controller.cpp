@@ -74,7 +74,7 @@ void Controller::newRound() {
     else {
         player2->updateScore();
     }
-    system("pause");
+    //system("pause");
 }
 
 void Controller::checkRound() {
@@ -111,7 +111,8 @@ void Controller::turnPlayCard() {
     cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;
     if (handSize) {
         UserInterface::getInstance()->uiPrintPlayerHand();
-        unsigned int selectedCardNb = UserInterface::getInstance()->uiSelectCard();
+        int selectedCardNb = UserInterface::getInstance()->uiSelectCard();
+        if (selectedCardNb < 0) return;
 
         const Card& selectedCard = *curHand.getCard(selectedCardNb);
 

@@ -76,6 +76,9 @@ public:
 	size_t getSizeP2() const { return combination_p2.size(); }
 	size_t getSideSize(Side s) const { return s == Side::s1 ? combination_p1.size() : combination_p2.size(); }
 	const PlacableCard* getCard(Side s, unsigned int n) { return (s == Side::s1) ? combination_p1[n] : combination_p2[n]; }
+	bool isFull(Side s) {
+		return revendication != Side::none || (s == Side::s1 ? getSizeP1() : getSizeP2()) == max_size;
+	}
 	const vector<const PlacableCard*> getCombinationP1() const { return combination_p1; }
 	const vector<const PlacableCard*> getCombinationP2() const { return combination_p2; }
 	/*const PlacableCard** getCombinationSide(Side s) const {
@@ -145,6 +148,16 @@ public:
 
 	void addCard(const PlacableCard& card, const Side side, const unsigned int n) { if (n > 9) throw BoardException("Board addCard error : 0<=n<9"); stones[n].addCard(card, side); };
 	void getPlayableStones(PlacableCard* c) { std::cout << "\nBoard::getPlayableStones();"; }
+	bool full(Side side) {
+		for (auto& s : stones) {
+			if (!s.isFull(side))
+				return false;
+		}
+		return true;
+	}
+	// ITERATOR : methods
+	//BoardIterator begin() { return stones.begin(); }
+	//BoardIterator end() { return BoardIterator(stones, stone_nb); }
 
 	vector<Stone>& getStones() { return stones; }
 

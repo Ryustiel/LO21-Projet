@@ -18,9 +18,9 @@ public :
     virtual void quickLaunch(int ia1, int ia2, Version v) = 0;
 
 
-    virtual unsigned int uiSelectCard(bool taticCheck = true) = 0;
-    virtual unsigned int uiSelectCard(Stone* stone, Side side) = 0;
-    virtual unsigned int uiSelectStone() = 0;
+    virtual int uiSelectCard(bool taticCheck = true) = 0;
+    virtual int uiSelectCard(Stone* stone, Side side) = 0;
+    virtual int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneCombatMode() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
     virtual int uiSelectStoneForClaim() = 0;
@@ -70,9 +70,9 @@ public:
 
 
 
-    unsigned int uiSelectCard(bool taticCheck = true) final;
-    unsigned int uiSelectCard(Stone* stone, Side side) final;
-    unsigned int uiSelectStone() final;
+    int uiSelectCard(bool taticCheck = true) final;
+    int uiSelectCard(Stone* stone, Side side) final;
+    int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;
     int uiSelectStoneForClaim() final; //TO DELETE
     bool uiWantClaimStone() final {
