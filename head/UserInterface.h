@@ -37,6 +37,7 @@ public :
     virtual void uiPrintGame()=0;
     virtual void uiPrintDiscard()=0;
     virtual void uiPrintCurrentPlayer() =0;
+    virtual void uiControllerReady() = 0;
 
 protected:
     UserInterface() {}
@@ -191,10 +192,11 @@ public:
     bool uiSelectPlayOrDiscard() override;
 
     //affichage
-    void uiPrintCurrentPlayer();
-    void uiPrintPlayerHand();
-    void uiPrintGame();
-    void uiPrintDiscard() ;
+    void uiPrintCurrentPlayer() final;
+    void uiPrintPlayerHand() final;
+    void uiPrintGame() final;
+    void uiPrintDiscard() final;
+    void uiControllerReady() final{};
 
 protected :
     UserInterfaceCmd() {}
