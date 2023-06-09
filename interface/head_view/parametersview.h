@@ -2,10 +2,9 @@
 #define PARAMETERSVIEW_H
 
 #include <QWidget>
-#include "../head_view/versionview.h"
-
 #include <QComboBox>
 #include <QLabel>
+#include "../../head/Version.h"
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
@@ -21,7 +20,7 @@ public:
         choix1 = new QComboBox(parent);
         choix1->addItem("Humain");
         choix1->addItem("IA aléatoire");
-        choix1->addItem("IA stratégique");
+        //choix1->addItem("IA stratégique");
 
         connect(choix1, SIGNAL(currentIndexChanged(int)), this, SLOT(player1Changed()));
 
@@ -30,15 +29,17 @@ public:
         choix2 = new QComboBox(parent);
         choix2->addItem("Humain");
         choix2->addItem("IA aléatoire");
-        choix2->addItem("IA stratégique");
+        //choix2->addItem("IA stratégique");
 
         connect(choix2, SIGNAL(currentIndexChanged(int)), this, SLOT(player2Changed()));
 
         nom1 = new QLabel("Nom du joueur 1 :");
         name1 = new QLineEdit(parent);
+        name1->setText("Le Gontil");
 
         nom2 = new QLabel("Nom du joueur 2 :");
         name2 = new QLineEdit(parent);
+        name2->setText("Le Michon");
 
         go = new QPushButton(parent);
         go->setText("Continuer");
@@ -64,10 +65,18 @@ public:
         noms->addLayout(nomJ1);
         noms->addLayout(nomJ2);
 
+        manches = new QLabel("Nombres de manches à jouer :");
+        nbManches = new QLineEdit(parent);
+        nbManches->setText("5");
+        manche = new QVBoxLayout;
+        manche->addWidget(manches);
+        manche->addWidget(nbManches);
+
         couche = new QVBoxLayout;
         couche->addLayout(Choix1);
         couche->addLayout(Choix2);
         couche->addLayout(noms);
+        couche->addLayout(manche);
         couche->addWidget(go);
 
         setLayout(couche);
@@ -76,6 +85,9 @@ public:
     const QString getNom2() const {return name2->text();}
     bool est_IA1() const {return (choix1->currentIndex()==1 || choix1->currentIndex()==2);}
     bool est_IA2() const {return (choix2->currentIndex()==1 || choix2->currentIndex()==2);}
+    int getRoundNb(){return nbManches->text().toInt();}
+signals:
+    void isDone();
 private:
     QComboBox* choix1;
     QLabel* choixJ1;
@@ -90,6 +102,9 @@ private:
     QVBoxLayout* noms;
     QHBoxLayout* Choix1;
     QHBoxLayout* Choix2;
+    QLabel* manches;
+    QLineEdit* nbManches;
+    QVBoxLayout* manche;
     QVBoxLayout* couche;
     QPushButton* go;
 private slots:

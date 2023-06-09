@@ -13,7 +13,7 @@ const Card& Deck::draw() {
 	if (isEmpty()) throw ShottenTottenException("draw error : deck is empty");
 	unsigned int x = rand() % card_count;
 	auto& c = *cards[x];
-	cards[x] = cards[card_count--];
+	cards[x] = cards[--card_count];
 	return c;
 }
 
@@ -23,4 +23,8 @@ const size_t Deck::drawMultiple(const Card** cards, const size_t number) {
 		cards[i] = &draw();
 	}
 	return number;
+}
+
+void Deck::addCard(const Card& c) {
+	cards[card_count++] = &c;
 }

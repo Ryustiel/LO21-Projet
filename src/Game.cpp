@@ -19,15 +19,15 @@ Game::Game(const Version& version) {
     else if (version == Version::tactic) {
         cards = new Card * [10];
         cards[0] = new Elite("Chief1", Colors, Numbers);
-        cards[1] = new Elite("Chief2", Colors, Numbers);
+        cards[6] = new Elite("Chief2", Colors, Numbers);
         cards[2] = new Elite("Spy", Colors, { Number::seven });
         cards[3] = new Elite("Shield-Bearer", Colors, { Number::one,Number::two,Number::three });
-        cards[4] = new CombatMode("Blind-Man’s Bluff");
+        cards[4] = new BlindManBluff("Blind-Man’s Bluff");
         cards[5] = new CombatMode("Mud Fight");
-        cards[6] = new Ruses("Recruiter");
-        cards[7] = new Ruses("Strategist");
-        cards[8] = new Ruses("Banshee");
-        cards[9] = new Ruses("Traiter");
+        cards[7] = new Recruiter("Recruiter");
+        cards[1] = new Strategist("Strategist");
+        cards[8] = new Banshee("Banshee");
+        cards[9] = new Traiter("Traiter");
         card_count = 10;
     }
     else {

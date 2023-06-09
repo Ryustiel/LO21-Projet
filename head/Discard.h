@@ -12,21 +12,31 @@ private:
 	const Card** cards;
 	size_t size;
 	size_t max_size;
+
+	class DiscardIterator {
+	private:
+		const Card** cards;
+		size_t indice;
+	public:
+		DiscardIterator(const Card** cards, size_t i) : cards(cards), indice(i) {};
+		const Card* operator*() { return cards[indice]; }
+		bool operator==(const DiscardIterator& other) const { return other.indice == indice; }
+		bool operator!=(const DiscardIterator& other) const { return other.indice != indice; }
+
+		DiscardIterator& operator++() {
+			++indice;
+			return *this;
+		}
+	};
 public:
 	Discard(): cards(nullptr),size(0),max_size(0) {}
 	~Discard();
 	void addCard(const Card& c);
 	void withdrawCard(const Card& c);
-	class DiscardIterator {
-	private:
-		friend Discard;
-		const Card* begin;
-		const Card* cur;
-		size_t size;
-		DiscardIterator(const Card* begin, size_t size): begin(begin),cur(begin),size(size) {}
-	public:
-		void next() { if (cur == begin + size) throw DiscardException("DiscardIterator next error : iterator ended !"); cur++; }
-		bool isDone() { return cur == begin; }
-	};
-	DiscardIterator begin() { return DiscardIterator(cards[0], size); }
+	size_t getSize() const { return size; }
+	size_t getMaxSize() const { return max_size; }
+	const Card** getCards() const { return cards; }
+
+	DiscardIterator begin() { return DiscardIterator(cards, 0); }
+	DiscardIterator end() { return DiscardIterator(nullptr, size); }
 };

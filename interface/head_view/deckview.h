@@ -1,5 +1,6 @@
-#ifndef STONEVIEW_H
-#define STONEVIEW_H
+#ifndef DECKVIEW_H
+#define DECKVIEW_H
+
 #include <QWidget>
 #include <QPen>
 #include <QBrush>
@@ -8,32 +9,26 @@
 #include "../../head/Board.h"
 
 
-class VueBorne : public QPushButton
+class VuePioche : public QPushButton
 {
     Q_OBJECT
 public:
     //deux constructeurs differents
-    explicit VueBorne(/*const Stone& s,*/ QWidget *parent = nullptr);
-    const Stone& getCarte() const { return *borne; }
-    void setNb(int i){nb = i;}
+    explicit VuePioche(const Deck& d, QWidget *parent = nullptr);
 protected:
            //void paintEvent(QPaintEvent *event) override;
 private:
-    const Stone* borne=nullptr;
+    const Deck* pioche=nullptr;
     QPen pen;
     QBrush brush;
-    int nb;
 signals:
     // quand la vude de carte est cliquée, elle émet un signal en transmettant son adresse
-    void borneClicked(int i);
+    void carteClicked(VuePioche*);
 public slots:
 private slots:
-    void clickedEvent() { emit borneClicked(nb);}
+    void clickedEvent() { emit carteClicked(this); }
 };
 
 
 
-
-
-
-#endif // STONEVIEW_H
+#endif // DECKVIEW_H

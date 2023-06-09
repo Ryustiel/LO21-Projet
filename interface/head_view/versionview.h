@@ -2,6 +2,7 @@
 #define VERSIONVIEW_H
 #include <QWidget>
 #include "../../head/Version.h"
+#include "../../interface/head_view/parametersview.h"
 
 #include <QComboBox>
 #include <QLabel>
@@ -35,7 +36,8 @@ public:
 
         setLayout(couche);
     };
-    const std::string getVersion() const {return toString(version);} // à changer quand on aura le toString de la version
+    Version getVersion() const {return version;} // à changer quand on aura le toString de la version
+    VueParametres& getVueParametres() {return parameterView;}
 private:
     Version version;
     QComboBox* choix;
@@ -43,6 +45,7 @@ private:
     QHBoxLayout* Choix;
     QVBoxLayout* couche;
     QPushButton* go;
+    VueParametres parameterView;
 private slots:
     // slots qui gère les clics sur le bouton
     void buttonClicked();

@@ -13,6 +13,10 @@ x64
 *.suo
 *.ipch
 /.vs
+enc_temp_folder
+/.vscode
+output
+/.out
 interface\interface.pro.user
 build-interface-Desktop_Qt_6_5_0_MinGW_64_bit-Debug
 *.Debug
@@ -22,3 +26,7 @@ enc_temp_folder/
 /.vscode
 output
 /.out
+interface/*.user*
+build-LO21-Projet-Desktop_Qt_6_5_0_MinGW_64_bit-Debug
+build-interface-Desktop_Qt_6_5_0_MinGW_64_bit-Debug
+/interface/.vs

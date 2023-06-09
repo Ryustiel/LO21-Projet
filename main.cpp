@@ -1,22 +1,31 @@
 #include <iostream>
 #include <string>
+
 //#include "src/Controller.cpp"
 //#include "src/Player.cpp"
 #include "head/Game.h"
 #include "head/Card.h"
 #include "head/Board.h"
-#include "head/Supervisor.h"
 #include "head/Controller.h"
 #include "head/UserInterface.h"
+#include "head/Utility.h"
 
 int main() {
-	
+
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 1, 1);
-	cout << Supervisor::getInstance().getController()->getCurPlayer()->selectCard();
+	cout << Supervisor::getInstance().getController()->getCurrentPlayerHand()->selectCard();
 	*/
 
-	//UserInterface::getInstance().launchUserInterface();
+	UserInterfaceCmd::setInstance();
+
+	UserInterface::getInstance()->quickLaunch(1,1,Version::tactic);
+
+	/*bool blist[5] = {true, true, false, false, true};
+	int result = Utility::randChoice(blist, 5);
+
+	std::cout << result;*/
+
 
 	/*
 	Supervisor::getInstance().setController(Version::legacy, "Ori", "Kyo", 0, 0);
@@ -28,7 +37,7 @@ int main() {
 
 	Supervisor::getInstance().getController()->claimStone(Side::s1,0);
 
-	//UserInterface::getInstance().launchUserInterface();
+	//UserInterfaceCmd::getInstance().launchUserInterfaceCmd();
 	*/
 
 	/*
@@ -87,7 +96,7 @@ int main() {
 	else cout << "none";
 	cout << endl;
 	*/
-	
+
 
 	// SCRIPT DE JEU
 	// pour comprendre l'enchainement des evenements
@@ -104,7 +113,7 @@ int main() {
 	// => ctr.qtDisplayPlayerTurn()
 	// ctr->eventCardPicked("Carte carte_choisie"); // interface : menu Card Picker
 	// => ctr.qtDisplayStonePicker();
-	// carteSelectionnee.activate(); 
+	// carteSelectionnee.activate();
 	// ctr->qtDisplayPlayerTurn(); // interface : menu Stone Picker
 	// ctr->eventChoiceEndTurn(); // interface : menu Jouer son Tour
 	// => ctr.startTurn() => ctr.checkRound(); => ctr.qtDisplayVictoryMenu();

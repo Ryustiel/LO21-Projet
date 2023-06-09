@@ -1,14 +1,16 @@
-
 #ifndef BOARDVIEW_H
 #define BOARDVIEW_H
+
 #include <QWidget>
 #include <vector>
 #include <set>
 #include "cardview.h"
 #include "stoneview.h"
-//#include "../../head/Supervisor.h"
+#include "../../head/Supervisor.h"
+#include "../../head/Card.h"
+#include "../../head/UserInterface.h"
+#include "versionview.h"
 #include "qlabel.h"
-
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -17,17 +19,57 @@
 #include <QGridLayout>
 #include <QProgressBar>
 #include <QLCDNumber>
+#include "cardview.h"
+#include "stoneview.h"
+#include "deckview.h"
 
-class VueCarte;
-
-class VuePartie : public QWidget
+class VuePartie : public QWidget, public UserInterface
 {
     Q_OBJECT
+    //explicit VuePartie(QWidget *parent = nullptr);
+    int receivedHandCard = -1;
+    int receivedBorne = -1;
+    VuePioche* receivedDeck = nullptr;
 public:
-    explicit VuePartie(QWidget *parent = nullptr);
-private: // controleur de la partie a ajouter
-    QLabel* joueur1;
-    QLabel* joueur2;
+    VuePartie();
+    static void setInstance() {
+        if (handler.instance == nullptr) handler.instance = new VuePartie;
+    }
+
+    void launchUserInterface();
+    void startWindow();
+    void StartSupervisor();
+    void quickLaunch(int ia1, int ia2, Version v);
+
+    unsigned int uiSelectCard(bool taticCheck = true) final;
+    unsigned int uiSelectCard(Stone* stone, Side side) {};
+    unsigned int uiSelectStone() final;
+    unsigned int uiSelectStoneCombatMode() {};
+    unsigned int uiSelectStoneForCombatMode() {};
+    int uiSelectStoneForClaim() {};
+    int userSelectStoneForClaim() const {};
+    bool uiWantClaimStone() final;
+    Deck* uiSelectDeck() final;
+    unsigned int uiSelectUnclaimedStone() {};
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) {};
+    void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {};
+    bool uiSelectPlayOrDiscard() {};
+
+    void uiPrintPlayerHand() {};
+    void uiPrintGame() {};
+    void uiPrintDiscard() {};
+    void uiPrintCurrentPlayer() {};
+    void uiControllerReady() final;
+
+    //void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
+    VueVersion vVersion;
+signals:
+    void clickCardReceived();
+    void clickStoneReceived();
+    void clickDeckReceived();
+protected:
+    QLabel* tourJeu;
+    QLabel* tourJoueur;
     QLabel* scorej1; // texte "Score joueur1"
     QLabel* scorej2; // texte "Score joueur 2"
     QLCDNumber* scoreJoueur1; // affichage du score j1
@@ -35,40 +77,49 @@ private: // controleur de la partie a ajouter
     QLabel* instructions;
     QLabel* manche;
     QLCDNumber* mancheValue;
-    QLabel* pioche; // texte "Pioche"
-    QProgressBar* nbCartesPioche; // progression de la pioche
+    QLabel* piocheClan; // texte "Pioche"
+    QProgressBar* nbCartesPiocheClan; // progression de la pioche
+    QVBoxLayout* pbPioches;
+    VuePioche* clanDeck;
     QHBoxLayout* layoutInformations;
     QGridLayout* layoutCartes; // grille des cartes
     QVBoxLayout* layoutPioches;
-    QGridLayout* layoutMain;
+    QGridLayout* layoutMain1;
+    QGridLayout* layoutMain2;
     QVBoxLayout* couche;
-    //vector<VueBorne*> bornes;
+    vector<VueBorne*> bornes;
     vector<VueCarte*> cartesPlateau; // adresses des objets VueCarte
     vector<VueCarte*> cartesMain1;
     vector<VueCarte*> cartesMain2;
-protected:
-    //pour pouvoir recupere le layout info dans VuePartieTactique
-    //faire pareil pour les layout des pioches
-    QHBoxLayout* getLayoutInformations() const {
-        return layoutInformations;
-    }
-private slots:
+public slots:
+    virtual void actionCarteMain(int nb);
+protected slots:
     // slots qui gère les clics sur les cartes
-    //void actioncarte(VueCarte* vc);
-    //void actionborne(VueBorne* vb);
+
+    virtual void actionBorne(int i);
+    void actionPioche(VuePioche* vp);
+    void receiveVersionInfos();
 };
 
 class VuePartieTactique : public VuePartie {
     Q_OBJECT
 public :
-    explicit VuePartieTactique(QWidget *parent = nullptr);
+    VuePartieTactique();
+    static void setInstance() {
+        if (handler.instance == nullptr) handler.instance = new VuePartieTactique;
+    }
     //~VuePartieTactique();
 private :
-    QLabel* pioche2;
-    QProgressBar* nbCartesPioche2;
+    //explicit VuePartieTactique(QWidget *parent = nullptr);
+    QLabel* piocheTactique;
+    QProgressBar* nbCartesPiocheT;
+    VuePioche* tacticDeck;
+    VueCarte* discard;
 private slots:
-    //void actioncarte(VueCarte* vc);
-    //void actionborne(VueBorne* vb);
+    void actionCartePlateau(VueCarte* vc);
+    void actionBorne(VueBorne* vb);
+    void actionPioche(VuePioche* vp);
+    void actionDefausse();
 };
 
 

@@ -28,6 +28,7 @@ public :
 
 	bool isEmpty() const { return card_count == 0; }
 	const Card& draw();
+	void addCard(const Card& c);
 	//permet de remplir un tableau et retourne combien de carte il a reussi à donner (si il y en a pas assez il en donne moins)
 	const size_t drawMultiple(const Card** cards, const size_t number);
 };

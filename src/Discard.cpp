@@ -14,6 +14,7 @@ void Discard::addCard(const Card& c) {
 		cards = newTab;
 	}
 	cards[size++] = &c;
+	cout << "check";
 }
 
 void Discard::withdrawCard(const Card& c) {
