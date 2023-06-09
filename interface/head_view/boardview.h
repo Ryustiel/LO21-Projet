@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <vector>
 #include <set>
-#include "cardview.h"
+#include "cardview_old.h"
 #include "stoneview.h"
 #include "../../head/Supervisor.h"
 #include "../../head/Card.h"
