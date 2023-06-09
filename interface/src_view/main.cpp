@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     //VuePartie::getInstance()->launchUserInterface();
     VuePartie::getInstance()->quickLaunch(0,0,Version::legacy);
     //QApplication app(argc, argv);
-    return 0;
+    return app.exec();
 }
 
 

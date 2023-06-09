@@ -1,5 +1,6 @@
 #include "..\head\Supervisor.h"
 #include "..\exception\ShottenTottenException.h"
+#include "..\head\UserInterface.h"
 
 Supervisor::Handler Supervisor::handler = Supervisor::Handler();
 
@@ -16,13 +17,13 @@ void Supervisor::freeInstance() {
 void Supervisor::setController(const Version& v, const string& name_player1, const string& name_player2, unsigned int IA_player1, unsigned int IA_player2) {
 	if (controller == nullptr) {
 		switch (v) {
-		case Version::legacy :
+		case Version::legacy:
 			controller = new Controller(v, name_player1, name_player2, IA_player1, IA_player2);
 			break;
-		case Version::tactic :
+		case Version::tactic:
 			controller = new TacticController(v, name_player1, name_player2, IA_player1, IA_player2);
 			break;
-		default :
+		default:
 			throw ShottenTottenException("Incorrect game version");
 		}
 	}
