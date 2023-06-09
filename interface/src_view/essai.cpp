@@ -9,7 +9,7 @@
 #include <QLCDNumber>
 #include <QMessageBox>
 
-#include "../head_view/cardview.h"
+#include "../head_view/cardview_old.h"
 #include "../head_view/essai.h"
 
 //constructeur
@@ -32,7 +32,7 @@ Essai::Essai(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
 
 
     //afficher carte -> les initialiser avant
-    for(size_t i=0;i<20;i++) vuecartes[i]=new VueCarteClan;
+    for(size_t i=0;i<20;i++) vuecartes[i]=new VueCarte;
     for(size_t i=0;i<20;i++){
         layoutCartes->addWidget(vuecartes[i],i/4,i%4);
         //connexion signaux slots
@@ -48,13 +48,15 @@ Essai::Essai(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
     Clan *c1=new Clan(color1,number1);
     Clan *c2=new Clan(color2,number2);
 
-    //Tactical *t=new Tactical("boue");
+    Tactical *t=new Tactical("boue");
 
     size_t i=0;
     qDebug() << "message";
     vuecartes[i]->setCarte(*c1);
     i++;
     vuecartes[i]->setCarte(*c2);
+    i++;
+    vuecartes[i]->setCarte(*t);
 
 
     /*

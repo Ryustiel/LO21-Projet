@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
+/*
+
 //classe mère VUE CARTE
 class VueCarte : public QPushButton
 {
@@ -70,5 +72,6 @@ public:
 protected:
     void dessiner(QPainter& painter) override; //redefinition de la methode dessiner
 };
+*/
 
 #endif // CARDVIEW_H

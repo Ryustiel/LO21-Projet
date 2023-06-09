@@ -4,7 +4,6 @@
 
 #include <QWidget>
 #include <vector>
-#include <set>
 #include "../../head/Card.h"
 
 

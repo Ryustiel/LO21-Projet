@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 
+/*
 
 VueCarte::VueCarte(const Card& c, QWidget* parent) : QPushButton(parent), carte(&c)
 {
@@ -29,7 +30,7 @@ VueCarte::VueCarte(QWidget* parent) : QPushButton(parent)
     //setStyleSheet("QPushButton:open{ border: 2px solid red;  }");
 }
 
-/*
+
 VueCarte* VueCarte::createVueCarte(const Card& c, QWidget* parent)
 {
     if (const Clan* clanCard = dynamic_cast<const Clan*>(&c))
@@ -71,7 +72,7 @@ void VueCarte::setCarte(const Card& c){
     carte = &c;
     update();
 }
-*/
+
 
 
 void VueCarte::paintEvent(QPaintEvent* event)
@@ -113,3 +114,4 @@ void VueCarteTactical::dessiner(QPainter& painter)
         painter.drawText(textPosX, textPosY, QString::fromStdString(t->getName()));
     }
 }
+*/
