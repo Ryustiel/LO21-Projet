@@ -55,7 +55,7 @@ VuePartie::VuePartie(QWidget *parent) : QWidget(parent)
     layoutInformations->addWidget(scoreJoueur2);
 
     //afficher carte -> les initialiser avant
-    for(size_t i=0;i<20;i++) cartesPlateau[i]=new VueCarte;
+    for(size_t i=0;i<20;i++) cartesPlateau[i]=new VueCarteClan;
     for(size_t i=0;i<20;i++){
         layoutCartes->addWidget(cartesPlateau[i],i/4,i%4);
         //connexion signaux slots

@@ -49,17 +49,20 @@ VueCarte* VueCarte::createVueCarte(const Card& c, QWidget* parent)
         return nullptr;
     }
 }
-*/
 
-/*
+
+
 void VueCarte::setCarte(const Card& c){
     VueCarte* newVueCarte = createVueCarte(c, parentWidget());
 
     // Désassocier l'ancienne carte (si présente)
     if (carte != nullptr)
     {
-        // ...
+        setNoCarte();
     }
+
+
+
 
     setCheckable(true);
     setChecked(false);
@@ -67,11 +70,9 @@ void VueCarte::setCarte(const Card& c){
     // Associer la nouvelle carte et mettre à jour la vue
     carte = &c;
     update();
-
-    // Supprimer l'ancienne vue de carte (si présente)
-    delete newVueCarte;
 }
 */
+
 
 void VueCarte::paintEvent(QPaintEvent* event)
 {
@@ -81,7 +82,7 @@ void VueCarte::paintEvent(QPaintEvent* event)
     dessiner(painter);
 }
 
-void VueCarte::dessiner(QPainter& painter)
+void VueCarteClan::dessiner(QPainter& painter)
 {
     const Clan* c = dynamic_cast<const Clan*>(&getCarte());
     if (c != nullptr)
