@@ -246,7 +246,7 @@ void Controller::claimStone(unsigned int n) {
     bool s1Completed = (board->getStone(n).getSizeP1() == board->getStone(n).getMaxSize());
     bool s2Completed = (board->getStone(n).getSizeP2() == board->getStone(n).getMaxSize());
     //to revendicate a stone, current player's combination must be completed
-    if ((s == Side::s1 && !s1Completed) || (s == Side::s2) && !s2Completed) {
+    if ((s == Side::s1 && !s1Completed) || ((s == Side::s2) && !s2Completed)) {
         evaluated_side = Side::none;
     }
     else if (!s1Completed || !s2Completed) {

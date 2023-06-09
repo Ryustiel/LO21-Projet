@@ -115,9 +115,10 @@ void VuePartie::startWindow(){
     for(int i=0; i<nbBornes; i++){
         bornes[i]=new VueBorne();//Supervisor::getInstance().getController()->getBoard().getStone(i)
         bornes[i]->setContentsMargins(0,0,0,0);
+        bornes [i]->setNb(i);
         size_t j=i+nbBornes*3;
         layoutCartes->addWidget(bornes[i], j/nbBornes, j%nbBornes);
-        connect(bornes[i],SIGNAL(borneClicked(VueBorne*)),this,SLOT(actionBorne(VueBorne*)));
+        connect(bornes[i],SIGNAL(borneClicked(int)),this,SLOT(actionBorne(int)));
     }
 
     k=0;
@@ -192,6 +193,7 @@ void VuePartie::startWindow(){
     for(int i=0; i<Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(); i++)
     {
         cartesMain2[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer2().getHand()->getCard(i))
+        cartesMain1[i]->setNb(i);
         connect(cartesMain2[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
         layoutMain2->addWidget(cartesMain2[i],0,i);
     }
@@ -320,17 +322,22 @@ unsigned int VuePartie::uiSelectCard(bool taticCheck){
     QEventLoop loop;
     connect(this, SIGNAL(clickCardReceived()), & loop, SLOT(quit()));
     loop.exec();
-    return receivedCard;
+    return receivedHandCard;
 };
 unsigned int uiSelectCard(Stone* stone, Side side) {return 1;};
-unsigned int uiSelectStone() {return 1;};
+unsigned int VuePartie::uiSelectStone() {
+    QEventLoop loop;
+    connect(this, SIGNAL(clickStoneReceived()), & loop, SLOT(quit()));
+    loop.exec();
+    return receivedBorne;
+};
 unsigned int uiSelectStoneCombatMode() {return 1;};
 unsigned int uiSelectStoneForCombatMode() {return 1;};
 int uiSelectStoneForClaim() {return 1;};
 int userSelectStoneForClaim() {return 1;};
-bool uiWantClaimStone() {return 1;};
-Deck* uiSelectDeck() {return &Supervisor::getInstance().getController()->getClanDeck();};
-unsigned int uiSelectUnclaimedStone() { return 1;};
+bool VuePartie::uiWantClaimStone() {return 0;};
+Deck* VuePartie::uiSelectDeck() {return &Supervisor::getInstance().getController()->getClanDeck();};
+unsigned int uiSelectUnclaimedStone() { return 0;};
 int uiSelectCardOnStone(Side s, unsigned int stone_nb) {return 1;};
 
 void uiPrintPlayerHand() {return;};
@@ -341,13 +348,19 @@ void uiPrintDiscard() {return;};
 
 
 void VuePartie::actionCarteMain(int nb){
-    receivedCard = nb;
+    receivedHandCard = nb;
     emit clickCardReceived();
 }
 void VuePartieTactique::actionCartePlateau(VueCarte* vc){}
-void VuePartie::actionBorne(VueBorne* vb){}
+void VuePartie::actionBorne(int i){
+    receivedBorne = i;
+    emit clickStoneReceived();
+}
 void VuePartieTactique::actionBorne(VueBorne* vb){}
-void VuePartie::actionPioche(){}
+void VuePartie::actionPioche(VuePioche* vp){
+    receivedDeck = vp;
+    emit clickDeckReceived();
+}
 void VuePartieTactique::actionPioche(VuePioche* vp){}
 void VuePartieTactique::actionDefausse(){}
 

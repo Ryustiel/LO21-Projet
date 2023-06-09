@@ -27,7 +27,9 @@ class VuePartie : public QWidget, public UserInterface
 {
     Q_OBJECT
     //explicit VuePartie(QWidget *parent = nullptr);
-    int receivedCard = -1;
+    int receivedHandCard = -1;
+    int receivedBorne = -1;
+    VuePioche* receivedDeck = nullptr;
 public:
     VuePartie();
     static void setInstance() {
@@ -41,13 +43,13 @@ public:
 
     unsigned int uiSelectCard(bool taticCheck = true) final;
     unsigned int uiSelectCard(Stone* stone, Side side) {};
-    unsigned int uiSelectStone() {};
+    unsigned int uiSelectStone() final;
     unsigned int uiSelectStoneCombatMode() {};
     unsigned int uiSelectStoneForCombatMode() {};
     int uiSelectStoneForClaim() {};
     int userSelectStoneForClaim() const {};
-    bool uiWantClaimStone() {};
-    Deck* uiSelectDeck() {};
+    bool uiWantClaimStone() final;
+    Deck* uiSelectDeck() final;
     unsigned int uiSelectUnclaimedStone() {};
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) {};
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {};
@@ -63,6 +65,8 @@ public:
     VueVersion vVersion;
 signals:
     void clickCardReceived();
+    void clickStoneReceived();
+    void clickDeckReceived();
 protected:
     QLabel* tourJeu;
     QLabel* tourJoueur;
@@ -92,8 +96,8 @@ public slots:
 protected slots:
     // slots qui gère les clics sur les cartes
 
-    virtual void actionBorne(VueBorne* vb);
-    void actionPioche();
+    virtual void actionBorne(int i);
+    void actionPioche(VuePioche* vp);
     void receiveVersionInfos();
 };
 

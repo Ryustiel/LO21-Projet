@@ -18,7 +18,7 @@ VueBorne::VueBorne(/*const Stone& s,*/ QWidget *parent) : QPushButton(parent)/*,
     setAutoFillBackground(true);
     setFixedSize(60,40);
     connect(this,SIGNAL(clicked()),this,SLOT(clickedEvent()));
-    setCheckable(true);
+    setCheckable(false);
 }
 
 
