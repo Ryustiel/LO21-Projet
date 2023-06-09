@@ -18,8 +18,7 @@ public :
     virtual void quickLaunch(int ia1, int ia2, Version v) = 0;
 
 
-    virtual int uiSelectCard(bool taticCheck = true) = 0;
-    virtual int uiSelectCard(Stone* stone, Side side) = 0;
+    virtual int uiSelectCard(bool* possibleChoice) = 0;
     virtual int uiSelectStone() = 0;
     virtual unsigned int uiSelectStoneCombatMode() = 0;
     virtual unsigned int uiSelectStoneForCombatMode() = 0;
@@ -70,8 +69,7 @@ public:
 
 
 
-    int uiSelectCard(bool taticCheck = true) final;
-    int uiSelectCard(Stone* stone, Side side) final;
+    virtual int uiSelectCard(bool* possibleChoice) final;
     int uiSelectStone() final;
     unsigned int uiSelectStoneForCombatMode() final;
     int uiSelectStoneForClaim() final; //TO DELETE
@@ -91,20 +89,8 @@ public:
     
 
     //INPUT USERS
-    unsigned int userSelectCard() const {
-        unsigned int card_nb = 0;
-        cout << endl << "Select a card to play from your hand (number) : ";
-        cin >> card_nb;
-        size_t card_hand_count = 0; // la valeur sera mise à jour avec getPickableCards()
-        bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&card_hand_count);
-        while (((card_nb < 0) || (card_nb >= card_hand_count)) || (!pickable[card_nb])) { // user input until correct
-            cout << endl << "You can't play this card. Please select a card to play from your hand : ";
-            cin >> card_nb;
-        }
-        return card_nb;
-    }
 
-    unsigned int userSelectCard(unsigned int option_count, const string& retry_message) const {
+    unsigned int userInputChoice(unsigned int option_count, const string& retry_message) const {
         unsigned int card_nb = 0;
         cin >> card_nb;
         while ((card_nb < 0) || (card_nb >= option_count)) { // repeat until user enters a valid input

@@ -110,7 +110,7 @@ void Controller::turnPlayCard() {
     cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;
     if (handSize) {
         UserInterface::getInstance()->uiPrintPlayerHand();
-        int selectedCardNb = UserInterface::getInstance()->uiSelectCard();
+        int selectedCardNb = selectHandCard();
         if (selectedCardNb < 0) return;
 
         const Card& selectedCard = *curHand.getCard(selectedCardNb);
@@ -290,7 +290,29 @@ void Controller::playTurn(Side s) {
     throw ShottenTottenException("playTurn : inadequate side s");
 }
 
-
+int Controller::selectHandCard(bool checkPickable) {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable;
+    size_t* size;
+    if (checkPickable) {
+        pickable = getPickableCards();
+    }else {
+        const size_t size = c->getCurrentPlayerHand().getSize();
+        pickable = new bool[size];
+        for (size_t i = 0; i < size; ++i) {
+            pickable[i] = true;
+        }
+    }
+    
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        return playerIA->selectCard(pickable);
+    }
+    else {
+        
+        return UserInterface::getInstance()->uiSelectCard(pickable);
+    }
+}
 //TACTIC CONTROLLER METHODS
 
 void TacticController::initForNewRound() {

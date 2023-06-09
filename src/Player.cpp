@@ -1,10 +1,9 @@
 #include "../head/Player.h"
 #include "../head/Supervisor.h"
 
-int PlayerAIRandom::selectCard() const {
-	
-	size_t size = 0;
-	bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&size);
+int PlayerAIRandom::selectCard(bool* pickable) const {
+	Controller* c = Supervisor::getInstance().getController();
+	size_t size = c->getCurrentPlayerHand().getSize();
 	bool allunpickable = true;
 	for (int i = 0; i < size; ++i) {
 		if (pickable[i]) {

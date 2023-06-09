@@ -176,51 +176,18 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 	return -1;
 }
 
-int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
-	int card_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) { //not IA
-		if (!tacticCheck) {
-			Controller* c = Supervisor::getInstance().getController();
-			card_nb = userSelectCard(c->getCurrentPlayerHand().getSize(),"error");
+int UserInterfaceCmd::uiSelectCard(bool* pickable) {
+	cout << "Select a card from this stone (type in a number) : " << endl;
+	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		unsigned int choice = userInputChoice(c->getCurrentPlayerHand().getSize(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
 		}
-		else {
-			card_nb = userSelectCard();
-		}
-
+		cout << "This Card isn't pickable !" << endl;
 	}
-	else { //is IA
-		card_nb = playerIA->selectCard();
-	}
-
-	cout << "Selected card (number) : " << card_nb << endl;
-	return card_nb;
 }
 
-int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
-	int card_nb = 0;
-	cout << endl << "Select a card from this stone (type in a number) : ";
-	size_t nstones; // number on cards on a stone
-
-	// fetching the number of cards placed on the one side
-	if (side == Side::s1) {
-		nstones = stone->getSizeP1();
-
-	}
-	else {
-		nstones = stone->getSizeP2();
-	}
-
-	// fetching a card number from either the interface or the AI methods
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) {
-		card_nb = playerIA->selectCard(nstones);
-	}
-	else {
-		card_nb = UserInterfaceCmd::userSelectCard(nstones, "This is not a number, or there is no card bearing this number.");
-	}
-	return card_nb;
-}
 
 bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 	Controller* c = Supervisor::getInstance().getController();

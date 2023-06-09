@@ -72,8 +72,8 @@ public:
 	// getBoardContent() -> BoardIterator
 
 	bool canPlayCard() { // returns True if at least one card is playable
-		size_t size;
-		bool* playable = getPickableCards(&size);
+		size_t size = getCurrentPlayerHand().getSize();
+		bool* playable = getPickableCards();
 		bool at_least_one = false;
 		for (size_t i = 0; i < size; i++) {
 			if (playable[i]) {
@@ -83,18 +83,15 @@ public:
 		}
 		return at_least_one;
 	}
-
-	virtual bool* getPickableCards(size_t * size) const { // modifier ça pour avoir une size TO DO
+	virtual bool* getPickableCards() const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
 		for (size_t i = 0; i < hs; ++i) {
 			pickable[i] = true;
 		}
-		*size = hs; // sauvegarde une valeur pour exporter
 		return pickable;
 	} // récupère la liste des cartes jouables
-
 	bool* getUnclaimedStones() const {
 		const size_t sn = board->getStoneNb();
 		bool* unclaimed = new bool[sn];
@@ -103,7 +100,6 @@ public:
 		}
 		return unclaimed;
 	}
-
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		const size_t sn = board->getStoneNb();
 
@@ -125,8 +121,9 @@ public:
 		}
 		return playableCM;
 	}
-
 	virtual unsigned int getDeckCount() const { return 1; }
+
+	int selectHandCard(bool checkPickable = true);
 
 	// SETTERS
 
@@ -184,7 +181,6 @@ public:
 	}
 
 	virtual void playTurn(Side s);
-	Stone& askStoneChoice() { return board->getStone(0); }
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
@@ -245,12 +241,12 @@ public :
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
 
-	bool* getPickableCards(size_t * size)const final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
+	bool* getPickableCards()const final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
 
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
-		pickable = Controller::getPickableCards(size);
+		pickable = Controller::getPickableCards();
 
 		if (playerCanPlayTacticalCard()) { //can play tactical cards
 
@@ -272,8 +268,6 @@ public :
 			for (size_t i = 0; i < hs; ++i) {
 				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
 			}
-
-			*size = hs;
 
 			return pickable;
 		}
