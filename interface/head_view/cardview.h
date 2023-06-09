@@ -25,7 +25,7 @@ public:
     bool cartePresente() const { return carte != nullptr;}
 
 protected:
-    virtual void dessiner(QPainter& painter)=0; //methode pour dessiner le visuel de la carte
+    virtual void dessiner(QPainter& painter){}; //methode pour dessiner le visuel de la carte
     void paintEvent(QPaintEvent *event) override;
 
 private:
