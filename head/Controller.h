@@ -55,7 +55,7 @@ public:
 	Side getCurSide() const { return current_side; }
 	Version getVersion() const { return version; }
 	Deck& getClanDeck() const { return *clanDeck; }
-	Game getClanGame() const { return clanGame; } // accès en lecture seule
+    const Game& getClanGame() const { return clanGame; } // accès en lecture seule
 	Board& getBoard() { return *board; } //accès écriture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
