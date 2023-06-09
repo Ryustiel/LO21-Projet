@@ -15,17 +15,16 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
     remainingRounds = nturns;
     totalRounds = nturns;
     maxScore = winthreshold;
-    Controller* c = Supervisor::getInstance().getController();
 
-    while (c->getRemainingRounds() != 0) {
-        cout << "* ROUND " << c->getTotalRounds() - c->getRemainingRounds() + 1 << " (on " << c->getTotalRounds() << ") *" << endl;
+    while (getRemainingRounds() != 0) {
+        cout << "* ROUND " << getTotalRounds() - getRemainingRounds() + 1 << " (on " << getTotalRounds() << ") *" << endl;
 
         newRound();
         //decrementing remaining rounds
-        unsigned int r = c->getRemainingRounds();
-        c->setRemainingRounds(r - 1);
+        unsigned int r = getRemainingRounds();
+        setRemainingRounds(r - 1);
     }
-    Player* winner = c->getWinner();
+    Player* winner = getWinner();
     if (winner != nullptr) {
         cout << endl << "The winner is : " << winner->getName() << "! Congratulations!" << endl;
     }
