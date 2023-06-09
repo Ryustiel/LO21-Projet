@@ -11,6 +11,7 @@
 #include "../../head/Version.h"
 #include "../head_view/cardview.h"
 #include "../head_view/boardview.h"
+#include <QEventLoop>
 
 //constructeur
 VuePartie::VuePartie() : QWidget(){}
@@ -18,6 +19,7 @@ VuePartie::VuePartie() : QWidget(){}
 void VuePartie::startWindow(){
     cartesPlateau = vector<VueCarte *>(Supervisor::getInstance().getController()->getBoard().getStoneNb()*3*2,nullptr);
     cartesMain1 = vector<VueCarte *>(Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(),nullptr);
+    cartesMain2  = vector<VueCarte *>(Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(),nullptr);
     bornes = vector<VueBorne *>(Supervisor::getInstance().getController()->getBoard().getStoneNb(),nullptr);
 
 
@@ -171,7 +173,8 @@ void VuePartie::startWindow(){
     for(int i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
     {
         cartesMain1[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i))
-        connect(cartesMain1[i],SIGNAL(Clicked(VueCarte*)),this,SLOT(actionCarteMain(VueCarte*)));
+        cartesMain1[i]->setNb(i);
+        connect(cartesMain1[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
         layoutMain1->addWidget(cartesMain1[i],0,i);
     }
 
@@ -186,10 +189,10 @@ void VuePartie::startWindow(){
     mainj2->setContentsMargins(0,0,20,0);
 
     layoutMain2 = new QGridLayout;
-    for(size_t i=0; i<Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(); i++)
+    for(int i=0; i<Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(); i++)
     {
         cartesMain2[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer2().getHand()->getCard(i))
-        connect(cartesMain2[i],SIGNAL(carteClicked(VueCarte*)),this,SLOT(actionCarteMain(VueCarte*)));
+        connect(cartesMain2[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
         layoutMain2->addWidget(cartesMain2[i],0,i);
     }
 
@@ -216,6 +219,7 @@ void VuePartie::startWindow(){
     }
 
     setLayout(couche);
+    show();
 }
 
 void VuePartie::launchUserInterface(){
@@ -228,10 +232,13 @@ void VuePartie::StartSupervisor(){
 
 }
 
+void VuePartie::uiControllerReady(){
+    startWindow();
+}
+
 void VuePartie::receiveVersionInfos(){
     VueParametres& vp = vVersion.getVueParametres();
     Supervisor::getInstance().eventStartGame(vVersion.getVersion(),vp.getNom1().toStdString(),vp.getNom2().toStdString(),vp.est_IA1(),vp.est_IA2(),vp.getRoundNb(),4);
-    startWindow();
 }
 
 void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
@@ -307,7 +314,14 @@ VuePartieTactique::VuePartieTactique() : VuePartie()
     setLayout(couche);
 }
 
-unsigned int uiSelectCard() {return 1;};
+unsigned int VuePartie::uiSelectCard(bool taticCheck){
+    //vVersion.show();
+
+    QEventLoop loop;
+    connect(this, SIGNAL(clickCardReceived()), & loop, SLOT(quit()));
+    loop.exec();
+    return receivedCard;
+};
 unsigned int uiSelectCard(Stone* stone, Side side) {return 1;};
 unsigned int uiSelectStone() {return 1;};
 unsigned int uiSelectStoneCombatMode() {return 1;};
@@ -326,8 +340,10 @@ void uiPrintCurrentPlayer() {return;};
 void uiPrintDiscard() {return;};
 
 
-void VuePartie::actionCarteMain(VueCarte* vc){}
-void VuePartieTactique::actionCarteMain(VueCarte* vc){}
+void VuePartie::actionCarteMain(int nb){
+    receivedCard = nb;
+    emit clickCardReceived();
+}
 void VuePartieTactique::actionCartePlateau(VueCarte* vc){}
 void VuePartie::actionBorne(VueBorne* vb){}
 void VuePartieTactique::actionBorne(VueBorne* vb){}

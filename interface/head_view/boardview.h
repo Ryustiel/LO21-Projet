@@ -7,6 +7,7 @@
 #include "cardview.h"
 #include "stoneview.h"
 #include "../../head/Supervisor.h"
+#include "../../head/Card.h"
 #include "../../head/UserInterface.h"
 #include "versionview.h"
 #include "qlabel.h"
@@ -26,6 +27,7 @@ class VuePartie : public QWidget, public UserInterface
 {
     Q_OBJECT
     //explicit VuePartie(QWidget *parent = nullptr);
+    int receivedCard = -1;
 public:
     VuePartie();
     static void setInstance() {
@@ -37,7 +39,7 @@ public:
     void StartSupervisor();
     void quickLaunch(int ia1, int ia2, Version v);
 
-    unsigned int uiSelectCard(bool taticCheck = true) final {};
+    unsigned int uiSelectCard(bool taticCheck = true) final;
     unsigned int uiSelectCard(Stone* stone, Side side) {};
     unsigned int uiSelectStone() {};
     unsigned int uiSelectStoneCombatMode() {};
@@ -49,15 +51,18 @@ public:
     unsigned int uiSelectUnclaimedStone() {};
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) {};
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {};
-    bool uiSelectPlayOrDiscard() {}
+    bool uiSelectPlayOrDiscard() {};
 
     void uiPrintPlayerHand() {};
     void uiPrintGame() {};
     void uiPrintDiscard() {};
     void uiPrintCurrentPlayer() {};
+    void uiControllerReady() final;
 
     //void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
     VueVersion vVersion;
+signals:
+    void clickCardReceived();
 protected:
     QLabel* tourJeu;
     QLabel* tourJoueur;
@@ -82,9 +87,11 @@ protected:
     vector<VueCarte*> cartesPlateau; // adresses des objets VueCarte
     vector<VueCarte*> cartesMain1;
     vector<VueCarte*> cartesMain2;
+public slots:
+    virtual void actionCarteMain(int nb);
 protected slots:
     // slots qui gère les clics sur les cartes
-    virtual void actionCarteMain(VueCarte* vc);
+
     virtual void actionBorne(VueBorne* vb);
     void actionPioche();
     void receiveVersionInfos();
@@ -105,7 +112,6 @@ private :
     VuePioche* tacticDeck;
     VueCarte* discard;
 private slots:
-    void actionCarteMain(VueCarte* vc);
     void actionCartePlateau(VueCarte* vc);
     void actionBorne(VueBorne* vb);
     void actionPioche(VuePioche* vp);

@@ -16,7 +16,6 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
     totalRounds = nturns;
     maxScore = winthreshold;
     Controller* c = Supervisor::getInstance().getController();
-
     while (c->getRemainingRounds() != 0) {
         cout << "* ROUND " << c->getTotalRounds() - c->getRemainingRounds() + 1 << " (on " << c->getTotalRounds() << ") *" << endl;
 
@@ -64,6 +63,7 @@ void Controller::initForNewRound() {
 void Controller::newRound() {
     std::cout << "\n===================== newRound";
     initForNewRound();
+    UserInterface::getInstance()->uiControllerReady();
     Side winning = Side::none;
     while (winning == Side::none) {
         newTurn();
