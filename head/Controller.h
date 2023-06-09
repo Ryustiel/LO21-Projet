@@ -104,16 +104,28 @@ public:
 		const size_t sn = board->getStoneNb();
 
 		bool* playable = getUnclaimedStones();
+		bool allUnplayable = true;
 		for (size_t i = 0; i < sn; ++i) {
 			playable[i] = playable[i] && board->getStone(i).getSideSize(current_side) != board->getStone(i).getMaxSize();
+			if (playable[i]) {
+				allUnplayable = false;
+			}
 		}
+		if (allUnplayable)
+			return nullptr;
 		return playable;
 	}
 	bool* getPlayableCombatModeStones() { //vérifie les bornes sur lesquelles on peut poser une carte Combat mode -> non revendiquées et ne possédant pas déjà une combat mode
 		const size_t sn = board->getStoneNb();
 		bool* playableCM = getUnclaimedStones();
+		bool allUnplayable = true;
 		for (size_t i = 0; i < sn; ++i) {
 			playableCM[i] = playableCM[i] && (board->getStone(i).getCombatMode() == nullptr);
+			if (playableCM[i])
+				allUnplayable = false;
+		}
+		if (allUnplayable) {
+			return nullptr;
 		}
 		cout << "(getPlayableCombatModeStones) - bool list : ";
 		for (size_t i = 0; i < sn; ++i) {
@@ -124,6 +136,8 @@ public:
 	virtual unsigned int getDeckCount() const { return 1; }
 
 	int selectHandCard(bool checkPickable = true);
+	int selectPlayableStone();
+	int selectStoneForCombatMode();
 
 	// SETTERS
 

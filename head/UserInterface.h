@@ -19,9 +19,8 @@ public :
 
 
     virtual int uiSelectCard(bool* possibleChoice) = 0;
-    virtual int uiSelectStone() = 0;
-    virtual unsigned int uiSelectStoneCombatMode() = 0;
-    virtual unsigned int uiSelectStoneForCombatMode() = 0;
+    virtual int uiSelectStone(bool* pickable) = 0;
+    virtual unsigned int uiSelectStoneForCombatMode(bool* pickable) = 0;
     virtual int uiSelectStoneForClaim() = 0;
     virtual int userSelectStoneForClaim() const = 0;
     virtual bool uiWantClaimStone() = 0;
@@ -69,17 +68,17 @@ public:
 
 
 
-    virtual int uiSelectCard(bool* possibleChoice) final;
-    int uiSelectStone() final;
-    unsigned int uiSelectStoneForCombatMode() final;
+    virtual int uiSelectCard(bool* pickable) final;
+    int uiSelectStone(bool* pickable) final;
+    unsigned int uiSelectStoneForCombatMode(bool* pickable) final;
     int uiSelectStoneForClaim() final; //TO DELETE
     bool uiWantClaimStone() final {
-        cout << "Do you want to claim a stone ? (0: yes, 1: no)" << endl;
+        cout << "Do you want to claim a stone ? (0: no, 1: yes)" << endl;
         int result;
         while (true) {
             cin >> result;
             if (result < 2 && result >= 0) {
-                return !result;
+                return result;
             }
         }
         return 1;
@@ -106,18 +105,6 @@ public:
         cout << "Select a stone (number) : ";
         cin >> stone_nb;
         while (stone_nb < 0 || stone_nb >= stone_count || !Supervisor::getInstance().getController()->getUnclaimedStones()[stone_nb]) { //user input until correct
-            cout << "You can't choose this stone. Please select another stone : ";
-            cin >> stone_nb;
-        }
-        return stone_nb;
-    }
-
-    unsigned int userSelectStone() const {
-        unsigned int stone_nb = 0;
-        unsigned int stone_count = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-        cout << "Select a stone (number) : ";
-        cin >> stone_nb;
-        while (stone_nb < 0 || stone_nb >= stone_count ||  !Supervisor::getInstance().getController()->getPlayableStones()[stone_nb]) { //user input until correct
             cout << "You can't choose this stone. Please select another stone : ";
             cin >> stone_nb;
         }
@@ -160,8 +147,6 @@ public:
         cin >> choice;
         return choice;
     }
-
-    unsigned int uiSelectStoneCombatMode() override;
     ///PLAY THE GAME
     void uiGameView2(); //pick a card
     void uiGameView3(); //pick a stone (always after uiGameView2) ; can be skipped

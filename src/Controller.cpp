@@ -293,7 +293,6 @@ void Controller::playTurn(Side s) {
 int Controller::selectHandCard(bool checkPickable) {
     Controller* c = Supervisor::getInstance().getController();
     bool* pickable;
-    size_t* size;
     if (checkPickable) {
         pickable = getPickableCards();
     }else {
@@ -313,6 +312,36 @@ int Controller::selectHandCard(bool checkPickable) {
         return UserInterface::getInstance()->uiSelectCard(pickable);
     }
 }
+
+int Controller::selectPlayableStone() {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getPlayableStones();
+    if (!pickable)
+        return -1;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        return playerIA->selectStone(pickable);
+    }
+    else {
+
+        return UserInterface::getInstance()->uiSelectStone(pickable);
+    }
+};
+
+int Controller::selectStoneForCombatMode() {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getPlayableCombatModeStones();
+    if (!pickable)
+        return -1;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        return playerIA->selectStoneForCombatMode(pickable);
+    }
+    else {
+
+        return UserInterface::getInstance()->uiSelectStoneForCombatMode(pickable);
+    }
+};
 //TACTIC CONTROLLER METHODS
 
 void TacticController::initForNewRound() {

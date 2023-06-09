@@ -35,18 +35,11 @@ int PlayerAIRandom::selectCard(bool* pickable) const {
 	return card_nb;
 }
 
-unsigned int PlayerAIRandom::selectCard(size_t nchoices) const {
-	// choses a random int based on n_stones
-	std::cout << "MAKING RANDOM CHOICE " << nchoices << endl;
-	return Utility::randInt(0, nchoices);
-}
 
-unsigned int PlayerAIRandom::selectStone() const {
+unsigned int PlayerAIRandom::selectStone(bool* pickable) const {
 	unsigned int stone_nb = 0;
 	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-	bool* list_stones = new bool[max_stones];
-	list_stones = Supervisor::getInstance().getController()->getPlayableStones();
-	while (!list_stones[stone_nb]) {
+	while (!pickable[stone_nb]) {
 		stone_nb++;
 	}
 	// stone_nb sera toujours défini : 
@@ -56,7 +49,7 @@ unsigned int PlayerAIRandom::selectStone() const {
 		std::cout << endl << "stone_nb [" << stone_nb << "] ; MAX stones [" << max_stones;
 		std::cout << "]";
 		for (int i = 0; i < max_stones; i++) {
-			std::cout << endl << list_stones[i] << " [" << i << "]";
+			std::cout << endl << pickable[i] << " [" << i << "]";
 		}
 		std::cout << endl;
 
@@ -66,12 +59,11 @@ unsigned int PlayerAIRandom::selectStone() const {
 	return stone_nb;
 }
 
-unsigned int PlayerAIRandom::selectStoneForCombatMode() const {
+unsigned int PlayerAIRandom::selectStoneForCombatMode(bool* pickable) const {
+	
 	unsigned int stone_nb = 0;
 	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-	bool* list_stones = new bool[max_stones];
-	list_stones = Supervisor::getInstance().getController()->getPlayableCombatModeStones();
-	while (!list_stones[stone_nb]) {
+	while (!pickable[stone_nb]) {
 		stone_nb++;
 	}
 	// stone_nb sera toujours défini : 
@@ -81,7 +73,7 @@ unsigned int PlayerAIRandom::selectStoneForCombatMode() const {
 		std::cout << endl << "stone_nb [" << stone_nb << "] ; MAX stones [" << max_stones;
 		std::cout << "]";
 		for (int i = 0; i < max_stones; i++) {
-			std::cout << endl << list_stones[i] << " [" << i << "]";
+			std::cout << endl << pickable[i] << " [" << i << "]";
 		}
 		std::cout << endl;
 

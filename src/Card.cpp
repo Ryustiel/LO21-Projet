@@ -58,7 +58,7 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 
 void PlacableCard::activate() const{
 	Controller* c = Supervisor::getInstance().getController();
-	int stoneNum = UserInterface::getInstance()->uiSelectStone();
+	int stoneNum = c->selectPlayableStone();
 	if (stoneNum < 0) return;
 	Stone& s = c->getBoard().getStone(stoneNum);
 	s.addCard(*this,c->getCurSide());
@@ -94,7 +94,7 @@ void Elite::activate() const {
 void CombatMode::activate() const {
 	Tactical::activate();
 	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
-	int stoneNb = UserInterface::getInstance()->uiSelectStoneCombatMode();
+	int stoneNb = c->selectStoneForCombatMode();
 	Stone& s = c->getBoard().getStone(stoneNb);
 	s.setCombatMode(this);
 }

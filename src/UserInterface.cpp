@@ -177,9 +177,9 @@ int UserInterfaceCmd::uiSelectStoneForClaim() {
 }
 
 int UserInterfaceCmd::uiSelectCard(bool* pickable) {
-	cout << "Select a card from this stone (type in a number) : " << endl;
 	Controller* c = Supervisor::getInstance().getController();
 	while (true) {
+		cout << "Select a card from this hand (type in a number) : " << endl;
 		unsigned int choice = userInputChoice(c->getCurrentPlayerHand().getSize(), "Invalid Number !\n");
 		if (pickable[choice]) {
 			return choice;
@@ -187,7 +187,6 @@ int UserInterfaceCmd::uiSelectCard(bool* pickable) {
 		cout << "This Card isn't pickable !" << endl;
 	}
 }
-
 
 bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 	Controller* c = Supervisor::getInstance().getController();
@@ -208,75 +207,29 @@ bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
 	return choice;
 }
 
-int UserInterfaceCmd::uiSelectStone() {
-	unsigned int stone_nb;
+int UserInterfaceCmd::uiSelectStone(bool* pickable) {
 	Controller* c = Supervisor::getInstance().getController();
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
-	if (c->getBoard().full(c->getCurSide())) {
-		cout << "all stones are full !"<< endl;
-		return -1;
-	}
-	bool* playableStones = c->getPlayableStones();
-	while (true) { //user input until correct
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
-
-		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << endl << "DEBUG in UserInterfaceCmd::uiSelectStone()";
-			cout << endl << stone_nb << " STONE NB" << endl << c->getBoard().getStoneNb() << " GET BOARD STONE NB" << endl;
-			cout << "This stone number is not valid !" << endl;
-			continue;
+	while (true) {
+		cout << "Select a Stone (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
 		}
-		else if (!playableStones[stone_nb]) {
-			cout << "This Stone is full! Choose an another one!" << endl;
-			continue;
-		}
-		cout << "Selected stone (number): " << stone_nb << endl;
-		return stone_nb;
+		cout << "This Stone isn't pickable !" << endl;
 	}
 }
 
-unsigned int UserInterfaceCmd::uiSelectStoneCombatMode() {
-	unsigned int stone_nb;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
-	if (c == nullptr) throw ShottenTottenException("UserInterfaceCmd::uiSelectStoneCombatMode - controller isn't tactical !");
-	bool* playableStonesCM = c->getPlayableCombatModeStones();
-	while (true) { //user input until correct
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStoneForCombatMode();
 
-		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid !" << endl;
-			continue;
-		}
-		else if (!playableStonesCM[stone_nb]) {
-			cout << "This Stone already bears a Combat Mode card! Please select another stone." << endl;
-			continue;
-		}
-		cout << "Selected stone (number): " << stone_nb << endl;
-		return stone_nb;
-	}
-}
 
-unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() { //TO DO
-	unsigned int stone_nb;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
-	if (c == nullptr) throw ShottenTottenException("UserInterface::uiSelectStoneForCombatMode error : no TacticController found !");
-	bool* playableStones = c->getPlayableStonesCombatMode();
-	while (true) { //user input until correct
-		cout << "Select a stone (number) : ";
-
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
-
-		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This STONE number isn't valid ! (combat mode)" << endl;
-			continue;
+unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode(bool* pickable) { //TO DO
+	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a Stone to apply the combat mode (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
 		}
-		else if (!playableStones[stone_nb]) {
-			cout << "This Stone already have a combat mode ! Choose an another one !" << endl;
-			continue;
-		}
-		return stone_nb;
+		cout << "This Stone isn't pickable !" << endl;
 	}
 }
 
