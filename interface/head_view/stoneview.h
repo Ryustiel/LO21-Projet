@@ -7,7 +7,6 @@
 #include "../../head/Card.h"
 #include "../../head/Board.h"
 
-
 class VueBorne : public QPushButton
 {
     Q_OBJECT

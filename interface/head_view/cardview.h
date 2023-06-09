@@ -1,5 +1,5 @@
-#ifndef CARDVIEW_H
-#define CARDVIEW_H
+#ifndef CARDVIEW_OLD_H
+#define CARDVIEW_OLD_H
 
 #include <QWidget>
 #include <QPen>
@@ -7,106 +7,45 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
+
 class VueCarte : public QPushButton
 {
     Q_OBJECT
 public:
     //deux constructeurs differents
-    VueCarte(const Clan* c, QWidget *parent = nullptr);
-    VueCarte(QWidget *parent = nullptr);
+    VueCarte(const Card& c, QWidget *parent = nullptr);
+    explicit VueCarte(QWidget *parent = nullptr);
 
     // affecter une nouvelle carte à la vue
-    void setCarte(const Clan& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
+    void setCarte(const Card& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
 
     // vue sans carte
     void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
     const Card& getCarte() const { return *carte; }
     bool cartePresente() const { return carte!=nullptr; }
-    void setNb(int i){
-        nb = i;
-    }
+    void setNb(int i){nb = i;}
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
     int nb;
-    const Clan* carte=nullptr;
+    const Card* carte=nullptr;
     QPen pen;
     QBrush brush;
-    void dessinerNombre(QPainter &painter);
-    //signaux & slots
+    void dessinerClan(QPainter &painter); //pour le cas des cartes Clan
+    void dessinerTactical(QPainter &painter); //pour le cas des cartes Tactiques
+
+    //SIGNAUX ET SLOTS
 signals:
-    // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
+    // quand la vue de la carte est cliquée, elle émet un signal en transmettant son adresse
     void carteClicked(int i);
 public slots:
 private slots:
+    //a adapter !
     void clickedEvent() { emit carteClicked(nb); }
 };
 
 
-/*
-//classe fille pour les cartes Clan
-class VueCarteClan : public VueCarte
-{
-    Q_OBJECT
-public:
-    //deux constructeurs differents
-    VueCarteClan(const Clan& c, QWidget *parent = nullptr);
-    explicit VueCarteClan(QWidget *parent = nullptr);
 
-    // affecter une nouvelle carte à la vue
-    void setCarte(const Clan& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
+#endif // CARDVIEW_OLD_H
 
-    // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
-    const Clan& getCarte() const { return *carte; }
-    bool cartePresente() const { return carte!=nullptr; }
-protected:
-    void paintEvent(QPaintEvent *event) override;
-private:
-    const Clan* carte=nullptr;
-    QPen pen;
-    QBrush brush;
-    void dessinerNombre(QPainter &painter);
-    //signaux & slots
-signals:
-    // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VueCarteClan*);
-public slots:
-private slots:
-    void clickedEvent() { emit carteClicked(this); }
-};
-
-//classe fille pour les cartes Tactiques
-class VueCarteTactique : public VueCarte
-{
-    Q_OBJECT
-public:
-    //deux constructeurs differents
-    VueCarteTactique(const Tactical& c, QWidget *parent = nullptr);
-    explicit VueCarteTactique(QWidget *parent = nullptr);
-
-    // affecter une nouvelle carte à la vue
-    void setCarte(const Tactical& c) { setCheckable(true); setChecked(false); carte=&c; update(); }
-
-    // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
-    const Tactical& getCarte() const { return *carte; }
-    bool cartePresente() const { return carte!=nullptr; }
-protected:
-    void paintEvent(QPaintEvent *event) override;
-private:
-    const Tactical* carte=nullptr;
-    QPen pen;
-    QBrush brush;
-    void dessinerNombre(QPainter &painter);
-    //signaux & slots
-signals:
-    // quand la vue de de carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VueCarteTactique*);
-public slots:
-private slots:
-    void clickedEvent() { emit carteClicked(this); }
-};
-*/
-#endif // CARDVIEW_H
 

@@ -175,6 +175,7 @@ void VuePartie::startWindow(){
     {
         cartesMain1[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i))
         cartesMain1[i]->setNb(i);
+        cartesMain1[i]->setCarte(*Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i));
         connect(cartesMain1[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
         layoutMain1->addWidget(cartesMain1[i],0,i);
     }
@@ -194,6 +195,7 @@ void VuePartie::startWindow(){
     {
         cartesMain2[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer2().getHand()->getCard(i))
         cartesMain1[i]->setNb(i);
+        cartesMain2[i]->setCarte(*Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i));
         connect(cartesMain2[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
         layoutMain2->addWidget(cartesMain2[i],0,i);
     }
