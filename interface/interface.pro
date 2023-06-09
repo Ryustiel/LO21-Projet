@@ -15,7 +15,6 @@ SOURCES += \
     ../src/Version.cpp \
     src_view/boardview.cpp \
     src_view/cardview.cpp \
-    src_view/cardview_old.cpp \
     src_view/discardview.cpp \
     src_view/essai.cpp \
     src_view/main.cpp \
@@ -46,7 +45,6 @@ HEADERS += \
     ../head/Card.h \
     ../head/Supervisor.h \
     head_view/cardview.h \
-    head_view/cardview_old.h \
     head_view/discardview.h \
     head_view/essai.h \
     head_view/parametersview.h \
