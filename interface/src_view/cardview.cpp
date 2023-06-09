@@ -1,4 +1,4 @@
-#include "../head_view/cardview_old.h"
+#include "../head_view/cardview.h"
 #include <QPainter>
 #include <QString>
 #include <QStaticText>
@@ -33,7 +33,7 @@ void VueCarte::dessinerClan(QPainter &painter)
     if (carte != nullptr && dynamic_cast<const Clan*>(carte) != nullptr) //si il y a bien une carte associée à la vue
     //&& (typeid(*carte).name()=="Clan")
     {
-        const Clan* c=static_cast<const Clan*>(carte);
+        const Clan* c=dynamic_cast<const Clan*>(carte);
         QColor couleurCarte = QColor::fromString(toString(c->getColor()));
         painter.setPen(couleurCarte); // Couleur du texte
         painter.setFont(QFont("Arial", 20)); // Police et taille du texte
@@ -48,9 +48,9 @@ void VueCarte::dessinerClan(QPainter &painter)
 
 void VueCarte::dessinerTactical(QPainter &painter)
 {
-    if (carte != nullptr && dynamic_cast<const Tactical*>(carte) != nullptr) //si il y a bien une carte associée à la vue
+    const Tactical* c=dynamic_cast<const Tactical*>(carte);
+    if (carte != nullptr && c != nullptr) //si il y a bien une carte associée à la vue
     {
-        const Tactical* c=static_cast<const Tactical*>(carte);
         painter.setPen(Qt::black); // Couleur du texte
         painter.setFont(QFont("Arial", 14)); // Police et taille du texte
 

@@ -23,9 +23,11 @@ public:
     void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
     const Card& getCarte() const { return *carte; }
     bool cartePresente() const { return carte!=nullptr; }
+    void setNb(int i){nb = i;}
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
+    int nb;
     const Card* carte=nullptr;
     QPen pen;
     QBrush brush;
@@ -35,11 +37,11 @@ private:
     //SIGNAUX ET SLOTS
 signals:
     // quand la vue de la carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VueCarte*);
+    void carteClicked(int i);
 public slots:
 private slots:
     //a adapter !
-    void clickedEvent() { emit carteClicked(this); }
+    void clickedEvent() { emit carteClicked(nb); }
 };
 
 

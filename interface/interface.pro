@@ -45,6 +45,7 @@ HEADERS += \
     ../head/Card.h \
     ../head/Supervisor.h \
     head_view/cardview.h \
+    head_view/deckview.h \
     head_view/discardview.h \
     head_view/essai.h \
     head_view/parametersview.h \
