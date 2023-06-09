@@ -16,6 +16,8 @@ private:
 public:
 	Game(const Version& v);
 	~Game();
+	Game(const Game&) = delete;
+	Game& operator=(Game const&) = delete;
 	unsigned int getCardCount() const { return card_count; }
 	const Card& getCard(unsigned int i) const;
 };
