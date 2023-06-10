@@ -24,6 +24,7 @@ void VuePartie::startWindow(){
 
 
     setWindowTitle("Schotten Totten"); //titre fenetre
+    setWindowState(Qt::WindowMaximized);
     //setFixedSize(800, 600); //dimensions fenetre
     //distribuer cartes grace au controleur
 
@@ -107,7 +108,7 @@ void VuePartie::startWindow(){
 
     for(int i=0;i<nbBornes*3;i++) {
         cartesPlateau[i]=new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getBoard().getStone(i%nbBornes).getCombinationP1()[k])
-        cartesPlateau[i]->setContentsMargins(0,0,0,0);
+        cartesPlateau[i]->setContentsMargins(1,1,1,1);
         if (i%(nbBornes-1)==0) k--;
     }
     for(int i=0;i<nbBornes*3;i++) layoutCartes->addWidget(cartesPlateau[i],i/nbBornes,i%nbBornes);
