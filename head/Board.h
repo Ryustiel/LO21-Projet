@@ -50,7 +50,7 @@ inline string toString(CombinationType c) {
 
 //bestStraightCompletion is unused
 const PlacableCard** bestStraightCompletion(list<const PlacableCard*> cardNumberTable[9], const PlacableCard** possibleCards, const size_t pcn, const size_t desiredSize, const size_t numberOfAvailableCards, const size_t highestNum = 9, const PlacableCard* partialResult[9] = nullptr);
-const bool recursiveCombinationType(int* baseComb, const PlacableCard* possibleCards[],  const size_t maxSize, int* max, const size_t size =0);
+const bool recursiveCombinationType(int* baseComb, const PlacableCard*const* possibleCards,  const size_t maxSize, int* max, const size_t size =0);
 
 class Stone {
 private:
@@ -116,10 +116,10 @@ public:
 	static const PlacableCard** bestVariation(const PlacableCard** possibleCards, const size_t pcn, const PlacableCard** incompleteCombination, const size_t icn, const size_t desiredSize, CombinationType combinationToBeat, const size_t sumToBeat, bool combat_mode_mud_prensence);
 
 	//Determines the type out of a complete card combination, sets the sum of the cards in max if given
-	static const CombinationType evaluateCompleteCombinaison(const PlacableCard* c[], size_t combination_size, int* max = nullptr);
+	static const CombinationType evaluateCompleteCombinaison(const PlacableCard*const* c, size_t combination_size, int* max = nullptr);
 
 	//Determines the type out of an incomplete card combination, sets the sum of the cards in max if given
-	static const CombinationType evaluateCombinaison(const PlacableCard* c[], size_t combination_size, int* max = nullptr);
+	static const CombinationType evaluateCombinaison(const PlacableCard*const* c, size_t combination_size, int* max = nullptr);
 
 	//Return which Combination (same size) is the strongest
 	static const Side compareCombination(const PlacableCard* c1[], const PlacableCard* c2[], int combination_size, bool combat_mode_mud_prensence = 0); //ajouter un argument ; bool/énum "evaluationType" 
