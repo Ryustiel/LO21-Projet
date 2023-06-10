@@ -11,7 +11,7 @@ Deck::~Deck() {
 
 const Card& Deck::draw() {
 	if (isEmpty()) throw ShottenTottenException("draw error : deck is empty");
-	unsigned int x = rand() % card_count;
+	unsigned int x = Utility::randInt(0, card_count);
 	auto& c = *cards[x];
 	cards[x] = cards[--card_count];
 	return c;

@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#include "Utility.h"
+
 class Deck {
 private :
 	const Card** cards;

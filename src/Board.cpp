@@ -84,7 +84,7 @@ void Stone::setRevendication(Side s) {
 	}
 }
 
-const bool recursiveCombinationType(int* baseComb, const PlacableCard* possibleCards[], const size_t maxSize, int* maxSum, const size_t size) {
+const bool recursiveCombinationType(int* baseComb, const PlacableCard*const* possibleCards, const size_t maxSize, int* maxSum, const size_t size) {
 	*maxSum = 0;
 	if (size == maxSize) {
 		int min = baseComb[0];
@@ -145,7 +145,7 @@ void quickSort(const PlacableCard** cards, int end, int start = 0) {
 	}
 }
 
-const CombinationType Stone::evaluateCombinaison(const PlacableCard* c[], size_t combination_size, int* max) {//evaluation of a full card combination
+const CombinationType Stone::evaluateCombinaison(const PlacableCard*const* c, size_t combination_size, int* max) {//evaluation of a full card combination
 	list<Color> commonColors(Colors);
 	list<Number> commonNumbers(Numbers);
 	array<list<const PlacableCard*>, 9> cardNumberTable = array<list<const PlacableCard*>, 9>();
@@ -176,7 +176,6 @@ const CombinationType Stone::evaluateCombinaison(const PlacableCard* c[], size_t
 
 	if (commonNumbers.empty()) {
 		if (recursiveCombinationType(new int[combination_size], c, combination_size, max)) {
-			cout << "evaluateCombinaison : check" << endl;
 			if (flush)
 				return CombinationType::straight_flush;
 			return CombinationType::straight;

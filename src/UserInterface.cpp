@@ -504,10 +504,28 @@ void UserInterfaceCmd::uiPrintGame() {
 			cout << "Unclaimed" << endl;
 		}
 		else if (stone.getRevendication() == Side::s1) {
-			cout << "Claimed by Player 1" << endl;
+			cout << "Claimed by Player 1";
+			const vector<const PlacableCard*> comb = stone.getCombinationP1();
+			const PlacableCard** a = new const PlacableCard*[comb.size()];
+			for (size_t i = 0; i < comb.size(); ++i) {
+				a[i] = comb[i];
+			}
+			size_t s = stone.getSideSize(Side::s1);
+			int sum;
+			CombinationType ct = Stone::evaluateCombinaison(a, s, &sum);
+			cout << " with a " << toString(ct) << " of " << sum << " points !" << endl;
 		}
 		else { //claimed by player 2
-			cout << "Claimed by Player 2" << endl;
+			cout << "Claimed by Player 2";
+			const vector<const PlacableCard*> comb = stone.getCombinationP2();
+			const PlacableCard** a = new const PlacableCard * [comb.size()];
+			for (size_t i = 0; i < comb.size(); ++i) {
+				a[i] = comb[i];
+			}
+			size_t s = stone.getSideSize(Side::s2);
+			int sum;
+			CombinationType ct = Stone::evaluateCombinaison(a, s, &sum);
+			cout << " with a " << toString(ct) << " of " << sum << " points !" << endl;
 		}
 		if (stone.getCombatMode()) {
 			cout << "	Combat mode : " << stone.getCombatMode()->getName() << endl;
@@ -520,6 +538,7 @@ void UserInterfaceCmd::uiPrintGame() {
 		}
 		k = 0;
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
+		k = 0;
 		for (auto card : stone.getCombinationP2()) { //display P1 combination
 			cout << "		Card " << k << " : " << card->getName() << endl;
 			k++;
