@@ -44,120 +44,266 @@ enum CombinationType {
 
 ''' CLASSES '''
 class Supervisor <singelton> {
-    - controller : Controller* 
+    - controller : Controller* {=nullptr}
+    - isQT : bool 
+    - {static} handler : Handler
 
-    + $getInstance() : Supervisor& 
-    + freeInstance() : void
+    - Supervisor()
+    - ~Supervisor()
+
+    + {static} $getInstance() : Supervisor& 
+    + {static} freeInstance() : void
     + setController(v : const Version&, name_player1 : const string&, name_player2 : const string&, id_player1 : unsigned int, id_player2, unsigned int) : void
     + getController() : Controller*
+    + getIsQT() : bool {const}
+    + eventFirstStart() : void
+    + eventStartGame(v : Version, p1name : const string&, p2name : const string&, AI_player1 : unsigned int, AI_player2 : unsigned int, nrounds : int, winthreshold : int)
+    + qtDosplayMainMenu()
+    + quitGame()
+    + quitApp()
 }
 
 class Controller {
-    - version : const Version
-	- clanDeck : Deck* 
-	- board : Board
+    - version : const Version {= Version::legacy}
+    - current_side : Side {= Side::s1}
+	- clanDeck : Deck* {= nullptr}
+	- board : Board*
 	- clanGame : Game
 	- player1 : Player*
 	- player2 : Player*
-	- round : bool
-    - stop : bool
+    - handSize : size_t
+    - playerCardPick : unsigned int
+    - playerStonePick : unsigned int
     - remainingRounds : int
-    - round : bool
-    - stop : bool
     - totalRounds : int
+    - maxScore : int
 
-    - handleNewRound() : void
-    - runRoundLoop() : void
-    - runChecks() : void
+    - newRound() : void
+    - checkRound() : void
+    - {virtual} newTurn() : void
 
-    + Controller(v : const Version&, name_player1 : const string&, name_player2 : const string&, is_IA_1 : bool, is_IA_2 : bool)
-    + ~Controller()
+    # Controller(v : const Version&, name_player1 : const string&, name_player2 : const string&, is_IA_1 : bool, is_IA_2 : bool)
+    # {virtual} ~Controller()
+    # {virtual} initForNewRound() : void
+
     + Controller(c : const Controller&) = delete
 	+ Controller& operator=(c : const Controller&) = delete
-    + getClanDeck() : Deck&
-  	+ getBoard() : Board&
+    
+    + getCurrentPlayer() : Player* {const}
+    + getCurrentPlayerHand() : Hand& {const}
+    + getCurSide() : Side {const}
+    + getVersion() : Version {const}
+    + getClanDeck() : Deck& {const}
+    + getClanGame() : Game {const}
+  	+ getBoard() : Board& {const}
+    + getPlayer1() : Player& {const}
+    + getPlayer2() : Player& {const}
+    + getRemainingRounds() : int {const}
+    + getTotalRounds() : int {const}
+    + getWinner() : Player* {const}
+    + canPlayCard() : bool
+    + {virtual} getPickableCards(size : size_t*) : bool* {const}
+    + getUnclaimedStones() : bool* {const}
+    + getPlayableStones() : bool*
+    + getPlayableCombatModeStones() : bool*
+    + {virtual} getDeckCount() : unsigned int {const}
+    + {virtual} getAvailableCards(cards : const PlacableCard**&, foundedSize : size_t&) : bool
+
+    + setToralRounds(n : int) : void
+    + setRemainingRounds(n : int) : void
+    + setPlayerHand() : void
+
+    'A enlever ??
     + setPlayer1(player : Player*) : void
     + setPlayer2(player : Player*) : void
-    + newGame(nbTurns : int) : void
+
+    + claimStone(n : unsigned int) : void
+    + runGame(nbturns : int, winthreshold : int) : void
+    + turnPlayCard() : void
+    + {virtual} turDrawCard() : void
+    + turnClaimStone() : void
+
+    + qtGameOver() : void
+    + eventCardPicked(n:int) : void
+    + eventStonePicked() : void
+    + eventChoiceDraw() : void
+    + eventChoiceEndTurn() : void
+    + eventChoiceClaim() : void
+    + {virtual} playTurn(s : Side):void
+    + askStoneChoice() : Stone&
 }
 
 class TacticController {
-    - version : const Version 
-	- tacticDeck : Deck*
+    - version : const Version {= Version::tactic}
+	- tacticDeck : Deck* {= nullptr}
+    - discard : Discard* {= nullptr}
 	- tacticGame : Game
+    - handSize : size_t {= 7}
+    - p1TacticalCardPlayed : unsigned int {= 0}
+    - p2TacticalCardPlayed : unsigned int {= 0}
 
-    + TacticController(v : const Version&, name_player1 : const string&, name_player2 : const string&, unsigned int, is_IA_1 : bool, is_IA_2 : bool)
+    - initForNewRound() : void {final}
+    + TacticController(v : const Version&, name_player1 : const string&, name_player2 : const string&, AI_player1 : unsigned int, AI_player2 : unsigned int )
     + ~TacticController()
-    + getTacticDeck() : Deck&
+
+    + getDeckCount() : unsigned int {const override}
+    + getTacticDeck(): Deck& {const}
+	+ getTacticGame() : Game& {const}
+	+ getDiscard() : Discard& {const}
+
+    + {virtual} getPickableCards(size : size_t*) : bool* {final}
+    + getPlayableStonesCombatMode() : bool* 
+    + getAvailableCards(cards : const PlacableCard**&, foundedSize : size_t&) : bool {final}
+    + incrementTacticalPlayed(s : Side) : void 
+    + playerCanPlayTacticalCard() : bool
+    + newTurn() : void {override}
 }
 
 class Player {
     - name : string
-    - score : unsigned int
-    - hand : Hand*
-    - pick : int
+    - side : Side
+    - score : unsigned int {= 0}
+    - hand : Hand* {= nullptr}
 
-    + Player(n : const string&)
-    + ~Player()
-    + getName() const : const string& 
-    + getId() const : unsigned int
-    + getScore() const : unsigned int
-    + getHand() const : const Hand*
+    # Player(n : const string&, s : Side)
+    # {virtual} ~Player()
+
+    + getName() : const string& {const}
+    + getScore() : unsigned int {const}
+    + getHand(): Hand* {const}
+
+    ' A GARDER ??
     + setHand(c[6] : const Card*) : void
     + setHand(c : const Card**, n : size_t) : void
-    + updateScore() : void
     + init() : void
     + initRound() : void
     + playTurn() : void
+
+    + updateScore() : void
+    + initForNewGame() : void
+    + initForNewRound(c : const Card**, size : const size_t) : void
 }
 
 class PlayerAIRandom {
-    - PlayerAIRandom(n : const string&)
+    + PlayerAIRandom(n : const string&, s : Side)
+    + selectCard() : unsigned int {const}
+    + selectCard(nchoices : size_t ) : unsigned int {const}
+    + selectStone() : unsigned int  {const}
+    + selectUnclaimedStone() : unsigned int {const}
+    + selectDeck() : unsigned int {const}
+    + WantClaimStone() : bool  {const}
+    + selectCardOnStone(s : Side, stone_nb : unsigned int ) : int  {const}
 }
 
 class Card <abstract> {
-    - name : string
+    - name : const string
 
-    + Card(n : const string)
-    + activate() const : void
+    # Card(n : const string)
+
+    + {virtual} ~Card() = default
+    + getName() : const string& {const}
+    + {virtual} activate() : void {const = 0}
+}
+
+class PlacableCard{
+    + PlacableCard(n : const string)
+	+ {virtual} ~PlacableCard() = default;
+	+ {virtual} canBeUsedAs(const Color& c) : bool {const = 0}
+	+ {virtual} canBeUsedAs(const Number& n) : bool  {const = 0}
+	+ {virtual} higherPossibleNumber() : Number  {const = 0}
+	+ {virtual} possibleNumber() : const list<Number>  {const = 0}
+	+ canBeUsedAs(const Color& c, const Number& n) : bool  {const}
+	+ activate() : void  {const override}
 }
 
 class Clan {
-    - color : Color
-	- number : Number
+    - color : const Color
+	- number : const Number
 
     + Clan(c : const Color&, nb : const Number)
-    + activate() const : void
-    + getColor() const : const Color&
-    + getNumber() const : const Number&
+    + ~Clan() {final = default}
+    + getColor() : const Color& {const}
+    + getNumber() : const Number& {const}
+
+    + canBeUsedAs(c : const Color&) : bool {const final}
+	+ canBeUsedAs(n : const Number&) : bool {const final}
+	+ higherPossibleNumber() : Number  {const final}
+	+ possibleNumber() : const list<Number> {const final}
 }
 
 class Tactical {
     + Tactical(n : const string)
-    + activate() const : void
+    + {virtual} ~Tactical() = default
+    + activate() : void {const override}
 }
 
 class Elite {
-    + Elite(n : const string)
+    - allowedColors : const list<Color>
+    - allowedNumbers : const list<Number>
+
+    + Elite(n : const string, allowedColors : list<Color> , allowedNumbers : list<Number>)
+    + activate() : void {const final}
+    + getName() : const string& {const}
+    + canBeUsedAs(c : const Color&) : bool {const}
+    + canBeUsedAs(n : const Number&) : bool {const}
+    + higherPossibleNumber() : Number {const}
+    + possibleNumber() : const list<Number> {const}
 }
 
 class CombatMode {
     + CombatMode(n : const string)
+    + ~CombatMode() {= default}
+    + activate() : void {const override}
+}
+
+class BlindManBluff{
+    + BlindManBluff(n : const string)
+    + ~BlindManBluff() {final = default}
+    + activate() : void {const final}
 }
 
 class Ruses {
     + Ruses(n : const string)
+    + ~Ruses() {= default}
+    + activate() : void {const override}
 }
+
+class Banshee{
+    + Banshee(n : const string)
+    + ~Banshee() {final = default}
+    + activate() : void {const final}
+}
+
+class Strategist{
+    + Strategist(n : const string)
+    + ~Strategist() {final = default}
+    + activate() : void {const final}
+}
+
+class Traiter{
+    + Traiter(n : const string)
+    + ~Traiter() {final = default}
+    + activate() : void {const final}
+}
+
+
 
 class Hand {
 	- cards : const Card**
 	- size : size_t
 	- max_size : size_t
+    - class HandIterator
 
-    + Hand(c[6] : const Card*)
     + Hand(c : const Card**, n : size_t)
     + add(c : const Card&) : void
+    + withdraw(c : const Card&) : void
     + play(c : const Card&) : void
+    + getSize() : size_t {const}
+    + getMaxSize() : size_t {const}
+    + getCard(i : size_t) : const Card* {const}
+
+    + begin() : HandIterator
+    + end() : HandIterator
 }
 
 class Game {
@@ -166,7 +312,8 @@ class Game {
 
     + Game(v : const Version&);
 	+ ~Game();
-	+ getCardCount() const : unsigned int
+	+ getCardCount() : unsigned int {const}
+    + getCard(i : unsigned int) : const Card& {const}
 }
 
 class Deck {
@@ -174,68 +321,102 @@ class Deck {
     - card_count : unsigned int
 	- max_card_count : unsigned int
 
-    + Deck(g : const Game&)
+    + {explicit} Deck(g : const Game&)
     + ~Deck();
 	+ Deck(p : const Deck&) = delete
 	+ operator=(const Deck& p) : Deck& = delete
-	+ getCardCount() const : unsigned int
-    + getMaxCardCount() const : unsigned int
-    + isEmpty() const : bool
+	+ getCardCount() : unsigned int {const}
+    + getMaxCardCount() : unsigned int {const}
+    + getCard(i : unsigned int) : const Card*
+    + isEmpty() : bool {const}
     + draw() : const Card&
+    + drawMultiple(cards : const Card**, number : const size_t) : const size_t
 }
 
 class Stone {
     - max_size : size_t
 	- size_p1 : size_t
 	- size_p2 : size_t
-	- combination_p1 : const Card**
-	- combination_p2 : const Card**
+	- combination_p1 : const PlacableCard**
+	- combination_p2 : const PlacableCard**
+    - combat_mode : const CombatMode* {= nullptr}
 	- revendication : Side
 	- firstCompleted : Side
+    - class StoneIterator
 
     + Stone()
     + ~Stone()
-    + const Side getRevendication()
-    + addCard(card : const Card&, side : const Side) : void 
-    + removeCard(card : const Card&, side : const Side) : const Card& 
-	+ setMaxSize(size : const size_t) : void
-    + getMaxSize() const : size_t
-    + getSizeP1() const : size_t
-    + getSizeP2() const : size_t
-    + getCombinationP1() const : const Card**
-    + getCombinationP2() const : const Card**
-    + getRevendication() const : Side
-    + getFirstCompleted() const : Side
-    + const Side isWon(const Card** AvailableCards, const size_t availableCardsCount) const;
-	+ $combinationVariationFromIncompleteCombination(possibleCards : const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, nbOfComninationFound : size_t&) : list<const Card**> 
-    + $bestVariation(possibleCards const Card**, pcn : const size_t, incompleteCombination : const Card**, icn : const size_t, desiredSize : const size_t, combinationToBeat : CombinationType, sumToBeat : const size_t) : const Card**
-    + $combinationTypeFromCompleteCombination(c[] : const Card* , n : size_t, max : int* = nullptr) : const CombinationType
-    + $compareCombination(c1[] : const Card*, c2[] : const Card*, n : size_t) : const Side
-    + $compareCombinationType(p1 : const CombinationType&, p2 : const CombinationType&) : const Side
-    + $sum(const Clan *c[], size_t n) : const size_t
+    
+    + getMaxSize(): size_t {const}
+    + getSizeP1() : size_t {const}
+    + getSizeP2() : size_t {const}
+    + getSideSize(s : Side) : size_t {const}
+    + getCombinationP1() : const PlacableCard** {const}
+    + getCombinationP2() : const PlacableCard** {const}
+    + getCombinationSide(s : Side) : const PlacableCard** {const}
+    + getFirstCompleted() : Side {const}
+    + getRevendication() : const Side {const}
+    + getCombatMode() : const CombatMode* {const}
+   
+    + setMaxSize(size : const size_t) : void
+    + setCombatMode(cM : const CombatMode*) : void
+    + setRevendication(s : Side) : void
+
+    + addCard(card : const PlacableCard&, side : const Side) : void 
+    + removeCard(card : const PlacableCard&, side : const Side) : const PlacableCard& 
+	
+    + begin(side : Side) : StoneIterator
+    + end(side : Side) : StoneIterator
+
+    + evaluateWinningSide(AvailableCards : const PlacableCard**, availableCardsCount : const size_t) : const Side {const}
+    + evaluateWinningSide() : const Side {const}
+
+    + {static} bestVariation(possibleCards : const PlacableCard** , pcn : const size_t, incompleteCombination :  const PlacableCard**, icn :  const size_t, desiredSize : const size_t, combinationToBeat : CombinationType , sumToBeat : const size_t , combat_mode_mud_prensence : bool) : const PlacableCard** 
+	+ {static} evaluateCompleteCombinaison(c[] : const PlacableCard* , combination_size : size_t , max = nullptr : int* ) : const CombinationType 
+	+ {static} evaluateCombinaison(c[] : const PlacableCard* , combination_size : size_t , max = nullptr : int*) const CombinationType 
+	+ {static} compareCombination(c1[] : const PlacableCard* , c2[] : const PlacableCard* , combination_size : int , combat_mode_mud_prensence = 0 : bool) : const Side 
+	+ {static} compareCombinationType(p1 : const CobinationType&, p2 : const CombinationType& ) : const Side 
 }
 
 class Board {
     - stones : Stone*
-	- border_nb : size_
-    - won : Side
+	- stone_nb : size_t
+    - won : bool {= false}
+    - class BoardIterator
 
 
-    + Board(size_t size = 9)
+    + Board(size : size_t {= 9})
     + ~Board()
-    + getStones() const : const Stone*
-    + getBorderNb() const : size_t
-    + getWon() const : Side
+    + getStones() : Stone* {const}
+    + getStone(n : unsigned int) : Stone& {const}
+    + getStoneNb() : size_t {const}
 
-    + addCard(card : const Card&, side : const Side, n : const unsigned int) : void
-    + removeCard(card : const Card&, side : const Side, n : const unsigned int) : const Card&
-    + isStoneWon(n : const unsigned int, AvailableCards : const Card** , availableCardsCount : const size_t) const : const Side
+    + addCard(card : const PlacableCard&, side : const Side, n : const unsigned int) : void {const}
+    + removeCard(card : const PlacableCard&, side : const Side, n : const unsigned int) : const PlacableCard&
+    + getPlayableStones(PlacableCard* c) : void
+
+    + begin() : BoardIterator
+    + end() : BoardIterator
+
+    + evaluateStoneWinningSide(n : const unsigned int, AvailableCards : const PlacableCard**, availableCardsCount : sont size_t) : const Side {const}
+    + evaluateStoneWinningSide(n : const unsigned int) : const Side {const}
+    + evaluateGameWinner() : const Side {const}
 }
 
 class Discard {
-    - class DiscardIterator
-    + addCard(card : const Card&) : void
-    + removeCard(card : const Card&) : const Card&
+    - cards : const Card**
+    - size : size_t
+    - max_size : size_t
+
+    + Discard()
+    + ~Discard()
+    + addCard(c : const Card&) : void
+    + withdrawCard(c : const Card&) : void
+    + getSize() : size_t  {const}
+	+ getMaxSize() : size_t  {const}
+	+ getCards() {const} : const Card** 
+    + class DiscardIterator
+    + begin() : DiscardIterator
 }
 
 
@@ -244,12 +425,19 @@ Controller <|-- TacticController
 
 Player <|-- PlayerAIRandom
 
-Card <|-- Clan
+Card <|-- PlacableCard
+PlacableCard <|-- Clan
 Card <|-- Tactical
 
 Tactical <|-- Elite
+PlacableCard <|-- Elite
 Tactical <|-- CombatMode
 Tactical <|-- Ruses
+CombatMode <|-- BlindManBluff
+Ruses <|-- Banshee
+Ruses <|-- Strategist
+Ruses <|-- Traiter
+
 
 
 ''' RELATIONS '''
