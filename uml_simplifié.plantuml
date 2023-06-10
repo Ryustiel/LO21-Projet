@@ -1,4 +1,8 @@
-@startuml Hello
+"plantuml.commandArgs": [
+     "-DPLANTUML_LIMIT_SIZE=8192"
+]
+
+@startuml uml
 
 ''' ENUMERATIONS '''
 enum Number {
