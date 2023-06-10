@@ -95,9 +95,14 @@ public:
 	bool* getUnclaimedStones() const {
 		const size_t sn = board->getStoneNb();
 		bool* unclaimed = new bool[sn];
+		bool allClaimed = true;
 		for (size_t i = 0; i < sn; ++i) {
 			unclaimed[i] = board->getStone(i).getRevendication() == Side::none;
+			if (unclaimed[i])
+				allClaimed = false;
 		}
+		if (allClaimed)
+			return nullptr;
 		return unclaimed;
 	}
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
@@ -138,6 +143,7 @@ public:
 	int selectHandCard(bool checkPickable = true);
 	int selectPlayableStone();
 	int selectStoneForCombatMode();
+	int selectStoneForClaim();
 
 	// SETTERS
 

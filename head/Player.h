@@ -53,7 +53,7 @@ public:
     int selectCard(bool* pickable) const;
     unsigned int selectStone(bool * pickable) const;
     unsigned int selectStoneForCombatMode(bool* pickable) const;
-    unsigned int selectUnclaimedStone() const;
+    unsigned int selectStoneForClaim(bool* pickable) const;
     unsigned int selectDeck() const;
     bool WantClaimStone() const;
     int selectCardOnStone(Side s, unsigned int stone_nb) const;

@@ -161,21 +161,6 @@ unsigned int UserInterfaceCmd::uiSelectRounds() { //to delete ?
 
 /// User Input ///
 
-int UserInterfaceCmd::uiSelectStoneForClaim() {
-	int stone_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA != nullptr) {
-		stone_nb = playerIA->selectUnclaimedStone();
-	}
-	else {
-		stone_nb = userSelectStoneForClaim();
-	}
-	if (stone_nb >= 0) { //correct input
-		return stone_nb;
-	}
-	return -1;
-}
-
 int UserInterfaceCmd::uiSelectCard(bool* pickable) {
 	Controller* c = Supervisor::getInstance().getController();
 	while (true) {
@@ -219,8 +204,6 @@ int UserInterfaceCmd::uiSelectStone(bool* pickable) {
 	}
 }
 
-
-
 unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode(bool* pickable) { //TO DO
 	Controller* c = Supervisor::getInstance().getController();
 	while (true) {
@@ -233,17 +216,18 @@ unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode(bool* pickable) { //TO
 	}
 }
 
-unsigned int UserInterfaceCmd::uiSelectUnclaimedStone() {
-	unsigned int stone_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA != nullptr) {
-		stone_nb = playerIA->selectUnclaimedStone();
+int UserInterfaceCmd::uiSelectStoneForClaim(bool* pickable) {
+	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a Stone to claim (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
+		}
+		cout << "This Stone isn't claimable !" << endl;
 	}
-	else {
-		stone_nb = userSelectUnclaimedStone();
-	}
-	return stone_nb;
 }
+
 
 unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
 	//displayStone() //TO DO
@@ -266,7 +250,7 @@ void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsign
 	cardNb = -1;
 
 	while (true) {
-		stoneNb = this->uiSelectUnclaimedStone();
+		stoneNb = c->selectStoneForClaim();
 		while (true) {
 			int choice;
 			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
@@ -305,7 +289,7 @@ void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsign
 
 	while (cardNb == -1) {
 		UserInterface::getInstance()->uiInvalidChoiceMsg();
-		stoneNb = this->uiSelectUnclaimedStone();
+		stoneNb = c->selectStoneForClaim();
 		cardNb = this->uiSelectCardOnStone(s, stoneNb);
 	}
 }

@@ -82,19 +82,17 @@ unsigned int PlayerAIRandom::selectStoneForCombatMode(bool* pickable) const {
 
 	return stone_nb;
 }
-unsigned int PlayerAIRandom::selectUnclaimedStone() const {
+unsigned int PlayerAIRandom::selectStoneForClaim(bool* pickable) const {
 	unsigned int stone_nb = rand()%9;
-	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
-	list_stones = Supervisor::getInstance().getController()->getUnclaimedStones();
 
 	//vérification
 	cout << "(PlayerAIRandom::selectStoneForClaim) - getUnclaimedStones : ";
 	for (size_t i = 0; i < Supervisor::getInstance().getController()->getBoard().getStoneNb(); i++) {
-		cout << list_stones[i] << "; ";
+		cout << pickable[i] << "; ";
 	}
 	cout << "(PlayerAIRandom::selectStoneForClaim) - end of check" << endl;
 
-	while (!list_stones[stone_nb]) {
+	while (!pickable[stone_nb]) {
 		stone_nb = rand() % 9;
 	}
 	return stone_nb;

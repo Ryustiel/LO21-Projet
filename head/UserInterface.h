@@ -21,11 +21,9 @@ public :
     virtual int uiSelectCard(bool* possibleChoice) = 0;
     virtual int uiSelectStone(bool* pickable) = 0;
     virtual unsigned int uiSelectStoneForCombatMode(bool* pickable) = 0;
-    virtual int uiSelectStoneForClaim() = 0;
-    virtual int userSelectStoneForClaim() const = 0;
+    virtual int uiSelectStoneForClaim(bool* pickable) = 0;
     virtual bool uiWantClaimStone() = 0;
     virtual Deck* uiSelectDeck() = 0;
-    virtual unsigned int uiSelectUnclaimedStone() = 0;
     virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
     virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
     virtual bool uiSelectPlayOrDiscard() = 0;
@@ -71,7 +69,7 @@ public:
     virtual int uiSelectCard(bool* pickable) final;
     int uiSelectStone(bool* pickable) final;
     unsigned int uiSelectStoneForCombatMode(bool* pickable) final;
-    int uiSelectStoneForClaim() final; //TO DELETE
+    int uiSelectStoneForClaim(bool* pickable) final; //TO DELETE
     bool uiWantClaimStone() final {
         cout << "Do you want to claim a stone ? (0: no, 1: yes)" << endl;
         int result;
@@ -97,31 +95,6 @@ public:
             cin >> card_nb;
         }
         return card_nb;
-    }
-
-    unsigned int userSelectUnclaimedStone() const {
-        unsigned int stone_nb = 0;
-        unsigned int stone_count = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-        cout << "Select a stone (number) : ";
-        cin >> stone_nb;
-        while (stone_nb < 0 || stone_nb >= stone_count || !Supervisor::getInstance().getController()->getUnclaimedStones()[stone_nb]) { //user input until correct
-            cout << "You can't choose this stone. Please select another stone : ";
-            cin >> stone_nb;
-        }
-        return stone_nb;
-    }
-
-    int userSelectStoneForClaim() const {
-        unsigned int stone_nb = 0;
-        unsigned int stone_count = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-        cout << endl << "Please select a stone to claim (number) : ";
-        cin >> stone_nb;
-        cout << endl;
-        if (stone_nb < 0 || stone_nb >= stone_count || !Supervisor::getInstance().getController()->getUnclaimedStones()[stone_nb]) { //unique user input
-            cout << "You can't claim this stone." << endl;
-            return -1;
-        }
-        return stone_nb;
     }
 
     int userSelectCardOnStone(Side s, unsigned int stone_nb) {
@@ -156,7 +129,6 @@ public:
     void uiTurnLauncher(Player& curr_player); //launches the turn
 
 
-    unsigned int uiSelectUnclaimedStone() override;
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
     bool uiSelectPlayOrDiscard() override;

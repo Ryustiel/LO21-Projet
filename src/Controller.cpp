@@ -140,26 +140,24 @@ void Controller::turnDrawCard() {
 }
 
 void Controller::turnClaimStone() {
-    std::cout << "\n=============== turnClaimStone()";
-    bool choice_claim = false;
+    std::cout << "\n=============== turnClaimStone()" << endl;
     PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
-    if (playerAI) { //is IA
-        while (playerAI->WantClaimStone()) {
-            unsigned int selectedStoneNB = playerAI->selectUnclaimedStone();
-            cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
-            claimStone(selectedStoneNB);
-            cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
+
+    while (true){
+        if (playerAI) {
+            if (!playerAI->WantClaimStone())
+                break;
         }
-    }
-    else { //is Human
-        while (UserInterface::getInstance()->uiWantClaimStone()) {
-            //A DEFINIR !!!
-            int selectedStoneNB = UserInterface::getInstance()->userSelectStoneForClaim();
-            if (selectedStoneNB >= 0)
-                claimStone(selectedStoneNB);
-            else break; //if user's choice is wrong
+        else {
+            if(!UserInterface::getInstance()->uiWantClaimStone())
+                break;
         }
+        unsigned int selectedStoneNB = selectStoneForClaim();
+        cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
+        claimStone(selectedStoneNB);
+        cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
     }
+    
 }
 
 void Controller::newTurn() {
@@ -340,6 +338,21 @@ int Controller::selectStoneForCombatMode() {
     else {
 
         return UserInterface::getInstance()->uiSelectStoneForCombatMode(pickable);
+    }
+};
+
+int Controller::selectStoneForClaim() {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getUnclaimedStones();
+    if (!pickable)
+        return -1;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        return playerIA->selectStoneForClaim(pickable);
+    }
+    else {
+
+        return UserInterface::getInstance()->uiSelectStoneForClaim(pickable);
     }
 };
 //TACTIC CONTROLLER METHODS
