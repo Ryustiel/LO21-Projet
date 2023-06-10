@@ -12,7 +12,7 @@ VueCarte::VueCarte(const Card& c, QWidget *parent) : QPushButton(parent),carte(&
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
-    setFixedSize(120,200);
+    setFixedSize(60,90);
     connect(this,SIGNAL(clicked()),this,SLOT(clickedEvent()));
     setCheckable(true);
 }
@@ -21,7 +21,7 @@ VueCarte::VueCarte(QWidget *parent): QPushButton(parent)
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
-    setFixedSize(120,200);
+    setFixedSize(60,90);
     connect(this,SIGNAL(clicked()),this,SLOT(clickedEvent()));
     setCheckable(false);
 }
