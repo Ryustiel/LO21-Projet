@@ -101,8 +101,25 @@ public:
 			if (unclaimed[i])
 				allClaimed = false;
 		}
-		if (allClaimed)
+		if (allClaimed) {
+			delete[] unclaimed;
 			return nullptr;
+		}
+		return unclaimed;
+	}
+	bool* getUnclaimedStonesAndNotEmpty(Side s) const {
+		const size_t sn = board->getStoneNb();
+		bool* unclaimed = new bool[sn];
+		bool allClaimed = true;
+		for (size_t i = 0; i < sn; ++i) {
+			unclaimed[i] = board->getStone(i).getRevendication() == Side::none && board->getStone(i).getSideSize(s);
+			if (unclaimed[i])
+				allClaimed = false;
+		}
+		if (allClaimed) {
+			delete[] unclaimed;
+			return nullptr;
+		}
 		return unclaimed;
 	}
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
@@ -145,6 +162,7 @@ public:
 	int selectStoneForCombatMode();
 	int selectStoneForClaim();
 	Deck* selectDeck();
+	void selectStoneAndCard(Side s, int& cardNb, int& stoneNb);
 
 	// SETTERS
 
@@ -268,7 +286,7 @@ public :
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
 		pickable = Controller::getPickableCards();
-
+		bool allUnplayable = true;
 		if (playerCanPlayTacticalCard()) { //can play tactical cards
 
 			if (!playerCanPlayCombatMode()) { //on retire les combat mode des cartes jouables
@@ -282,17 +300,27 @@ public :
 					if (pickable[i]) pickable[i] = !dynamic_cast<const Chief*>(curHand.getCard(i));
 				}
 			}
+			
+			for (size_t i = 0; i < hs; ++i) {
+				if (pickable[i]) {
+					allUnplayable = false;
+					break;
+				}
+			}
 
-			return pickable;
 		}
 		else { //can't play tactical cards
 			for (size_t i = 0; i < hs; ++i) {
 				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
+				if (pickable[i])
+					allUnplayable = false;
 			}
-
-			return pickable;
 		}
-
+		if (allUnplayable) {
+			delete[] pickable;
+			return nullptr;
+		}
+		return pickable;
 	/* //je laisse le code au cas-où
 		if (playerCanPlayTacticalCard()) {
 			if (playerCanPlayChiefCard()) {

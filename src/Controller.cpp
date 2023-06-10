@@ -293,6 +293,9 @@ int Controller::selectHandCard(bool checkPickable) {
     bool* pickable;
     if (checkPickable) {
         pickable = getPickableCards();
+        if (!pickable) {
+            return -1;
+        }
     }else {
         const size_t size = c->getCurrentPlayerHand().getSize();
         pickable = new bool[size];
@@ -300,15 +303,16 @@ int Controller::selectHandCard(bool checkPickable) {
             pickable[i] = true;
         }
     }
-    
+    int result;
     PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
     if (playerIA) {
-        return playerIA->selectCard(pickable);
+        result= playerIA->selectCard(pickable);
     }
     else {
-        
-        return UserInterface::getInstance()->uiSelectCard(pickable);
+        result= UserInterface::getInstance()->uiSelectCard(pickable);
     }
+    delete[] pickable;
+    return result;
 }
 
 int Controller::selectPlayableStone() {
@@ -316,14 +320,17 @@ int Controller::selectPlayableStone() {
     bool* pickable = getPlayableStones();
     if (!pickable)
         return -1;
+    int result;
     PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
     if (playerIA) {
-        return playerIA->selectStone(pickable);
+        result= playerIA->selectStone(pickable);
     }
     else {
 
-        return UserInterface::getInstance()->uiSelectStone(pickable);
+        result= UserInterface::getInstance()->uiSelectStone(pickable);
     }
+    delete[] pickable;
+    return result;
 };
 
 int Controller::selectStoneForCombatMode() {
@@ -438,7 +445,24 @@ Deck* Controller::selectDeck()
         return &c->getClanDeck();
     }
 }
-;
+
+void Controller::selectStoneAndCard(Side s, int& cardNb, int& stoneNb){
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getUnclaimedStonesAndNotEmpty(s);
+    if (!pickable) {
+        stoneNb = -1;
+        cardNb = -1;
+        return;
+    }
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        playerIA->selectStoneAndCard(s, cardNb, stoneNb, pickable);
+    }
+    else {
+        UserInterface::getInstance()->uiSelectCardAndStone(s, cardNb, stoneNb, pickable);
+    }
+}
+
 //TACTIC CONTROLLER METHODS
 
 void TacticController::initForNewRound() {

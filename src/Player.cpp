@@ -1,5 +1,6 @@
 #include "../head/Player.h"
 #include "../head/Supervisor.h"
+#include "../head/Utility.h"
 
 int PlayerAIRandom::selectCard(bool* pickable) const {
 	Controller* c = Supervisor::getInstance().getController();
@@ -96,6 +97,26 @@ unsigned int PlayerAIRandom::selectStoneForClaim(bool* pickable) const {
 		stone_nb = rand() % 9;
 	}
 	return stone_nb;
+}
+
+void PlayerAIRandom::selectStoneAndCard(Side s, int& cardNb, int& stoneNb, bool* pickableStone) const{
+	stoneNb = 0;
+	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
+	while (!pickableStone[stoneNb]) {
+		stoneNb++;
+	}
+	// stone_nb sera toujours défini : 
+	// la partie se termine nécessairement avant que list_stones = { false, false, ..., false }
+	Controller* c = Supervisor::getInstance().getController();
+	if (stoneNb >= max_stones) {
+		Stone* stone = &c->getBoard().getStone(stoneNb);
+		cardNb = Utility::randInt(0, stone->getSideSize(s)); ;
+		return;
+	}
+
+	stoneNb = -1;
+	cardNb = -1;
+
 }
 
 unsigned int PlayerAIRandom::selectDeck() const {

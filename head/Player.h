@@ -54,6 +54,7 @@ public:
     unsigned int selectStone(bool * pickable) const;
     unsigned int selectStoneForCombatMode(bool* pickable) const;
     unsigned int selectStoneForClaim(bool* pickable) const;
+    void selectStoneAndCard(Side s, int& cardNb, int& stoneNb, bool* pickableStone) const;
     unsigned int selectDeck() const;
     bool WantClaimStone() const;
     int selectCardOnStone(Side s, unsigned int stone_nb) const;

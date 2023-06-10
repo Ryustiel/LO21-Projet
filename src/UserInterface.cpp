@@ -259,8 +259,30 @@ unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb
 	return card_nb;
 }
 
-void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {
+void UserInterfaceCmd::uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) {
 	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a Stone in which you want to select a card (type in a number) : " << endl;
+		stoneNb = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number");
+		if (!pickableCards[stoneNb]) {
+			cout << "This stone isn't selectable !" << endl;
+			continue;
+		}
+		while (true) {
+			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
+			int choice = userInputChoice(2, "Invalid Number");
+			if (choice) {
+				break;
+			}
+			else {
+				cout << "Select a card (type in a number)" << endl;
+				Stone* stone = &c->getBoard().getStone(stoneNb);
+				cardNb = userInputChoice(stone->getSideSize(s), "Invalid Number");
+				return;
+			}
+		}
+	}
+	/*Controller* c = Supervisor::getInstance().getController();
 	cardNb = -1;
 
 	while (true) {
@@ -305,7 +327,7 @@ void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsign
 		UserInterface::getInstance()->uiInvalidChoiceMsg();
 		stoneNb = c->selectStoneForClaim();
 		cardNb = this->uiSelectCardOnStone(s, stoneNb);
-	}
+	}*/
 }
 
 

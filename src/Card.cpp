@@ -122,9 +122,13 @@ void Banshee::activate() const {
 	else {
 		Side opponent_side = c->getCurSide() == Side::s2 ? Side::s1 : Side::s2;
 		
-		unsigned int cardNb;
-		unsigned int stoneNb;
-		UserInterface::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+		int cardNb;
+		int stoneNb;
+		c->selectStoneAndCard(opponent_side, cardNb, stoneNb);
+		if (cardNb < 0 || stoneNb < 0) {
+			cout << "This Card can't be used yet !" << endl;
+			return;
+		}
 		Stone& s = c->getBoard().getStone(stoneNb);
 
 
@@ -141,9 +145,13 @@ void Strategist::activate() const {
 	if (tc == nullptr) throw ShottenTottenException("Strategist::activate error: no tactic controller !");
 
 	//select stone then card to move
-	unsigned int cardNb;
-	unsigned int stoneNb;
-	UserInterface::getInstance()->uiSelectCardAndStone(c->getCurSide(), cardNb, stoneNb);
+	int cardNb;
+	int stoneNb;
+	c->selectStoneAndCard(c->getCurSide(), cardNb, stoneNb);
+	if (cardNb < 0 || stoneNb < 0) {
+		cout << "This Card can't be used yet !" << endl;
+		return;
+	}
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 	//removing selected card from its stone
@@ -170,9 +178,14 @@ void Traiter::activate() const {
 	}
 	Side opponent_side = c->getCurSide() == Side::s2 ? Side::s1 : Side::s2;
 
-	unsigned int cardNb;
-	unsigned int stoneNb;
-	UserInterface::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+	int cardNb;
+	int stoneNb;
+	c->selectStoneAndCard(opponent_side, cardNb, stoneNb);
+	if (cardNb < 0 || stoneNb < 0) {
+		cout << "This Card can't be used yet !" << endl;
+		return;
+	}
+		
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 
