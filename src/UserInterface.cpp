@@ -507,7 +507,7 @@ void UserInterfaceCmd::uiPrintGame() {
 			cout << "Claimed by Player 1" << endl;
 		}
 		else { //claimed by player 2
-			cout << "Claimed by Player 1" << endl;
+			cout << "Claimed by Player 2" << endl;
 		}
 		if (stone.getCombatMode()) {
 			cout << "	Combat mode : " << stone.getCombatMode()->getName() << endl;
@@ -516,10 +516,13 @@ void UserInterfaceCmd::uiPrintGame() {
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
 		for (auto card : stone.getCombinationP1()) { //display P1 combination
 			cout << "		Card " << k << " : " << card->getName() << endl;
+			k++;
 		}
+		k = 0;
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
 		for (auto card : stone.getCombinationP2()) { //display P1 combination
 			cout << "		Card " << k << " : " << card->getName() << endl;
+			k++;
 		}
 		cout << endl;
 	}

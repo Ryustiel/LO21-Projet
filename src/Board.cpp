@@ -211,7 +211,7 @@ const Side Stone::compareCombination(const PlacableCard* c1[], const PlacableCar
 
 	//comparing combinations sums
 	if (sum_s1 > sum_s2) return Side::s1;
-	else if (sum_s2 > sum_s1) return Side::s1;
+	else if (sum_s2 > sum_s1) return Side::s2;
 
 	return Side::none;
 }
