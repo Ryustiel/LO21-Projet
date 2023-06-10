@@ -1,4 +1,10 @@
 
-QPushButton:open {
+VueCarte:open {
     border: 1px solid red; /* Exemple de couleur de contour rouge */
+    background : rgb(252, 93, 71);
 }
+
+VuePartie{
+    background : rgb(242, 240, 227);
+}
+
