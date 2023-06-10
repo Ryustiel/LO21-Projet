@@ -419,6 +419,95 @@ class Discard {
     + begin() : DiscardIterator
 }
 
+class UserInterface{
+
+    - state : unsigned int {= 0}
+    # {static} handler : Handler
+    
+    + {static} getInstance() : UserInterface*
+    + {static} freeInstance() : void
+    
+    + getState() : unsigned int {const}
+    + getState() : unsigned int& {const}
+
+    + {virtual} launchUserInterface() : void {=0}
+    + {virtual} quickLaunch(ia1 : int, ia2 : int, v : Version) : void {=0}
+    + {virtual} setState(i : const unsigned int) : void
+    + {virtual} uiGameInit() : void {= 0}
+    + {virtual} uiSelectRounds() : unsigned int  {= 0}
+    + {virtual} uiSelectVersion() : Version  {= 0}
+    + {virtual} uiVersionMenu() : Version  {= 0}
+
+    + {virtual} uiSelectPlayerName(i : int, isIA1 : int&) : string {= 0}
+    + {virtual} uiPlayerMenu(players_name[] : string , isIA1 : int&, isIA2 : int&) : void {= 0}
+
+    + {virtual} uiSelectCard() : unsigned int  {= 0}
+    + {virtual} uiSelectCard(stone : Stone*, side : Side) : unsigned int {= 0}
+    + {virtual} uiSelectStone() : unsigned int {= 0}
+    + {virtual} uiSelectStoneCombatMode() : unsigned int {= 0}
+    + {virtual} uiSelectStoneForCombatMode() : unsigned int {= 0}
+    + {virtual} uiSelectStoneForClaim() : int {= 0}
+    + {virtual} userSelectStoneForClaim() : int {const} {= 0}
+    + {virtual} uiWantClaimStone() : bool {= 0}
+    + {virtual} uiSelectDeck() : Deck* {= 0}
+    + {virtual} uiSelectUnclaimedStone() : unsigned int {= 0}
+    + {virtual} uiSelectCardOnStone(s : Side, stone_nb : unsigned int) : unsigned int {= 0}
+    + {virtual} uiSelectCardAndStone(s : Side, cardNb : unsigned int&, stoneNb : unsigned int&) : void {= 0}
+    + {virtual} uiPrintPlayerHand() : void  {= 0}
+    + {virtual} uiPrintGame() : void  {= 0}
+    + {virtual} uiPlayCard() : void  {= 0}
+    + {virtual} uiPrintCurrentPlayer() : void  {= 0}
+    + {virtual} uiPrintDiscard() : void  {= 0}
+    + uiInvalidChoiceMsg() : void
+
+    # UserInterface()
+    # {virtual} ~UserInterface()
+    
+}
+
+class UserInterfaceCmd{
+    + {static} setInstance() : void
+    + launchUserInterface() : void {final}
+    + quickLaunch(ia1 : int, ia2 : int, v : Version) : void {final}
+    + uiGameInit() : void
+    + uiSelectRounds() : unsigned int 
+    + uiSelectVersion() : Version 
+    + uiVersionMenu() : Version 
+    + uiSelectPlayerName(i : int, isIA1 : int& ) : string 
+    + uiPlayerMenu(players_name[] : string, isIA1 : int& , isIA2 : int& ) : void
+    + uiSelectCard() : unsigned int {final}
+    + uiSelectCard(stone : Stone*, side : Side) : unsigned int {final}
+    + uiSelectStone() : unsigned int {final}
+    + uiSelectStoneForCombatMode() : unsigned int {final}
+    + uiSelectStoneForClaim() : int {final}
+    + uiWantClaimStone() : bool {final}
+    + uiSelectDeck() : Deck* {final}
+    + uiPrintCurrentPlayer() : void {final}
+    + userSelectCard() : unsigned int {const}
+    + userSelectCard(option_count : unsigned int, retry_message : const string& ) : unsigned int {const}
+    + userSelectUnclaimedStone() : unsigned int {const}
+    + userSelectStone() : unsigned int {const}
+    + userSelectStoneForClaim() : int  {const}
+    + userSelectCardOnStone(s : Side, stone_nb : unsigned int ) : int
+    + uiSelectStoneCombatMode() : unsigned int {override}
+    + uiGameView2() : void
+    + uiGameView3() : void
+    + uiGameView4() : void
+    + uiGameView5() : void
+    + uiRoundLauncher() : void
+    + uiTurnLauncher(curr_player : Player&) : void
+    + uiPlayCard() : void
+    + uiSelectUnclaimedStone() : unsigned int {overrided}
+    + uiSelectCardOnStone(s : Side, stone_nb : unsigned int) : unsigned int {override}
+    + uiSelectCardAndStone(s : Side, cardNb : unsigned int&, stoneNb : unsigned int&) : void {override}
+    + uiPrintPlayerHand : void
+    + uiPrintGame() : void
+    + uiPrintDiscard() : void {override}
+
+    # UserInterfaceCmd()
+    # {virtual} ~UserInterfaceCmd()
+}
+
 
 ''' HERITAGES '''
 Controller <|-- TacticController
@@ -437,6 +526,7 @@ CombatMode <|-- BlindManBluff
 Ruses <|-- Banshee
 Ruses <|-- Strategist
 Ruses <|-- Traiter
+UserInterface <|-- UserInterfaceCmd
 
 
 
