@@ -24,7 +24,6 @@ public :
     virtual int uiSelectStoneForClaim(bool* pickable) = 0;
     virtual bool uiWantClaimStone() = 0;
     virtual Deck* uiSelectDeck() = 0;
-    virtual unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) = 0;
     virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
     virtual bool uiSelectPlayOrDiscard() = 0;
     void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
@@ -129,8 +128,8 @@ public:
     void uiTurnLauncher(Player& curr_player); //launches the turn
 
 
-    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) override;
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) override;
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb);
     bool uiSelectPlayOrDiscard() override;
 
     //affichage

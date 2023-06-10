@@ -144,6 +144,7 @@ public:
 	int selectPlayableStone();
 	int selectStoneForCombatMode();
 	int selectStoneForClaim();
+	Deck* selectDeck();
 
 	// SETTERS
 

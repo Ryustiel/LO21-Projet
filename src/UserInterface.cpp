@@ -228,6 +228,20 @@ int UserInterfaceCmd::uiSelectStoneForClaim(bool* pickable) {
 	}
 }
 
+Deck* UserInterfaceCmd::uiSelectDeck() {
+	Controller* c = Supervisor::getInstance().getController();
+	int choice = userInputChoice(2, "Invalid Number !\n");
+	if (choice) {
+		TacticController* tc = dynamic_cast<TacticController*>(c);
+		if (tc) {
+			return &tc->getTacticDeck();
+		}
+		throw BoardException("Tactic Controller isn't initialised !");
+	}
+	else {
+		return &c->getClanDeck();
+	}
+}
 
 unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
 	//displayStone() //TO DO
@@ -292,86 +306,6 @@ void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsign
 		stoneNb = c->selectStoneForClaim();
 		cardNb = this->uiSelectCardOnStone(s, stoneNb);
 	}
-}
-
-Deck* UserInterfaceCmd::uiSelectDeck() {
-	cout << "Deck Selection : "<<endl;
-	Controller* c = Supervisor::getInstance().getController();
-	TacticController* tc = dynamic_cast<TacticController*>(c);
-	if (c->getClanDeck().isEmpty()) {
-		if (tc && !tc->getTacticDeck().isEmpty()) {
-			cout << "Tactical deck is empty ! Drawing the Clan deck instead" << endl;
-			return &tc->getTacticDeck();
-		}
-		else {
-			cout << "All decks are empty !" << endl;
-			return nullptr;
-		}
-	}
-	else {
-		if (tc) {
-			if (tc && !tc->getTacticDeck().isEmpty()) {
-				int choice = -1;
-				while (true) {
-					cout << "Select a Deck (0: default, 1: tactic) : ";
-					PlayerAIRandom* cur_player = dynamic_cast<PlayerAIRandom*>(Supervisor::getInstance().getController()->getCurrentPlayer());
-					if (cur_player) choice = cur_player->selectDeck();
-					else cin >> choice;
-					if (choice >= 2 || choice < 0) {
-						cout << "Invalid choice." << endl;
-					}
-					else {
-						break;
-					}
-				}
-				if (choice) {
-					cout << "Tactic Deck selected !" << endl;
-					return &tc->getTacticDeck();
-				}
-			}
-			else {
-				cout << "Clan deck is empty ! Drawing the Tactical deck instead." << endl;
-			}
-
-		}
-		else {
-			cout << "Legacy Deck Selected !" << endl;
-		}
-		return &c->getClanDeck();
-	}
-
-
-	switch (c->getVersion()) {
-	case Version::tactic:
-		int choice;
-		if (!tc->getTacticDeck().isEmpty()) {
-			while (true) {
-				cout << "Select a Deck (0: default, 1: tactic) : ";
-				cin >> choice;
-				if (choice >= 2 || choice < 0) {
-					cout << "Choix invalide" << endl;
-				}
-				else {
-					break;
-				}
-			}
-			if (choice) {
-				return &tc->getTacticDeck();
-			}
-		}
-		else {
-			cout << "Tactic Deck is empty !"<< endl;
-		}
-
-	default:
-	case Version::legacy:
-		if (c->getClanDeck().isEmpty()) {
-			cout << "Clan Deck is empty !" << endl;
-			return nullptr;
-		}
-		return &c->getClanDeck();
-	}
-
 }
 
 

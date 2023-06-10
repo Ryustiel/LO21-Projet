@@ -203,7 +203,7 @@ void Recruiter::activate() const {
 
 	for (unsigned int i = 0; i < 3; ++i) {
 		cout << "Choose a Deck to draw !" << endl;
-		Deck* d = UserInterface::getInstance()->uiSelectDeck();
+		Deck* d = c->selectDeck();
 		if (!d) {
 			cout << "All decks are empty :( !" << endl;
 			break;
