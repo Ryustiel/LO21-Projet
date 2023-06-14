@@ -37,7 +37,6 @@ private:
 	unsigned int playerStonePick;
 
 	void newRound(); // événement de début de manche
-	void checkRound(); // verifie si la manche est gagnée
 
 	virtual void newTurn(); // lance un nouveau tour de joueur
 
