@@ -32,6 +32,7 @@ public :
     virtual void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) =0;
     virtual bool uiSelectPlayOrDiscard() = 0;
     void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
+    virtual void uiUpdateView()=0;
 
     virtual void uiPrintPlayerHand()=0;
     virtual void uiPrintGame()=0;
@@ -88,6 +89,7 @@ public:
         return 1;
     };
     Deck* uiSelectDeck() final;
+    void uiUpdateView() final { return; };
 
     
 

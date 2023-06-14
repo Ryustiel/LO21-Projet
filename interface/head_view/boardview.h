@@ -54,6 +54,7 @@ public:
     unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) {};
     void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {};
     bool uiSelectPlayOrDiscard() {};
+    void uiUpdateView() final;
 
     void uiPrintPlayerHand() {};
     void uiPrintGame() {};

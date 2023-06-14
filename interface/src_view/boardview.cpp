@@ -264,6 +264,14 @@ void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
 
     Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
 }
+void VuePartie::uiUpdateView(){
+    for(int i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
+    {
+        cartesMain1[i]->setCarte(*Supervisor::getInstance().getController()->getCurrentPlayerHand().getCard(i));
+    }
+}
+
+
 //cas version TACTIQUE
 //constructeur
 VuePartieTactique::VuePartieTactique() : VuePartie()

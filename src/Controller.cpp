@@ -165,12 +165,14 @@ void Controller::turnClaimStone() {
 }
 
 void Controller::newTurn() {
+    UserInterface::getInstance()->uiUpdateView();
     std::cout << "\n================== newTurn";
     UserInterface::getInstance()->uiPrintCurrentPlayer();
     UserInterface::getInstance()->uiPrintGame();
     turnPlayCard();
     UserInterface::getInstance()->uiPrintGame();
     turnDrawCard(); //pb quand pioche vide
+    UserInterface::getInstance()->uiUpdateView();
     turnClaimStone();
     cout << "Your turn is over...!";
     //system("pause");
