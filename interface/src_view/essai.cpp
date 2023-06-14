@@ -52,11 +52,11 @@ Essai::Essai(QWidget *parent) : QWidget(parent),vuecartes(20,nullptr)
 
     size_t i=0;
     qDebug() << "message";
-    vuecartes[i]->setCarte(*c1);
+    vuecartes[i]->setCarte(c1);
     i++;
-    vuecartes[i]->setCarte(*c2);
+    vuecartes[i]->setCarte(c2);
     i++;
-    vuecartes[i]->setCarte(*t);
+    vuecartes[i]->setCarte(t);
 
 
     /*

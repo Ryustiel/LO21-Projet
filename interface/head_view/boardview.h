@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <vector>
+#include <array>
 #include <set>
 #include "cardview.h"
 #include "stoneview.h"
@@ -51,6 +52,8 @@ public:
     bool uiSelectPlayOrDiscard() {};
     void uiUpdateView() final;
 
+    void updateStonesView();
+
     void uiPrintPlayerHand() {};
     void uiPrintGame() {};
     void uiPrintDiscard() {};
@@ -84,9 +87,9 @@ protected:
     QGridLayout* layoutMain2;
     QVBoxLayout* couche;
     vector<VueBorne*> bornes;
-    vector<VueCarte*> cartesPlateau; // adresses des objets VueCarte
+    vector<array<vector<VueCarte*>,2>> cartesPlateau; // adresses des objets VueCarte
     vector<VueCarte*> cartesMain1;
-    vector<VueCarte*> cartesMain2;
+    QLabel* handLabel;
 public slots:
     virtual void actionCarteMain(int nb);
 protected slots:

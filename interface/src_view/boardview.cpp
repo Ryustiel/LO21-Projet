@@ -17,10 +17,10 @@
 VuePartie::VuePartie() : QWidget(){}
 
 void VuePartie::startWindow(){
-    cartesPlateau = vector<VueCarte *>(Supervisor::getInstance().getController()->getBoard().getStoneNb()*3*2,nullptr);
-    cartesMain1 = vector<VueCarte *>(Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(),nullptr);
-    cartesMain2  = vector<VueCarte *>(Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(),nullptr);
-    bornes = vector<VueBorne *>(Supervisor::getInstance().getController()->getBoard().getStoneNb(),nullptr);
+    Controller * c = Supervisor::getInstance().getController();
+    const size_t stoneNb = c->getBoard().getStoneNb();
+    cartesMain1 = vector<VueCarte *>(c->getPlayer1().getHand()->getSize(),nullptr);
+    bornes = vector<VueBorne *>(stoneNb,nullptr);
 
 
     setWindowTitle("Schotten Totten"); //titre fenetre
@@ -31,12 +31,12 @@ void VuePartie::startWindow(){
 
     //barre de progression pioche
     piocheClan=new QLabel("Pioche clan");
-    auto nb_cartes_jeu=Supervisor::getInstance().getController()->getClanGame().getCardCount();
-    auto nb_cartes_pioche=Supervisor::getInstance().getController()->getClanDeck().getCardCount();
+    auto nb_cartes_jeu=c->getClanGame().getCardCount();
+
 
     nbCartesPiocheClan=new QProgressBar;
     nbCartesPiocheClan->setRange(0,nb_cartes_jeu);
-    nbCartesPiocheClan->setValue(nb_cartes_pioche);
+    nbCartesPiocheClan->setValue(0);
     nbCartesPiocheClan->setFixedHeight(20);
     nbCartesPiocheClan->setFixedWidth(250);
 
@@ -50,31 +50,31 @@ void VuePartie::startWindow(){
     //manches restantes
     manche = new QLabel("Manches restantes :");
     mancheValue = new QLCDNumber;
-    mancheValue->display(Supervisor::getInstance().getController()->getRemainingRounds());
+    mancheValue->display(c->getRemainingRounds());
 
     QVBoxLayout* manches= new QVBoxLayout;
     manches->addWidget(manche);
     manches->addWidget(mancheValue);
 
     //Joueur actuel
-    tourJeu = new QLabel("Tour de " + QString::fromStdString(Supervisor::getInstance().getController()->getCurrentPlayer()->getName()));
+    tourJeu = new QLabel("Tour de " + QString::fromStdString(c->getCurrentPlayer()->getName()));
 
     QVBoxLayout* tour = new QVBoxLayout;
     tour->addWidget(tourJeu);
     tour->setContentsMargins(20,0,20,0);
 
     //Scores joueurs
-    QString joueur1 = "Score " + QString::fromStdString(Supervisor::getInstance().getController()->getPlayer1().getName());
+    QString joueur1 = "Score " + QString::fromStdString(c->getPlayer1().getName());
     scorej1=new QLabel(joueur1);
-    QString joueur2 = "Score " + QString::fromStdString(Supervisor::getInstance().getController()->getPlayer2().getName());
+    QString joueur2 = "Score " + QString::fromStdString(c->getPlayer2().getName());
     scorej2=new QLabel(joueur2);
 
     scoreJoueur1 = new QLCDNumber;
-    scoreJoueur1->display(static_cast<int>(Supervisor::getInstance().getController()->getPlayer1().getScore()));
+    scoreJoueur1->display(static_cast<int>(c->getPlayer1().getScore()));
     scoreJoueur1->setFixedHeight(30);
 
     scoreJoueur2 = new QLCDNumber;
-    scoreJoueur2->display(static_cast<int>(Supervisor::getInstance().getController()->getPlayer2().getScore()));
+    scoreJoueur2->display(static_cast<int>(c->getPlayer2().getScore()));
     scoreJoueur2->setFixedHeight(30);
 
     QHBoxLayout* j1= new QHBoxLayout;
@@ -95,43 +95,35 @@ void VuePartie::startWindow(){
     layoutInformations->addLayout(tour);
     layoutInformations->addLayout(scores);
 
-
     //affichage plateau
     layoutCartes = new QGridLayout;
-    int k=3-1;
-
-    int nbBornes= Supervisor::getInstance().getController()->getBoard().getStoneNb();
-    int nbCartes= Supervisor::getInstance().getController()->getBoard().getStone(0).getMaxSize();
-    //size_t k=nbCartes-1;
-    //REMPLACER TOUS LES 3 PAR NBCARTES QUAND CA FONCTIONNERA (en haut aussi)
-    cout<<"nb cartes : "<<nbCartes;
-
-    for(int i=0;i<nbBornes*3;i++) {
-        cartesPlateau[i]=new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getBoard().getStone(i%nbBornes).getCombinationP1()[k])
-        cartesPlateau[i]->setContentsMargins(1,1,1,1);
-        if (i%(nbBornes-1)==0) k--;
+    cartesPlateau = vector<array<vector<VueCarte *>,2>>(stoneNb);
+    Board& b = c->getBoard();
+    for(size_t i = 0; i<stoneNb; ++i){
+        Stone& s = b.getStone(i);
+        const size_t stoneSize = s.getMaxSize();
+        for(size_t j = 0; j<2;++j){
+            cartesPlateau[i][j] = vector<VueCarte *>(stoneSize);
+            for(size_t k = 0; k< cartesPlateau[i][j].size(); ++k){
+                cartesPlateau[i][j][k] = new VueCarte();
+                VueCarte * vc = cartesPlateau[i][j][k];
+                vc->setContentsMargins(1,1,1,1);
+                int x = j ? k + stoneSize+1 : stoneSize-k-1;
+                int y = i;
+                layoutCartes->addWidget(vc,x,y);
+            }
+        }
     }
-    for(int i=0;i<nbBornes*3;i++) layoutCartes->addWidget(cartesPlateau[i],i/nbBornes,i%nbBornes);
 
-    for(int i=0; i<nbBornes; i++){
-        bornes[i]=new VueBorne();//Supervisor::getInstance().getController()->getBoard().getStone(i)
+
+
+    for(int i=0; i<stoneNb; i++){
+        bornes[i]=new VueBorne();//c->getBoard().getStone(i)
         bornes[i]->setContentsMargins(0,0,0,0);
         bornes [i]->setNb(i);
-        size_t j=i+nbBornes*3;
-        layoutCartes->addWidget(bornes[i], j/nbBornes, j%nbBornes);
+        size_t j=i+stoneNb*3;
+        layoutCartes->addWidget(bornes[i], j/stoneNb, j%stoneNb);
         connect(bornes[i],SIGNAL(borneClicked(int)),this,SLOT(actionBorne(int)));
-    }
-
-    k=0;
-    for(int i=nbBornes*3;i<nbBornes*3*2;i++) {
-        cartesPlateau[i]=new VueCarte();//Supervisor::getInstance().getController()->getBoard().getStone(i%nbBornes).getCombinationP2()[k]
-        cartesPlateau[i]->setContentsMargins(0,0,0,0);
-        if (i%(nbBornes-1)==0) k++;
-    }
-
-    for(int i=3*nbBornes; i<nbBornes*3*2; i++){
-        size_t j=i+nbBornes;
-        layoutCartes->addWidget(cartesPlateau[i],j/nbBornes,j%nbBornes);
     }
 
     layoutCartes->setSpacing(0);
@@ -147,7 +139,7 @@ void VuePartie::startWindow(){
 
     //Pioche
 
-    clanDeck = new VuePioche(Supervisor::getInstance().getController()->getClanDeck());
+    clanDeck = new VuePioche(c->getClanDeck());
     connect(clanDeck, SIGNAL(piocheClicked()),this, SLOT(actionPioche()));
 
     QVBoxLayout* clan = new QVBoxLayout;
@@ -165,63 +157,36 @@ void VuePartie::startWindow(){
     plateau->setContentsMargins(0,25,0,25);
 
     //Mains
-    QLabel* mainj1 = new QLabel("Main "+QString::fromStdString(Supervisor::getInstance().getController()->getPlayer1().getName()));
+    handLabel = new QLabel("Main "+QString::fromStdString(c->getPlayer1().getName()));
     QFont font = QFont();
     font.setPointSize(11);
-    mainj1->setFont(font);
-    mainj1->setContentsMargins(0,0,20,0);
+    handLabel->setFont(font);
+    handLabel->setContentsMargins(0,0,20,0);
 
     layoutMain1 = new QGridLayout;
-    for(int i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
+    for(int i=0; i<c->getPlayer1().getHand()->getSize(); i++)
     {
-        cartesMain1[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i))
+        cartesMain1[i]= new VueCarte();//dynamic_cast<const Clan*>(c->getPlayer1().getHand()->getCard(i))
         cartesMain1[i]->setNb(i);
-        cartesMain1[i]->setCarte(*Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i));
+        cartesMain1[i]->setCarte(c->getPlayer1().getHand()->getCard(i));
         connect(cartesMain1[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
         layoutMain1->addWidget(cartesMain1[i],0,i);
     }
 
     QHBoxLayout* main1 = new QHBoxLayout;
-    main1->addWidget(mainj1);
+    main1->addWidget(handLabel);
     main1->addLayout(layoutMain1);
     main1->setContentsMargins(10,0,260,0);
-
-
-    QLabel* mainj2 = new QLabel("Main "+QString::fromStdString(Supervisor::getInstance().getController()->getPlayer2().getName()));
-    mainj2->setFont(font);
-    mainj2->setContentsMargins(0,0,20,0);
-
-    layoutMain2 = new QGridLayout;
-    for(int i=0; i<Supervisor::getInstance().getController()->getPlayer2().getHand()->getSize(); i++)
-    {
-        cartesMain2[i]= new VueCarte();//dynamic_cast<const Clan*>(Supervisor::getInstance().getController()->getPlayer2().getHand()->getCard(i))
-        cartesMain1[i]->setNb(i);
-        cartesMain2[i]->setCarte(*Supervisor::getInstance().getController()->getPlayer1().getHand()->getCard(i));
-        connect(cartesMain2[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
-        layoutMain2->addWidget(cartesMain2[i],0,i);
-    }
-
-    QHBoxLayout* main2 = new QHBoxLayout;
-    main2->addWidget(mainj2);
-    main2->addLayout(layoutMain2);
-    main2->setContentsMargins(10,0,260,0);
 
     //ajouter layouts a fenetre globale
     couche = new QVBoxLayout;
     couche->addLayout(layoutInformations);
     couche->addLayout(plateau);
     couche->addLayout(main1);
-    couche->addLayout(main2);
 
-    switch(Supervisor::getInstance().getController()->getCurSide()){
-    case(Side::s1):
-        couche->removeItem(main2);
-        break;
 
-    case(Side::s2):
-        couche->removeItem(main1);
 
-    }
+
 
     setLayout(couche);
     show();
@@ -264,10 +229,39 @@ void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
 
     Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
 }
+
 void VuePartie::uiUpdateView(){
+    updateStonesView();
+    handLabel->setText("Main "+QString::fromStdString(Supervisor::getInstance().getController()->getCurrentPlayer()->getName()));
     for(int i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
     {
-        cartesMain1[i]->setCarte(*Supervisor::getInstance().getController()->getCurrentPlayerHand().getCard(i));
+        cartesMain1[i]->setCarte(Supervisor::getInstance().getController()->getCurrentPlayerHand().getCard(i));
+    }
+}
+
+void VuePartie::updateStonesView(){
+
+    Controller* c = Supervisor::getInstance().getController();
+    Board& b = c->getBoard();
+    auto nb_cartes_pioche=c->getClanDeck().getCardCount();
+    nbCartesPiocheClan->setValue(nb_cartes_pioche);
+
+    const size_t stoneNb = b.getStoneNb();
+    for(size_t i = 0; i<stoneNb; ++i){
+        Stone& s = b.getStone(i);
+        const size_t stoneSize = s.getMaxSize();
+        for(size_t j = 0; j<2;++j){
+            Side side = j ? c->getCurSide() : (c->getCurSide()== Side::s1 ? Side::s2 : Side::s1);
+            for(size_t k = 0; k< cartesPlateau[i][j].size(); ++k){
+                VueCarte * vc = cartesPlateau[i][j][k];
+                if (k >= s.getSideSize(side)){
+                    vc->setNoCarte();
+                }else{
+                    const Card * c = s.getCard(side,k);
+                    vc->setCarte(c);
+                }
+            }
+        }
     }
 }
 
