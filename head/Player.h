@@ -50,11 +50,11 @@ private:
     //
 public:
     PlayerAIRandom(const string& n, Side s) : Player(n, s) {}
-    unsigned int selectCard() const;
-    unsigned int selectCard(size_t nchoices) const;
-    unsigned int selectStone() const;
-    unsigned int selectStoneForCombatMode() const;
-    unsigned int selectUnclaimedStone() const;
+    int selectCard(bool* pickable) const;
+    unsigned int selectStone(bool * pickable) const;
+    unsigned int selectStoneForCombatMode(bool* pickable) const;
+    unsigned int selectStoneForClaim(bool* pickable) const;
+    void selectStoneAndCard(Side s, int& cardNb, int& stoneNb, bool* pickableStone) const;
     unsigned int selectDeck() const;
     bool WantClaimStone() const;
     int selectCardOnStone(Side s, unsigned int stone_nb) const;

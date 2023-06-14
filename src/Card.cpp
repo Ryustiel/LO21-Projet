@@ -58,7 +58,8 @@ std::initializer_list<Number> Numbers = { Number::one, Number::two, Number::thre
 
 void PlacableCard::activate() const{
 	Controller* c = Supervisor::getInstance().getController();
-	int stoneNum = UserInterface::getInstance()->uiSelectStone();
+	int stoneNum = c->selectPlayableStone();
+	if (stoneNum < 0) return;
 	Stone& s = c->getBoard().getStone(stoneNum);
 	s.addCard(*this,c->getCurSide());
 };
@@ -93,7 +94,7 @@ void Elite::activate() const {
 void CombatMode::activate() const {
 	Tactical::activate();
 	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
-	int stoneNb = UserInterface::getInstance()->uiSelectStoneCombatMode();
+	int stoneNb = c->selectStoneForCombatMode();
 	Stone& s = c->getBoard().getStone(stoneNb);
 	s.setCombatMode(this);
 }
@@ -121,9 +122,13 @@ void Banshee::activate() const {
 	else {
 		Side opponent_side = c->getCurSide() == Side::s2 ? Side::s1 : Side::s2;
 		
-		unsigned int cardNb;
-		unsigned int stoneNb;
-		UserInterface::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+		int cardNb;
+		int stoneNb;
+		c->selectStoneAndCard(opponent_side, cardNb, stoneNb);
+		if (cardNb < 0 || stoneNb < 0) {
+			cout << "This Card can't be used yet !" << endl;
+			return;
+		}
 		Stone& s = c->getBoard().getStone(stoneNb);
 
 
@@ -140,16 +145,20 @@ void Strategist::activate() const {
 	if (tc == nullptr) throw ShottenTottenException("Strategist::activate error: no tactic controller !");
 
 	//select stone then card to move
-	unsigned int cardNb;
-	unsigned int stoneNb;
-	UserInterface::getInstance()->uiSelectCardAndStone(c->getCurSide(), cardNb, stoneNb);
+	int cardNb;
+	int stoneNb;
+	c->selectStoneAndCard(c->getCurSide(), cardNb, stoneNb);
+	if (cardNb < 0 || stoneNb < 0) {
+		cout << "This Card can't be used yet !" << endl;
+		return;
+	}
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 	//removing selected card from its stone
 	const PlacableCard& selected_card = *s.getCard(c->getCurSide(),cardNb);
 	s.removeCard(selected_card, c->getCurSide());
 
-	bool choice = UserInterface::getInstance()->uiSelectPlayOrDiscard();
+	bool choice = c->selectPlaceOrDiscard();
 	if (choice) {
 		//putting it on the right stone -> playable card activation
 		selected_card.PlacableCard::activate();
@@ -169,9 +178,14 @@ void Traiter::activate() const {
 	}
 	Side opponent_side = c->getCurSide() == Side::s2 ? Side::s1 : Side::s2;
 
-	unsigned int cardNb;
-	unsigned int stoneNb;
-	UserInterface::getInstance()->uiSelectCardAndStone(opponent_side, cardNb, stoneNb);
+	int cardNb;
+	int stoneNb;
+	c->selectStoneAndCard(opponent_side, cardNb, stoneNb);
+	if (cardNb < 0 || stoneNb < 0) {
+		cout << "This Card can't be used yet !" << endl;
+		return;
+	}
+		
 	Stone& s = c->getBoard().getStone(stoneNb);
 
 
@@ -186,7 +200,8 @@ void Recruiter::activate() const {
 	if (!c) { throw ShottenTottenException("Recruiter::activate error: no tactic controller !"); }
 	for (unsigned int i = 0; i < 2; ++i) {
 		cout << "Choose a card to discard !" << endl;
-		unsigned int cardNb = UserInterface::getInstance()->uiSelectCard();
+		int cardNb = c->selectHandCard(false);
+		if (cardNb < 0) return;
 		const Card* selectedCard = c->getCurrentPlayerHand().getCard(cardNb);
 		c->getCurrentPlayerHand().withdraw(*selectedCard);
 		Deck* d;
@@ -201,7 +216,7 @@ void Recruiter::activate() const {
 
 	for (unsigned int i = 0; i < 3; ++i) {
 		cout << "Choose a Deck to draw !" << endl;
-		Deck* d = UserInterface::getInstance()->uiSelectDeck();
+		Deck* d = c->selectDeck();
 		if (!d) {
 			cout << "All decks are empty :( !" << endl;
 			break;

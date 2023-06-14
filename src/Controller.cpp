@@ -15,16 +15,16 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
     remainingRounds = nturns;
     totalRounds = nturns;
     maxScore = winthreshold;
-    Controller* c = Supervisor::getInstance().getController();
-    while (c->getRemainingRounds() != 0) {
-        cout << "* ROUND " << c->getTotalRounds() - c->getRemainingRounds() + 1 << " (on " << c->getTotalRounds() << ") *" << endl;
+
+    while (getRemainingRounds() != 0) {
+        cout << "* ROUND " << getTotalRounds() - getRemainingRounds() + 1 << " (on " << getTotalRounds() << ") *" << endl;
 
         newRound();
         //decrementing remaining rounds
-        unsigned int r = c->getRemainingRounds();
-        c->setRemainingRounds(r - 1);
+        unsigned int r = getRemainingRounds();
+        setRemainingRounds(r - 1);
     }
-    Player* winner = c->getWinner();
+    Player* winner = getWinner();
     if (winner != nullptr) {
         cout << endl << "The winner is : " << winner->getName() << "! Congratulations!" << endl;
     }
@@ -76,18 +76,7 @@ void Controller::newRound() {
     else {
         player2->updateScore();
     }
-    system("pause");
-}
-
-void Controller::checkRound() {
-    std::cout << "\n=============================== checkRound";
-    remainingRounds--;
-    if (remainingRounds <= 0 || player1->getScore() >= maxScore || player2->getScore() >= maxScore) {
-        qtGameOver();
-    }
-    else {
-        newRound();
-    }
+    //system("pause");
 }
 
 void Controller::turnPlayCard() {
@@ -113,7 +102,8 @@ void Controller::turnPlayCard() {
     cout << "(Controller::turnPlayCard) - hand size (début de l'action : jouer une carte) = " << handSize << endl;
     if (handSize) {
         UserInterface::getInstance()->uiPrintPlayerHand();
-        unsigned int selectedCardNb = UserInterface::getInstance()->uiSelectCard();
+        int selectedCardNb = selectHandCard();
+        if (selectedCardNb < 0) return;
 
         const Card& selectedCard = *curHand.getCard(selectedCardNb);
 
@@ -132,7 +122,7 @@ void Controller::turnDrawCard() {
     if (getCurrentPlayerHand().getSize() == getCurrentPlayerHand().getMaxSize()) {
         return;
     }
-    Deck* d = UserInterface::getInstance()->uiSelectDeck();
+    Deck* d = selectDeck();
     if (d) {
         cout << "(Controller::turnDrawCard()) - selected deck card count (before draw) : " << d->getCardCount() << endl;
         getCurrentPlayerHand().add(d->draw());
@@ -142,26 +132,24 @@ void Controller::turnDrawCard() {
 }
 
 void Controller::turnClaimStone() {
-    std::cout << "\n=============== turnClaimStone()";
-    bool choice_claim = false;
+    std::cout << "\n=============== turnClaimStone()" << endl;
     PlayerAIRandom* playerAI = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
-    if (playerAI) { //is IA
-        while (playerAI->WantClaimStone()) {
-            unsigned int selectedStoneNB = playerAI->selectUnclaimedStone();
-            cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
-            claimStone(selectedStoneNB);
-            cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
+
+    while (true){
+        if (playerAI) {
+            if (!playerAI->WantClaimStone())
+                break;
         }
-    }
-    else { //is Human
-        while (UserInterface::getInstance()->uiWantClaimStone()) {
-            //A DEFINIR !!!
-            int selectedStoneNB = UserInterface::getInstance()->userSelectStoneForClaim();
-            if (selectedStoneNB >= 0)
-                claimStone(selectedStoneNB);
-            else break; //if user's choice is wrong
+        else {
+            if(!UserInterface::getInstance()->uiWantClaimStone())
+                break;
         }
+        unsigned int selectedStoneNB = selectStoneForClaim();
+        cout << "(Controller::turnClaimStone) - IA protocole : stone selected : " << selectedStoneNB << endl;
+        claimStone(selectedStoneNB);
+        cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
     }
+    
 }
 
 void Controller::newTurn() {
@@ -294,6 +282,190 @@ void Controller::playTurn(Side s) {
     throw ShottenTottenException("playTurn : inadequate side s");
 }
 
+int Controller::selectHandCard(bool checkPickable) {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable;
+    if (checkPickable) {
+        pickable = getPickableCards();
+        if (!pickable) {
+            return -1;
+        }
+    }else {
+        const size_t size = c->getCurrentPlayerHand().getSize();
+        pickable = new bool[size];
+        for (size_t i = 0; i < size; ++i) {
+            pickable[i] = true;
+        }
+    }
+    int result;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        result= playerIA->selectCard(pickable);
+    }
+    else {
+        result= UserInterface::getInstance()->uiSelectCard(pickable);
+    }
+    delete[] pickable;
+    return result;
+}
+
+int Controller::selectPlayableStone() {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getPlayableStones();
+    if (!pickable)
+        return -1;
+    int result;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        result= playerIA->selectStone(pickable);
+    }
+    else {
+
+        result= UserInterface::getInstance()->uiSelectStone(pickable);
+    }
+    delete[] pickable;
+    return result;
+};
+
+int Controller::selectStoneForCombatMode() {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getPlayableCombatModeStones();
+    if (!pickable)
+        return -1;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        return playerIA->selectStoneForCombatMode(pickable);
+    }
+    else {
+
+        return UserInterface::getInstance()->uiSelectStoneForCombatMode(pickable);
+    }
+};
+
+int Controller::selectStoneForClaim() {
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getUnclaimedStones();
+    if (!pickable)
+        return -1;
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        return playerIA->selectStoneForClaim(pickable);
+    }
+    else {
+
+        return UserInterface::getInstance()->uiSelectStoneForClaim(pickable);
+    }
+}
+
+Deck* Controller::selectDeck()
+{
+    cout << "Deck Selection : " << endl;
+    Controller* c = Supervisor::getInstance().getController();
+    TacticController* tc = dynamic_cast<TacticController*>(c);
+    if (c->getClanDeck().isEmpty()) {
+        if (tc && !tc->getTacticDeck().isEmpty()) {
+            cout << "Clan deck is empty ! Drawing the Tactic deck instead" << endl;
+            return &tc->getTacticDeck();
+        }
+        else {
+            cout << "All decks are empty !" << endl;
+            return nullptr;
+        }
+    }
+    else {
+        if (tc) {
+            if (tc && !tc->getTacticDeck().isEmpty()) {
+                int choice = -1;
+                while (true) {
+                    cout << "Select a Deck (0: default, 1: tactic) : ";
+                    PlayerAIRandom* cur_player = dynamic_cast<PlayerAIRandom*>(Supervisor::getInstance().getController()->getCurrentPlayer());
+                    if (cur_player) {
+                        int choice = cur_player->selectDeck();
+                        if (choice >= 2 || choice < 0) {
+                            cout << "Invalid choice." << endl;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    else return UserInterface::getInstance()->uiSelectDeck();
+                    
+                }
+                if (choice) {
+                    cout << "Tactic Deck selected !" << endl;
+                    return &tc->getTacticDeck();
+                }
+            }
+            else {
+                cout << "Clan deck is empty ! Drawing the Tactical deck instead." << endl;
+            }
+
+        }
+        else {
+            cout << "Legacy Deck Selected !" << endl;
+        }
+        return &c->getClanDeck();
+    }
+
+
+    switch (c->getVersion()) {
+    case Version::tactic:
+        int choice;
+        if (!tc->getTacticDeck().isEmpty()) {
+            while (true) {
+                cout << "Select a Deck (0: default, 1: tactic) : ";
+                cin >> choice;
+                if (choice >= 2 || choice < 0) {
+                    cout << "Choix invalide" << endl;
+                }
+                else {
+                    break;
+                }
+            }
+            if (choice) {
+                return &tc->getTacticDeck();
+            }
+        }
+        else {
+            cout << "Tactic Deck is empty !" << endl;
+        }
+
+    default:
+    case Version::legacy:
+        if (c->getClanDeck().isEmpty()) {
+            cout << "Clan Deck is empty !" << endl;
+            return nullptr;
+        }
+        return &c->getClanDeck();
+    }
+}
+
+void Controller::selectStoneAndCard(Side s, int& cardNb, int& stoneNb){
+    Controller* c = Supervisor::getInstance().getController();
+    bool* pickable = getUnclaimedStonesAndNotEmpty(s);
+    if (!pickable) {
+        stoneNb = -1;
+        cardNb = -1;
+        return;
+    }
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (c->getCurrentPlayer());
+    if (playerIA) {
+        playerIA->selectStoneAndCard(s, cardNb, stoneNb, pickable);
+    }
+    else {
+        UserInterface::getInstance()->uiSelectCardAndStone(s, cardNb, stoneNb, pickable);
+    }
+}
+
+bool Controller::selectPlaceOrDiscard(){
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
+    if (playerIA != nullptr) {
+        return playerIA->booleanChoice();
+    }
+    else {
+        return UserInterface::getInstance()->uiSelectPlayOrDiscard();
+    }
+}
 
 //TACTIC CONTROLLER METHODS
 
@@ -367,3 +539,15 @@ bool TacticController::getAvailableCards(const PlacableCard**& availableCards, s
     }
     return true;
 }
+
+bool TacticController::playerCanPlayCombatMode() const {
+    for (size_t i = 0; i < getBoard().getStoneNb(); i++) {
+        const Stone& cur_stone = getBoard().getStone(i);
+        bool check_claim = cur_stone.getRevendication() == Side::none;
+        bool check_cm = cur_stone.getCombatMode() == nullptr;
+        if (check_cm && check_claim) return true;
+    }
+    return false;
+}
+
+

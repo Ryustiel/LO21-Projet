@@ -1,10 +1,21 @@
 #include "../head/Player.h"
 #include "../head/Supervisor.h"
+#include "../head/Utility.h"
 
-unsigned int PlayerAIRandom::selectCard() const {
-	
-	size_t size = 0;
-	bool* pickable = Supervisor::getInstance().getController()->getPickableCards(&size);
+int PlayerAIRandom::selectCard(bool* pickable) const {
+	Controller* c = Supervisor::getInstance().getController();
+	size_t size = c->getCurrentPlayerHand().getSize();
+	bool allunpickable = true;
+	for (int i = 0; i < size; ++i) {
+		if (pickable[i]) {
+			allunpickable = false;
+			break;
+		}
+	}
+	if (allunpickable) {
+		cout << "No usable card ! Too bad for you :p";
+		return -1;
+	}
 	unsigned int card_nb = Utility::randChoice(pickable, size);
 
 	/*
@@ -25,18 +36,11 @@ unsigned int PlayerAIRandom::selectCard() const {
 	return card_nb;
 }
 
-unsigned int PlayerAIRandom::selectCard(size_t nchoices) const {
-	// choses a random int based on n_stones
-	std::cout << "MAKING RANDOM CHOICE " << nchoices << endl;
-	return Utility::randInt(0, nchoices);
-}
 
-unsigned int PlayerAIRandom::selectStone() const {
+unsigned int PlayerAIRandom::selectStone(bool* pickable) const {
 	unsigned int stone_nb = 0;
 	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-	bool* list_stones = new bool[max_stones];
-	list_stones = Supervisor::getInstance().getController()->getPlayableStones();
-	while (!list_stones[stone_nb]) {
+	while (!pickable[stone_nb]) {
 		stone_nb++;
 	}
 	// stone_nb sera toujours défini : 
@@ -46,7 +50,7 @@ unsigned int PlayerAIRandom::selectStone() const {
 		std::cout << endl << "stone_nb [" << stone_nb << "] ; MAX stones [" << max_stones;
 		std::cout << "]";
 		for (int i = 0; i < max_stones; i++) {
-			std::cout << endl << list_stones[i] << " [" << i << "]";
+			std::cout << endl << pickable[i] << " [" << i << "]";
 		}
 		std::cout << endl;
 
@@ -56,12 +60,11 @@ unsigned int PlayerAIRandom::selectStone() const {
 	return stone_nb;
 }
 
-unsigned int PlayerAIRandom::selectStoneForCombatMode() const {
+unsigned int PlayerAIRandom::selectStoneForCombatMode(bool* pickable) const {
+	
 	unsigned int stone_nb = 0;
 	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
-	bool* list_stones = new bool[max_stones];
-	list_stones = Supervisor::getInstance().getController()->getPlayableCombatModeStones();
-	while (!list_stones[stone_nb]) {
+	while (!pickable[stone_nb]) {
 		stone_nb++;
 	}
 	// stone_nb sera toujours défini : 
@@ -71,7 +74,7 @@ unsigned int PlayerAIRandom::selectStoneForCombatMode() const {
 		std::cout << endl << "stone_nb [" << stone_nb << "] ; MAX stones [" << max_stones;
 		std::cout << "]";
 		for (int i = 0; i < max_stones; i++) {
-			std::cout << endl << list_stones[i] << " [" << i << "]";
+			std::cout << endl << pickable[i] << " [" << i << "]";
 		}
 		std::cout << endl;
 
@@ -80,22 +83,40 @@ unsigned int PlayerAIRandom::selectStoneForCombatMode() const {
 
 	return stone_nb;
 }
-unsigned int PlayerAIRandom::selectUnclaimedStone() const {
+unsigned int PlayerAIRandom::selectStoneForClaim(bool* pickable) const {
 	unsigned int stone_nb = rand()%9;
-	bool* list_stones = new bool[Supervisor::getInstance().getController()->getBoard().getStoneNb()];
-	list_stones = Supervisor::getInstance().getController()->getUnclaimedStones();
 
 	//vérification
 	cout << "(PlayerAIRandom::selectStoneForClaim) - getUnclaimedStones : ";
 	for (size_t i = 0; i < Supervisor::getInstance().getController()->getBoard().getStoneNb(); i++) {
-		cout << list_stones[i] << "; ";
+		cout << pickable[i] << "; ";
 	}
 	cout << "(PlayerAIRandom::selectStoneForClaim) - end of check" << endl;
 
-	while (!list_stones[stone_nb]) {
+	while (!pickable[stone_nb]) {
 		stone_nb = rand() % 9;
 	}
 	return stone_nb;
+}
+
+void PlayerAIRandom::selectStoneAndCard(Side s, int& cardNb, int& stoneNb, bool* pickableStone) const{
+	stoneNb = 0;
+	unsigned int max_stones = Supervisor::getInstance().getController()->getBoard().getStoneNb();
+	while (!pickableStone[stoneNb]) {
+		stoneNb++;
+	}
+	// stone_nb sera toujours défini : 
+	// la partie se termine nécessairement avant que list_stones = { false, false, ..., false }
+	Controller* c = Supervisor::getInstance().getController();
+	if (stoneNb >= max_stones) {
+		Stone* stone = &c->getBoard().getStone(stoneNb);
+		cardNb = Utility::randInt(0, stone->getSideSize(s)); ;
+		return;
+	}
+
+	stoneNb = -1;
+	cardNb = -1;
+
 }
 
 unsigned int PlayerAIRandom::selectDeck() const {

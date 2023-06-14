@@ -37,7 +37,6 @@ private:
 	unsigned int playerStonePick;
 
 	void newRound(); // événement de début de manche
-	void checkRound(); // verifie si la manche est gagnée
 
 	virtual void newTurn(); // lance un nouveau tour de joueur
 
@@ -57,6 +56,7 @@ public:
 	Deck& getClanDeck() const { return *clanDeck; }
     const Game& getClanGame() const { return clanGame; } // accès en lecture seule
 	Board& getBoard() { return *board; } //accès écriture
+	const Board& getBoard() const { return *board; } //accès lecture
 	Player& getPlayer1() const  { return *player1; }
 	Player& getPlayer2() const  { return *player2; }
 	int getRemainingRounds() const { return remainingRounds; }
@@ -71,8 +71,8 @@ public:
 	// getBoardContent() -> BoardIterator
 
 	bool canPlayCard() { // returns True if at least one card is playable
-		size_t size;
-		bool* playable = getPickableCards(&size);
+		size_t size = getCurrentPlayerHand().getSize();
+		bool* playable = getPickableCards();
 		bool at_least_one = false;
 		for (size_t i = 0; i < size; i++) {
 			if (playable[i]) {
@@ -82,41 +82,71 @@ public:
 		}
 		return at_least_one;
 	}
-
-	virtual bool* getPickableCards(size_t * size) const { // modifier ça pour avoir une size TO DO
+	virtual bool* getPickableCards() const { // modifier ça pour avoir une size TO DO
 		Hand& curHand = getCurrentPlayerHand();
 		const size_t hs = curHand.getSize();
 		bool* pickable = new bool[hs];
 		for (size_t i = 0; i < hs; ++i) {
 			pickable[i] = true;
 		}
-		*size = hs; // sauvegarde une valeur pour exporter
 		return pickable;
 	} // récupère la liste des cartes jouables
-
 	bool* getUnclaimedStones() const {
 		const size_t sn = board->getStoneNb();
 		bool* unclaimed = new bool[sn];
+		bool allClaimed = true;
 		for (size_t i = 0; i < sn; ++i) {
 			unclaimed[i] = board->getStone(i).getRevendication() == Side::none;
+			if (unclaimed[i])
+				allClaimed = false;
+		}
+		if (allClaimed) {
+			delete[] unclaimed;
+			return nullptr;
 		}
 		return unclaimed;
 	}
-
+	bool* getUnclaimedStonesAndNotEmpty(Side s) const {
+		const size_t sn = board->getStoneNb();
+		bool* unclaimed = new bool[sn];
+		bool allClaimed = true;
+		for (size_t i = 0; i < sn; ++i) {
+			unclaimed[i] = board->getStone(i).getRevendication() == Side::none && board->getStone(i).getSideSize(s);
+			if (unclaimed[i])
+				allClaimed = false;
+		}
+		if (allClaimed) {
+			delete[] unclaimed;
+			return nullptr;
+		}
+		return unclaimed;
+	}
 	bool* getPlayableStones() { // utilise la carte sélectionnée pour regarder si la stone est okay
 		const size_t sn = board->getStoneNb();
 
 		bool* playable = getUnclaimedStones();
+		bool allUnplayable = true;
 		for (size_t i = 0; i < sn; ++i) {
 			playable[i] = playable[i] && board->getStone(i).getSideSize(current_side) != board->getStone(i).getMaxSize();
+			if (playable[i]) {
+				allUnplayable = false;
+			}
 		}
+		if (allUnplayable)
+			return nullptr;
 		return playable;
 	}
 	bool* getPlayableCombatModeStones() { //vérifie les bornes sur lesquelles on peut poser une carte Combat mode -> non revendiquées et ne possédant pas déjà une combat mode
 		const size_t sn = board->getStoneNb();
 		bool* playableCM = getUnclaimedStones();
+		bool allUnplayable = true;
 		for (size_t i = 0; i < sn; ++i) {
 			playableCM[i] = playableCM[i] && (board->getStone(i).getCombatMode() == nullptr);
+			if (playableCM[i])
+				allUnplayable = false;
+		}
+		if (allUnplayable) {
+			return nullptr;
 		}
 		cout << "(getPlayableCombatModeStones) - bool list : ";
 		for (size_t i = 0; i < sn; ++i) {
@@ -124,8 +154,15 @@ public:
 		}
 		return playableCM;
 	}
-
 	virtual unsigned int getDeckCount() const { return 1; }
+
+	int selectHandCard(bool checkPickable = true);
+	int selectPlayableStone();
+	int selectStoneForCombatMode();
+	int selectStoneForClaim();
+	Deck* selectDeck();
+	void selectStoneAndCard(Side s, int& cardNb, int& stoneNb);
+	bool selectPlaceOrDiscard();
 
 	// SETTERS
 
@@ -183,7 +220,6 @@ public:
 	}
 
 	virtual void playTurn(Side s);
-	Stone& askStoneChoice() { return board->getStone(0); }
 
 protected:
 	Controller(const Version& v, const string& name_player1, const string& name_player2, unsigned int AI_player1, unsigned int AI_player2, size_t handSize = 6)
@@ -244,7 +280,48 @@ public :
 	Game& getTacticGame() { return tacticGame; }
 	Discard& getDiscard() const { return *discard; }
 
-	bool* getPickableCards(size_t * size)const final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
+	bool* getPickableCards()const final { // renvoie une liste de booléens qui indiquent les cartes jouables pour ce tour
+
+		Hand& curHand = getCurrentPlayerHand();
+		const size_t hs = curHand.getSize();
+		bool* pickable = new bool[hs];
+		pickable = Controller::getPickableCards();
+		bool allUnplayable = true;
+		if (playerCanPlayTacticalCard()) { //can play tactical cards
+
+			if (!playerCanPlayCombatMode()) { //on retire les combat mode des cartes jouables
+				for (size_t i = 0; i < hs; ++i) {
+					if (pickable[i]) pickable[i] = !dynamic_cast<const CombatMode*>(curHand.getCard(i));
+				}
+			}
+
+			if (!playerCanPlayChiefCard()) { //on retire les combat mode des cartes jouables
+				for (size_t i = 0; i < hs; ++i) {
+					if (pickable[i]) pickable[i] = !dynamic_cast<const Chief*>(curHand.getCard(i));
+				}
+			}
+			
+			for (size_t i = 0; i < hs; ++i) {
+				if (pickable[i]) {
+					allUnplayable = false;
+					break;
+				}
+			}
+
+		}
+		else { //can't play tactical cards
+			for (size_t i = 0; i < hs; ++i) {
+				pickable[i] = !dynamic_cast<const Tactical*>(curHand.getCard(i));
+				if (pickable[i])
+					allUnplayable = false;
+			}
+		}
+		if (allUnplayable) {
+			delete[] pickable;
+			return nullptr;
+		}
+		return pickable;
+	/* //je laisse le code au cas-où
 		if (playerCanPlayTacticalCard()) {
 			if (playerCanPlayChiefCard()) {
 				return Controller::getPickableCards(size); // toutes les cartes sont jouables
@@ -274,7 +351,9 @@ public :
 
 			return pickable;
 		}
+		*/
 	}
+
 	bool* getPlayableStonesCombatMode() {
 		const size_t sn = getBoard().getStoneNb();
 		bool* playable = getUnclaimedStones();
@@ -290,6 +369,7 @@ public :
 	void incrementChiefCardPlayed(Side s);
 	bool playerCanPlayTacticalCard() const;
 	bool playerCanPlayChiefCard() const;
+	bool playerCanPlayCombatMode() const;
 
 	void newTurn() override;
 };

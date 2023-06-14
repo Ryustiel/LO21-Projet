@@ -66,7 +66,7 @@ void UserInterfaceCmd::quickLaunch(int ia1, int ia2, Version v) {
 	//cout << "(uiGameInit) - isIA1 = " << isIA1;
 	//cout << "(uiGameInit) - isIA2 = " << isIA2;
 
-	unsigned int rounds_nb = 5;
+	unsigned int rounds_nb = 15;
 
 	Supervisor::getInstance().eventStartGame(selected_version, players_name[0], players_name[1], AI_player1, AI_player2, rounds_nb, 4);
 }
@@ -161,164 +161,72 @@ unsigned int UserInterfaceCmd::uiSelectRounds() { //to delete ?
 
 /// User Input ///
 
-int UserInterfaceCmd::uiSelectStoneForClaim() {
-	int stone_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA != nullptr) {
-		stone_nb = playerIA->selectUnclaimedStone();
-	}
-	else {
-		stone_nb = userSelectStoneForClaim();
-	}
-	if (stone_nb >= 0) { //correct input
-		return stone_nb;
-	}
-	return -1;
-}
-
-unsigned int UserInterfaceCmd::uiSelectCard(bool tacticCheck) {
-	int card_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) { //not IA
-		if (tacticCheck) {
-			Controller* c = Supervisor::getInstance().getController();
-			card_nb = userSelectCard(c->getCurrentPlayerHand().getSize(),"error");
+int UserInterfaceCmd::uiSelectCard(bool* pickable) {
+	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a card from this hand (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getCurrentPlayerHand().getSize(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
 		}
-		else {
-			card_nb = userSelectCard();
-		}
-		
+		cout << "This Card isn't pickable !" << endl;
 	}
-	else { //is IA
-		card_nb = playerIA->selectCard();
-	}
-
-	cout << "Selected card (number) : " << card_nb << endl;
-	return card_nb;
-}
-
-unsigned int UserInterfaceCmd::uiSelectCard(Stone * stone, Side side) {
-	int card_nb = 0;
-	cout << endl << "Select a card from this stone (type in a number) : ";
-	size_t nstones; // number on cards on a stone
-
-	// fetching the number of cards placed on the one side
-	if (side == Side::s1) {
-		nstones = stone->getSizeP1();
-
-	}
-	else {
-		nstones = stone->getSizeP2();
-	}
-
-	// fetching a card number from either the interface or the AI methods
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA == nullptr) {
-		card_nb = playerIA->selectCard(nstones);
-	}
-	else {
-		card_nb = UserInterfaceCmd::userSelectCard(nstones, "This is not a number, or there is no card bearing this number.");
-	}
-	return card_nb;
 }
 
 bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
+	cout << "Put the card in discard (0) or place the card (1) : " ;
+	return userBooleanChoice();
+}
+
+int UserInterfaceCmd::uiSelectStone(bool* pickable) {
 	Controller* c = Supervisor::getInstance().getController();
-	const TacticController* tc = dynamic_cast<const TacticController*>(c);
-	if (tc == nullptr) {
-		throw ShottenTottenException("(UserInterfaceCmd::uiSelectPlayOrDiscard) - error: no tactic controller !");
+	while (true) {
+		cout << "Select a Stone (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
+		}
+		cout << "This Stone isn't pickable !" << endl;
 	}
-	bool choice = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA != nullptr) {
-		choice = playerIA->booleanChoice();
+}
+
+unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode(bool* pickable) { //TO DO
+	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a Stone to apply the combat mode (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
+		}
+		cout << "This Stone isn't pickable !" << endl;
+	}
+}
+
+int UserInterfaceCmd::uiSelectStoneForClaim(bool* pickable) {
+	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a Stone to claim (type in a number) : " << endl;
+		unsigned int choice = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number !\n");
+		if (pickable[choice]) {
+			return choice;
+		}
+		cout << "This Stone isn't claimable !" << endl;
+	}
+}
+
+Deck* UserInterfaceCmd::uiSelectDeck() {
+	Controller* c = Supervisor::getInstance().getController();
+	int choice = userInputChoice(2, "Invalid Number !\n");
+	if (choice) {
+		TacticController* tc = dynamic_cast<TacticController*>(c);
+		if (tc) {
+			return &tc->getTacticDeck();
+		}
+		throw BoardException("Tactic Controller isn't initialised !");
 	}
 	else {
-		cout << "Put the card in discard (0) or place the card (1) : ";
-		choice = userBooleanChoice();
-		cout << endl;
+		return &c->getClanDeck();
 	}
-	return choice;
-}
-
-unsigned int UserInterfaceCmd::uiSelectStone() {
-	unsigned int stone_nb;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	Controller* c = Supervisor::getInstance().getController();
-	bool* playableStones = c->getPlayableStones();
-	while (true) { //user input until correct
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
-
-		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << endl << "DEBUG in UserInterfaceCmd::uiSelectStone()";
-			cout << endl << stone_nb << " STONE NB" << endl << c->getBoard().getStoneNb() << " GET BOARD STONE NB" << endl;
-			cout << "This stone number is not valid !" << endl;
-			continue;
-		}
-		else if (!playableStones[stone_nb]) {
-			cout << "This Stone is full! Choose an another one!" << endl;
-			continue;
-		}
-		cout << "Selected stone (number): " << stone_nb << endl;
-		return stone_nb;
-	}
-}
-
-unsigned int UserInterfaceCmd::uiSelectStoneCombatMode() {
-	unsigned int stone_nb;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	TacticController* c = dynamic_cast <TacticController*>(Supervisor::getInstance().getController());
-	if (c == nullptr) throw ShottenTottenException("UserInterfaceCmd::uiSelectStoneCombatMode - controller isn't tactical !");
-	bool* playableStonesCM = c->getPlayableCombatModeStones();
-	while (true) { //user input until correct
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
-
-		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This number isn't valid !" << endl;
-			continue;
-		}
-		else if (!playableStonesCM[stone_nb]) {
-			cout << "This Stone already bears a Combat Mode card! Please select another stone." << endl;
-			continue;
-		}
-		cout << "Selected stone (number): " << stone_nb << endl;
-		return stone_nb;
-	}
-}
-
-unsigned int UserInterfaceCmd::uiSelectStoneForCombatMode() { //TO DO
-	unsigned int stone_nb;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	TacticController* c = dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
-	if (c == nullptr) throw ShottenTottenException("UserInterface::uiSelectStoneForCombatMode error : no TacticController found !");
-	bool* playableStones = c->getPlayableStonesCombatMode();
-	while (true) { //user input until correct
-		cout << "Select a stone (number) : ";
-
-		stone_nb = (playerIA == nullptr) ? userSelectStone() : playerIA->selectStone();
-
-		if (stone_nb < 0 || stone_nb >= c->getBoard().getStoneNb()) {
-			cout << "This STONE number isn't valid ! (combat mode)" << endl;
-			continue;
-		}
-		else if (!playableStones[stone_nb]) {
-			cout << "This Stone already have a combat mode ! Choose an another one !" << endl;
-			continue;
-		}
-		return stone_nb;
-	}
-}
-
-unsigned int UserInterfaceCmd::uiSelectUnclaimedStone() {
-	unsigned int stone_nb = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA != nullptr) {
-		stone_nb = playerIA->selectUnclaimedStone();
-	}
-	else {
-		stone_nb = userSelectUnclaimedStone();
-	}
-	return stone_nb;
 }
 
 unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb) {
@@ -337,12 +245,34 @@ unsigned int UserInterfaceCmd::uiSelectCardOnStone(Side s, unsigned int stone_nb
 	return card_nb;
 }
 
-void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {
+void UserInterfaceCmd::uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) {
 	Controller* c = Supervisor::getInstance().getController();
+	while (true) {
+		cout << "Select a Stone in which you want to select a card (type in a number) : " << endl;
+		stoneNb = userInputChoice(c->getBoard().getStoneNb(), "Invalid Number");
+		if (!pickableCards[stoneNb]) {
+			cout << "This stone isn't selectable !" << endl;
+			continue;
+		}
+		while (true) {
+			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
+			int choice = userInputChoice(2, "Invalid Number");
+			if (choice) {
+				break;
+			}
+			else {
+				cout << "Select a card (type in a number)" << endl;
+				Stone* stone = &c->getBoard().getStone(stoneNb);
+				cardNb = userInputChoice(stone->getSideSize(s), "Invalid Number");
+				return;
+			}
+		}
+	}
+	/*Controller* c = Supervisor::getInstance().getController();
 	cardNb = -1;
 
 	while (true) {
-		stoneNb = this->uiSelectUnclaimedStone();
+		stoneNb = c->selectStoneForClaim();
 		while (true) {
 			int choice;
 			cout << "Do you want to select a card (0) or select an another stone (1)?" << endl;
@@ -381,99 +311,19 @@ void UserInterfaceCmd::uiSelectCardAndStone(Side s, unsigned int& cardNb, unsign
 
 	while (cardNb == -1) {
 		UserInterface::getInstance()->uiInvalidChoiceMsg();
-		stoneNb = this->uiSelectUnclaimedStone();
+		stoneNb = c->selectStoneForClaim();
 		cardNb = this->uiSelectCardOnStone(s, stoneNb);
-	}
-}
-
-Deck* UserInterfaceCmd::uiSelectDeck() {
-	cout << "Deck Selection : "<<endl;
-	Controller* c = Supervisor::getInstance().getController();
-	TacticController* tc = dynamic_cast<TacticController*>(c);
-	if (c->getClanDeck().isEmpty()) {
-		if (tc && !tc->getTacticDeck().isEmpty()) {
-			cout << "Tactical deck is empty ! Drawing the Clan deck instead" << endl;
-			return &tc->getTacticDeck();
-		}
-		else {
-			cout << "All decks are empty !" << endl;
-			return nullptr;
-		}
-	}
-	else {
-		if (tc) {
-			if (tc && !tc->getTacticDeck().isEmpty()) {
-				int choice = -1;
-				while (true) {
-					cout << "Select a Deck (0: default, 1: tactic) : ";
-					PlayerAIRandom* cur_player = dynamic_cast<PlayerAIRandom*>(Supervisor::getInstance().getController()->getCurrentPlayer());
-					if (cur_player) choice = cur_player->selectDeck();
-					else cin >> choice;
-					if (choice >= 2 || choice < 0) {
-						cout << "Invalid choice." << endl;
-					}
-					else {
-						break;
-					}
-				}
-				if (choice) {
-					cout << "Tactic Deck selected !" << endl;
-					return &tc->getTacticDeck();
-				}
-			}
-			else {
-				cout << "Clan deck is empty ! Drawing the Tactical deck instead." << endl;
-			}
-
-		}
-		else {
-			cout << "Legacy Deck Selected !" << endl;
-		}
-		return &c->getClanDeck();
-	}
-
-
-	switch (c->getVersion()) {
-	case Version::tactic:
-		int choice;
-		if (!tc->getTacticDeck().isEmpty()) {
-			while (true) {
-				cout << "Select a Deck (0: default, 1: tactic) : ";
-				cin >> choice;
-				if (choice >= 2 || choice < 0) {
-					cout << "Choix invalide" << endl;
-				}
-				else {
-					break;
-				}
-			}
-			if (choice) {
-				return &tc->getTacticDeck();
-			}
-		}
-		else {
-			cout << "Tactic Deck is empty !"<< endl;
-		}
-
-	default:
-	case Version::legacy:
-		if (c->getClanDeck().isEmpty()) {
-			cout << "Clan Deck is empty !" << endl;
-			return nullptr;
-		}
-		return &c->getClanDeck();
-	}
-
+	}*/
 }
 
 
 /// PRINTS ///
 
 void UserInterfaceCmd::uiPrintPlayerHand() {
-	Hand& cur_hand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
 	cout << endl << Supervisor::getInstance().getController()->getCurrentPlayer()->getName() << "'s hand :" << endl;
-	for (size_t i = 0; i < cur_hand.getSize(); i++) {
-		cout << i << " : " << cur_hand.getCard(i)->getName() << endl;
+	unsigned int i = 0;
+	for (auto card : Supervisor::getInstance().getController()->getCurrentPlayerHand()) {
+		cout << i++ << " : " << card->getName() << endl;
 	}
 }
 
@@ -490,30 +340,53 @@ void UserInterfaceCmd::uiPrintCurrentPlayer() {
 }
 
 void UserInterfaceCmd::uiPrintGame() {
-	Board& cur_board = Supervisor::getInstance().getController()->getBoard();
+	Board& curr_board = Supervisor::getInstance().getController()->getBoard();
 	cout << endl;
-	for (size_t i = 0; i < cur_board.getStoneNb(); i++) { //for each stone
-		cout << "Stone " << i << " : ";
-		Stone& cur_stone = cur_board.getStone(i);
-		if (cur_stone.getRevendication() == Side::none) {
+	unsigned int i = 0;
+	for (Stone& stone : curr_board.getStones()) { //for each stone
+		cout << "Stone " << i++ << " : ";
+
+		if (stone.getRevendication() == Side::none) {
 			cout << "Unclaimed" << endl;
 		}
-		else if (cur_stone.getRevendication() == Side::s1) {
-			cout << "Claimed by Player 1" << endl;
+		else if (stone.getRevendication() == Side::s1) {
+			cout << "Claimed by Player 1";
+			const vector<const PlacableCard*> comb = stone.getCombinationP1();
+			const PlacableCard** a = new const PlacableCard*[comb.size()];
+			for (size_t i = 0; i < comb.size(); ++i) {
+				a[i] = comb[i];
+			}
+			size_t s = stone.getSideSize(Side::s1);
+			int sum;
+			CombinationType ct = Stone::evaluateCombinaison(a, s, &sum);
+			cout << " with a " << toString(ct) << " of " << sum << " points !" << endl;
 		}
 		else { //claimed by player 2
-			cout << "Claimed by Player 1" << endl;
+			cout << "Claimed by Player 2";
+			const vector<const PlacableCard*> comb = stone.getCombinationP2();
+			const PlacableCard** a = new const PlacableCard * [comb.size()];
+			for (size_t i = 0; i < comb.size(); ++i) {
+				a[i] = comb[i];
+			}
+			size_t s = stone.getSideSize(Side::s2);
+			int sum;
+			CombinationType ct = Stone::evaluateCombinaison(a, s, &sum);
+			cout << " with a " << toString(ct) << " of " << sum << " points !" << endl;
 		}
-		if (cur_stone.getCombatMode()) {
-			cout << "	Combat mode : " << cur_stone.getCombatMode()->getName() << endl;
+		if (stone.getCombatMode()) {
+			cout << "	Combat mode : " << stone.getCombatMode()->getName() << endl;
 		}
+		int k = 0;
 		cout << "	Player 1 ( " << Supervisor::getInstance().getController()->getPlayer1().getName() << " ) combination :" << endl;
-		for (size_t k = 0; k < cur_stone.getSizeP1(); k++) { //display P1 combination
-			cout << "		Card " << k << " : " << cur_stone.getCard(Side::s1,k)->getName() << endl;
+		for (auto card : stone.getCombinationP1()) { //display P1 combination
+			cout << "		Card " << k << " : " << card->getName() << endl;
+			k++;
 		}
 		cout << "	Player 2 ( " << Supervisor::getInstance().getController()->getPlayer2().getName() << " ) combination :" << endl;
-		for (size_t k = 0; k < cur_stone.getSizeP2(); k++) { //display P1 combination
-			cout << "		Card " << k << " : " << cur_stone.getCard(Side::s2,k)->getName() << endl;
+		k = 0;
+		for (auto card : stone.getCombinationP2()) { //display P1 combination
+			cout << "		Card " << k << " : " << card->getName() << endl;
+			k++;
 		}
 		cout << endl;
 	}
