@@ -11,6 +11,7 @@
 #include "../../head/Version.h"
 #include "../head_view/cardview.h"
 #include "../head_view/boardview.h"
+#include "../head_view/infobox.h"
 #include <QEventLoop>
 
 //constructeur
@@ -117,7 +118,7 @@ void VuePartie::startWindow(){
 
 
 
-    for(int i=0; i<stoneNb; i++){
+    for(size_t i=0; i<stoneNb; i++){
         bornes[i]=new VueBorne();//c->getBoard().getStone(i)
         bornes[i]->setContentsMargins(0,0,0,0);
         bornes [i]->setNb(i);
@@ -164,7 +165,7 @@ void VuePartie::startWindow(){
     handLabel->setContentsMargins(0,0,20,0);
 
     layoutMain1 = new QGridLayout;
-    for(int i=0; i<c->getPlayer1().getHand()->getSize(); i++)
+    for(size_t i=0; i<c->getPlayer1().getHand()->getSize(); i++)
     {
         cartesMain1[i]= new VueCarte();//dynamic_cast<const Clan*>(c->getPlayer1().getHand()->getCard(i))
         cartesMain1[i]->setNb(i);
@@ -233,7 +234,7 @@ void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
 void VuePartie::uiUpdateView(){
     updateStonesView();
     handLabel->setText("Main "+QString::fromStdString(Supervisor::getInstance().getController()->getCurrentPlayer()->getName()));
-    for(int i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
+    for(size_t i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
     {
         cartesMain1[i]->setCarte(Supervisor::getInstance().getController()->getCurrentPlayerHand().getCard(i));
     }
@@ -243,13 +244,14 @@ void VuePartie::updateStonesView(){
 
     Controller* c = Supervisor::getInstance().getController();
     Board& b = c->getBoard();
+
+    //updateDecks
     auto nb_cartes_pioche=c->getClanDeck().getCardCount();
     nbCartesPiocheClan->setValue(nb_cartes_pioche);
 
     const size_t stoneNb = b.getStoneNb();
     for(size_t i = 0; i<stoneNb; ++i){
         Stone& s = b.getStone(i);
-        const size_t stoneSize = s.getMaxSize();
         for(size_t j = 0; j<2;++j){
             Side side = j ? c->getCurSide() : (c->getCurSide()== Side::s1 ? Side::s2 : Side::s1);
             for(size_t k = 0; k< cartesPlateau[i][j].size(); ++k){
@@ -321,20 +323,37 @@ VuePartieTactique::VuePartieTactique() : VuePartie()
     setLayout(couche);
 }
 
-int VuePartie::uiSelectCard(bool* possibleChoice){
-    //vVersion.show();
+int VuePartie::uiSelectCard(bool* pickable){
+    //vVersion.show()
+    cout << *pickable << endl;
+    while(1){
+        QEventLoop loop;
+        connect(this, SIGNAL(clickCardReceived()), & loop, SLOT(quit()));
+        loop.exec();
+        disconnect(this, SIGNAL(clickCardReceived()), & loop, SLOT(quit()));
+        if(pickable[receivedHandCard]){
+            return receivedHandCard;
+        }
+        QMessageBox msgBox;
+        msgBox.setText("This card can't be picked !");
+        msgBox.exec();
+    }
 
-    QEventLoop loop;
-    connect(this, SIGNAL(clickCardReceived()), & loop, SLOT(quit()));
-    loop.exec();
-    return receivedHandCard;
 };
 
 int VuePartie::uiSelectStone(bool* pickable) {
-    QEventLoop loop;
-    connect(this, SIGNAL(clickStoneReceived()), & loop, SLOT(quit()));
-    loop.exec();
-    return receivedBorne;
+    while(1){
+        QEventLoop loop;
+        connect(this, SIGNAL(clickStoneReceived()), & loop, SLOT(quit()));
+        loop.exec();
+        disconnect(this, SIGNAL(clickStoneReceived()), & loop, SLOT(quit()));
+        if (pickable[receivedBorne])
+            return receivedBorne;
+        QMessageBox msgBox;
+        msgBox.setText("This stone can't be picked !");
+        msgBox.exec();
+    }
+
 };
 unsigned int uiSelectStoneCombatMode() {return 1;};
 unsigned int uiSelectStoneForCombatMode() {return 1;};

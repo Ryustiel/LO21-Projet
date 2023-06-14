@@ -1,4 +1,5 @@
 QT += widgets
+HEADERS+=fetchThread.h
 
 SOURCES += \
     ../src/Board.cpp \
@@ -16,7 +17,7 @@ SOURCES += \
     src_view/boardview.cpp \
     src_view/cardview.cpp \
     src_view/discardview.cpp \
-    src_view/essai.cpp \
+    src_view/infobox.cpp \
     src_view/main.cpp \
     ../src/Card.cpp \
     src_view/parametersview.cpp \
@@ -47,10 +48,11 @@ HEADERS += \
     head_view/cardview.h \
     head_view/deckview.h \
     head_view/discardview.h \
-    head_view/essai.h \
+    head_view/infobox.h \
     head_view/parametersview.h \
     head_view/stoneview.h \
-    head_view/versionview.h
+    head_view/versionview.h \
+    src_view/infobox.h
 
 RESOURCES += \
     resources.qrc

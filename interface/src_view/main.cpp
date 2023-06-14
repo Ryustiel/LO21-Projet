@@ -3,7 +3,6 @@
 #include "../head_view/boardview.h"
 #include "../head_view/parametersview.h"
 #include "../head_view/boardview.h"
-#include "../head_view/essai.h"
 #include <QFile>
 #include <QResource>
 
