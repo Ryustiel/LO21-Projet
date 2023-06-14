@@ -81,7 +81,9 @@ public:
         return 1;
     };
     Deck* uiSelectDeck() final;
-
+    void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final;
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb);
+    bool uiSelectPlayOrDiscard() final;
     
 
     //INPUT USERS
@@ -119,18 +121,6 @@ public:
         cin >> choice;
         return choice;
     }
-    ///PLAY THE GAME
-    void uiGameView2(); //pick a card
-    void uiGameView3(); //pick a stone (always after uiGameView2) ; can be skipped
-    void uiGameView4(); //click to continue
-    void uiGameView5(); //draw a card
-    void uiRoundLauncher(); //launches the round
-    void uiTurnLauncher(Player& curr_player); //launches the turn
-
-
-    void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final;
-    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb);
-    bool uiSelectPlayOrDiscard() final;
 
     //affichage
     void uiPrintCurrentPlayer();
