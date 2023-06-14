@@ -327,7 +327,7 @@ VuePartieTactique::VuePartieTactique() : VuePartie()
     setLayout(couche);
 }
 
-unsigned int VuePartie::uiSelectCard(bool taticCheck){
+int VuePartie::uiSelectCard(bool* possibleChoice){
     //vVersion.show();
 
     QEventLoop loop;
@@ -335,8 +335,8 @@ unsigned int VuePartie::uiSelectCard(bool taticCheck){
     loop.exec();
     return receivedHandCard;
 };
-unsigned int uiSelectCard(Stone* stone, Side side) {return 1;};
-unsigned int VuePartie::uiSelectStone() {
+
+int VuePartie::uiSelectStone(bool* pickable) {
     QEventLoop loop;
     connect(this, SIGNAL(clickStoneReceived()), & loop, SLOT(quit()));
     loop.exec();

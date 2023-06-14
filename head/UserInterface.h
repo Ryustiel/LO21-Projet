@@ -85,9 +85,9 @@ public:
     Deck* uiSelectDeck() final;
     void uiUpdateView() final { return; };
     void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final;
-    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb);
     bool uiSelectPlayOrDiscard() final;
     
+    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb);
 
     //INPUT USERS
 

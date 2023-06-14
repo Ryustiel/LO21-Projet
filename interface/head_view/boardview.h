@@ -41,18 +41,13 @@ public:
     void StartSupervisor();
     void quickLaunch(int ia1, int ia2, Version v);
 
-    unsigned int uiSelectCard(bool taticCheck = true) final;
-    unsigned int uiSelectCard(Stone* stone, Side side) {};
-    unsigned int uiSelectStone() final;
-    unsigned int uiSelectStoneCombatMode() {};
-    unsigned int uiSelectStoneForCombatMode() {};
-    int uiSelectStoneForClaim() {};
-    int userSelectStoneForClaim() const {};
+    int uiSelectCard(bool* possibleChoice) final;
+    int uiSelectStone(bool* pickable) final;
+    unsigned int uiSelectStoneForCombatMode(bool* pickable)final {};
+    int uiSelectStoneForClaim(bool* pickable) final {};
     bool uiWantClaimStone() final;
     Deck* uiSelectDeck() final;
-    unsigned int uiSelectUnclaimedStone() {};
-    unsigned int uiSelectCardOnStone(Side s, unsigned int stone_nb) {};
-    void uiSelectCardAndStone(Side s, unsigned int& cardNb, unsigned int& stoneNb) {};
+    void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final {};
     bool uiSelectPlayOrDiscard() {};
     void uiUpdateView() final;
 
