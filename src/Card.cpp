@@ -158,7 +158,7 @@ void Strategist::activate() const {
 	const PlacableCard& selected_card = *s.getCard(c->getCurSide(),cardNb);
 	s.removeCard(selected_card, c->getCurSide());
 
-	bool choice = UserInterface::getInstance()->uiSelectPlayOrDiscard();
+	bool choice = c->selectPlaceOrDiscard();
 	if (choice) {
 		//putting it on the right stone -> playable card activation
 		selected_card.PlacableCard::activate();

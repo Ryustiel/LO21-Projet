@@ -463,6 +463,16 @@ void Controller::selectStoneAndCard(Side s, int& cardNb, int& stoneNb){
     }
 }
 
+bool Controller::selectPlaceOrDiscard(){
+    PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (getCurrentPlayer());
+    if (playerIA != nullptr) {
+        return playerIA->booleanChoice();
+    }
+    else {
+        return UserInterface::getInstance()->uiSelectPlayOrDiscard();
+    }
+}
+
 //TACTIC CONTROLLER METHODS
 
 void TacticController::initForNewRound() {
@@ -545,4 +555,5 @@ bool TacticController::playerCanPlayCombatMode() const {
     }
     return false;
 }
+
 

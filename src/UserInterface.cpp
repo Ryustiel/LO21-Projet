@@ -174,22 +174,8 @@ int UserInterfaceCmd::uiSelectCard(bool* pickable) {
 }
 
 bool UserInterfaceCmd::uiSelectPlayOrDiscard() { //TO DO
-	Controller* c = Supervisor::getInstance().getController();
-	const TacticController* tc = dynamic_cast<const TacticController*>(c);
-	if (tc == nullptr) {
-		throw ShottenTottenException("(UserInterfaceCmd::uiSelectPlayOrDiscard) - error: no tactic controller !");
-	}
-	bool choice = 0;
-	PlayerAIRandom* playerIA = dynamic_cast<PlayerAIRandom*> (Supervisor::getInstance().getController()->getCurrentPlayer());
-	if (playerIA != nullptr) {
-		choice = playerIA->booleanChoice();
-	}
-	else {
-		cout << "Put the card in discard (0) or place the card (1) : ";
-		choice = userBooleanChoice();
-		cout << endl;
-	}
-	return choice;
+	cout << "Put the card in discard (0) or place the card (1) : " ;
+	return userBooleanChoice();
 }
 
 int UserInterfaceCmd::uiSelectStone(bool* pickable) {

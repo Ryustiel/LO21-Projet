@@ -163,6 +163,7 @@ public:
 	int selectStoneForClaim();
 	Deck* selectDeck();
 	void selectStoneAndCard(Side s, int& cardNb, int& stoneNb);
+	bool selectPlaceOrDiscard();
 
 	// SETTERS
 
