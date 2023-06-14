@@ -15,7 +15,7 @@ private:
 	unsigned int card_count;
 public:
 	Game(const Version& v);
-	~Game();
+	virtual ~Game();
 	unsigned int getCardCount() const { return card_count; }
 	const Card& getCard(unsigned int i) const;
 };
