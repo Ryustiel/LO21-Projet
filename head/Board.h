@@ -163,6 +163,8 @@ public:
 	//BoardIterator begin() { return stones.begin(); }
 	//BoardIterator end() { return BoardIterator(stones, stone_nb); }
 
+	int countClaimed(Side s);
+
 	vector<Stone>& getStones() { return stones; }
 
 	//Return which side as won a specific stone

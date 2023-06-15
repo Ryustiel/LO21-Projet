@@ -21,7 +21,7 @@ public:
     Hand* getHand() const { return hand; }
 
     // s'utilise avec getScore pour gérer le score de victoire de manches du joueur
-    void updateScore() { score++; }
+    void updateScore(int value) { score += value; }
 
     // initialisation du joueur pour la partie
     void initForNewGame() { 

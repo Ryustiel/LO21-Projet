@@ -71,12 +71,18 @@ void Controller::newRound() {
         winning = board->evaluateGameWinner();
     }
     if (winning == Side::s1) {
-        player1->updateScore();
-        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << player1->getName() << "As won this round !");
+        player1->updateScore(5);
+        player2->updateScore(board->countClaimed(Side::s2));
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << "\n\n"
+            << player1->getName() << " has won the round and now has a score of "
+            << player1->getScore() << " versus " << player2->getScore() << " for player 2.");
     }
-    else {
-        player2->updateScore();
-        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << player1->getName() << "As won this round !");
+    else if (winning == Side::s2) {
+        player2->updateScore(5);
+        player1->updateScore(board->countClaimed(Side::s1));
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << "\n\n"
+            << player2->getName()<< " has won the round and now has a score of "
+            << player2->getScore() << " versus " << player1->getScore() << " for player 1.");
     }
     //system("pause");
 }
@@ -231,6 +237,7 @@ bool Controller::getAvailableCards(const PlacableCard**& availableCards, size_t&
 }
 
 void Controller::claimStone(unsigned int n) {
+    // tente de revendiquer la stone, évalue si le joueur gagne et met à jour le plateau de jeu
     Side s = getCurSide();
     if (s == Side::none) throw ShottenTottenException("claimStone : inadequate side s");
     if (n < 0 || n > board->getStoneNb()) throw ShottenTottenException("claimStone : inadequate stone number n");

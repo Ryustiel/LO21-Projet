@@ -450,3 +450,14 @@ const Side Board::evaluateGameWinner() const {
 	//cout << "The game continues !" << endl;
 	return Side::none;
 }
+
+int Board::countClaimed(Side s) {
+	// counts the number of stones that are have been revendicated by side s
+	int count = 0;
+	for (auto& stone : stones) {
+		if (stone.getRevendication() == s) {
+			count++;
+		}
+	}
+	return count;
+}
