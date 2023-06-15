@@ -1,7 +1,7 @@
 #include "../head/Controller.h"
 #include "../head/Supervisor.h"
-#include <iostream>
 #include "../head/UserInterface.h"
+#include <iostream>
 
 void Controller::runGame(int nturns, int winthreshold) { // + additional parameters
 
@@ -26,10 +26,10 @@ void Controller::runGame(int nturns, int winthreshold) { // + additional paramet
     }
     Player* winner = getWinner();
     if (winner != nullptr) {
-        cout << endl << "The winner is : " << winner->getName() << "! Congratulations!" << endl;
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << "The winner is : " << winner->getName() << "! Congratulations!");
     }
     else {
-        cout << endl << "It's a draw! Perhaps could you decide the winner by playing again..." << endl;
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << "It's a draw! Perhaps could you decide the winner by playing again..." );
     }
 }
 
@@ -72,9 +72,11 @@ void Controller::newRound() {
     }
     if (winning == Side::s1) {
         player1->updateScore();
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << player1->getName() << "As won this round !");
     }
     else {
         player2->updateScore();
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << player1->getName() << "As won this round !");
     }
     //system("pause");
 }
@@ -149,7 +151,7 @@ void Controller::turnClaimStone() {
         claimStone(selectedStoneNB);
         cout << "(Controller::turnClaimStone) - IA protocole : claimStone() done" << endl;
     }
-    
+ 
 }
 
 void Controller::newTurn() {
@@ -257,9 +259,10 @@ void Controller::claimStone(unsigned int n) {
     if (evaluated_side == s) {
         //revendicating the stone
         board->getStone(n).setRevendication(s);
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << "This Stone as been revendicated !");
     }
     else {
-        cout << endl << "You can't claim stone " << n << "!" << endl;
+        UserInterface::getInstance()->uiShowMessage(Utility::stringbuilder() << "You can't claim this stone !");
     }
 }
 

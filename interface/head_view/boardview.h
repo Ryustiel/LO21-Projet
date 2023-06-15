@@ -55,6 +55,8 @@ public:
 
     void updateStonesView();
 
+    void uiShowMessage(const string s);
+
     void uiPrintPlayerHand() {};
     void uiPrintGame() {};
     void uiPrintDiscard() {};

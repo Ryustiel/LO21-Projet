@@ -26,7 +26,8 @@ public :
     virtual Deck* uiSelectDeck() = 0;
     virtual void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) =0;
     virtual bool uiSelectPlayOrDiscard() = 0;
-    void uiInvalidChoiceMsg() { cout << "Invalid choice." << endl; }
+    virtual void uiShowMessage(const string s)=0;
+    void uiInvalidChoiceMsg() { uiShowMessage("Invalid Choice !"); }
     virtual void uiUpdateView()=0;
 
     virtual void uiPrintPlayerHand()=0;
@@ -126,6 +127,7 @@ public:
     }
 
     //affichage
+    void uiShowMessage(const string s) final { cout << s << endl; }
     void uiPrintCurrentPlayer() final;
     void uiPrintPlayerHand() final;
     void uiPrintGame() final;

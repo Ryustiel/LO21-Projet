@@ -164,13 +164,14 @@ void VuePartie::startWindow(){
     handLabel->setContentsMargins(0,0,20,0);
 
     layoutMain1 = new QGridLayout;
-    for(size_t i=0; i<c->getPlayer1().getHand()->getSize(); i++)
+    size_t hsize = c->getCurrentPlayerHand().getSize();
+    for(size_t i=0; i<hsize; i++)
     {
         cartesMain1[i]= new VueCarte();//dynamic_cast<const Clan*>(c->getPlayer1().getHand()->getCard(i))
         cartesMain1[i]->setNb(i);
         cartesMain1[i]->setCarte(c->getPlayer1().getHand()->getCard(i));
         connect(cartesMain1[i],SIGNAL(carteClicked(int)),this,SLOT(actionCarteMain(int)));
-        layoutMain1->addWidget(cartesMain1[i],0,i);
+        layoutMain1->addWidget(cartesMain1[i],0,hsize-i);
     }
 
     QHBoxLayout* main1 = new QHBoxLayout;
@@ -233,9 +234,18 @@ void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
 void VuePartie::uiUpdateView(){
     updateStonesView();
     handLabel->setText("Main "+QString::fromStdString(Supervisor::getInstance().getController()->getCurrentPlayer()->getName()));
-    for(size_t i=0; i<Supervisor::getInstance().getController()->getPlayer1().getHand()->getSize(); i++)
+    Hand& curHand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
+    size_t hsize= curHand.getSize();
+
+
+    size_t i=0;
+    for(i; i<hsize; i++)
     {
-        cartesMain1[i]->setCarte(Supervisor::getInstance().getController()->getCurrentPlayerHand().getCard(i));
+        cartesMain1[i]->setCarte(curHand.getCard(i));
+        cartesMain1[i]->show();
+    }
+    for(i;i<curHand.getMaxSize();++i){
+        cartesMain1[i]->hide();
     }
 }
 
@@ -333,9 +343,7 @@ int VuePartie::uiSelectCard(bool* pickable){
         if(pickable[receivedHandCard]){
             return receivedHandCard;
         }
-        QMessageBox msgBox;
-        msgBox.setText("This card can't be picked !");
-        msgBox.exec();
+        uiShowMessage("This card can't be picked !");
     }
 };
 
@@ -347,9 +355,7 @@ int VuePartie::uiSelectStone(bool* pickable) {
         disconnect(this, SIGNAL(clickStoneReceived()), & loop, SLOT(quit()));
         if (pickable[receivedBorne])
             return receivedBorne;
-        QMessageBox msgBox;
-        msgBox.setText("This stone can't be picked !");
-        msgBox.exec();
+        uiShowMessage("This stone can't be picked !");
     }
 
 };
@@ -361,10 +367,12 @@ int VuePartie::uiSelectStoneForClaim(bool* pickable){
 bool VuePartie::uiWantClaimStone() {
     QMessageBox msgBox;
     msgBox.setText("Do you want to claim stones ?");
-    QPushButton *button = msgBox.addButton("Yes", QMessageBox::AcceptRole);
-    connect(button, SIGNAL(clicked()), this, SLOT(claimAccepted()));
+
     QPushButton *button2 = msgBox.addButton("No", QMessageBox::AcceptRole);
     connect(button2, SIGNAL(clicked()), this, SLOT(claimRefused()));
+
+    QPushButton *button = msgBox.addButton("Yes", QMessageBox::AcceptRole);
+    connect(button, SIGNAL(clicked()), this, SLOT(claimAccepted()));
 
     msgBox.exec();
     return wantToClaim;
@@ -381,6 +389,12 @@ Deck* VuePartie::uiSelectDeck() {return &Supervisor::getInstance().getController
 unsigned int uiSelectUnclaimedStone() { return 0;};
 int uiSelectCardOnStone(Side s, unsigned int stone_nb) {return 1;};
 
+
+void VuePartie::uiShowMessage(const string s){
+    QMessageBox msgBox;
+    msgBox.setText(QString::fromStdString(s));
+    msgBox.exec();
+};
 void uiPrintPlayerHand() {return;};
 void uiPrintGame() {return;};
 void uiPlayCard() {return;};
