@@ -11,7 +11,6 @@
 #include "../../head/Version.h"
 #include "../head_view/cardview.h"
 #include "../head_view/boardview.h"
-#include "../head_view/infobox.h"
 #include <QEventLoop>
 
 //constructeur
@@ -338,7 +337,6 @@ int VuePartie::uiSelectCard(bool* pickable){
         msgBox.setText("This card can't be picked !");
         msgBox.exec();
     }
-
 };
 
 int VuePartie::uiSelectStone(bool* pickable) {
@@ -355,11 +353,30 @@ int VuePartie::uiSelectStone(bool* pickable) {
     }
 
 };
-unsigned int uiSelectStoneCombatMode() {return 1;};
-unsigned int uiSelectStoneForCombatMode() {return 1;};
-int uiSelectStoneForClaim() {return 1;};
-int userSelectStoneForClaim() {return 1;};
-bool VuePartie::uiWantClaimStone() {return 0;};
+
+int VuePartie::uiSelectStoneForClaim(bool* pickable){
+    return uiSelectStone(pickable);
+}
+
+bool VuePartie::uiWantClaimStone() {
+    QMessageBox msgBox;
+    msgBox.setText("Do you want to claim stones ?");
+    QPushButton *button = msgBox.addButton("Yes", QMessageBox::AcceptRole);
+    connect(button, SIGNAL(clicked()), this, SLOT(claimAccepted()));
+    QPushButton *button2 = msgBox.addButton("No", QMessageBox::AcceptRole);
+    connect(button2, SIGNAL(clicked()), this, SLOT(claimRefused()));
+
+    msgBox.exec();
+    return wantToClaim;
+};
+
+void VuePartie::claimAccepted(){
+    wantToClaim = true;
+}
+void VuePartie::claimRefused(){
+    wantToClaim = false;
+}
+
 Deck* VuePartie::uiSelectDeck() {return &Supervisor::getInstance().getController()->getClanDeck();};
 unsigned int uiSelectUnclaimedStone() { return 0;};
 int uiSelectCardOnStone(Side s, unsigned int stone_nb) {return 1;};

@@ -31,6 +31,7 @@ class VuePartie : public QWidget, public UserInterface
     int receivedHandCard = -1;
     int receivedBorne = -1;
     VuePioche* receivedDeck = nullptr;
+    bool wantToClaim;
 public:
     VuePartie();
     static void setInstance() {
@@ -45,7 +46,7 @@ public:
     int uiSelectCard(bool* possibleChoice) final;
     int uiSelectStone(bool* pickable) final;
     unsigned int uiSelectStoneForCombatMode(bool* pickable)final {};
-    int uiSelectStoneForClaim(bool* pickable) final {};
+    int uiSelectStoneForClaim(bool* pickable) final;
     bool uiWantClaimStone() final;
     Deck* uiSelectDeck() final;
     void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final {};
@@ -98,6 +99,8 @@ protected slots:
     virtual void actionBorne(int i);
     void actionPioche(VuePioche* vp);
     void receiveVersionInfos();
+    void claimAccepted();
+    void claimRefused();
 };
 
 class VuePartieTactique : public VuePartie {

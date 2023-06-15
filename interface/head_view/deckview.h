@@ -5,8 +5,7 @@
 #include <QPen>
 #include <QBrush>
 #include <QPushButton>
-#include "../../head/Card.h"
-#include "../../head/Board.h"
+#include "../../head/Deck.h"
 
 
 class VuePioche : public QPushButton
