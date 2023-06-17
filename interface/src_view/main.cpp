@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
 
     VuePartie::setInstance();
     //VuePartie::getInstance()->launchUserInterface();
-    VuePartie::getInstance()->quickLaunch(0,0,Version::legacy);
-
+    VuePartie::getInstance()->quickLaunch(0,0,Version::tactic);
+    //VuePartie::getInstance()->launchUserInterface();
     //VueVersion version;
     //Essai fenetre;
 

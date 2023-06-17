@@ -13,19 +13,18 @@ class VuePioche : public QPushButton
     Q_OBJECT
 public:
     //deux constructeurs differents
-    explicit VuePioche(const Deck& d, QWidget *parent = nullptr);
+    explicit VuePioche(Deck& d, QWidget *parent = nullptr) ;
 protected:
            //void paintEvent(QPaintEvent *event) override;
 private:
-    const Deck* pioche=nullptr;
+    Deck * pioche=nullptr;
     QPen pen;
     QBrush brush;
 signals:
     // quand la vude de carte est cliquée, elle émet un signal en transmettant son adresse
-    void carteClicked(VuePioche*);
+    void piocheClicked(Deck*);
 public slots:
-private slots:
-    void clickedEvent() { emit carteClicked(this); }
+    void clickedEvent() { emit piocheClicked(pioche); cout<<"clicked" <<endl; }
 };
 
 

@@ -1,4 +1,4 @@
-#include <QLabel>
+    #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -18,6 +18,7 @@ VuePartie::VuePartie() : QWidget(){}
 
 void VuePartie::startWindow(){
     Controller * c = Supervisor::getInstance().getController();
+    TacticController * tc = dynamic_cast<TacticController * >(c);
     const size_t stoneNb = c->getBoard().getStoneNb();
     cartesMain1 = vector<VueCarte *>(c->getPlayer1().getHand()->getSize(),nullptr);
     bornes = vector<VueBorne *>(stoneNb,nullptr);
@@ -46,6 +47,24 @@ void VuePartie::startWindow(){
 
     pbPioches = new QVBoxLayout;
     pbPioches->addLayout(piocheC);
+
+    if(tc){
+        piocheTactique=new QLabel("Pioche tactique");
+        TacticController* ct=dynamic_cast<TacticController*>(c);
+
+        nbCartesPiocheT=new QProgressBar;
+        nbCartesPiocheT->setRange(0,ct->getTacticGame().getCardCount());
+        nbCartesPiocheT->setValue(0);
+        nbCartesPiocheT->setFixedHeight(20);
+        nbCartesPiocheT->setFixedWidth(250);
+
+        QHBoxLayout* piocheT = new QHBoxLayout;
+        piocheT->addWidget(piocheTactique);
+        piocheT->addWidget(nbCartesPiocheT);
+
+        pbPioches->addLayout(piocheT);
+        pbPioches->update();
+    }
 
     //manches restantes
     manche = new QLabel("Manches restantes :");
@@ -111,6 +130,10 @@ void VuePartie::startWindow(){
                 int x = j ? k + stoneSize+1 : stoneSize-k-1;
                 int y = i;
                 layoutCartes->addWidget(vc,x,y);
+                vc->setNb(k);
+                vc->setStoneNb(i);
+                vc->setSide(j);
+                connect(vc,SIGNAL(carteSurBorneClicked(int,int,int)),this,SLOT(actionCarteBorne(int,int,int)));
             }
         }
     }
@@ -139,16 +162,34 @@ void VuePartie::startWindow(){
 
     //Pioche
 
+    layoutPioches = new QVBoxLayout;
+
     clanDeck = new VuePioche(c->getClanDeck());
-    connect(clanDeck, SIGNAL(piocheClicked()),this, SLOT(actionPioche()));
+    connect(clanDeck, SIGNAL(piocheClicked(Deck*)),this, SLOT(actionPioche(Deck*)));
 
     QVBoxLayout* clan = new QVBoxLayout;
     QLabel* piocheClan2 =new QLabel("Pioche clan");
     clan->addWidget(piocheClan2);
     clan->addWidget(clanDeck);
 
-    layoutPioches = new QVBoxLayout;
     layoutPioches->addLayout(clan);
+
+    if(tc){
+        tacticDeck = new VuePioche(tc->getTacticDeck());
+        connect(tacticDeck, SIGNAL(piocheClicked(Deck*)),this, SLOT(actionPioche(Deck*)));
+        QVBoxLayout* tactic = new QVBoxLayout;
+        QLabel* piocheTactique2=new QLabel("Pioche tactique");
+        tactic->addWidget(piocheTactique2);
+        tactic->addWidget(tacticDeck);
+
+        layoutPioches->addLayout(tactic);
+    }
+
+
+
+
+
+
     layoutPioches->setContentsMargins(20,200,0,200);
 
     QHBoxLayout* plateau = new QHBoxLayout;
@@ -209,7 +250,8 @@ void VuePartie::uiControllerReady(){
 
 void VuePartie::receiveVersionInfos(){
     VueParametres& vp = vVersion.getVueParametres();
-    Supervisor::getInstance().eventStartGame(vVersion.getVersion(),vp.getNom1().toStdString(),vp.getNom2().toStdString(),vp.est_IA1(),vp.est_IA2(),vp.getRoundNb(),4);
+    version = vVersion.getVersion();
+    Supervisor::getInstance().eventStartGame(version,vp.getNom1().toStdString(),vp.getNom2().toStdString(),vp.est_IA1(),vp.est_IA2(),vp.getRoundNb(),4);
 }
 
 void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
@@ -232,11 +274,20 @@ void VuePartie::quickLaunch(int ia1, int ia2, Version v) {
 }
 
 void VuePartie::uiUpdateView(){
+    Controller* c = Supervisor::getInstance().getController();
     updateStonesView();
     handLabel->setText("Main "+QString::fromStdString(Supervisor::getInstance().getController()->getCurrentPlayer()->getName()));
     Hand& curHand = Supervisor::getInstance().getController()->getCurrentPlayerHand();
     size_t hsize= curHand.getSize();
 
+    //updateDecks
+    auto nb_cartes_pioche=c->getClanDeck().getCardCount();
+    nbCartesPiocheClan->setValue(nb_cartes_pioche);
+    TacticController *tc = dynamic_cast<TacticController *>(c);
+    if (tc){
+        auto nb_cartes_piocheT=tc->getTacticDeck().getCardCount();
+        nbCartesPiocheT->setValue(nb_cartes_piocheT);
+    }
 
     size_t i=0;
     for(i; i<hsize; i++)
@@ -254,9 +305,6 @@ void VuePartie::updateStonesView(){
     Controller* c = Supervisor::getInstance().getController();
     Board& b = c->getBoard();
 
-    //updateDecks
-    auto nb_cartes_pioche=c->getClanDeck().getCardCount();
-    nbCartesPiocheClan->setValue(nb_cartes_pioche);
 
     const size_t stoneNb = b.getStoneNb();
     for(size_t i = 0; i<stoneNb; ++i){
@@ -279,7 +327,7 @@ void VuePartie::updateStonesView(){
 
 //cas version TACTIQUE
 //constructeur
-VuePartieTactique::VuePartieTactique() : VuePartie()
+/*VuePartieTactique::VuePartieTactique() : VuePartie()
 {
     //ajout bar de progression pioche tactique
     piocheTactique=new QLabel("Pioche tactique");
@@ -331,10 +379,10 @@ VuePartieTactique::VuePartieTactique() : VuePartie()
 
     setLayout(couche);
 }
+*/
 
 int VuePartie::uiSelectCard(bool* pickable){
     //vVersion.show()
-    cout << *pickable << endl;
     while(1){
         QEventLoop loop;
         connect(this, SIGNAL(clickCardReceived()), & loop, SLOT(quit()));
@@ -359,6 +407,10 @@ int VuePartie::uiSelectStone(bool* pickable) {
     }
 
 };
+
+unsigned int VuePartie::uiSelectStoneForCombatMode(bool* pickable){
+    return uiSelectStone(pickable);
+}
 
 int VuePartie::uiSelectStoneForClaim(bool* pickable){
     return uiSelectStone(pickable);
@@ -385,10 +437,52 @@ void VuePartie::claimRefused(){
     wantToClaim = false;
 }
 
-Deck* VuePartie::uiSelectDeck() {return &Supervisor::getInstance().getController()->getClanDeck();};
-unsigned int uiSelectUnclaimedStone() { return 0;};
-int uiSelectCardOnStone(Side s, unsigned int stone_nb) {return 1;};
+Deck* VuePartie::uiSelectDeck() {
+    while(1){
+        QEventLoop loop;
+        connect(this, SIGNAL(clickDeckReceived()), & loop, SLOT(quit()));
+        loop.exec();
+        disconnect(this, SIGNAL(clickDeckReceived()), & loop, SLOT(quit()));
+        return receivedDeck;
+    }
+};
 
+void VuePartie::uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards){
+    Controller * c = Supervisor::getInstance().getController();
+    while(1){
+        QEventLoop loop;
+        connect(this, SIGNAL(clickCardOnBorneReceived()), & loop, SLOT(quit()));
+        loop.exec();
+        disconnect(this, SIGNAL(clickCardOnBorneReceived()), & loop, SLOT(quit()));
+        Side sideSelected = receivedSide ? c->getCurSide() : (c->getCurSide()== Side::s1 ? Side::s2 : Side::s1);
+        cout << "side : " << receivedSide << " received, translate : " << (sideSelected == Side::s1 ? "s1" : "s2");
+        if (s != sideSelected){
+            uiShowMessage("Wrong Side !");
+            continue;
+        }
+        if(!pickableCards[receivedBorne]){
+            uiShowMessage("This card can't be picked !");
+            continue;
+        }
+        cardNb =receivedHandCard;
+        stoneNb = receivedBorne;
+        return;
+    }
+}
+
+bool VuePartie::uiSelectPlayOrDiscard() {
+    QMessageBox msgBox;
+    msgBox.setText("Where do you want to put it ");
+
+    QPushButton *button2 = msgBox.addButton("Discard", QMessageBox::AcceptRole);
+    connect(button2, SIGNAL(clicked()), this, SLOT(claimRefused()));
+
+    QPushButton *button = msgBox.addButton("Your side", QMessageBox::AcceptRole);
+    connect(button, SIGNAL(clicked()), this, SLOT(claimAccepted()));
+
+    msgBox.exec();
+    return wantToClaim;
+};
 
 void VuePartie::uiShowMessage(const string s){
     QMessageBox msgBox;
@@ -406,18 +500,21 @@ void VuePartie::actionCarteMain(int nb){
     receivedHandCard = nb;
     emit clickCardReceived();
 }
-void VuePartieTactique::actionCartePlateau(VueCarte* vc){}
+void VuePartie::actionCarteBorne(int nb, int stoneNb, int side){
+    receivedHandCard = nb;
+    receivedBorne = stoneNb;
+    receivedSide = side;
+    emit clickCardOnBorneReceived();
+}
 void VuePartie::actionBorne(int i){
     receivedBorne = i;
     emit clickStoneReceived();
 }
-void VuePartieTactique::actionBorne(VueBorne* vb){}
-void VuePartie::actionPioche(VuePioche* vp){
+void VuePartie::actionPioche(Deck* vp){
+    cout << "actionPioche clicked" <<endl;
     receivedDeck = vp;
     emit clickDeckReceived();
 }
-void VuePartieTactique::actionPioche(VuePioche* vp){}
-void VuePartieTactique::actionDefausse(){}
 
 /*
 void VuePartie::carteClique(VueCarte* vc){

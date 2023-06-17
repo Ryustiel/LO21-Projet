@@ -30,8 +30,10 @@ class VuePartie : public QWidget, public UserInterface
     //explicit VuePartie(QWidget *parent = nullptr);
     int receivedHandCard = -1;
     int receivedBorne = -1;
-    VuePioche* receivedDeck = nullptr;
+    int receivedSide = -1;
+    Deck* receivedDeck = nullptr;
     bool wantToClaim;
+    Version version;
 public:
     VuePartie();
     static void setInstance() {
@@ -45,12 +47,12 @@ public:
 
     int uiSelectCard(bool* possibleChoice) final;
     int uiSelectStone(bool* pickable) final;
-    unsigned int uiSelectStoneForCombatMode(bool* pickable)final {};
+    unsigned int uiSelectStoneForCombatMode(bool* pickable)final;
     int uiSelectStoneForClaim(bool* pickable) final;
     bool uiWantClaimStone() final;
     Deck* uiSelectDeck() final;
-    void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final {};
-    bool uiSelectPlayOrDiscard() {};
+    void uiSelectCardAndStone(Side s, int& cardNb, int& stoneNb, bool* pickableCards) final;
+    bool uiSelectPlayOrDiscard() final;
     void uiUpdateView() final;
 
     void updateStonesView();
@@ -69,6 +71,7 @@ signals:
     void clickCardReceived();
     void clickStoneReceived();
     void clickDeckReceived();
+    void clickCardOnBorneReceived();
 protected:
     QLabel* tourJeu;
     QLabel* tourJoueur;
@@ -80,9 +83,12 @@ protected:
     QLabel* manche;
     QLCDNumber* mancheValue;
     QLabel* piocheClan; // texte "Pioche"
+    QLabel* piocheTactique;
     QProgressBar* nbCartesPiocheClan; // progression de la pioche
+    QProgressBar* nbCartesPiocheT;
     QVBoxLayout* pbPioches;
     VuePioche* clanDeck;
+    VuePioche* tacticDeck;
     QHBoxLayout* layoutInformations;
     QGridLayout* layoutCartes; // grille des cartes
     QVBoxLayout* layoutPioches;
@@ -94,37 +100,19 @@ protected:
     vector<VueCarte*> cartesMain1;
     QLabel* handLabel;
 public slots:
-    virtual void actionCarteMain(int nb);
+    void actionCarteMain(int nb);
+    void actionCarteBorne(int nb, int stoneNb, int side);
 protected slots:
     // slots qui gère les clics sur les cartes
 
-    virtual void actionBorne(int i);
-    void actionPioche(VuePioche* vp);
+    void actionBorne(int i);
+    void actionPioche(Deck* vp);
     void receiveVersionInfos();
     void claimAccepted();
     void claimRefused();
 };
 
-class VuePartieTactique : public VuePartie {
-    Q_OBJECT
-public :
-    VuePartieTactique();
-    static void setInstance() {
-        if (handler.instance == nullptr) handler.instance = new VuePartieTactique;
-    }
-    //~VuePartieTactique();
-private :
-    //explicit VuePartieTactique(QWidget *parent = nullptr);
-    QLabel* piocheTactique;
-    QProgressBar* nbCartesPiocheT;
-    VuePioche* tacticDeck;
-    VueCarte* discard;
-private slots:
-    void actionCartePlateau(VueCarte* vc);
-    void actionBorne(VueBorne* vb);
-    void actionPioche(VuePioche* vp);
-    void actionDefausse();
-};
+
 
 
 #endif // BOARDVIEW_H

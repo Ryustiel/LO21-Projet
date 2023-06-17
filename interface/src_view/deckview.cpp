@@ -11,7 +11,7 @@
 //fichiers d'en-tête
 #include "../head_view/deckview.h"
 
-VuePioche::VuePioche(const Deck& d, QWidget *parent) : QPushButton(parent), pioche(&d)
+VuePioche::VuePioche(Deck& d, QWidget *parent) : QPushButton(parent), pioche(&d)
 {
     setText("Pioche");
     setBackgroundRole(QPalette::Base);

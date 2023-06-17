@@ -7,7 +7,6 @@
 #include <QPushButton>
 #include "../../head/Card.h"
 
-
 class VueCarte : public QPushButton
 {
     Q_OBJECT
@@ -21,15 +20,21 @@ public:
         carte=c;
         update(); }
 
+
+
     // vue sans carte
     void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
     const Card& getCarte() const { return *carte; }
     bool cartePresente() const { return carte!=nullptr; }
     void setNb(int i){nb = i;}
+    void setStoneNb(int i){stoneNb = i;}
+    void setSide(int i){side = i;}
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
     int nb;
+    int stoneNb;
+    int side;
     const Card* carte=nullptr;
     QPen pen;
     QBrush brush;
@@ -40,10 +45,11 @@ private:
 signals:
     // quand la vue de la carte est cliquée, elle émet un signal en transmettant son adresse
     void carteClicked(int i);
+    void carteSurBorneClicked(int i, int i2, int i3);
 public slots:
 private slots:
     //a adapter !
-    void clickedEvent() { emit carteClicked(nb); }
+    void clickedEvent() { emit carteClicked(nb); emit carteSurBorneClicked(nb, stoneNb,side); cout << "card clicked"<<endl; }
 };
 
 

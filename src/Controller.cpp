@@ -177,12 +177,15 @@ void Controller::newTurn() {
 
 void TacticController::newTurn() {
     std::cout << "\n================== newTurn";
+    UserInterface::getInstance()->uiUpdateView();
     UserInterface::getInstance()->uiPrintCurrentPlayer();
     UserInterface::getInstance()->uiPrintGame();
     UserInterface::getInstance()->uiPrintDiscard();
     turnPlayCard();
     UserInterface::getInstance()->uiPrintGame();
+    UserInterface::getInstance()->uiUpdateView();
     turnDrawCard(); //pb quand pioche vide
+    UserInterface::getInstance()->uiUpdateView();
     turnClaimStone();
     cout << "Your turn is over...!";
     //system("pause");
