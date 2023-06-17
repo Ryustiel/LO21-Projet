@@ -4,6 +4,7 @@ VueCarte:open {
     background : rgb(252, 93, 71);
 }
 
+
 VuePartie{
     background : rgb(242, 240, 227);
 }

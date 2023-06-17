@@ -18,12 +18,14 @@ public:
     // affecter une nouvelle carte à la vue
     void setCarte(const Card* c) {
         carte=c;
-        update(); }
+        update();
+    }
 
 
 
     // vue sans carte
-    void setNoCarte() { carte=nullptr; setCheckable(false); update(); }
+    void setNoCarte() { carte=nullptr; setCheckable(false); update();}
+    void setUnclickable() { carte=nullptr; setCheckable(false); setEnabled(false); update(); }
     const Card& getCarte() const { return *carte; }
     bool cartePresente() const { return carte!=nullptr; }
     void setNb(int i){nb = i;}

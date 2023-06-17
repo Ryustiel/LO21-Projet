@@ -120,14 +120,14 @@ void VuePartie::startWindow(){
     Board& b = c->getBoard();
     for(size_t i = 0; i<stoneNb; ++i){
         Stone& s = b.getStone(i);
-        const size_t stoneSize = s.getMaxSize();
+        const size_t stoneSize = s.getMaxSize()+1;
         for(size_t j = 0; j<2;++j){
             cartesPlateau[i][j] = vector<VueCarte *>(stoneSize);
-            for(size_t k = 0; k< cartesPlateau[i][j].size(); ++k){
+            for(size_t k = 0; k< stoneSize; ++k){
                 cartesPlateau[i][j][k] = new VueCarte();
                 VueCarte * vc = cartesPlateau[i][j][k];
                 vc->setContentsMargins(1,1,1,1);
-                int x = j ? k + stoneSize+1 : stoneSize-k-1;
+                int x = j ? (k + stoneSize+1) : (stoneSize-k-1);
                 int y = i;
                 layoutCartes->addWidget(vc,x,y);
                 vc->setNb(k);
@@ -145,7 +145,7 @@ void VuePartie::startWindow(){
         bornes[i]->setContentsMargins(0,0,0,0);
         bornes [i]->setNb(i);
         size_t j=i+stoneNb*3;
-        layoutCartes->addWidget(bornes[i], j/stoneNb, j%stoneNb);
+        layoutCartes->addWidget(bornes[i], 4, j%stoneNb);
         connect(bornes[i],SIGNAL(borneClicked(int)),this,SLOT(actionBorne(int)));
     }
 
@@ -311,7 +311,8 @@ void VuePartie::updateStonesView(){
         Stone& s = b.getStone(i);
         for(size_t j = 0; j<2;++j){
             Side side = j ? c->getCurSide() : (c->getCurSide()== Side::s1 ? Side::s2 : Side::s1);
-            for(size_t k = 0; k< cartesPlateau[i][j].size(); ++k){
+            size_t k = 0;
+            for(k;k< s.getMaxSize() ;++k){
                 VueCarte * vc = cartesPlateau[i][j][k];
                 if (k >= s.getSideSize(side)){
                     vc->setNoCarte();
@@ -319,6 +320,11 @@ void VuePartie::updateStonesView(){
                     const Card * c = s.getCard(side,k);
                     vc->setCarte(c);
                 }
+                vc->show();
+            }
+            for(k;k<cartesPlateau[i][j].size();++k){
+                VueCarte * vc = cartesPlateau[i][j][k];
+                vc->hide();
             }
         }
     }

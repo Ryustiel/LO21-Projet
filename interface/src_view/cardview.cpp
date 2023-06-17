@@ -62,7 +62,7 @@ void VueCarte::dessinerTactical(QPainter &painter)
     }
 
 
-}
+    }
 
 
 void VueCarte::paintEvent(QPaintEvent *event)
