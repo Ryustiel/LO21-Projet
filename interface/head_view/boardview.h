@@ -20,7 +20,6 @@
 #include <QGridLayout>
 #include <QProgressBar>
 #include <QLCDNumber>
-#include "cardview.h"
 #include "stoneview.h"
 #include "deckview.h"
 

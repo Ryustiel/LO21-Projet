@@ -151,14 +151,7 @@ void VuePartie::startWindow(){
 
     layoutCartes->setSpacing(0);
 
-    /*
-    //pour associer au vues cartes l'adresse d'une carte Clan
-    size_t i=0;
-    for(auto it=controleur.getPlateau().begin();it!=controleur.getPlateau().end();++it){
-        vuecartes[i]->setCarte(*it);
-        i++;
-    }
-    */
+
 
     //Pioche
 
@@ -309,6 +302,12 @@ void VuePartie::updateStonesView(){
     const size_t stoneNb = b.getStoneNb();
     for(size_t i = 0; i<stoneNb; ++i){
         Stone& s = b.getStone(i);
+        if(s.getRevendication()==Side::s1){
+            bornes[i]->setStyleSheet("background-color: rgb(252, 93, 71);");
+        }
+        if(s.getRevendication()==Side::s2){
+            bornes[i]->setStyleSheet("background-color: rgb(245, 158, 66);");
+        }
         for(size_t j = 0; j<2;++j){
             Side side = j ? c->getCurSide() : (c->getCurSide()== Side::s1 ? Side::s2 : Side::s1);
             size_t k = 0;
@@ -330,62 +329,6 @@ void VuePartie::updateStonesView(){
     }
 }
 
-
-//cas version TACTIQUE
-//constructeur
-/*VuePartieTactique::VuePartieTactique() : VuePartie()
-{
-    //ajout bar de progression pioche tactique
-    piocheTactique=new QLabel("Pioche tactique");
-    TacticController* controller=dynamic_cast<TacticController*>(Supervisor::getInstance().getController());
-    auto nb_cartes_jeu=controller->getTacticGame().getCardCount();
-    auto nb_cartes_pioche=controller->getTacticDeck().getCardCount();
-
-    nbCartesPiocheT=new QProgressBar;
-    nbCartesPiocheT->setRange(0,nb_cartes_jeu);
-    nbCartesPiocheT->setValue(nb_cartes_pioche);
-    nbCartesPiocheT->setFixedHeight(20);
-    nbCartesPiocheT->setFixedWidth(250);
-
-    QHBoxLayout* piocheT = new QHBoxLayout;
-    piocheT->addWidget(piocheTactique);
-    piocheT->addWidget(nbCartesPiocheT);
-
-    pbPioches->addLayout(piocheT);
-    pbPioches->update();
-
-
-    //pioches et défausse
-    disconnect(clanDeck, SIGNAL(piocheClicked()),this, SLOT(actionPioche()));
-    connect(clanDeck, SIGNAL(piocheClicked(VuePioche*)),this, SLOT(actionPioche(VuePioche*)));
-
-    tacticDeck = new VuePioche(controller->getTacticDeck());
-    connect(tacticDeck, SIGNAL(piocheClicked(VuePioche*)),this, SLOT(actionPioche(VuePioche*)));
-
-    QVBoxLayout* tactic = new QVBoxLayout;
-    QLabel* piocheTactique2=new QLabel("Pioche tactique");
-    tactic->addWidget(piocheTactique2);
-    tactic->addWidget(tacticDeck);
-
-    //défausse
-    QLabel* defausse = new QLabel("Défausse");
-    discard= new VueCarte(); //*(controller->getDiscard()->begin()) OU controller->getDiscard()->begin().currentItem()
-    connect(discard,SIGNAL(carteClicked()),this,SLOT(actionDefausse()));
-
-    QVBoxLayout* Discard = new QVBoxLayout;
-    Discard->addWidget(defausse);
-    Discard->addWidget(discard);
-
-    layoutPioches->addLayout(tactic);
-    layoutPioches->addLayout(Discard);
-    layoutPioches->setContentsMargins(20,60,0,60);
-    layoutPioches->update();
-
-    couche->update();
-
-    setLayout(couche);
-}
-*/
 
 int VuePartie::uiSelectCard(bool* pickable){
     //vVersion.show()
@@ -420,6 +363,7 @@ unsigned int VuePartie::uiSelectStoneForCombatMode(bool* pickable){
 
 int VuePartie::uiSelectStoneForClaim(bool* pickable){
     return uiSelectStone(pickable);
+
 }
 
 bool VuePartie::uiWantClaimStone() {
@@ -522,80 +466,6 @@ void VuePartie::actionPioche(Deck* vp){
     emit clickDeckReceived();
 }
 
-/*
-void VuePartie::carteClique(VueCarte* vc){
-    if(!vc->cartePresente()){
-        if(controleur.getPioche().getNbCartes()==0){
-            QMessageBox message(QMessageBox::Icon::Information,"Attention","La pioche est vide !");
-            message.exec();
-        }
-        else{
-            controleur.distribuer();
-            size_t i=0;
-            for(auto it=controleur.getPlateau().begin();it!=controleur.getPlateau().end();++it){
-                vuecartes[i]->setCarte(*it);
-                i++;
-            }
-            nbCartesPioche->setValue(controleur.getPioche().getNbCartes());
-        }
-    }
-    else{
-        if(!vc->isChecked()){
-            selectionCartes.erase(&vc->getCarte());
-        }
-        else{
-            selectionCartes.insert(&vc->getCarte());
-
-            if(selectionCartes.size()==3){
-                vector<const Set::Carte*> c(selectionCartes.begin(),selectionCartes.end());
-
-                Set::Combinaison comb(*c[0],*c[1],*c[2]);
-                if(comb.estUnSET()){
-                    controleur.getPlateau().retirer(*c[0]);
-                    controleur.getPlateau().retirer(*c[1]);
-                    controleur.getPlateau().retirer(*c[2]);
-
-                    selectionCartes.clear();
-
-                    if(controleur.getPlateau().getNbCartes()<12)
-                        controleur.distribuer();
-
-                    scoreValue++;
-                    scoreJoueur->display(scoreValue);
-
-                    for(size_t i=0;i<vuecartes.size();i++){
-                        vuecartes[i]->setNoCarte();
-
-                    }
-                    size_t i=0;
-                    for(auto it=controleur.getPlateau().begin();it!=controleur.getPlateau().end();++it){
-                        vuecartes[i]->setCarte(*it);
-                        i++;
-                    }
-
-                    nbCartesPioche->setValue(controleur.getPioche().getNbCartes());
-
-
-
-                }else{
-                    QMessageBox message(QMessageBox::Icon::Warning,"Attention","ce n'est pas un set");
-                    message.exec();
-
-                    for(size_t i=0;i<vuecartes.size();i++){
-                        vuecartes[i]->setChecked(false);
-
-                    }
-                    selectionCartes.clear();
-
-                }
-
-
-            }
-        }
-    }
-    update();
-}
-*/
 
 
 

@@ -52,10 +52,10 @@ void VueCarte::dessinerTactical(QPainter &painter)
     if (carte != nullptr && c != nullptr) //si il y a bien une carte associée à la vue
     {
         painter.setPen(Qt::black); // Couleur du texte
-        painter.setFont(QFont("Arial", 14)); // Police et taille du texte
+        painter.setFont(QFont("Arial", 8)); // Police et taille du texte
 
         // Définir la position du texte sur la carte (par exemple, au centre)
-        int textPosX = width() / 3;
+        int textPosX = width() / 4;
         int textPosY = height() / 2;
 
         painter.drawText(textPosX, textPosY, QString::fromStdString(c->getName())); // Dessiner le nombre sur la carte
